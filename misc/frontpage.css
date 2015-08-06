@@ -1,0 +1,98 @@
+body {
+    counter-reset: section;
+
+    color:#000000;
+    margin:0 auto;
+    padding:0;
+    font: 16px 'Lucida Grande', Geneva, Helvetica, Arial, sans-serif;
+    line-height:1.4em;
+    margin-left:0.2cm;
+    margin-right:0.2cm;
+}
+
+#wrap {
+    width:95%;
+}
+
+#header {
+    float:left;
+    text-align:left;
+    width:100%;
+    font-family: arial, sans-serif;
+    background-color:#ffffff;
+}
+
+#leftside {
+    float:left;
+    text-align:left;
+    width:20%;
+    font-family: arial, sans-serif;
+    color: #5073b9;
+    background-color:#ffffff;
+}
+
+#leftside ul {
+    padding-left: 30px;
+}
+
+#leftside li {
+    list-style-type: none;
+    list-style-position:outside;
+}
+
+#leftside ul ul {
+    padding-left: 10px;
+}
+
+#leftside ul ul li {
+    list-style-type: none;
+    list-style-position:outside;
+    font: 12px 'Lucida Grande', Geneva, Helvetica, Arial, sans-serif;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#leftside a {
+    text-decoration: none; 
+    color: #003399;
+}
+
+#rightside {
+    float:right;
+    text-align:left;
+    width:78%;
+    font-family: 'Lucida Grande', Geneva, Helvetica, Arial, sans-serif;
+    background-color:#ffffff;
+}
+
+#rightside p {
+    padding-left: 20px;
+    padding-right: 40px;
+}
+
+#rightside li {
+    list-style: square;
+}
+
+#rightside ul ul li {
+    list-style: circle;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+
+#slogan {
+    color:#003399;
+    font-size:          28px;
+    font-weight:        700;
+    letter-spacing:     -1px;
+    line-height:        1.2em;
+    padding-left:       30px;
+    padding-right:      0px;
+    padding-top:        10px;
+    padding-bottom:     10px;
+}
+
+.fade {
+    color:#5073b9;
+}

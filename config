@@ -1,0 +1,109 @@
+TARGET = $(shell uname)
+COMPILER = gcc
+BLASLAPACK = platform
+
+STANDARD = c11
+
+ifeq ($(TARGET),Darwin)
+  CXXDYLIB  = -dynamiclib
+  DYLIB_EXT = dylib
+  ifeq ($(COMPILER),gcc)
+    CC  = gcc
+    CXX = g++
+    ifeq ($(STANDARD),c11)
+        CXXFLAGS += -std=c++11
+    endif
+  endif
+  ifeq ($(COMPILER),icc)
+    CC  = icc
+    CXX = icpc
+  endif
+  ifeq ($(COMPILER),clang)
+    CC  = clang
+    CXX = clang++
+    ifeq ($(STANDARD),c11)
+        CXXFLAGS += -std=c++11
+    endif
+  endif
+  ifeq ($(BLASLAPACK),platform)
+    CPPFLAGS += -DWITH_VECLIB
+    # LIBS     += -lmpfr -lgmpxx -lgmp -lgmpfrxx
+    LDFLAGS  += -framework Accelerate
+  endif
+endif
+
+ifeq ($(TARGET),Linux)
+  STATLIB_EXT = a
+  ifeq ($(COMPILER),gcc)
+    CC  = gcc
+    CXX = g++
+    ifeq ($(BLASLAPACK),platform)
+      CPPFLAGS += -DWITH_GOTOBLAS -DHAVE_CBLAS -I/usr/include
+      LDLIBS   += -llapack -lgoto -lcblas -lblas -lgfortran
+      # Multi-Precision stuff -lmpfr -lgmpxx -lgmp
+      LDFLAGS  += -L/usr/lib
+    endif
+  endif
+  ifeq ($(STANDARD),c11)
+    CXXFLAGS += -std=c++11
+  endif
+endif
+
+# compilation modes ------------------------------------------------------------
+
+#HASHTYPE = -DGNUCXX
+HASHTYPE = -DBOOST -DBOOST_HAS_TR1_TUPLE
+#HASHTYPE = -DTRONE -DBOOST_HAS_TR1_TUPLE
+#HASHTYPE = -DCONEONE
+
+# --- FLENS defines --------------------
+CPPFLAGS += -DINCLUDE_TYPE_TRAITS
+
+# --- debug mode -----------------------
+DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION
+DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
+            -O0 -Wfatal-errors -pedantic -Wextra \
+            -fPIC -Wall -Wno-attributes
+
+# --- release mode ----------------------
+RELEASEMODE = -O3 -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
+
+# --- profiling mode --------------------
+PROFILEMODE = -p -g -DNDEBUG $(HASHTYPE)
+
+# --- select compilation-mode here by commenting / uncommenting
+#CXXFLAGS += $(DEBUGMODE)
+CXXFLAGS += $(RELEASEMODE)
+#CXXFLAGS += $(PROFILEMODE)
+
+#CPPFLAGS += -D_GLIBCXX_PERMIT_BACKWARD_HASH
+CPPFLAGS += -Wno-deprecated
+CPPFLAGS += -I$(FLENS_HOME) -I$(LAWA_HOME) -I$(HTFI_HOME)
+
+ifdef BOOST_HOME
+  CPPFLAGS += -I$(BOOST_HOME)
+endif
+
+ifdef GMPFRXX_HOME
+   CPPFLAGS += -I$(GMPFRXX_HOME)
+   LDFLAGS += -L$(GMPFRXX_HOME)
+   LDLIBS  += -lgmpfrxx
+endif
+
+ifdef MPREC_INC_HOME
+   CPPFLAGS += -I$(MPREC_INC_HOME)
+endif
+
+ifdef MPREC_LIB_HOME
+   LDFLAGS += -L$(MPREC_LIB_HOME)
+   LDLIBS  += -lmpfr -lgmpxx -lgmp
+endif
+
+ifdef GSL_INC_HOME
+  CPPFLAGS += -I$(GSL_INC_HOME)
+endif
+
+ifdef GSL_LIB_HOME
+  LDFLAGS += -L$(GSL_LIB_HOME)
+  LDLIBS  += -lgsl
+endif
