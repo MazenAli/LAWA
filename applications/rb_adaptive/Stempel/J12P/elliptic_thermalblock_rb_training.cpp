@@ -393,7 +393,9 @@ int main () {
         cerr << "Error: Unable to open alphas.txt for writing" << endl;
     }
     rb_system.set_alpha(alphas);
-   */ 
+   */
+
+    /*
     ParamType min   = {{0.01,0}};
     ParamType max   = {{20,1}};
     std::vector<ParamType> Xi_test = rb_base.generate_uniform_paramset(min,
@@ -410,21 +412,16 @@ int main () {
     }
     data.close();
 
-    exit(0);
+    exit(0);*/
 
-    /*
     rb_base.init();
-    rb_system.read_rb_data("training_data_stempel");
+    //rb_system.read_rb_data("training_data_stempel");
     //rb_base.read_basisfunctions("training_data_stempel/bf");
     //rb_base.read_rieszrepresentors("training_data_stempel/representors");
-
     //rb_base.calc_rb_data();
     //rb_system.write_rb_data("training_data_stempel");
-    rb_base.train_Greedy(24rb_base.n_bf());
 
-    rb_base.write_basisfunctions("offline_data_stempel");
-    rb_base.write_rieszrepresentors("offline_data_stempel")*/;
-
+    rb_base.train_Greedy();
 
     return 0;
 }

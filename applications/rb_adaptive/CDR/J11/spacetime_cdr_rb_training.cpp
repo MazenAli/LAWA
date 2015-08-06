@@ -41,6 +41,7 @@ int main () {
     Basis2D_Test  basis2d_test(basis_int,basis_intbc);
 
 
+    /*
     for (int i = 1; i<= 8; ++i) {
         DataType        u;
 
@@ -63,7 +64,7 @@ int main () {
                                  1e-02,
                                  plot.c_str());
     }
-    exit(0);
+    exit(0);*/
 
     /// Initialization of operators
     DenseVectorT no_singPts;
@@ -116,29 +117,24 @@ int main () {
     LOp_Id1D_Space			lOp_Id1D_Test_t (basis_int, basis_int, RefIdentityBil_Test_t, IdentityBil_Test_t);
     LOp_Id1D_Time_Trial		lOp_Id1D_Trial_t(basis_per, basis_per, RefIdentityBil_Trial_t, IdentityBil_Trial_t);
     LOp_Conv1D_Time_Trial 	lOp_Conv1D_Trial_t(basis_per, basis_per, RefConvectionBil_Trial_t, ConvectionBil_Trial_t);
-    
+
     LOpT_Conv1D_Time		lOpT_Conv1D_t(basis_per, basis_int, RefTranspConvectionBil_t, TranspConvectionBil_t);
     LOpT_Id1D_Time			lOpT_Id1D_t  (basis_per, basis_int, RefTranspIdentityBil_t, TranspIdentityBil_t);
     LOpT_Id1D_Space			lOpT_Id1D_x  (basis_intbc, basis_intbc, RefTranspIdentityBil_x, TranspIdentityBil_x);
     LOpT_Lapl1D_Space		lOpT_Lapl1D_x(basis_intbc, basis_intbc, RefTranspLaplaceBil_x, TranspLaplaceBil_x);
     LOpT_Conv1D_Space		lOpT_Conv1D_x(basis_intbc, basis_intbc, RefTranspConvectionBil_x, TranspConvectionBil_x);
 
-    /*IndexSet<Index2D> LambdaTrialExact, LambdaTestExact;
     getSparseGridIndexSet(basis2d_trial,LambdaTrialExact, J, 0, GAMMA);
     getSparseGridIndexSet(basis2d_test, LambdaTestExact , J, 0, GAMMA);
 
-    std::cout << "Size of trial sparse grid " << LambdaTrialExact.size() << std::endl;
-
-    std::cout << "Size of test sparse grid " << LambdaTestExact.size() << std::endl;*/
-
-    LOp_Conv_Id_2D			localConvectionIdentityOp2D		(lOp_Conv1D_t, 		lOp_Id1D_x/*,
-                                                             LambdaTrialExact, LambdaTestExact*/);
-    LOp_Id_Id_2D			localIdentityIdentityOp2D		(lOp_Id1D_t, 		lOp_Id1D_x/*,
-                                                             LambdaTrialExact, LambdaTestExact*/);
-    LOp_Id_Lapl_2D			localIdentityLaplaceOp2D		(lOp_Id1D_t, 		lOp_Lapl1D_x/*,
-                                                             LambdaTrialExact, LambdaTestExact*/);
-    LOp_Id_Conv_2D			localIdentityConvectionOp2D		(lOp_Id1D_t, 		lOp_Conv1D_x/*,
-                                                             LambdaTrialExact, LambdaTestExact*/);
+    LOp_Conv_Id_2D			localConvectionIdentityOp2D		(lOp_Conv1D_t, 		lOp_Id1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+    LOp_Id_Id_2D			localIdentityIdentityOp2D		(lOp_Id1D_t, 		lOp_Id1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+    LOp_Id_Lapl_2D			localIdentityLaplaceOp2D		(lOp_Id1D_t, 		lOp_Lapl1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+    LOp_Id_Conv_2D			localIdentityConvectionOp2D		(lOp_Id1D_t, 		lOp_Conv1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
 
     LOp_Test_Id_Id_2D		localIdentityIdentityOp2D_Test	(lOp_Id1D_Test_t, 	lOp_Id1D_x);
     LOp_Test_Id_Lapl_2D		localIdentityLaplaceOp2D_Test	(lOp_Id1D_Test_t, 	lOp_Lapl1D_x);
@@ -147,14 +143,14 @@ int main () {
     LOp_Trial_Id_Conv_2D 	localIdentityConvectionOp2D_Trial(lOp_Id1D_Trial_t, lOp_Conv1D_x);
     LOp_Trial_Conv_Id_2D 	localConvectionIdentityOp2D_Trial(lOp_Conv1D_Trial_t,lOp_Id1D_x);
 
-    LOpT_Conv_Id_2D		transpLocalConvectionIdentityOp2D	(lOpT_Conv1D_t, lOpT_Id1D_x/*,
-                                                             LambdaTestExact, LambdaTrialExact*/);
-    LOpT_Id_Id_2D		transpLocalIdentityIdentityOp2D		(lOpT_Id1D_t, 	lOpT_Id1D_x/*,
-                                                             LambdaTestExact, LambdaTrialExact*/);
-    LOpT_Id_Lapl_2D		transpLocalIdentityLaplaceOp2D		(lOpT_Id1D_t, 	lOpT_Lapl1D_x/*,
-                                                             LambdaTestExact, LambdaTrialExact*/);
-    LOpT_Id_Conv_2D		transpLocalIdentityConvectionOp2D	(lOpT_Id1D_t, 	lOpT_Conv1D_x/*,
-                                                             LambdaTestExact, LambdaTrialExact*/);
+    LOpT_Conv_Id_2D		transpLocalConvectionIdentityOp2D	(lOpT_Conv1D_t, lOpT_Id1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
+    LOpT_Id_Id_2D		transpLocalIdentityIdentityOp2D		(lOpT_Id1D_t, 	lOpT_Id1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
+    LOpT_Id_Lapl_2D		transpLocalIdentityLaplaceOp2D		(lOpT_Id1D_t, 	lOpT_Lapl1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
+    LOpT_Id_Conv_2D		transpLocalIdentityConvectionOp2D	(lOpT_Id1D_t, 	lOpT_Conv1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
 
     localConvectionIdentityOp2D.setJ(9);
     localIdentityIdentityOp2D.setJ(9);
@@ -188,46 +184,10 @@ int main () {
     ///             (heights of jumps in derivatives)
     FullColMatrixT nodeltas;
     SeparableRhsIntegral2D			rhs(basis2d_test, F1, nodeltas, nodeltas, 20);
-    SeparableRhs           			F(rhs,noPrec/*,LambdaTestExact*/);
-
-    /*/ Debug
-    IndexSet<Index2D> LambdaDebugTrial, LambdaDebugTest;
-    getFullIndexSet(basis2d_trial, LambdaDebugTrial, 5, 5, 0);
-    getFullIndexSet(basis2d_test,  LambdaDebugTest,  5, 5, 0);
-    //getSparseGridIndexSet(basis2d_test, LambdaDebug , J+2, 0, GAMMA+0.2);
-    std::cout << "Debug F\n";
-    DataType error;
-    error = F(LambdaTestExact) - F(LambdaDebugTest);
-    std::cout << "Error is " << error.norm(2.) << std::endl;
-    std::cout << "\n\nDebug A^q\n";
-    DataType Au1, Au2, u1, u2;
-    u1 = F(LambdaTrialExact);
-    u2 = F(LambdaDebugTrial);
-    FillWithZeros(LambdaTestExact, Au1);
-    FillWithZeros(LambdaDebugTest, Au2);
-    localConvectionIdentityOp2D.eval(u1, Au1);
-    localConvectionIdentityOp2D.eval(u2, Au2);
-
-    error = Au1 - Au2;
-    std::cout << "Error is " << error.norm(2.) << std::endl;*/
-
+    SeparableRhs           			F(rhs,noPrec,LambdaTestExact);
 
     SeparableRhsIntegral2D_Trial	rhs_u(basis2d_trial, F1, nodeltas, nodeltas, 20);
     SeparableRhs_Trial           	F_u(rhs_u,noPrec);
-
-    /*std::cout << "\n\nDebug (A^q)^T\n";
-    u1 = F(LambdaTestExact);
-    u2 = F(LambdaDebugTest);
-    Au1.clear(); Au2.clear();
-    FillWithZeros(LambdaTrialExact, Au1);
-    FillWithZeros(LambdaDebugTrial, Au2);
-    transpLocalConvectionIdentityOp2D.eval(u1, Au1);
-    transpLocalConvectionIdentityOp2D.eval(u2, Au2);
-    error = Au1 - Au2;
-    std::cout << "Error is " << error.norm(2.) << std::endl;
-    std::cout << "Full grid size trial is " << LambdaDebugTrial.size() << std::endl;
-    std::cout << "Full grid size test  is " << LambdaDebugTest.size() << std::endl;
-    exit(0);*/
 
 	//===============================================================//
 	//===============  RB SETUP =====================================//
@@ -366,13 +326,6 @@ int main () {
 
     MTTruthSolver rb_truth(awgm_u, awgm_rieszF, awgm_rieszA, innprod_Y_u_u, A_u_u, flex_rhs_u);
 
-    /*
-    ParamType mu = {0.,-9.};
-    rb_truth.access_solver().access_params().tol = 1e-05;
-    DataType u = rb_truth.get_truth_solution(mu);
-    saveCoeffVector2D(u, rb_truth.get_trialbasis(), "test_sol.txt");
-    exit(0);*/
-
 
     //----------- RB System ---------------- //
 
@@ -440,6 +393,7 @@ int main () {
     ParamType mu_min = {{0., -9.}};
     ParamType mu_max = {{30, 15}};
 
+    rb_base.greedy_params.problem_type  = PetrovGalerkin;
     rb_base.greedy_params.training_type = weak;
     rb_base.greedy_params.tol = 1e-04;
     rb_base.greedy_params.min_param = mu_min;
@@ -478,10 +432,11 @@ int main () {
     cout << "Parameters Riesz Solver A : " << std::endl << std::endl;
     awgm_rieszA.awgm_params.print();
 
-    /*
-    rb_base.init();
-    rb_base.train_Greedy();*/
 
+    rb_base.init();
+    rb_base.train_Greedy();
+
+/*
     std::vector<ParamType> Xi_test =
         rb_base.generate_uniform_paramset(mu_min, mu_max,
                                           {{50, 50}},
@@ -494,7 +449,7 @@ int main () {
         }
         data << std::endl;
     }
-    data.close();
+    data.close();*/
 
     /*rb_system.write_rb_data("offline_data_stage8");
     rb_base.write_basisfunctions("offline_data_stage8");

@@ -21,12 +21,9 @@
 #include <lawa/methods/rb/datastructures/lb_base.h>
 */
 
-#define MAX_LEVEL   11
 
 using namespace std;
 using namespace lawa;
-
-
 
 // quick and dirty finite wavelet expansion implementation
 template <typename T, typename Index, typename RHSINTEGRAL,
@@ -106,8 +103,6 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
         double              ETA     = 1e-16;
         bool                recalcF = false;
         long                total   = 0;
-        //DataType            PF;
-        //int                 nbf;
 
     public:
         RB_Base_wavest(RB_Model& _rb_system, TruthModel& _rb_truth,
@@ -161,11 +156,8 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
         calculate_Riesz_LHS_information(const DataType& bf, bool) override
         {
             std::cout << "Correct LHS called\n";
-            //int N = nbf;
             int N = this->rb_basisfunctions.size();
             std::cout << "Current N=" << N << std::endl;
-            //++N;
-            //++nbf;
             calc_wav_LHS(bf);
 
             // Update the Riesz Representor Norms A x A
@@ -225,10 +217,6 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
             std::size_t Qf = this->rb_system.Q_f();
             assert(Qf>0);
             this->F_representors.resize(Qf);
-
-            //for (auto mu : Lambda) {
-            //    PF[mu] = P(mu);
-            //}
 
             for (std::size_t i=0; i<Qf; ++i) {
                 F.set_active_comp(i);
@@ -427,14 +415,14 @@ typedef LocalOperator1D<Basis_Space,Basis_Space,
 typedef LocalOperator1D<Basis_Space,Basis_Space,
 						RefTranspConvection1D_Space,TranspConvection1D_Space>	LOpT_Conv1D_Space;
 
-typedef /*SimpleOp2D*/LocalOperator2D<LOp_Conv1D_Time, LOp_Id1D_Space>                        LOp_Conv_Id_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOp_Id1D_Time, LOp_Id1D_Space>                          LOp_Id_Id_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOp_Id1D_Time, LOp_Lapl1D_Space>                        LOp_Id_Lapl_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOp_Id1D_Time, LOp_Conv1D_Space>                        LOp_Id_Conv_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOpT_Conv1D_Time, LOpT_Id1D_Space>                      LOpT_Conv_Id_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOpT_Id1D_Time, LOpT_Id1D_Space>                        LOpT_Id_Id_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOpT_Id1D_Time, LOpT_Lapl1D_Space>                      LOpT_Id_Lapl_2D;
-typedef /*SimpleOp2D*/LocalOperator2D<LOpT_Id1D_Time, LOpT_Conv1D_Space>                      LOpT_Id_Conv_2D;
+typedef SimpleOp2D<LOp_Conv1D_Time, LOp_Id1D_Space>                        LOp_Conv_Id_2D;
+typedef SimpleOp2D<LOp_Id1D_Time, LOp_Id1D_Space>                          LOp_Id_Id_2D;
+typedef SimpleOp2D<LOp_Id1D_Time, LOp_Lapl1D_Space>                        LOp_Id_Lapl_2D;
+typedef SimpleOp2D<LOp_Id1D_Time, LOp_Conv1D_Space>                        LOp_Id_Conv_2D;
+typedef SimpleOp2D<LOpT_Conv1D_Time, LOpT_Id1D_Space>                      LOpT_Conv_Id_2D;
+typedef SimpleOp2D<LOpT_Id1D_Time, LOpT_Id1D_Space>                        LOpT_Id_Id_2D;
+typedef SimpleOp2D<LOpT_Id1D_Time, LOpT_Lapl1D_Space>                      LOpT_Id_Lapl_2D;
+typedef SimpleOp2D<LOpT_Id1D_Time, LOpT_Conv1D_Space>                      LOpT_Id_Conv_2D;
 
 
 typedef LocalOperator2D<LOp_Id1D_Space,LOp_Id1D_Space>							LOp_Test_Id_Id_2D;
@@ -458,7 +446,7 @@ typedef NoPreconditioner<T, Index2D>								NoPrec2D;
 
 //==== RightHandSides ====//
 typedef SeparableRHS2D<T,Basis2D_Test>                              SeparableRhsIntegral2D;
-typedef /*Simple*/RHS<T,Index2D,SeparableRhsIntegral2D,
+typedef SimpleRHS<T,Index2D,SeparableRhsIntegral2D,
             NoPrec2D>                                         		SeparableRhs;
 typedef SeparableRHS2D<T,Basis2D_Trial>                             SeparableRhsIntegral2D_Trial;
 typedef RHS<T,Index2D,SeparableRhsIntegral2D_Trial,

@@ -8,8 +8,6 @@
 
 #include <lawa/lawa.h>
 
-#define     MAX_LEVEL   12
-
 using namespace std;
 using namespace lawa;
 
@@ -19,7 +17,6 @@ template <typename T, typename Index, typename RHSINTEGRAL,
 class SimpleRHS : public RHS<T, Index, RHSINTEGRAL, Preconditioner>
 {
     private:
-        const int                   J = MAX_LEVEL;
         const IndexSet<Index>&      LambdaTest;
     public:
         SimpleRHS(const RHSINTEGRAL& rhsintegral, Preconditioner& P,
@@ -88,8 +85,6 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
         double              ETA     = 1e-16;
         bool                recalcF = false;
         long                total   = 0;
-        //DataType            PF;
-        //int                 nbf;
 
     public:
         RB_Base_wavest(RB_Model& _rb_system, TruthModel& _rb_truth,
@@ -143,11 +138,8 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
         calculate_Riesz_LHS_information(const DataType& bf, bool) override
         {
             std::cout << "Correct LHS called\n";
-            //int N = nbf;
             int N = this->rb_basisfunctions.size();
             std::cout << "Current N=" << N << std::endl;
-            //++N;
-            //++nbf;
             calc_wav_LHS(bf);
 
             // Update the Riesz Representor Norms A x A
@@ -207,10 +199,6 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
             std::size_t Qf = this->rb_system.Q_f();
             assert(Qf>0);
             this->F_representors.resize(Qf);
-
-            //for (auto mu : Lambda) {
-            //    PF[mu] = P(mu);
-            //}
 
             for (std::size_t i=0; i<Qf; ++i) {
                 F.set_active_comp(i);

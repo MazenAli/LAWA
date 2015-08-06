@@ -488,27 +488,38 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 				}
 			}
 			else{
-                double delta    = 1./2.;
+                double delta    = greedy_params.deter_rate;
                 double beta_mu  = rb_system.alpha_LB(current_param);
-				//rb_truth.access_solver().access_params().tol_primal =
-                //    greedy_params.tol*delta*beta_mu;
+                double factor   = 0.;
+
+                if (greedy_params.problem_type == PetrovGalerkin) {
+                    rb_truth.access_solver().access_params().tol_primal =
+                    greedy_params.tol*delta*beta_mu;
+                    factor = beta_mu*beta_mu*delta;
+                } else {
+                    factor = beta_mu*delta;
+                }
+
 				rb_truth.access_solver().access_params().tol =
-                    greedy_params.tol*delta*beta_mu*beta_mu;
+                    greedy_params.tol*factor;
                 std::cout << "beta(mu) = " << rb_system.alpha_LB(current_param)
                           << std::endl;
                 std::cout << "delta    = " << delta << std::endl;
                 std::cout << "tol      = " << greedy_params.tol << std::endl;
                 std::cout << "and thus...\n";
                 std::cout << "Tolerance for snapshot set to\n"
-                          << "Dual   : "
                           << std::scientific
                           << rb_truth.access_solver().access_params().tol
-                //          << std::endl
-                //          << "Primal : "
-                //          << std::scientific
-                //          << rb_truth.access_solver().access_params().tol_primal
                           << std::endl;
-				u = rb_truth.get_truth_solution(current_param);
+
+                if (greedy_params.problem_type == PetrovGalerkin) {
+                    std::cout << "Primal : "
+                              << std::scientific
+                              << rb_truth.access_solver().access_params().tol_primal
+                              << std::endl;
+                }
+
+                u = rb_truth.get_truth_solution(current_param);
 			}
 		}
 

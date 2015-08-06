@@ -18,7 +18,7 @@ ParamInfo<std::array<T,N> >::print(std::array<T,N> mu)
 template<typename ParamType>
 RB_Greedy_Parameters<ParamType>::RB_Greedy_Parameters(
         VariationalFormulationType _problem_type,
-		TrainingType _training_type, double _tol, std::size_t _Nmax,
+		TrainingType _training_type, double _tol, double _deter_rate, std::size_t _Nmax,
 		ParamType _min_param, ParamType _max_param,
 		intArray _training_params_per_dim,
 		intArray _log_scaling, bool _print_info,
@@ -36,7 +36,7 @@ RB_Greedy_Parameters<ParamType>::RB_Greedy_Parameters(
 		bool _read_truth_sols, std::size_t _nb_existing_truth_sols)
  : problem_type(_problem_type),
    training_type(_training_type), snapshot_tol_red_crit(_snapshot_tol_red_crit),
-   tol(_tol), Nmax(_Nmax), min_param(_min_param), max_param(_max_param),
+   tol(_tol), deter_rate(_deter_rate), Nmax(_Nmax), min_param(_min_param), max_param(_max_param),
    nb_training_params(_training_params_per_dim), log_scaling(_log_scaling),
    print_info(_print_info), print_file(_print_file), verbose(_verbose),
    write_during_training(_write_during_training), trainingdata_folder(_trainingdata_folder),

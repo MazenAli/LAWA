@@ -101,6 +101,7 @@ struct AWGM_PG_Parameters{
 struct AWGM_Parameters{
 
     double     tol;
+    double     tol_primal; // dummy variable
     double     alpha;
     std::size_t     max_its;
     std::size_t     max_basissize;
@@ -126,7 +127,8 @@ struct AWGM_Parameters{
                     std::size_t _hashmapsize = 10,
                     std::string _info_filename = "awgm_cg_conv_info.txt",
                     std::string _plot_filename = "awgm_cg_u_plot",
-                    bool _clear_solver = false);
+                    bool _clear_solver = false,
+                    double _tol_primal = 0.);
 
     void print();
 };

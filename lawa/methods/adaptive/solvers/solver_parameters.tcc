@@ -76,12 +76,13 @@ AWGM_Parameters::AWGM_Parameters(double _tol, double _alpha, std::size_t _max_it
 		std::size_t _max_basissize, bool _print_info,
 		bool _verbose, bool _plot_solution, bool _verbose_extra,
 		std::size_t _hashmapsize, std::string _info_filename, std::string _plot_filename,
-		bool _clear_solver)
+		bool _clear_solver, double _tol_primal)
 : tol(_tol), alpha(_alpha), max_its(_max_its), max_basissize(_max_basissize),
   print_info(_print_info), verbose(_verbose), plot_solution(_plot_solution),
   verbose_extra(_verbose_extra), hashmapsize(_hashmapsize),
   info_filename(_info_filename), plot_filename(_plot_filename),
-  clear_solver(_clear_solver)
+  clear_solver(_clear_solver),
+  tol_primal(_tol_primal)
 {}
 
 void

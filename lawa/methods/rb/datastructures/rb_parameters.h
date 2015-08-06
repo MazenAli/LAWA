@@ -56,6 +56,7 @@ struct RB_Greedy_Parameters{
 
 	typedef typename std::array<std::size_t,ParamInfo<ParamType>::dim> intArray;
 	double 		tol;
+    double      deter_rate;
 	std::size_t 		Nmax;
 	ParamType 	min_param;
 	ParamType 	max_param;
@@ -85,7 +86,7 @@ struct RB_Greedy_Parameters{
 	bool 		write_direct_representors;
 	double 		min_error_reduction;		// if snapshot_tol_red_crit = conv_rate_degradation
 	double		refSolution_tol_factor; 	// factor between accuracy of "exact" sol and that of "truth"
-    bool        read_truth_sols;            // for strong Greedy    
+    bool        read_truth_sols;            // for strong Greedy
     std::size_t nb_existing_truth_sols;     // for strong Greedy
 	
 	
@@ -93,6 +94,7 @@ struct RB_Greedy_Parameters{
                         VariationalFormulationType  _problem_type = Galerkin,
 						TrainingType _training_type = weak,
 						double _tol = 1e-2,
+                        double _deter_rate = 0.5,
 						std::size_t _Nmax = 20,
 						ParamType _min_param = ParamType(),
 						ParamType _max_param = ParamType(),
