@@ -124,6 +124,7 @@ int main () {
     LOpT_Lapl1D_Space		lOpT_Lapl1D_x(basis_intbc, basis_intbc, RefTranspLaplaceBil_x, TranspLaplaceBil_x);
     LOpT_Conv1D_Space		lOpT_Conv1D_x(basis_intbc, basis_intbc, RefTranspConvectionBil_x, TranspConvectionBil_x);
 
+    IndexSet<Index2D> LambdaTrialExact, LambdaTestExact;
     getSparseGridIndexSet(basis2d_trial,LambdaTrialExact, J, 0, GAMMA);
     getSparseGridIndexSet(basis2d_test, LambdaTestExact , J, 0, GAMMA);
 

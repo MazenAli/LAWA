@@ -7,6 +7,7 @@ STANDARD = c11
 ifeq ($(TARGET),Darwin)
   CXXDYLIB  = -dynamiclib
   DYLIB_EXT = dylib
+  STATLIB_EXT = a
   ifeq ($(COMPILER),gcc)
     CC  = gcc
     CXX = g++
@@ -34,6 +35,7 @@ endif
 
 ifeq ($(TARGET),Linux)
   STATLIB_EXT = a
+  DYLIB_EXT   = so
   ifeq ($(COMPILER),gcc)
     CC  = gcc
     CXX = g++

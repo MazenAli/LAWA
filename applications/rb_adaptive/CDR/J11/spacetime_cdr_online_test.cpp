@@ -2,6 +2,9 @@
 #include <fstream>
 #include <sstream>
 
+#define J       11
+#define GAMMA   0.
+
 void
 read_paramfile(string paramfilename, vector<ParamType>& v){
     T mu1, mu2;
@@ -100,6 +103,10 @@ int main (int argc, char* argv[]) {
     													zero_Fct, w_conv_Fct, zero_Fct, 10, true, false, true);
 
     /// Initialization of local operator
+    IndexSet<Index2D> LambdaTrialExact, LambdaTestExact;
+    getSparseGridIndexSet(basis2d_trial, LambdaTrialExact, J, 0, GAMMA);
+    getSparseGridIndexSet(basis2d_test,  LambdaTestExact, J, 0, GAMMA);
+
     LOp_Conv1D_Time			lOp_Conv1D_t	(basis_int, basis_per, RefConvectionBil_t, ConvectionBil_t);
     LOp_Id1D_Time			lOp_Id1D_t  	(basis_int, basis_per, RefIdentityBil_t, IdentityBil_t);
     LOp_Id1D_Space			lOp_Id1D_x  	(basis_intbc, basis_intbc, RefIdentityBil_x, IdentityBil_x);
@@ -115,10 +122,15 @@ int main (int argc, char* argv[]) {
     LOpT_Lapl1D_Space		lOpT_Lapl1D_x(basis_intbc, basis_intbc, RefTranspLaplaceBil_x, TranspLaplaceBil_x);
     LOpT_Conv1D_Space		lOpT_Conv1D_x(basis_intbc, basis_intbc, RefTranspConvectionBil_x, TranspConvectionBil_x);
 
-    LOp_Conv_Id_2D			localConvectionIdentityOp2D		(lOp_Conv1D_t, 		lOp_Id1D_x);
-    LOp_Id_Id_2D			localIdentityIdentityOp2D		(lOp_Id1D_t, 		lOp_Id1D_x);
-    LOp_Id_Lapl_2D			localIdentityLaplaceOp2D		(lOp_Id1D_t, 		lOp_Lapl1D_x);
-    LOp_Id_Conv_2D			localIdentityConvectionOp2D		(lOp_Id1D_t, 		lOp_Conv1D_x);
+    LOp_Conv_Id_2D			localConvectionIdentityOp2D		(lOp_Conv1D_t, 		lOp_Id1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+    LOp_Id_Id_2D			localIdentityIdentityOp2D		(lOp_Id1D_t, 		lOp_Id1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+    LOp_Id_Lapl_2D			localIdentityLaplaceOp2D		(lOp_Id1D_t, 		lOp_Lapl1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+    LOp_Id_Conv_2D			localIdentityConvectionOp2D		(lOp_Id1D_t, 		lOp_Conv1D_x,
+                                                             LambdaTrialExact, LambdaTestExact);
+
     LOp_Test_Id_Id_2D		localIdentityIdentityOp2D_Test	(lOp_Id1D_Test_t, 	lOp_Id1D_x);
     LOp_Test_Id_Lapl_2D		localIdentityLaplaceOp2D_Test	(lOp_Id1D_Test_t, 	lOp_Lapl1D_x);
     LOp_Trial_Id_Id_2D		localIdentityIdentityOp2D_Trial	(lOp_Id1D_Trial_t, 	lOp_Id1D_x);
@@ -126,10 +138,14 @@ int main (int argc, char* argv[]) {
     LOp_Trial_Id_Conv_2D 	localIdentityConvectionOp2D_Trial(lOp_Id1D_Trial_t, lOp_Conv1D_x);
     LOp_Trial_Conv_Id_2D 	localConvectionIdentityOp2D_Trial(lOp_Conv1D_Trial_t,lOp_Id1D_x);
 
-    LOpT_Conv_Id_2D		transpLocalConvectionIdentityOp2D	(lOpT_Conv1D_t, lOpT_Id1D_x);
-    LOpT_Id_Id_2D		transpLocalIdentityIdentityOp2D		(lOpT_Id1D_t, 	lOpT_Id1D_x);
-    LOpT_Id_Lapl_2D		transpLocalIdentityLaplaceOp2D		(lOpT_Id1D_t, 	lOpT_Lapl1D_x);
-    LOpT_Id_Conv_2D		transpLocalIdentityConvectionOp2D	(lOpT_Id1D_t, 	lOpT_Conv1D_x);
+    LOpT_Conv_Id_2D		transpLocalConvectionIdentityOp2D	(lOpT_Conv1D_t, lOpT_Id1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
+    LOpT_Id_Id_2D		transpLocalIdentityIdentityOp2D		(lOpT_Id1D_t, 	lOpT_Id1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
+    LOpT_Id_Lapl_2D		transpLocalIdentityLaplaceOp2D		(lOpT_Id1D_t, 	lOpT_Lapl1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
+    LOpT_Id_Conv_2D		transpLocalIdentityConvectionOp2D	(lOpT_Id1D_t, 	lOpT_Conv1D_x,
+                                                             LambdaTestExact, LambdaTrialExact);
 
     localConvectionIdentityOp2D.setJ(9);
     localIdentityIdentityOp2D.setJ(9);
@@ -163,7 +179,7 @@ int main (int argc, char* argv[]) {
     ///             (heights of jumps in derivatives)
     FullColMatrixT nodeltas;
     SeparableRhsIntegral2D			rhs(basis2d_test, F1, nodeltas, nodeltas, 20);
-    SeparableRhs           			F(rhs,noPrec);
+    SeparableRhs           			F(rhs,noPrec,LambdaTestExact);
 
     SeparableRhsIntegral2D_Trial	rhs_u(basis2d_trial, F1, nodeltas, nodeltas, 20);
     SeparableRhs_Trial           	F_u(rhs_u,noPrec);
