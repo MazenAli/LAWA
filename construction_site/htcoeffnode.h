@@ -13,6 +13,7 @@
 namespace lawa
 {
 
+
 template <typename T, typename _Basis, typename _Index>
 class HTCoeffNode
 {
