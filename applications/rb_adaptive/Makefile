@@ -1,4 +1,4 @@
-SUBDIRS := Stempel CDR
+SUBDIRS := Stempel CDR Toy
 
 
 all:

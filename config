@@ -1,5 +1,5 @@
 TARGET = $(shell uname)
-COMPILER = gcc
+COMPILER = clang
 BLASLAPACK = platform
 
 STANDARD = c11
@@ -62,7 +62,7 @@ HASHTYPE = -DBOOST -DBOOST_HAS_TR1_TUPLE
 CPPFLAGS += -DINCLUDE_TYPE_TRAITS
 
 # --- debug mode -----------------------
-DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION
+DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION -DDEBUG_SAMPLER
 DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
             -O0 -Wfatal-errors -pedantic -Wextra \
             -fPIC -Wall -Wno-attributes
@@ -74,8 +74,8 @@ RELEASEMODE = -O3 -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
 PROFILEMODE = -p -g -DNDEBUG $(HASHTYPE)
 
 # --- select compilation-mode here by commenting / uncommenting
-#CXXFLAGS += $(DEBUGMODE)
-CXXFLAGS += $(RELEASEMODE)
+CXXFLAGS += $(DEBUGMODE)
+#CXXFLAGS += $(RELEASEMODE)
 #CXXFLAGS += $(PROFILEMODE)
 
 #CPPFLAGS += -D_GLIBCXX_PERMIT_BACKWARD_HASH
