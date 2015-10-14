@@ -56,6 +56,8 @@ struct IndexSet : __gnu_cxx::hash_set<Index, index_hashfunction<Index>, index_eq
 
     IndexSet(size_t n);
 
+    IndexSet<Index>(const IndexSet<Index>& _set);
+
     IndexSet<Index>&
     operator= (const IndexSet<Index> &_set);
 

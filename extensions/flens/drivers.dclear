@@ -1,0 +1,9 @@
+drivers.o drivers.d: drivers.cpp \
+ /home/mazenali/Research/FLENS/cxxblas/drivers/drivers.h \
+ /home/mazenali/Research/FLENS/cxxblas/auxiliary/issame.h \
+ /home/mazenali/Research/FLENS/cxxblas/auxiliary/restrictto.h \
+ /home/mazenali/Research/FLENS/cxxblas/drivers/o drivers.dpenblas.h \
+ /home/mazenali/Research/FLENS/cxxstd/cstdlib.h \
+ /home/mazenali/Research/FLENS/cxxblas/drivers/cblas.h \
+ /home/mazenali/Research/FLENS/cxxblas/typedefs.h \
+ /home/mazenali/Research/FLENS/cxxstd/complex.h

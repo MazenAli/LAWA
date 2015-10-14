@@ -344,7 +344,7 @@ typedef H1NormPreconditioner2D<T, Basis2D>                          Prec2D;
 typedef NoPreconditioner<T, Index2D>								NoPrec2D;
 
 //==== RightHandSides ====//
-typedef SmoothRHSWithAlignedSing2D<T, Basis2D, FullGridGL>          RhsIntegral2D;
+typedef SmoothRHSWithAlignedSing2D<T, Basis2D, SparseGridGP>          RhsIntegral2D;
 typedef RHS<T, Index2D, RhsIntegral2D, NoPrec2D>                    Rhs;
 
 
@@ -354,7 +354,8 @@ const size_t PDim = 1;
 typedef CoeffVector 								 						DataType;
 typedef array<T,PDim>	 													ParamType;
 
-typedef AffineLocalOperator<Index2D,AbstractLocalOperator2D<T>,ParamType>	Affine_Op_2D;
+
+typedef AffineLocalOperator<Index2D,Flex_COp_2D,ParamType>	        Affine_Op_2D;
 typedef AffineRhs<T,Index2D,Rhs,ParamType>							Affine_Rhs_2D;
 typedef FlexibleCompoundRhs<T,Index2D,Rhs>							RieszF_Rhs_2D;
 typedef FlexibleBilformRhs<Index2D,AbstractLocalOperator2D<T> >				RieszA_Rhs_2D;
@@ -376,7 +377,7 @@ typedef MultiTreeAWGM2<Index2D,Basis2D, H1_InnProd_2D,
 
 typedef MT_Truth<DataType,ParamType,MT_AWGM_Truth,
 				 MT_AWGM_Riesz_F,MT_AWGM_Riesz_A,H1_InnProd_2D,
-				 Flex_COp_2D, Flex_Rhs_2D, MT_AWGM_Riesz_Res>				MTTruthSolver;
+				 Affine_Op_2D, Flex_Rhs_2D, MT_AWGM_Riesz_Res>				MTTruthSolver;
 
 typedef LB_Base<ParamType, MTTruthSolver> 									        LB_Type;
 typedef Simple_RB_System<T,ParamType, LB_Type>								        RB_Model;
@@ -484,7 +485,7 @@ T no_theta(const std::array<T,PDim>& /*mu*/)
 
 T theta_chi_1(const std::array<T,PDim>& mu)
 {
-    if(mu[1] <= 1./nb_stempel){
+    if(mu[0] <= 1./nb_stempel){
        return 1;
     }
 	return 0;
@@ -493,7 +494,7 @@ T theta_chi_1(const std::array<T,PDim>& mu)
 
 T theta_chi_2(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 1./nb_stempel && mu[1] <= 2./nb_stempel){
+    if(mu[0] > 1./nb_stempel && mu[0] <= 2./nb_stempel){
        return 1;
     }
 	return 0;
@@ -501,7 +502,7 @@ T theta_chi_2(const std::array<T,PDim>& mu)
 
 T theta_chi_3(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 2./nb_stempel && mu[1] <= 3./nb_stempel){
+    if(mu[0] > 2./nb_stempel && mu[0] <= 3./nb_stempel){
        return 1;
     }
 	return 0;
@@ -509,7 +510,7 @@ T theta_chi_3(const std::array<T,PDim>& mu)
 
 T theta_chi_4(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 3./nb_stempel && mu[1] <= 4./nb_stempel){
+    if(mu[0] > 3./nb_stempel && mu[0] <= 4./nb_stempel){
        return 1;
     }
 	return 0;
@@ -517,7 +518,7 @@ T theta_chi_4(const std::array<T,PDim>& mu)
 
 T theta_chi_5(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 4./nb_stempel && mu[1] <= 5./nb_stempel){
+    if(mu[0] > 4./nb_stempel && mu[0] <= 5./nb_stempel){
        return 1;
     }
 	return 0;
@@ -525,7 +526,7 @@ T theta_chi_5(const std::array<T,PDim>& mu)
 
 T theta_chi_6(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 5./nb_stempel && mu[1] <= 6./nb_stempel){
+    if(mu[0] > 5./nb_stempel && mu[0] <= 6./nb_stempel){
        return 1;
     }
 	return 0;
@@ -533,7 +534,7 @@ T theta_chi_6(const std::array<T,PDim>& mu)
 
 T theta_chi_7(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 6./nb_stempel && mu[1] <= 7./nb_stempel){
+    if(mu[0] > 6./nb_stempel && mu[0] <= 7./nb_stempel){
        return 1;
     }
 	return 0;
@@ -541,7 +542,7 @@ T theta_chi_7(const std::array<T,PDim>& mu)
 
 T theta_chi_8(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 7./nb_stempel && mu[1] <= 8./nb_stempel){
+    if(mu[0] > 7./nb_stempel && mu[0] <= 8./nb_stempel){
        return 1;
     }
 	return 0;
@@ -549,7 +550,7 @@ T theta_chi_8(const std::array<T,PDim>& mu)
 
 T theta_chi_9(const std::array<T,PDim>& mu)
 {
-    if(mu[1] > 8./nb_stempel){
+    if(mu[0] > 8./nb_stempel){
        return 1;
     }
 	return 0;

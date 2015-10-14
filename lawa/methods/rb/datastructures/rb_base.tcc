@@ -420,8 +420,6 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 		    std::cout << "||=====================================================================||" << std::endl << std::endl;
 		}
 
-        exit(0);
-
 		if(rb_truth.access_solver().access_params().print_info){
 			std::stringstream filename;
 			filename << greedy_params.print_file << "_bf" << N+1 << ".txt";

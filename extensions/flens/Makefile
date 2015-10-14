@@ -1,5 +1,6 @@
 include $(LAWA_HOME)/Makefile.common
 
+
 SOURCES  := $(wildcard *.cpp)
 OBJECTS  := $(SOURCES:.cpp=.o)
 DEPS     := $(SOURCES:.cpp=.d)
@@ -12,6 +13,7 @@ ifeq ($(TARGET), Darwin)
 else
 	LIB = $(STATLIB)
 endif
+
 
 all: $(LIB)
 
@@ -31,6 +33,6 @@ clean:
 # automatic dependencies -------------------------------------------------------
 %.d: %.cpp
 	$(CXX) -MM $(CPPFLAGS) $(CXXFLAGS) $< \
-		| sed 's/$*.o/& $(subst /,\/,$@)/g' > $@
+		| sed 's/$*\.o/& $(subst /,\/,$@)/g' > $@
 
 -include $(DEPS)

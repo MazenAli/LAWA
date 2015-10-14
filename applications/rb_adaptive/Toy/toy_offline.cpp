@@ -1,6 +1,22 @@
 #include "toy.h"
 
 
+struct precon
+{
+    T
+    operator() (const Index2D&)
+    {
+        return 1.;
+    }
+};
+
+T
+zero(T, T)
+{
+    return 0.;
+}
+
+
 int main () {
 
 	//===============================================================//
@@ -15,6 +31,35 @@ int main () {
     /// Basis initialization
     _Basis     basis(d, j0);
     Basis2D    basis2d(basis, basis);
+
+
+
+    for (int i = 1; i<= 6; ++i) {
+        DataType        u;
+
+        std::string     snapshot;
+        std::string     plot;
+        snapshot = "training_data_toy/snap/snap_";
+        plot     = "plot_";
+        snapshot += std::to_string(i);
+        plot     += std::to_string(i);
+        snapshot += ".txt";
+
+        std::cout << "Reading snapshot from file " << snapshot << std::endl;
+        std::cout << "Printing plot to file " << plot << std::endl;
+        readCoeffVector2D(u, snapshot.c_str());
+        precon _p;
+        plot2D(basis2d, u, _p,
+                                 zero,
+                                 0., 1.,
+                                 0., 1.,
+                                 1e-02,
+                                 plot.c_str());
+    }
+    exit(0);
+
+
+
     /// Initialization of operators
     DenseVectorT no_singPts;
     Function<T> zero_Fct(zero_fct,no_singPts);
@@ -85,14 +130,16 @@ int main () {
     // 	Left Hand Side
     vector<ThetaStructure<ParamType>::ThetaFct>	lhs_theta_fcts;
     lhs_theta_fcts.push_back(no_theta);
-    lhs_theta_fcts.push_back(no_theta);
     ThetaStructure<ParamType> lhs_theta(lhs_theta_fcts);
 
     vector<AbstractLocalOperator2D<T>* > lhs_ops;
     lhs_ops.push_back(&localLaplaceIdentityOp2D);
     lhs_ops.push_back(&localIdentityLaplaceOp2D);
+    Flex_COp_2D                       A(lhs_ops);
+    vector<Flex_COp_2D*>                 ops_vec;
+    ops_vec.push_back(&A);
 
-    Affine_Op_2D affine_lhs(lhs_theta, lhs_ops);
+    Affine_Op_2D affine_lhs(lhs_theta, ops_vec);
 
     H1_InnProd_2D innprod(localIdentityIdentityOp2D, localLaplaceIdentityOp2D, localIdentityLaplaceOp2D);
 
@@ -189,7 +236,7 @@ int main () {
     rb_base.greedy_params.tol = 1e-05;
     rb_base.greedy_params.min_param = mu_min;
     rb_base.greedy_params.max_param = mu_max;
-    rb_base.greedy_params.Nmax =    1;
+    rb_base.greedy_params.Nmax =    6;
     rb_base.greedy_params.nb_training_params = {{nb_stempel}};
     rb_base.greedy_params.log_scaling = {{0}};
     rb_base.greedy_params.print_file = "toy_greedy_info.txt";

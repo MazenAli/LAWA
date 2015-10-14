@@ -43,6 +43,6 @@ clean:
 # automatic dependencies -------------------------------------------------------
 %.d: %.cpp
 	$(CXX) -MM $(CPPFLAGS) $(CXXFLAGS) $< \
-		| sed 's/$*.o/& $(subst /,\/,$@)/g' > $@
+		| sed 's/$*\.o/& $(subst /,\/,$@)/g' > $@
 
 -include $(DEPS)

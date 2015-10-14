@@ -28,6 +28,22 @@ Coefficients<Lexicographical,T,Index>::Coefficients(void)
 {
 }
 
+
+template <typename T, typename Index>
+Coefficients<Lexicographical, T, Index>::
+Coefficients(const Coefficients<Lexicographical, T, Index>& _coeff)
+{
+    typedef typename Coefficients<Lexicographical,T,Index>::const_iterator const_it;
+    typedef typename Coefficients<Lexicographical,T,Index>::value_type val_type;
+
+    if (_coeff.size() > 0) {
+        for (const_it lambda = _coeff.begin(); lambda != _coeff.end(); ++lambda) {
+            this->insert(val_type((*lambda).first, (*lambda).second));
+        }
+    }
+}
+
+
 template <typename T, typename Index>
 Coefficients<Lexicographical,T,Index>&
 Coefficients<Lexicographical,T,Index>::operator=(const Coefficients<Lexicographical,T,Index> &_coeff)

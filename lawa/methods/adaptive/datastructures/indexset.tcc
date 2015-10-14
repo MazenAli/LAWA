@@ -53,6 +53,19 @@ IndexSet<Index>::IndexSet(size_t n)
 }
 #endif
 
+
+template <typename Index>
+IndexSet<Index>::IndexSet(const IndexSet<Index>& _set)
+{
+    typedef typename IndexSet<Index>::const_iterator const_it;
+    if (_set.size() > 0) {
+        for (const_it lambda = _set.begin(); lambda != _set.end(); ++lambda) {
+            this->insert(*lambda);
+        }
+    }
+}
+
+
 template <typename Index>
 IndexSet<Index>&
 IndexSet<Index>::operator=(const IndexSet<Index> &_set)

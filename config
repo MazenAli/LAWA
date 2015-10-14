@@ -1,5 +1,5 @@
 TARGET = $(shell uname)
-COMPILER = clang
+COMPILER = gcc
 BLASLAPACK = platform
 
 STANDARD = c11
@@ -40,10 +40,9 @@ ifeq ($(TARGET),Linux)
     CC  = gcc
     CXX = g++
     ifeq ($(BLASLAPACK),platform)
-      CPPFLAGS += -DWITH_GOTOBLAS -DHAVE_CBLAS -I/usr/include
-      LDLIBS   += -llapack -lgoto -lcblas -lblas -lgfortran
+      CPPFLAGS += -DWITH_OPENBLAS -DHAVE_CBLAS
+      LDLIBS   += -llapack -lopenblas -lcblas -lblas -lgfortran
       # Multi-Precision stuff -lmpfr -lgmpxx -lgmp
-      LDFLAGS  += -L/usr/lib
     endif
   endif
   ifeq ($(STANDARD),c11)
@@ -74,8 +73,8 @@ RELEASEMODE = -O3 -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
 PROFILEMODE = -p -g -DNDEBUG $(HASHTYPE)
 
 # --- select compilation-mode here by commenting / uncommenting
-CXXFLAGS += $(DEBUGMODE)
-#CXXFLAGS += $(RELEASEMODE)
+#CXXFLAGS += $(DEBUGMODE)
+CXXFLAGS += $(RELEASEMODE)
 #CXXFLAGS += $(PROFILEMODE)
 
 #CPPFLAGS += -D_GLIBCXX_PERMIT_BACKWARD_HASH

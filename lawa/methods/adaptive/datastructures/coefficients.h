@@ -104,6 +104,9 @@ struct Coefficients<Lexicographical,T,Index> : public __gnu_cxx::hash_map<Index,
     typedef Index 	IndexType;
 
 
+    Coefficients(const Coefficients<Lexicographical, T, Index>& _coeff);
+
+
     Coefficients<Lexicographical,T,Index>&
     operator=(const Coefficients<Lexicographical,T,Index> &_coeff);
 
