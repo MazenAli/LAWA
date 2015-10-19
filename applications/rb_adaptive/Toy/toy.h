@@ -164,6 +164,9 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
             for (std::size_t i=0; i<Qa; ++i) {
                 sample_Au(basis, Lambda, (*A[i]), P, bf, temp[i],
                           tol, true);
+                for (auto& lambda : temp[i]) {
+                    lambda.second *= -1.;
+                }
                 total += temp[i].size();
             }
 
@@ -358,7 +361,7 @@ typedef array<T,PDim>	 													ParamType;
 typedef AffineLocalOperator<Index2D,Flex_COp_2D,ParamType>	        Affine_Op_2D;
 typedef AffineRhs<T,Index2D,Rhs,ParamType>							Affine_Rhs_2D;
 typedef FlexibleCompoundRhs<T,Index2D,Rhs>							RieszF_Rhs_2D;
-typedef FlexibleBilformRhs<Index2D,AbstractLocalOperator2D<T> >				RieszA_Rhs_2D;
+typedef FlexibleBilformRhs<Index2D, Flex_COp_2D>				    RieszA_Rhs_2D;
 
 typedef FlexibleCompoundRhs<T,Index2D,Rhs>     					Flex_Rhs_2D;
 

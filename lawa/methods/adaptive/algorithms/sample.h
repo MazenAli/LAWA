@@ -10,6 +10,7 @@ namespace lawa
 {
 
 
+// Adaptive sampling of f
 template <typename T, typename _Basis, typename _Index, typename _Rhs>
 void
 sample_f(const _Basis& basis, IndexSet<_Index> Lambda, _Rhs& f,
@@ -28,6 +29,7 @@ sample_f(const _Basis& basis, IndexSet<_Index> Lambda, _Rhs& f,
          bool IsMW = false, T alpha = 0.7, std::size_t max_it = 1e+02);
 
 
+// Adaptive sampling of A*u
 // u assumed to be properly scaled
 template <typename T, typename _Basis, typename _Index, typename _Op,
           typename _Precon>

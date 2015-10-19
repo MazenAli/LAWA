@@ -176,7 +176,7 @@ int main (int argc, char* argv[]) {
 
     Affine_Rhs_2D affine_rhs(rhs_theta, rhs_fcts);
     RieszF_Rhs_2D rieszF_rhs(rhs_fcts);
-    RieszA_Rhs_2D rieszA_rhs(lhs_ops);
+    RieszA_Rhs_2D rieszA_rhs(ops_vec);
 
 
 	//===============================================================//
@@ -200,7 +200,7 @@ int main (int argc, char* argv[]) {
 
     MT_AWGM_Truth awgm_u(basis2d, affine_lhs, affine_rhs, prec, awgm_truth_parameters, is_parameters);
     awgm_u.set_sol(dummy);
-    awgm_u.awgm_params.tol = 1e-08;
+    awgm_u.awgm_params.tol = 3e-06;
     awgm_u.awgm_params.max_basissize = 3e+06;
     awgm_u.set_initial_indexset(Lambda);
 
@@ -315,15 +315,32 @@ int main (int argc, char* argv[]) {
     		DenseVectorT u_N = rb_system.get_rb_solution(n, mu);
             cout << "u_" << n << " = " << u_N << endl;
     		// Compute real error
+            //
     		DataType u_approx = rb_base.reconstruct_u_N(u_N, n);
-    		//u_approx -= u;
+            DataType Au, f, error;
+            auto& oper   = rb_truth.access_RieszSolver_A().get_rhs().get_bilformvec();
+            auto& func   = rb_truth.access_RieszSolver_F().get_rhs();
+            auto& prec1  = rb_truth.access_RieszSolver_A().get_testprec();
+            auto& prec2  = rb_truth.access_RieszSolver_F().get_testprec();
+            auto& basis1 = rb_truth.access_RieszSolver_A().get_testbasis();
+            auto& basis2 = rb_truth.access_RieszSolver_F().get_testbasis();
+            sample_Au(basis1, Lambda, (*oper[0]), prec1, u_approx, Au,
+                          1e-08, true);
+            func.set_active_comp(8);
+            sample_f(basis2, Lambda, func, prec2,
+                         f,
+                         1e-08, true);
+            error = Au - f;
+            std::cout << "Error = " << error.norm(2.) << std::endl;
+            exit(0);
+            //u_approx -= u;
     		err = 0.;//u_approx.norm(2.);
             cout << "Err = " << err << endl;
     		errs_mu.push_back(err);
     		
     		av_err(n) += err;
 
-            // Plot
+            /*/ Plot
     		for (int i = 1; i<= 1; ++i) {
                 std::string     plot;
                 plot     = "plot_reduced_";
@@ -331,14 +348,14 @@ int main (int argc, char* argv[]) {
 
                 std::cout << "Printing plot to file " << plot << std::endl;
                 precon _p;
-                plot2D(basis2d, u_approx, _p,
+                plot2D(basis2d, origin, _p,
                                          zero,
                                          0., 1.,
                                          0., 1.,
                                          1e-03,
                                          plot.c_str());
             }
-            exit(0);
+            exit(0);*/
 
             // Compute error estimator
     		errbound = rb_system.get_errorbound(u_N, mu);

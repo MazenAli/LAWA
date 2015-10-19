@@ -33,7 +33,7 @@ int main () {
     Basis2D    basis2d(basis, basis);
 
 
-
+/*
     for (int i = 1; i<= 6; ++i) {
         DataType        u;
 
@@ -57,7 +57,7 @@ int main () {
                                  plot.c_str());
     }
     exit(0);
-
+*/
 
 
     /// Initialization of operators
@@ -168,7 +168,7 @@ int main () {
 
     Affine_Rhs_2D affine_rhs(rhs_theta, rhs_fcts);
     RieszF_Rhs_2D rieszF_rhs(rhs_fcts);
-    RieszA_Rhs_2D rieszA_rhs(lhs_ops);
+    RieszA_Rhs_2D rieszA_rhs(ops_vec);
 
     // Right Hand Sides for direct Riesz Representor
     AffineA_Rhs_2D	 	affineA_rhs(lhs_theta, lhs_ops);

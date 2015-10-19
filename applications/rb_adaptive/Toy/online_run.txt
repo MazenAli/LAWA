@@ -50,7 +50,7 @@ Parameters Training:
 Parameters Truth Solver: 
 
 ###### AWGM Parameters #################
-# tol:                  1e-08               
+# tol:                  3e-06               
 # alpha:                0.7                 
 # max_its:              1000                
 # max_basissize:        3000000             
@@ -104,7 +104,7 @@ Parameters Riesz Solver A :
 # clear solver:         0                   
 #########################################
 
-Number of Basis Functions: 6
+Number of Basis Functions: 1
  Read training_data_toy/RB_A_1.txt
  Read training_data_toy/RB_F_1.txt
  Read training_data_toy/RB_F_2.txt
@@ -120,11 +120,6 @@ Number of Basis Functions: 6
  Read training_data_toy/A_F_representor_norms.txt
  Read training_data_toy/A_A_representor_norms.txt
  Read training_data_toy/bf/bf_1.txt
- Read training_data_toy/bf/bf_2.txt
- Read training_data_toy/bf/bf_3.txt
- Read training_data_toy/bf/bf_4.txt
- Read training_data_toy/bf/bf_5.txt
- Read training_data_toy/bf/bf_6.txt
 ===============================
 Test Parameters: 
 1
@@ -135,6 +130,6 @@ RB solution: 1 cg iterations
 u_1 = 
 1.77282       
 
-Err = 0
-Printing plot to file plot_reduced_1
-Printing plot to file plot_reduced_2
+Tolerance 7.2288e-09 reached after 36 iterations
+Tolerance 9.0847e-09 reached after 31 iterations
+Error = 2.0765e-06
