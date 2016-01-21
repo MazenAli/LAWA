@@ -19,6 +19,14 @@
  #include <iomanip>
  #include <lawa/righthandsides/righthandsides.h>
  #include <lawa/operators/operators.h>
+ #include <lawa/functiontypes/separablefunction2d.h>
+ #include <lawa/methods/adaptive/datastructures/coefficients.h>
+ #include <lawa/methods/adaptive/datastructures/index.h>
+ #include <lawa/methods/adaptive/righthandsides/rhs.h>
+ #include <lawa/settings/enum.h>
+ #include <cmath>
+ #include <flens/flens.cxx>
+
  
 namespace lawa {
 
@@ -180,6 +188,122 @@ estimate_SpaceTimeError_W0T(Coefficients<Lexicographical,T,Index2D> & u,
     }
     
     return std::sqrt(error_est);
+}
+
+
+template <typename T, typename Basis2D>
+T
+h1Error2D(Basis2D& basis2d,  SeparableFunction2D<T>&  u,
+                             SeparableFunction2D<T>&  ux,
+                             SeparableFunction2D<T>&  uy,
+          Coefficients<Lexicographical, T, Index2D>&  uh,
+          T tolu,
+          T tolux,
+          T toluy)
+{
+    typedef     SeparableRHS2D<T, Basis2D>                   INTEGRAL;
+    typedef     NoPreconditioner<T, Index2D>                 NoPrec;
+    typedef     RHS<T, Index2D, INTEGRAL, NoPrec>            _RHS;
+    typedef     Integral<Gauss,
+                typename Basis2D::FirstBasisType,
+                typename Basis2D::FirstBasisType>            WAVX;
+    typedef     Integral<Gauss,
+                typename Basis2D::SecondBasisType,
+                typename Basis2D::SecondBasisType>           WAVY;
+    typedef     Coefficients<Lexicographical, T, Index2D>    Coefficients;
+
+    flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>   nodeltas;
+
+    INTEGRAL      uint   (basis2d, u,  nodeltas, nodeltas, 100);
+    INTEGRAL      uxint  (basis2d, ux, nodeltas, nodeltas, 100);
+    INTEGRAL      uyint  (basis2d, uy, nodeltas, nodeltas, 100);
+    INTEGRAL      uxintdp(basis2d, ux, nodeltas, nodeltas, 100, 1, 0);
+    INTEGRAL      uyintdp(basis2d, uy, nodeltas, nodeltas, 100, 0, 1);
+
+    NoPrec        noprec;
+
+    _RHS          uref   (uint,    noprec);
+    _RHS          uxref  (uxint,   noprec);
+    _RHS          uyref  (uyint,   noprec);
+    _RHS          uxdpref(uxintdp, noprec);
+    _RHS          uydpref(uyintdp, noprec);
+
+    WAVX          psix(basis2d.first,  basis2d.first);
+    WAVY          psiy(basis2d.second, basis2d.second);
+
+    IndexSet<Index2D>       Lambda;
+    T gamma = 0.2;
+    getSparseGridIndexSet(basis2d, Lambda, 1, 0, gamma);
+
+    Coefficients    errorvec;
+    T               error = 0.;
+
+    // L2 error
+    Coefficients    Uref;
+    sample_f(basis2d, Lambda, uref, Uref, tolu, true);
+    errorvec = Uref - uh;
+    error   += std::pow(errorvec.norm(2.), 2.);
+    Uref.clear();
+    errorvec.clear();
+
+    // H1 seminorm error
+    // x part
+    sample_f(basis2d, Lambda, uxref, Uref, tolux, true);
+    error += std::pow(Uref.norm(2.), 2.);
+    Uref.clear();
+
+    T ux_uhx = 0.;
+    for (auto& lambda : uh) {
+        ux_uhx += lambda.second*uxdpref(lambda.first);
+    }
+    error -= 2.*ux_uhx;
+
+    T uhx_uhx = 0.;
+    for (auto& lambda1 : uh) {
+        for (auto& lambda2 : uh) {
+            if (lambda2.first.index2.xtype == lambda1.first.index2.xtype &&
+                lambda2.first.index2.j     == lambda1.first.index2.j     &&
+                lambda2.first.index2.k     == lambda1.first.index2.k) {
+
+                uhx_uhx += lambda1.second*lambda2.second*
+                           psix(lambda1.first.index1.j, lambda1.first.index1.k,
+                                                 lambda1.first.index1.xtype, 1,
+                               lambda2.first.index1.j, lambda2.first.index1.k,
+                                                 lambda2.first.index1.xtype, 1);
+            }
+        }
+    }
+    error += uhx_uhx;
+
+    // y part
+    sample_f(basis2d, Lambda, uyref, Uref, toluy, true);
+    error += std::pow(Uref.norm(2.), 2.);
+    Uref.clear();
+
+    T uy_uhy = 0.;
+    for (auto& lambda : uh) {
+        uy_uhy += lambda.second*uydpref(lambda.first);
+    }
+    error -= 2.*uy_uhy;
+
+    T uhy_uhy = 0.;
+    for (auto& lambda1 : uh) {
+        for (auto& lambda2 : uh) {
+            if (lambda2.first.index1.xtype == lambda1.first.index1.xtype &&
+                lambda2.first.index1.j     == lambda1.first.index1.j     &&
+                lambda2.first.index1.k     == lambda1.first.index1.k) {
+
+                uhy_uhy += lambda1.second*lambda2.second*
+                           psiy(lambda1.first.index2.j, lambda1.first.index2.k,
+                                                 lambda1.first.index2.xtype, 1,
+                               lambda2.first.index2.j, lambda2.first.index2.k,
+                                                 lambda2.first.index2.xtype, 1);
+            }
+        }
+    }
+    error += uhy_uhy;
+
+    return std::sqrt(error);
 }
 
 } // namespace lawa

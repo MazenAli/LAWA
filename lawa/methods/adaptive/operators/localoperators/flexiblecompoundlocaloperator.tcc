@@ -124,5 +124,15 @@ clear()
 	}
 }
 
+
+template <typename Index, typename LocalOperatorType>
+const std::vector<LocalOperatorType*>&
+FlexibleCompoundLocalOperator<Index, LocalOperatorType>::
+get_localops() const
+{
+    return localops;
+}
+
+
 } // namespace lawa
 

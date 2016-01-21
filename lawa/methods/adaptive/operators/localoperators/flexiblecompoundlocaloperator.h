@@ -69,6 +69,9 @@ public:
 	void
     clear();
 
+    const std::vector<LocalOperatorType*>&
+    get_localops() const;
+
 protected:
 
 	std::vector<LocalOperatorType*>& localops;

@@ -44,7 +44,7 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
             std::cout << "Init Lambda size is " << Lambda.size() << std::endl;
         }
 
-    private:
+    public:
         void
         calculate_Riesz_RHS_information(bool) override
         {
@@ -129,11 +129,12 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
         void
         calc_wav_RHS()
         {
+            this->F_representors.clear();
             assert(this->F_representors.size()==0);
 
             auto& F      = this->rb_truth.access_RieszSolver_F().get_rhs();
-            auto& P      = this->rb_truth.access_RieszSolver_F().get_testprec();
-            auto& basis  = this->rb_truth.access_RieszSolver_F().get_testbasis();
+            auto& P      = this->rb_truth.access_solver().get_testprec();
+            auto& basis  = this->rb_truth.access_solver().get_testbasis();
 
             std::size_t Qf = this->rb_system.Q_f();
             assert(Qf>0);
@@ -156,14 +157,15 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
             std::size_t Qa = this->rb_system.Q_a();
             assert(Qa>0);
             std::vector<DataType>   temp(Qa);
-            auto& A     = this->rb_truth.access_RieszSolver_A().get_rhs().get_bilformvec();
-            auto& P     = this->rb_truth.access_RieszSolver_A().get_testprec();
-            auto& basis = this->rb_truth.access_RieszSolver_A().get_testbasis();
+            auto& A     = this->rb_truth.access_solver().get_lhs().get_localops();
+            auto& P     = this->rb_truth.access_solver().get_testprec();
+            auto& basis = this->rb_truth.access_solver().get_testbasis();
 
 
             for (std::size_t i=0; i<Qa; ++i) {
                 sample_Au(basis, Lambda, (*A[i]), P, bf, temp[i],
                           tol, true);
+                // Because Kristina
                 for (auto& lambda : temp[i]) {
                     lambda.second *= -1.;
                 }
@@ -179,9 +181,10 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
         void
         calc_rb_data()
         {
+            std::cout << "Calculating RB data\n";
             // F_F_norms
             std::size_t Qf = this->rb_system.Q_f();
-            this->rb_system.F_F_representor_norms.engine().resize((int) Qf, (int) Qf);
+            this->rb_system.F_F_representor_norms.resize(Qf, Qf);
             for(std::size_t qf1 = 1; qf1 <= Qf; ++qf1) {
                 for (std::size_t qf2 = qf1; qf2 <= Qf; ++qf2) {
 
@@ -198,7 +201,7 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
             // A_A_norms
             std::size_t Qa      = this->rb_system.Q_a();
             std::size_t n_bf    = this->n_bf();
-            this->rb_system.A_A_representor_norms.resize(n_bf);
+            /*this->rb_system.A_A_representor_norms.resize(n_bf);
             for(std::size_t n1 = 0; n1 < n_bf; ++n1) {
                 this->rb_system.A_A_representor_norms[n1].clear();
 
@@ -226,11 +229,12 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
                     this->rb_system.A_A_representor_norms[n1].push_back(A_n1_n2);
                 }
             }
+            */
 
             // A_F_norms
             this->rb_system.A_F_representor_norms.resize(n_bf);
             for(std::size_t n = 0; n < n_bf; ++n) {
-            typename RB_Model::FullColMatrixT A_F(Qa, Qf);
+                typename RB_Model::FullColMatrixT A_F(Qa, Qf);
                 for(std::size_t qa = 1; qa <= Qa; ++qa) {
                     for(std::size_t qf = 1; qf <= Qf; ++qf) {
                         A_F(qa, qf) =
@@ -238,10 +242,11 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
                                    this->F_representors[qf-1]);
                     }
                 }
+                this->rb_system.A_F_representor_norms[n].resize(Qa, Qf);
                 this->rb_system.A_F_representor_norms[n] = A_F;
             }
 
-            // RB_A
+            /*/ RB_A
             this->rb_system.RB_A_matrices.resize(Qa);
             for (std::size_t q_a = 0; q_a < Qa; ++q_a) {
                 this->rb_system.RB_A_matrices[q_a].resize(n_bf, n_bf);
@@ -254,6 +259,7 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
                 std::cout << std::endl << "||------- RB_A (" << q_a << ")  -----------------------------------------||" << std::endl;
                 std::cout << this->rb_system.RB_A_matrices[q_a] << std::endl;
             }
+            */
 
             // RB_F
             this->rb_system.RB_F_vectors.resize(Qf);
@@ -262,11 +268,11 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
                 for (std::size_t n = 1; n <= n_bf; ++n) {
                     this->rb_system.RB_F_vectors[q_f](n) = this->rb_truth.rhs_u(q_f, this->rb_basisfunctions[n-1]);
                 }
-                std::cout << std::endl << "||------- RB_F (" << q_f << ")  -----------------------------------------||" << std::endl;
+                std::cout << std::endl << "||------- RB_F (" << q_f+1 << ")  -----------------------------------------||" << std::endl;
                 std::cout << this->rb_system.RB_F_vectors[q_f] << std::endl;
             }
 
-            // RB_InnerProduct
+            /*/ RB_InnerProduct
             this->rb_system.RB_inner_product.resize(n_bf, n_bf);
             for (unsigned int i = 1; i <= n_bf; ++i) {
                 for (unsigned int j = i; j <= n_bf; ++j) {
@@ -278,6 +284,7 @@ class RB_Base_wavest : public RB_Base<RB_Model, TruthModel, DataType, ParamType>
 
             std::cout << std::endl << "||------- RB_InnerProduct  ----------------------------------||" << std::endl;
             std::cout << this->rb_system.RB_inner_product << std::endl;
+            */
         }
 };
 
@@ -395,6 +402,19 @@ typedef RB_Base_wavest<RB_Model,MTTruthSolver,DataType,ParamType,IndexSet<Index2
 #define a   1./35.
 #define nb_stempel 9
 
+#define mx4 0.3
+#define mx5 0.4
+#define mx6 0.6
+#define mx7 0.7
+#define my4 0.3
+#define my5 0.4
+#define my6 0.6
+#define my7 0.7
+
+#define addon 40
+#define offset 1
+
+
 
 double
 ux(double x, double mx)
@@ -404,10 +424,122 @@ ux(double x, double mx)
 
 
 double
+xux(double x, double mx)
+{
+    return ux(x, mx)*(-1.*(x-mx)*2./(a*a));
+}
+
+
+double
+u1(double x)
+{
+    return ux(x, mx1);
+}
+
+
+double
+ux1(double x)
+{
+    return xux(x, mx1);
+}
+
+
+double
+u2(double x)
+{
+    return ux(x, mx2);
+}
+
+
+double
+ux2(double x)
+{
+    return xux(x, mx2);
+}
+
+
+double
+u3(double x)
+{
+    return ux(x, mx3);
+}
+
+
+double
+ux3(double x)
+{
+    return xux(x, mx3);
+}
+
+
+double
+u4(double x)
+{
+    return ux(x, mx4);
+}
+
+
+double
+ux4(double x)
+{
+    return xux(x, mx4);
+}
+
+
+double
+u5(double x)
+{
+    return ux(x, mx5);
+}
+
+
+double
+ux5(double x)
+{
+    return xux(x, mx5);
+}
+
+
+double
+u6(double x)
+{
+    return ux(x, mx6);
+}
+
+
+double
+ux6(double x)
+{
+    return xux(x, mx6);
+}
+
+
+double
+u7(double x)
+{
+    return ux(x, mx7);
+}
+
+
+double
+ux7(double x)
+{
+    return xux(x, mx7);
+}
+
+
+double
 uxx(double x, double mx)
 {
     return ux(x, mx)*(std::pow(x-mx,2.)*4./(a*a*a*a)
            -2./(a*a));
+}
+
+
+double
+f(double x, double y, double m1, double m2)
+{
+    return -1.*(uxx(x, m1)*ux(y, m2)+uxx(y, m2)*ux(x, m1));
 }
 
 
@@ -471,6 +603,286 @@ double
 f9(double x, double y)
 {
     return -1.*(uxx(x, mx3)*ux(y, my3)+uxx(y, my3)*ux(x, mx3));
+}
+
+
+double
+f10(double x, double y)
+{
+    return f(x, y, mx1, my4);
+}
+
+
+double
+f11(double x, double y)
+{
+    return f(x, y, mx1, my5);
+}
+
+
+double
+f12(double x, double y)
+{
+    return f(x, y, mx1, my6);
+}
+
+
+double
+f13(double x, double y)
+{
+    return f(x, y, mx1, my7);
+}
+
+
+double
+f14(double x, double y)
+{
+    return f(x, y, mx2, my4);
+}
+
+
+double
+f15(double x, double y)
+{
+    return f(x, y, mx2, my5);
+}
+
+
+double
+f16(double x, double y)
+{
+    return f(x, y, mx2, my6);
+}
+
+
+double
+f17(double x, double y)
+{
+    return f(x, y, mx2, my7);
+}
+
+
+double
+f18(double x, double y)
+{
+    return f(x, y, mx3, my4);
+}
+
+
+double
+f19(double x, double y)
+{
+    return f(x, y, mx3, my5);
+}
+
+
+double
+f20(double x, double y)
+{
+    return f(x, y, mx3, my6);
+}
+
+
+double
+f21(double x, double y)
+{
+    return f(x, y, mx3, my7);
+}
+
+
+double
+f22(double x, double y)
+{
+    return f(x, y, mx4, my1);
+}
+
+
+double
+f23(double x, double y)
+{
+    return f(x, y, mx4, my2);
+}
+
+
+double
+f24(double x, double y)
+{
+    return f(x, y, mx4, my3);
+}
+
+
+double
+f25(double x, double y)
+{
+    return f(x, y, mx4, my4);
+}
+
+
+double
+f26(double x, double y)
+{
+    return f(x, y, mx4, my5);
+}
+
+
+double
+f27(double x, double y)
+{
+    return f(x, y, mx4, my6);
+}
+
+
+double
+f28(double x, double y)
+{
+    return f(x, y, mx4, my7);
+}
+
+
+double
+f29(double x, double y)
+{
+    return f(x, y, mx5, my1);
+}
+
+
+double
+f30(double x, double y)
+{
+    return f(x, y, mx5, my2);
+}
+
+
+double
+f31(double x, double y)
+{
+    return f(x, y, mx5, my3);
+}
+
+
+double
+f32(double x, double y)
+{
+    return f(x, y, mx5, my4);
+}
+
+
+double
+f33(double x, double y)
+{
+    return f(x, y, mx5, my5);
+}
+
+
+double
+f34(double x, double y)
+{
+    return f(x, y, mx5, my6);
+}
+
+
+double
+f35(double x, double y)
+{
+    return f(x, y, mx5, my7);
+}
+
+
+double
+f36(double x, double y)
+{
+    return f(x, y, mx6, my1);
+}
+
+
+double
+f37(double x, double y)
+{
+    return f(x, y, mx6, my2);
+}
+
+
+double
+f38(double x, double y)
+{
+    return f(x, y, mx6, my3);
+}
+
+
+double
+f39(double x, double y)
+{
+    return f(x, y, mx6, my4);
+}
+
+
+double
+f40(double x, double y)
+{
+    return f(x, y, mx6, my5);
+}
+
+
+double
+f41(double x, double y)
+{
+    return f(x, y, mx6, my6);
+}
+
+
+double
+f42(double x, double y)
+{
+    return f(x, y, mx6, my7);
+}
+
+
+double
+f43(double x, double y)
+{
+    return f(x, y, mx7, my1);
+}
+
+
+double
+f44(double x, double y)
+{
+    return f(x, y, mx7, my2);
+}
+
+
+double
+f45(double x, double y)
+{
+    return f(x, y, mx7, my3);
+}
+
+
+double
+f46(double x, double y)
+{
+    return f(x, y, mx7, my4);
+}
+
+
+double
+f47(double x, double y)
+{
+    return f(x, y, mx7, my5);
+}
+
+
+double
+f48(double x, double y)
+{
+    return f(x, y, mx7, my6);
+}
+
+
+double
+f49(double x, double y)
+{
+    return f(x, y, mx7, my7);
 }
 
 
@@ -553,11 +965,372 @@ T theta_chi_8(const std::array<T,PDim>& mu)
 
 T theta_chi_9(const std::array<T,PDim>& mu)
 {
-    if(mu[0] > 8./nb_stempel){
+    if(mu[0] > 8./nb_stempel && mu[0] <= 9./nb_stempel){
        return 1;
     }
 	return 0;
 }
+
+
+T theta_chi_10(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > offset && mu[0] <= (offset+1./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_11(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+1./addon) && mu[0] <= (offset+2./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_12(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+2./addon) && mu[0] <= (offset+3./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_13(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+3./addon) && mu[0] <= (offset+4./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_14(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+4./addon) && mu[0] <= (offset+5./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_15(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+5./addon) && mu[0] <= (offset+6./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_16(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+6./addon) && mu[0] <= (offset+7./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_17(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+7./addon) && mu[0] <= (offset+8./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_18(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+8./addon) && mu[0] <= (offset+9./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_19(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+9./addon) && mu[0] <= (offset+10./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_20(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+10./addon) && mu[0] <= (offset+11./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_21(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+11./addon) && mu[0] <= (offset+12./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_22(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+12./addon) && mu[0] <= (offset+13./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_23(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+13./addon) && mu[0] <= (offset+14./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_24(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+14./addon) && mu[0] <= (offset+15./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_25(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+15./addon) && mu[0] <= (offset+16./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_26(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+16./addon) && mu[0] <= (offset+17./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_27(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+17./addon) && mu[0] <= (offset+18./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_28(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+18./addon) && mu[0] <= (offset+19./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_29(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+19./addon) && mu[0] <= (offset+20./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_30(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+20./addon) && mu[0] <= (offset+21./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_31(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+21./addon) && mu[0] <= (offset+22./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_32(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+22./addon) && mu[0] <= (offset+23./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_33(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+23./addon) && mu[0] <= (offset+24./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_34(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+24./addon) && mu[0] <= (offset+25./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_35(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+25./addon) && mu[0] <= (offset+26./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_36(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+26./addon) && mu[0] <= (offset+27./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_37(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+27./addon) && mu[0] <= (offset+28./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_38(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+28./addon) && mu[0] <= (offset+29./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_39(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+29./addon) && mu[0] <= (offset+30./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_40(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+30./addon) && mu[0] <= (offset+31./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_41(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+31./addon) && mu[0] <= (offset+32./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_42(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+32./addon) && mu[0] <= (offset+33./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_43(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+33./addon) && mu[0] <= (offset+34./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_44(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+34./addon) && mu[0] <= (offset+35./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_45(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+35./addon) && mu[0] <= (offset+36./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_46(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+36./addon) && mu[0] <= (offset+37./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_47(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+37./addon) && mu[0] <= (offset+38./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_48(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+38./addon) && mu[0] <= (offset+39./addon)){
+       return 1;
+    }
+	return 0;
+}
+
+
+T theta_chi_49(const std::array<T,PDim>& mu)
+{
+    if(mu[0] > (offset+39./addon) && mu[0] <= (offset+40./addon)){
+       return 1;
+    }
+	return 0;
+}
+
 
 T zero_fct(T /*x*/){
 	return 0;

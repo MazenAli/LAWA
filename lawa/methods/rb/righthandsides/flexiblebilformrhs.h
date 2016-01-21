@@ -34,6 +34,8 @@ public:
 
 	typedef typename LocalOperatorType::T T;
 
+    FlexibleBilformRhs(){};
+
 	FlexibleBilformRhs(std::vector<LocalOperatorType*>& _bilformvec);
 
 	virtual

@@ -48,6 +48,10 @@ public:
     virtual
 	void
 	set_active_comp(int i);
+
+    virtual
+    const RHSType&
+    get_comp(int i) const;
 	
 	void
     clear();

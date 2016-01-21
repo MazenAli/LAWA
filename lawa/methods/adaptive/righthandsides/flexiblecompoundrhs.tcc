@@ -79,6 +79,16 @@ FlexibleCompoundRhs<T, Index,RHSType>::set_active_comp(int i)
 	}
 }
 
+
+template <typename T, typename Index, typename RHSType>
+const RHSType&
+FlexibleCompoundRhs<T, Index,RHSType>::get_comp(int i) const
+{
+    assert(i>=0 && (size_t)i<rhsvec.size());
+    return (*rhsvec[i]);
+}
+
+
 template <typename T, typename Index, typename RHSType>
 void
 FlexibleCompoundRhs<T, Index,RHSType>::

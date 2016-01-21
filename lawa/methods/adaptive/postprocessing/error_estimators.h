@@ -25,6 +25,10 @@
 #include <fstream>
 #include <lawa/methods/adaptive/datastructures/datastructures.h>
 #include <vector>
+#include <lawa/functiontypes/separablefunction2d.h>
+#include <lawa/methods/adaptive/datastructures/coefficients.h>
+#include <lawa/methods/adaptive/datastructures/index.h>
+#include <lawa/settings/enum.h>
 
 namespace lawa {
 
@@ -62,6 +66,21 @@ T
 estimate_SpaceTimeError_W0T(Coefficients<Lexicographical,T,Index2D> & u,
                             Coefficients<Lexicographical,T,Index2D> & u_exact,
                             const Preconditioner &P);
+
+
+// Works only for
+// a) separable reference solutions,
+// b) orthonormal tensor multiwavelets,
+// c) with boundary conditions consistent with the reference solution.
+template <typename T, typename Basis2D>
+T
+h1Error2D(Basis2D& basis2d,  SeparableFunction2D<T>&  u,
+                             SeparableFunction2D<T>&  ux,
+                             SeparableFunction2D<T>&  uy,
+          Coefficients<Lexicographical, T, Index2D>&  uh,
+          T tolu  = 1e-12,
+          T tolux = 1e-12,
+          T toluy = 1e-12);
 
 }    //namespace lawa
 

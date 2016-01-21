@@ -395,12 +395,12 @@ int main () {
     rb_system.set_alpha(alphas);
    */
 
-    /*
-    ParamType min   = {{0.01,0}};
-    ParamType max   = {{20,1}};
+
+    ParamType min   = {{0.01,1.0125}};
+    ParamType max   = {{20,2.0125}};
     std::vector<ParamType> Xi_test = rb_base.generate_uniform_paramset(min,
                                                                        max,
-                                                                       {{50,9}},
+                                                                       {{20,41}},
                                                                        {{1,0}});
     std::ofstream data("Xi_new.txt");
     data.precision(16);
@@ -412,7 +412,7 @@ int main () {
     }
     data.close();
 
-    exit(0);*/
+    exit(0);
 
     rb_base.init();
     //rb_system.read_rb_data("training_data_stempel");

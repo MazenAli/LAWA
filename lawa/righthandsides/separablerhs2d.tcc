@@ -5,9 +5,10 @@ SeparableRHS2D<T, Basis2D>::SeparableRHS2D
                             (const Basis2D& _basis, const SeparableFunction2D<T>& _F,
                              const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &_deltas_x,
                              const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &_deltas_y,
-                             int order)
+                             int order, int _deriv1, int _deriv2)
     : basis(_basis), F(_F), deltas_x(_deltas_x), deltas_y(_deltas_y),
-      integralf_x(F.F_x, basis.first), integralf_y(F.F_y, basis.second)
+      integralf_x(F.F_x, basis.first), integralf_y(F.F_y, basis.second),
+      deriv1(_deriv1), deriv2(_deriv2)
 {
     integralf_x.quadrature.setOrder(order);
     integralf_y.quadrature.setOrder(order);
@@ -21,14 +22,14 @@ SeparableRHS2D<T, Basis2D>::operator()(XType xtype_x, int j_x, long k_x,
     T val_x = 0;
     T val_y = 0;
 
-    val_x += integralf_x(j_x, k_x, xtype_x, 0);
+    val_x += integralf_x(j_x, k_x, xtype_x, deriv1);
     for (int i=1; i<=deltas_x.numRows(); ++i) {
-        val_x += deltas_x(i,2) * basis.first.generator(xtype_x)(deltas_x(i,1),j_x,k_x,0);
+        val_x += deltas_x(i,2) * basis.first.generator(xtype_x)(deltas_x(i,1),j_x,k_x,deriv1);
     }
 
-    val_y += integralf_y(j_y, k_y, xtype_y, 0);
+    val_y += integralf_y(j_y, k_y, xtype_y, deriv2);
     for (int i=1; i<=deltas_y.numRows(); ++i) {
-        val_y += deltas_y(i,2) * basis.second.generator(xtype_y)(deltas_y(i,1),j_y,k_y,0);
+        val_y += deltas_y(i,2) * basis.second.generator(xtype_y)(deltas_y(i,1),j_y,k_y,deriv2);
     }
 
     return val_x * val_y;
