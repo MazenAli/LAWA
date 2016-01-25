@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <lawa/methods/rb/datastructures/rb_system.h>
+#include <lawa/methods/rb/datastructures/mt_truth.h>
 #include <lawa/methods/rb/datastructures/thetastructure.h>
 #include <lawa/methods/rb/datastructures/rb_parameters.h>
 
@@ -32,14 +33,20 @@ namespace lawa {
  * 		General offline computations for the construction of
  * 		a reduced basis model.
  */
-template <typename RB_Model, typename TruthModel, typename DataType, typename ParamType>
+template <typename RB_Model, typename TruthModel, typename DataType, typename ParamType,
+          typename _IndexSet>
 class RB_Base{
 
 	typedef typename DataType::ValueType 						T;
 	typedef typename RB_Greedy_Parameters<ParamType>::intArray 	intArrayType;
 
+    const _IndexSet&    Lambda;
+    double              tol     = 1e-8;
+    long                total   = 0;
+
 public:
-	RB_Base(RB_Model& _rb_system, TruthModel& _rb_truth);
+	RB_Base(RB_Model& _rb_system, TruthModel& _rb_truth,
+            const _IndexSet& _Lambda);
 
 	std::size_t
 	n_bf();
@@ -49,11 +56,6 @@ public:
 	
 	void
 	train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N = 0);
-
-	/*
-	void
-	train_strong_Greedy();
-	*/
 
     DataType
     reconstruct_u_N(typename RB_Model::DenseVectorT u, std::size_t N);
@@ -107,7 +109,10 @@ public:
 
 	std::vector<DataType> 				rb_basisfunctions;
 
-public:
+    void
+    calc_rb_data();
+
+private:
 
 	void
 	add_to_basis(const DataType& u);
@@ -117,11 +122,17 @@ public:
 
     virtual
 	void
-	calculate_Riesz_RHS_information(bool update = false);
+	calculate_Riesz_RHS_information();
+
+    void
+    calc_wav_RHS();
 
     virtual
     void
-	calculate_Riesz_LHS_information(const DataType& bf, bool update = false	);
+	calculate_Riesz_LHS_information(const DataType& bf);
+
+    void
+    calc_wav_LHS(const DataType& bf);
 
 	void
 	recalculate_A_F_norms();

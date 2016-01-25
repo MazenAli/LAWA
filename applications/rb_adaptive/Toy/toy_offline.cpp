@@ -475,18 +475,17 @@ int main () {
     cout << "Parameters Riesz Solver Res : " << std::endl << std::endl;
     awgm_rieszRes.awgm_params.print();
 
-    rb_base.init();
-    rb_system.read_rb_data("training_data_toy");
-    rb_base.read_basisfunctions("training_data_toy/bf");
-    for (int i=0; i<rb_base.n_bf(); ++i) {
+    //rb_system.read_rb_data("training_data_toy");
+    //rb_base.read_basisfunctions("training_data_toy/bf");
+    /*for (int i=0; i<rb_base.n_bf(); ++i) {
         std::cout << " i = " << i+1 << std::endl;
         std::cout << rb_base.rb_basisfunctions[i].size() << std::endl;
-    }
+    }*/
     //rb_base.read_rieszrepresentors("training_data_toy/representors");
     //rb_base.calculate_Riesz_RHS_information(true);
     //rb_base.calc_rb_data();
     //rb_system.write_rb_data("training_data_toy");
-    //rb_base.train_Greedy();
+    rb_base.train_Greedy();
 
     std::cout << "toy_offline exited normally\n";
     return 0;
