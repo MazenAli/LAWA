@@ -112,7 +112,6 @@ void
 THRESH_NoCopy(Coefficients<Lexicographical,T,Index2D> &v, T eta)
 {
     typedef typename Coefficients<AbsoluteValue,T,Index2D >::iterator it;
-    typedef typename Coefficients<Lexicographical,T,Index2D >::const_iterator const_coeff_it;
     Coefficients<AbsoluteValue,T,Index2D > temp;
     temp = v;
 
@@ -132,7 +131,6 @@ template <typename T>
 Coefficients<Lexicographical,T,Index2D>
 MULTITREE_THRESH(const Coefficients<Lexicographical,T,Index2D > &v, T eta)
 {
-    typedef typename Coefficients<AbsoluteValue,T,Index2D >::iterator it;
     typedef typename Coefficients<Lexicographical,T,Index2D >::const_iterator const_coeff_it;
     Coefficients<Lexicographical,T,Index2D > ret;
     Coefficients<AbsoluteValue,T,Index2D > temp;

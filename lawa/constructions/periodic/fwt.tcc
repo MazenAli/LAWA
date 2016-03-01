@@ -44,8 +44,7 @@ reconstruct(const flens::DenseVector<X> &x,
 {
     assert(j>=basis.j0);
     assert(x.length()%2==0);
-    typedef typename X::ElementType T;
-    
+
     int middle = x.firstIndex() + x.length()/2 - 1;
     y.engine().resize(x.range()) || y.engine().fill();
     y  = basis.mra.M0*x(_(x.firstIndex(),middle));

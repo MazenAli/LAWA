@@ -28,7 +28,6 @@ IndexSet<Index2D>
 CompressionPDE2D<T,Basis2D>::SparsityPattern(const Index2D &lambda_col,
                                              const IndexSet<Index2D> &LambdaRow)
 {
-    typedef typename IndexSet<Index1D>::const_iterator set1d_const_it;
     typedef typename IndexSet<Index2D>::const_iterator set2d_const_it;
 
     IndexSet<Index2D> LambdaRowSparse;

@@ -22,7 +22,7 @@
 #define LAWA_CONSTRUCTIONS_TENSORBASIS3D_H 1
 
 namespace lawa{
-    
+
 template<MethodType Method, typename FirstBasis, typename SecondBasis, typename ThirdBasis>
 struct TensorBasis3D
 {

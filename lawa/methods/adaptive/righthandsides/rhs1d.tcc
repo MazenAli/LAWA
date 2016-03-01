@@ -85,7 +85,6 @@ T
 RHS1D<T,RHSINTEGRAL,Preconditioner>::operator()(const Index1D &lambda)
 {
     typedef typename Coefficients<Lexicographical,T,Index1D>::const_iterator const_coeff_it;
-    typedef typename Coefficients<AbsoluteValue,T,Index1D>::value_type val_type;
     const_coeff_it it_end       = rhs_data.end();
     const_coeff_it it_index     = rhs_data.find(lambda);
 

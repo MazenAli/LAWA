@@ -10,7 +10,6 @@ CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,In
 {
     typedef typename IndexSet<Index >::const_iterator const_set_it;
     typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-    typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
 
     Timer timer;
     if (assemble_matrix==0) {
@@ -111,7 +110,6 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
 
         typedef typename IndexSet<Index >::const_iterator const_set_it;
         typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-        typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
         typedef flens::DenseVector<flens::Array<T> >              DeVector;
         typedef flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > DeMatrix;
 
@@ -270,9 +268,6 @@ GMRESM_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,
 {
        typedef typename IndexSet<Index >::const_iterator const_set_it;
        typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-       typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
-       typedef flens::DenseVector<flens::Array<T> >              DeVector;
-       typedef flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > DeMatrix;
 
        std::cerr << "GMRESM_Solve called." << std::endl;
 
@@ -328,9 +323,6 @@ GMRES_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCo
 {
       typedef typename IndexSet<Index >::const_iterator const_set_it;
       typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-      typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
-      typedef flens::DenseVector<flens::Array<T> >              DeVector;
-      typedef flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > DeMatrix;
 
       std::cerr << "GMRES_Solve_PG called." << std::endl;
 
@@ -400,9 +392,6 @@ GMRESM_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaC
 {
       typedef typename IndexSet<Index >::const_iterator const_set_it;
       typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-      typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
-      typedef flens::DenseVector<flens::Array<T> >              DeVector;
-      typedef flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > DeMatrix;
 
       std::cerr << "GMRESM_Solve_PG called." << std::endl;
 
@@ -472,7 +461,6 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical
 {
         typedef typename IndexSet<Index >::const_iterator const_set_it;
         typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-        typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
 
         if (assemble_matrix==0) {   //Algorithm by Saad, p.237 ("CGNR")
             T alpha_cgls, beta_cgls, gammaPrev_cgls, gamma_cgls;
@@ -571,7 +559,6 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,  
 		else{
       typedef typename IndexSet<Index >::const_iterator const_set_it;
       typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
-      typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
 
       int NumOfRows = (int)LambdaRow.size();
       int NumOfCols = (int)LambdaCol.size();
@@ -621,7 +608,6 @@ CGLS_Solve(const IndexSet<Index> &LambdaRowOp, const IndexSet<SpaceIndex> &Lambd
     typedef typename IndexSet<SpaceIndex >::const_iterator const_set_initcond_it;
     typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
     typedef typename Coefficients<Lexicographical,T,SpaceIndex >::const_iterator const_coeff_initcond_it;
-    typedef typename Coefficients<Lexicographical,T,Index >::value_type val_type;
 
     std::cerr << "CGLS_SOLVE called..." << std::endl;
     int NumOfCols = LambdaCol.size();

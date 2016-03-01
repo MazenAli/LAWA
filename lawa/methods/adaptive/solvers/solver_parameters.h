@@ -70,6 +70,7 @@ struct AWGM_PG_Parameters{
     bool            clear_solver;
 
     AWGM_PG_Parameters(double _tol = 5e-03,
+                    double _tol_primal = 0.,
                     double _alpha = 0.7,
                     std::size_t _max_its = 100,
                     std::size_t _max_basissize = 400000,
@@ -87,9 +88,7 @@ struct AWGM_PG_Parameters{
                     std::string _plot_filename = "awgm_cgls_u_plot",
                     bool _write_intermediary_solutions = false,
                     std::string _intermediary_solutions_filename = "awgm_cgls_u",
-                    bool _clear_solver = false,
-                    double _tol_primal = 0.
-                    );
+                    bool _clear_solver = false);
 
     void print();
 };
@@ -117,6 +116,7 @@ struct AWGM_Parameters{
 
 
     AWGM_Parameters(double _tol = 5e-03,
+                    double _tol_primal = 0.,
                     double _alpha = 0.7,
                     std::size_t _max_its = 100,
                     std::size_t _max_basissize = 400000,
@@ -127,8 +127,7 @@ struct AWGM_Parameters{
                     std::size_t _hashmapsize = 10,
                     std::string _info_filename = "awgm_cg_conv_info.txt",
                     std::string _plot_filename = "awgm_cg_u_plot",
-                    bool _clear_solver = false,
-                    double _tol_primal = 0.);
+                    bool _clear_solver = false);
 
     void print();
 };

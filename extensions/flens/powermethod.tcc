@@ -54,7 +54,6 @@ void
 inversePowerMethod(const MatA &A, typename MatA::ElementType tol,
                    typename MatA::ElementType &lambda, VecX &y)
 {
-    typedef typename MatA::ElementType T;
     int maxIterations = std::numeric_limits<int>::max();
 
     VecX v, q;

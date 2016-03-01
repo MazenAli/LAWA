@@ -67,14 +67,15 @@ DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
             -fPIC -Wall -Wno-attributes
 
 # --- release mode ----------------------
-RELEASEMODE = -O3 -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
+RELEASEMODE = -O3 $(HASHTYPE) -fPIC -Wno-attributes
+RELEASEMODE += -DNDEBUG
 
 # --- profiling mode --------------------
 PROFILEMODE = -p -g -DNDEBUG $(HASHTYPE)
 
 # --- select compilation-mode here by commenting / uncommenting
-#CXXFLAGS += $(DEBUGMODE)
-CXXFLAGS += $(RELEASEMODE)
+CXXFLAGS += $(DEBUGMODE)
+#CXXFLAGS += $(RELEASEMODE)
 #CXXFLAGS += $(PROFILEMODE)
 
 #CPPFLAGS += -D_GLIBCXX_PERMIT_BACKWARD_HASH

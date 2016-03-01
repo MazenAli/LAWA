@@ -50,7 +50,7 @@ class SeparableRHS2D : public Rhs2D<T>
 
         T
         operator()(const Index2D &index) const;
-        
+
         void
         clear(){}
 
@@ -60,7 +60,7 @@ class SeparableRHS2D : public Rhs2D<T>
         const SeparableFunction2D<T>& F;
         const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_x;
         const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_y;
-        
+
         typedef typename Basis2D::FirstBasisType Basis_x;
         typedef typename Basis2D::SecondBasisType Basis_y;
 

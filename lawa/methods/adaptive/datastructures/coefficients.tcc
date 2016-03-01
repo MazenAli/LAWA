@@ -442,7 +442,6 @@ void
 Coefficients<Bucket,T,Index>::bucketsort(const Coefficients<Lexicographical,T,Index> &_coeff, T eps)
 {
     typedef typename Coefficients<Lexicographical,T,Index>::const_iterator const_it;
-    typedef typename Coefficients<Lexicographical,T,Index>::value_type val_type;
 
     for (int i=0; i<(int)buckets.size(); ++i) {
         buckets[i].clear();

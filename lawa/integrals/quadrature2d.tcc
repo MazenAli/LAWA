@@ -29,14 +29,13 @@ Quadrature2D<SparseGridGP,_Integral2D>::Quadrature2D(const _Integral2D &integral
 }
 
 template <typename _Integral2D>
-//const typename _Integral2D::T
-const double
+double
 Quadrature2D<SparseGridGP,_Integral2D>::operator()(double ax, double bx, double ay, double by) const
 {
     if ((ax == bx) || (ay == by)) {
         return 0.;
     }
-    
+
     T result = 0.;
     for (int i=1; i<=_weights.numRows(); ++i) {
         T x1 = 0.5*( (bx-ax)*_knots(i,1) + (bx+ax));

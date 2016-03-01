@@ -81,7 +81,7 @@ _integrate(const Integral<Quad,First,Second> &integral)
         return 0;
     }
 }
-    
+
 //--- function * primal/dual/orthogonal
 template <QuadratureType Quad, typename First, typename Second>
 typename First::T

@@ -322,7 +322,6 @@ fromCoefficientsToTreeCoefficients(const Coefficients<Lexicographical,T,Index1D>
                                  TreeCoefficients1D<T> &tree_v)
 {
     typedef typename Coefficients<Lexicographical,T,Index1D>::const_iterator    const_coeff1d_it;
-    typedef typename CoefficientsByLevel<T>::val_type                           val_type;
 
     for (const_coeff1d_it it=v.begin(); it!=v.end(); ++it) {
         short j     = (*it).first.j;

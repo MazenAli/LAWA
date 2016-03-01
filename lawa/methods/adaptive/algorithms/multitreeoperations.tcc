@@ -36,7 +36,6 @@ extendMultiTree(const Basis &basis, const Coefficients<Lexicographical,T,Index2D
 {
     typedef typename Coefficients<Lexicographical,T,Index2D>::const_iterator const_coeff2d_it;
     typedef IndexSet<Index1D>::const_iterator                                const_set1d_it;
-    typedef IndexSet<Index2D>::iterator                                      set2d_it;
 
 
 #ifdef TRONE
@@ -126,7 +125,6 @@ extendMultiTree(const Basis &basis, const Coefficients<Lexicographical,T,Index2D
 {
     typedef typename Coefficients<Lexicographical,T,Index2D>::const_iterator const_coeff2d_it;
     typedef IndexSet<Index1D>::const_iterator                                const_set1d_it;
-    typedef IndexSet<Index2D>::iterator                                      set2d_it;
 
 
 #ifdef TRONE
@@ -227,7 +225,6 @@ extendMultiTree(const Basis &basis, const Coefficients<Lexicographical,T,Index3D
 {
     typedef typename Coefficients<Lexicographical,T,Index3D>::const_iterator const_coeff3d_it;
     typedef IndexSet<Index1D>::const_iterator                                const_set1d_it;
-    typedef IndexSet<Index3D>::const_iterator                                set3d_it;
 
 #ifdef TRONE
     typedef std::tr1::unordered_map<Index1D, IndexSet<Index1D>, index_hashfunction<Index1D>, index_eqfunction<Index1D> >
@@ -409,7 +406,6 @@ void
 extendMultiTreeAtBoundary(const Basis &basis, const Coefficients<Lexicographical,T,Index2D>  &v,
                           Coefficients<Lexicographical,T,Index2D>  &C_v, int J, bool sparsetree)
 {
-    typedef typename Coefficients<Lexicographical,T,Index2D>::const_iterator const_coeff2d_it;
     typedef IndexSet<Index1D>::const_iterator                                const_set1d_it;
 
     IndexSet<Index1D> LambdaB_x1;
@@ -454,7 +450,6 @@ void
 extendMultiTreeAtBoundary(const Basis &basis, const Coefficients<Lexicographical,T,Index3D>  &v,
                           Coefficients<Lexicographical,T,Index3D>  &C_v, int J, bool sparsetree)
 {
-    typedef typename Coefficients<Lexicographical,T,Index3D>::const_iterator const_coeff3d_it;
     typedef IndexSet<Index1D>::const_iterator                                const_set1d_it;
 
     IndexSet<Index1D> LambdaB_x1;

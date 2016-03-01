@@ -61,7 +61,6 @@ reconstruct(const flens::DenseVector<X> &x,
             const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, int j,
             flens::DenseVector<Y> &y)
 {
-    typedef typename X::ElementType T;
     assert(j>=basis.j0);
     assert(x.range()==basis.mra.rangeI(j+1));
     basis.setLevel(j);
@@ -75,7 +74,6 @@ reconstruct_(const flens::DenseVector<X> &x,
              const Basis<typename X::ElementType,Dual,Interval,Cons> &basis_, int j,
              flens::DenseVector<Y> &y)
 {
-    typedef typename X::ElementType T;
     assert(j>=basis_.j0);
     assert(x.range()==basis_.mra_.rangeI_(j+1));
     basis_.setLevel(j);

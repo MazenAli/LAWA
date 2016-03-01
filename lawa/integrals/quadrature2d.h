@@ -44,7 +44,7 @@ class Quadrature2D<SparseGridGP,_Integral2D>
 
         Quadrature2D(const _Integral2D &integral);
 
-        const double
+        double
         operator()(double ax, double bx, double ay, double by) const;
 
         void setOrder(int order);
@@ -68,7 +68,7 @@ class Quadrature2D<FullGridGL,_Integral2D>
 {
     public:
         typedef typename _Integral2D::T T;
-        
+
         Quadrature2D(const _Integral2D &integral);
 
         const T
@@ -78,7 +78,7 @@ class Quadrature2D<FullGridGL,_Integral2D>
 
         void _initFullGrid();
         const _Integral2D &_integral;
-        
+
     private:
         int _order;
 
@@ -90,36 +90,36 @@ template <typename _Integral2D>
 class Quadrature2D<FullGridGL_localOrder, _Integral2D>
 {
     typedef Integral2D<FullGridGL, typename _Integral2D::Basis_X, typename _Integral2D::Basis_Y> Integral_nonLocal;
-    
+
     public:
         typedef typename _Integral2D::T T;
-      
-        Quadrature2D(const _Integral2D &integral);     
-      
+
+        Quadrature2D(const _Integral2D &integral);
+
         const T
         operator()(T ax, T bx, T ay, T by) const;
-        
+
         void setOrder(int order);
-        
+
         void set_refindfct(T (*_fct)(T));
-        
+
         void set_refindtol(T _tol);
 
         void set_lowOrder(int _lowOrder);
 
         void set_highOrder(int _highOrder);
-      
+
     private:
-      
+
         const _Integral2D &_integral;
         Integral_nonLocal integral_nonLocal;
-      
+
         Quadrature2D<FullGridGL, Integral_nonLocal> quadrature_lowOrder;
         Quadrature2D<FullGridGL, Integral_nonLocal> quadrature_highOrder;
         T (*refindfct)(T);
         T refindtol;
         int lowOrder, highOrder;
-        
+
         bool
         ref_indicator(T at, T bt, T ax, T bx) const;
 };

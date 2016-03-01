@@ -31,7 +31,6 @@ IndexSet<Index3D>
 CompressionPDE3D<T,Basis3D>::SparsityPattern(const Index3D &lambda_col,
                                              const IndexSet<Index3D> &LambdaRow)
 {
-    typedef typename IndexSet<Index1D>::const_iterator set1d_const_it;
     typedef typename IndexSet<Index3D>::const_iterator set3d_const_it;
 
     set3d_const_it LambdaRow_end = LambdaRow.end();
