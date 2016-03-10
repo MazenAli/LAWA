@@ -23,7 +23,8 @@
 
 #include <lawa/flensforlawa.h>
 #include <lawa/constructions/basis.h>
-#include <lawa/methods/adaptive/datastructures/datastructures.h>
+#include <lawa/methods/adaptive/datastructures/coefficients.h>
+#include <lawa/methods/adaptive/datastructures/treecoefficients1d.h>
 
 namespace lawa {
 

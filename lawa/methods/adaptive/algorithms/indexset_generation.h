@@ -21,7 +21,8 @@
 #ifndef LAWA_METHODS_ADAPTIVE_ALGORITHMS_INDEXSET_GENERATION_H_
 #define LAWA_METHODS_ADAPTIVE_ALGORITHMS_INDEXSET_GENERATION_H_
 
-#include <lawa/methods/adaptive/datastructures/datastructures.h>
+#include <lawa/methods/adaptive/datastructures/index.h>
+#include <lawa/methods/adaptive/datastructures/indexset.h>
 
 namespace lawa {
 

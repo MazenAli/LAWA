@@ -7,12 +7,14 @@ namespace lawa
 {
 
 template <typename T>
-SeparableFunctionD<T>::SeparableFunctionD(const std::vector<Function<T> >& _F,
+SeparableFunctionD<T>::SeparableFunctionD(const std::vector<FuncType>& _F,
                                           const size_type          _rank,
                                           const size_type          _dim):
-                     F(_F), rank_(_rank), dim_(_dim)
+    F(&_F),
+    rank_(_rank),
+    dim_(_dim)
 {
-    assert(F.size()==rank_*dim_);
+    assert(F->size()==rank()*dim());
 }
 
 
@@ -34,20 +36,18 @@ SeparableFunctionD<T>::dim() const
 
 template <typename T>
 T
-SeparableFunctionD<T>::operator()(const flens::
-                                        DenseVector
-                                        <flens::Array<T> >& x) const
+SeparableFunctionD<T>::eval(const DV& x) const
 {
-    assert((unsigned) x.length()==dim_);
+    assert((size_type) x.length()==dim());
     typedef typename flens::DenseVector<flens::Array<T> >::IndexType IndexType;
 
     T res = (T) 0;
-    for (size_type i=1; i<= rank_; ++i) {
+    for (size_type i=1; i<= rank(); ++i) {
         T temp = (T) 1;
         IndexType k;
         for (size_type j=1, k=x.firstIndex();
-             j<=dim_; ++j, k+=x.inc()) {
-            temp *= F[(j-1)*rank_+(i-1)](x(k));
+             j<=dim(); ++j, k+=x.inc()) {
+            temp *= getFunction(i, j)(x(k));
         }
         res += temp;
     }
@@ -57,22 +57,50 @@ SeparableFunctionD<T>::operator()(const flens::
 
 
 template <typename T>
-Function<T>&
-SeparableFunctionD<T>::operator()(const size_type i, const size_type j)
+const typename SeparableFunctionD<T>::FuncType&
+SeparableFunctionD<T>::getFunction(const size_type i, const size_type j) const
 {
-    assert(i>=1 && i<=rank_);
-    assert(j>=1 && i<=dim_);
-    return F[(j-1)*rank_+(i-1)];
+    assert(i>=1 && i<=rank());
+    assert(j>=1 && i<=dim());
+    return (*F)[(j-1)*rank()+(i-1)];
 }
 
 
 template <typename T>
-const Function<T>&
+typename SeparableFunctionD<T>::FuncType&
+SeparableFunctionD<T>::getFunction(const size_type i, const size_type j)
+{
+    assert(i>=1 && i<=rank());
+    assert(j>=1 && i<=dim());
+    return (*F)[(j-1)*rank()+(i-1)];
+}
+
+
+template <typename T>
+T
+SeparableFunctionD<T>::operator()(const DV& x) const
+{
+    return eval(x);
+}
+
+
+template <typename T>
+const typename SeparableFunctionD<T>::FuncType&
 SeparableFunctionD<T>::operator()(const size_type i, const size_type j) const
 {
-    assert(i>=1 && i<=rank_);
-    assert(j>=1 && i<=dim_);
-    return F[(j-1)*rank_+(i-1)];
+    assert(i>=1 && i<=rank());
+    assert(j>=1 && i<=dim());
+    return getFunction(i, j);
+}
+
+
+template <typename T>
+typename SeparableFunctionD<T>::FuncType&
+SeparableFunctionD<T>::operator()(const size_type i, const size_type j)
+{
+    assert(i>=1 && i<=rank());
+    assert(j>=1 && i<=dim());
+    return getFunction(i, j);
 }
 
 } // namespace lawa

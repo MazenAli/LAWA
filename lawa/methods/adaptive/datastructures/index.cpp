@@ -18,6 +18,7 @@
  */
 
 #include <lawa/methods/adaptive/datastructures/index.h>
+#include <cassert>
 
 namespace lawa {
 
@@ -98,6 +99,100 @@ Index3D::levelSum(void) const
 std::ostream& operator<<(std::ostream &s, const Index3D &_i)
 {
     s <<  _i.index1 << "," << _i.index2 << "," << _i.index3;
+    return s;
+}
+
+
+IndexD::IndexD(void):dim_(0), index_(){}
+
+
+IndexD::IndexD(const std::vector<Index1D>& _index):dim_(_index.size()),
+                                                   index_(_index){}
+
+
+int
+IndexD::levelSum() const
+{
+    int ret = 0;
+    for (size_type i=0; i<dim(); ++i) {
+        ret += getIndex()[i].j;
+    }
+
+    return ret;
+}
+
+
+IndexD::size_type
+IndexD::dim() const
+{
+    return dim_;
+}
+
+
+void
+IndexD::setIndex(const size_type i, const Index1D& _index)
+{
+    assert(i>=1 && i<=dim());
+    getIndex(i) = _index;
+}
+
+
+void
+IndexD::setIndex(const std::vector<Index1D>& _index)
+{
+    dim_   = _index.size();
+    index_ = _index;
+}
+
+
+const Index1D&
+IndexD::getIndex(const size_type i) const
+{
+    assert(i>=1 && i<=dim());
+    return index_[i-1];
+}
+
+
+Index1D&
+IndexD::getIndex(const size_type i)
+{
+    assert(i>=1 && i<=dim());
+    return index_[i-1];
+}
+
+
+const std::vector<Index1D>&
+IndexD::getIndex() const
+{
+    return index_;
+}
+
+
+const Index1D&
+IndexD::operator()(const size_type i) const
+{
+    assert(i>=1 && i<=dim());
+    return getIndex(i);
+}
+
+
+Index1D&
+IndexD::operator()(const size_type i)
+{
+    assert(i>=1 && i<=dim());
+    return getIndex(i);
+}
+
+
+std::ostream& operator<<(std::ostream& s, const IndexD& _Index)
+{
+    typedef IndexD::size_type   size_type;
+    s << "[";
+    for (size_type i=1; i<=_Index.dim(); ++i) {
+        s << _Index(i) << ";";
+    }
+    s << "]";
+
     return s;
 }
 

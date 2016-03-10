@@ -31,7 +31,20 @@ Coefficients<Lexicographical,T,Index>::Coefficients(void)
 
 template <typename T, typename Index>
 Coefficients<Lexicographical, T, Index>::
-Coefficients(const Coefficients<Lexicographical, T, Index>& _coeff)
+Coefficients(const Coefficients<Lexicographical, T, Index>& _coeff):
+    #ifdef TRONE
+    std::tr1::unordered_map<Index, T, index_hashfunction<Index>,
+                            index_eqfunction<Index> >()
+    #elif BOOST
+    boost::unordered_map<Index, T, index_hashfunction<Index>,
+                         index_eqfunction<Index> >()
+    #elif CONEONE
+    std::unordered_map<Index, T, index_hashfunction<Index>,
+                       index_eqfunction<Index> >()
+    #else
+    __gnu_cxx::hash_map<Index, T, index_hashfunction<Index>,
+                        index_eqfunction<Index> >()
+    #endif
 {
     typedef typename Coefficients<Lexicographical,T,Index>::const_iterator const_it;
     typedef typename Coefficients<Lexicographical,T,Index>::value_type val_type;

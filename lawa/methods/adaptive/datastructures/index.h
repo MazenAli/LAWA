@@ -22,6 +22,7 @@
 #define  LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_INDEX_H 1
 
 #include <boost/functional/hash.hpp>
+#include <vector>
 
 #include <lawa/settings/enum.h>
 #include <iostream>
@@ -80,6 +81,48 @@ struct Index3D
 };
 
 std::ostream& operator<<(std::ostream &s, const Index3D &_Index);
+
+class IndexD
+{
+public:
+    typedef std::vector<Index1D>::size_type     size_type;
+private:
+    size_type             dim_;
+    std::vector<Index1D>  index_;
+public:
+    IndexD(void);
+
+    IndexD(const std::vector<Index1D>& _index);
+
+    int
+    levelSum() const;
+
+    size_type
+    dim() const;
+
+    void
+    setIndex(const size_type i, const Index1D& _index);
+
+    void
+    setIndex(const std::vector<Index1D>& _index);
+
+    const Index1D&
+    getIndex(const size_type i) const;
+
+    Index1D&
+    getIndex(const size_type i);
+
+    const std::vector<Index1D>&
+    getIndex() const;
+
+    const Index1D&
+    operator()(const size_type i) const;
+
+    Index1D&
+    operator()(const size_type i);
+};
+
+std::ostream& operator<<(std::ostream &s, const IndexD &_Index);
 
 template <typename Index, typename PrincipalIndex, typename AlignedIndex, CoordinateDirection CoordX>
 struct

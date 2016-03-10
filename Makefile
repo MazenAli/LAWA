@@ -1,5 +1,5 @@
 include $(LAWA_HOME)/Makefile.common
-SUBDIRS := lawa extensions applications
+SUBDIRS := lawa extensions #applications
 
 all:
 	$(SILENT) for i in $(SUBDIRS); \

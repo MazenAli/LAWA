@@ -61,6 +61,10 @@ struct IntegralF
     IntegralF(const Function<T> &_function, const First &_first, const Second &_second,
               const T _left=0., const T _right=1.);
 
+    IntegralF(const IntegralF& _F);
+
+    IntegralF() = delete;
+
     T
     operator()(int _j1, long _k1, XType _e1, int _deriv) const;
 
@@ -79,12 +83,12 @@ struct IntegralF
     const T RightmLeft;
     const T SqrtRightmLeft;
     const T OneDivSqrtRightmLeft;
-    Quadrature<Quad,IntegralF<Quad,First,Second> > quadrature;
     const bool _f2;
     mutable int j1, deriv1,
                 j2, deriv2;
     mutable long k1, k2;
     mutable XType e1, e2;
+    Quadrature<Quad,IntegralF<Quad,First,Second> > quadrature;
 };
 
 } // namespace lawa

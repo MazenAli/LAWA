@@ -305,7 +305,7 @@ IntegralF<Quad,First,Second>::IntegralF(const Function<T> &_function,
                                         const First &_first, const T _left, const T _right)
     : function(_function), first(_first), second(_first), left(_left), right(_right),
       RightmLeft(right-left), SqrtRightmLeft(std::sqrt(right-left)),
-      OneDivSqrtRightmLeft(1./SqrtRightmLeft),quadrature(*this), _f2(false)
+      OneDivSqrtRightmLeft(1./SqrtRightmLeft), _f2(false),quadrature(*this)
 {
 }
 
@@ -315,10 +315,33 @@ IntegralF<Quad,First,Second>::IntegralF(const Function<T> &_function,
                                         const Second &_second, const T _left, const T _right)
     : function(_function), first(_first), second(_second), left(_left), right(_right),
       RightmLeft(right-left), SqrtRightmLeft(std::sqrt(right-left)),
-      OneDivSqrtRightmLeft(1./SqrtRightmLeft), quadrature(*this), _f2(true)
+      OneDivSqrtRightmLeft(1./SqrtRightmLeft), _f2(true), quadrature(*this)
 
 {
 }
+
+
+template <QuadratureType Quad, typename First, typename Second>
+IntegralF<Quad,First,Second>::IntegralF(const IntegralF& _F):
+        function(_F.function),
+        first(_F.first),
+        second(_F.second),
+        left(_F.left),
+        right(_F.right),
+        RightmLeft(_F.RightmLeft),
+        SqrtRightmLeft(_F.SqrtRightmLeft),
+        OneDivSqrtRightmLeft(_F.OneDivSqrtRightmLeft),
+        _f2(_F._f2),
+        j1(_F.j1),
+        deriv1(_F.deriv1),
+        j2(_F.j2),
+        deriv2(_F.deriv2),
+        k1(_F.k1),
+        k2(_F.k2),
+        e1(_F.e1),
+        e2(_F.e2),
+        quadrature(*this){}
+
 
 template <QuadratureType Quad, typename First, typename Second>
 typename First::T

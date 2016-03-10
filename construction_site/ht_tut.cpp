@@ -174,6 +174,7 @@ main()
     X.print_values();
     double eps = 1e-03;
     _X.truncate(eps, true);
+    _X.truncate(eps, false);
     _X.print_values();
 //    X.print_w_UorB();
     _X.print_w_UorB();
@@ -196,6 +197,8 @@ main()
     ++blub(3);
     std::cout << "blub=>\n" << blub << std::endl;
     */
+
+    X.print();
 
     return 0;
 }

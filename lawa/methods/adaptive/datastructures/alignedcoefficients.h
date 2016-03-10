@@ -32,7 +32,7 @@
 #endif
 
 #include <lawa/settings/enum.h>
-#include <lawa/methods/adaptive/datastructures/datastructures.h>
+#include <lawa/methods/adaptive/datastructures/coefficients.h>
 
 namespace lawa {
 

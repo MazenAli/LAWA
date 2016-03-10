@@ -169,9 +169,7 @@ class Basis<_T,Orthogonal,Interval,Multi>
         int _addRefinementLevel;    //B-splines for refinement are needed on higher levels
         int _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
 
-        Wavelet<T,Orthogonal,Interval,Multi> psi;
 
-        Basis<T,Orthogonal,Interval,MultiRefinement> refinementbasis;
 
 
    // private:      // should be private one fine day
@@ -180,7 +178,11 @@ class Basis<_T,Orthogonal,Interval,Multi>
                                        // bc(1) = 1 -> Dirichlet BC right.
         
         mutable int _j;                // the current level.
-    
+
+        Wavelet<T,Orthogonal,Interval,Multi> psi;
+
+        Basis<T,Orthogonal,Interval,MultiRefinement> refinementbasis;
+
         typedef T (*Evaluator)(T x, unsigned short deriv);
         
         friend class Wavelet<T,Orthogonal,Interval,Multi>;

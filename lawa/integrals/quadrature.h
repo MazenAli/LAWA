@@ -39,6 +39,10 @@ class Quadrature<Gauss,Integral>
 
         Quadrature(const Integral &_integral);
 
+        Quadrature(const Quadrature&) = delete;
+
+        Quadrature() = delete;
+
         const T
         operator()(T a, T b) const;
 
