@@ -1,5 +1,5 @@
-#ifndef LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_INDEXOPS_H
-#define LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_INDEXOPS_H 1
+#ifndef LAWA_METHODS_ADAPTIVE_ALGORITHMS_INDEXOPS_H
+#define LAWA_METHODS_ADAPTIVE_ALGORITHMS_INDEXOPS_H 1
 
 #include <lawa/methods/adaptive/datastructures/index.h>
 #include <lawa/methods/adaptive/datastructures/indexset.h>
@@ -33,6 +33,6 @@ maptowav(const unsigned long i, const Basis& basis);
 
 } // namespace lawa
 
-#include <lawa/methods/adaptive/datastructures/indexops.tcc>
+#include <lawa/methods/adaptive/algorithms/indexops.tcc>
 
-#endif // LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_INDEXOPS_H
+#endif // LAWA_METHODS_ADAPTIVE_ALGORITHMS_INDEXOPS_H

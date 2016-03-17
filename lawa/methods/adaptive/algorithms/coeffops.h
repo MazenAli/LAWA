@@ -1,5 +1,5 @@
-#ifndef LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_COEFFOPS_H
-#define LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_COEFFOPS_H 1
+#ifndef LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_H
+#define LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_H 1
 
 #include <iostream>
 #include <vector>
@@ -9,6 +9,7 @@
 #include <lawa/methods/adaptive/datastructures/coefficients.h>
 #include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
 #include <lawa/methods/adaptive/datastructures/htcoefficients.h>
+#include <lawa/methods/adaptive/operators/operatorsd/sepop.h>
 
 namespace lawa
 {
@@ -98,8 +99,46 @@ SepCoefficients<Lexicographical, T, Index1D>
 extract(const HTCoefficients<T, Basis>& tree,
         const htucker::DimensionIndex& idx);
 
+
+template <typename T, SortingCriterion S, typename Index>
+SepCoefficients<S, T, Index>
+add(const SepCoefficients<S, T, Index>& left,
+    const SepCoefficients<S, T, Index>& right);
+
+
+template <typename T, SortingCriterion S, typename Index>
+SepCoefficients<S, T, Index>
+operator+(const SepCoefficients<S, T, Index>& left,
+          const SepCoefficients<S, T, Index>& right);
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+eval(Sepop<Optype>& A,
+     const SepCoefficients<Lexicographical, T, Index1D>& u,
+     const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+operator*(Sepop<Optype>& A,
+          const SepCoefficients<Lexicographical, T, Index1D>& u);
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+eval(Sepop<Optype>& A,
+     const HTCoefficients<T, Basis>& u,
+     const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+operator*(Sepop<Optype>& A,
+          const HTCoefficients<T, Basis>& u);
+
 } // namespace lawa
 
-#include <lawa/methods/adaptive/datastructures/coeffops.tcc>
+#include <lawa/methods/adaptive/algorithms/coeffops.tcc>
 
-#endif // LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_COEFFOPS_H 1
+#endif // LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_H 1

@@ -17,15 +17,35 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
- 
-#include <lawa/methods/adaptive/algorithms/lambdatilde.h>
-#include <lawa/methods/adaptive/algorithms/linearsystemsolvers.h>
-#include <lawa/methods/adaptive/algorithms/localrefinement.h>
-#include <lawa/methods/adaptive/algorithms/multitreeoperations.h>
-#include <lawa/methods/adaptive/algorithms/security_zone.h>
-#include <lawa/methods/adaptive/algorithms/thresh.h>
-#include <lawa/methods/adaptive/algorithms/weightedapply1d.h>
-#include <lawa/methods/adaptive/algorithms/indexset_generation.h>
-#include <lawa/methods/adaptive/algorithms/sample.h>
-#include <lawa/methods/adaptive/algorithms/indexops.h>
-#include <lawa/methods/adaptive/algorithms/coeffops.h>
+
+#ifndef LAWA_METHODS_ADAPTIVE_OPERATORS_LOCALOPERATORS_ABSTRACTLOCALOPERATOR1D_H_
+#define LAWA_METHODS_ADAPTIVE_OPERATORS_LOCALOPERATORS_ABSTRACTLOCALOPERATOR1D_H_
+
+#include <lawa/methods/adaptive/datastructures/treecoefficients1d.h>
+
+namespace lawa {
+
+template <typename _T, typename TestBasis, typename TrialBasis=TestBasis>
+class AbstractLocalOperator1D {
+public:
+    typedef _T T;
+
+    virtual
+    void
+    eval(const TreeCoefficients1D<T> &PsiLambdaHat,
+         TreeCoefficients1D<T> &PsiLambdaCheck,
+         const char* mode) = 0;
+
+    virtual
+    const TrialBasis&
+    getTrialBasis() const  = 0;
+
+    virtual
+    const TestBasis&
+    getTestBasis() const   = 0;
+};
+
+
+} // namespace lawa
+
+#endif /* LAWA_METHODS_ADAPTIVE_OPERATORS_LOCALOPERATORS_ABSTRACTLOCALOPERATOR1D_H_ */

@@ -1,12 +1,12 @@
-#ifndef LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_COEFFOPS_TCC
-#define LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_COEFFOPS_TCC 1
+#ifndef LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_TCC
+#define LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_TCC 1
 
 #include <cassert>
 #include <iostream>
 #include <stdlib.h>
 #include <htucker/htucker.h>
 #include <flens/flens.cxx>
-#include <lawa/methods/adaptive/datastructures/indexops.h>
+#include <lawa/methods/adaptive/algorithms/indexops.h>
 
 namespace lawa
 {
@@ -160,6 +160,7 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
     assert(idx.min()>=1 && idx.max()<=tree.dim());
 
     typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >  Matrix;
+    typedef flens::DenseVector<flens::Array<T> >                      DV;
     using flens::_;
 
     for (auto tit=tree.tree().getGeneralTree().end();
@@ -180,6 +181,8 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
                 int sizec = (col>cols) ? col : cols;
                 U.resize(sizer, sizec);
                 U(_(1,rows),_(1,cols)) = copy;
+            } else {
+                U(_, col) = DV(rows);
             }
 
             for (const auto& it : coeff) {
@@ -232,6 +235,8 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
                 size_type sizec = (colsset>colsnode) ? colsset : colsnode;
                 U.resize(sizer, sizec);
                 U(_(1,rowsnode),_(1,colsnode)) = copy;
+            } else {
+                U.fill((T) 0);
             }
 
             for (size_type i=1; i<=colsset; ++i) {
@@ -419,6 +424,72 @@ extract(const HTCoefficients<T, Basis>& tree,
     exit(EXIT_FAILURE);
 }
 
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+eval(Sepop<Optype>& A,
+     const HTCoefficients<T, Basis>& u,
+     const std::size_t hashtablelength)
+{
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    HTCoefficients<T, Basis> sum;
+    if (!A.getIndexset().size()) {
+        std::cerr << "eval: empty Sepop<Optype>::indexset\n";
+        return sum;
+    }
+
+    for (size_type i=1; i<=A.rank(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        std::cout << "Current prod is\n";
+        prod.tree().print_w_UorB();
+        for (size_type j=1; j<=A.dim(); ++j) {
+            htucker::DimensionIndex idx(1);
+            idx[0] = j;
+
+            SepCoefficients<Lexicographical, T, Index1D>
+            frame = extract(prod, idx);
+
+            // Too many copies here -> efficiency loss!
+            for (size_type k=1; k<=frame.rank(); ++k) {
+                TreeCoefficients1D<T> input(hashtablelength,
+                                            u.basis().j0);
+                TreeCoefficients1D<T> output(hashtablelength,
+                                            A.ops(i, j).getTestBasis().j0);
+                input = frame(k, 1);
+                Coefficients<Lexicographical, T, Index1D> temp;
+                FillWithZeros(A.getIndexset(), temp);
+                output = temp;
+
+                std::cout << "frame(" << k << ", 1)=\n" << frame(k, 1)
+                          << "\ninput=\n" << input;
+                std::cout << "\noutput=\n" << temp << std::endl;
+                A.ops(i, j).eval(input, output, "A");
+                fromTreeCoefficientsToCoefficients(output, temp);
+                frame(k, 1) = temp;
+            }
+            set(prod, idx, frame);
+        }
+
+        if (i==1) {
+            sum = prod;
+        } else {
+            sum.tree() = sum.tree()+prod.tree();
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+operator*(Sepop<Optype>& A,
+          const HTCoefficients<T, Basis>& u)
+{
+    return eval(A, u);
+}
+
 } // namespace lawa
 
-#endif // LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_COEFFOPS_TCC 1
+#endif // LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_TCC 1

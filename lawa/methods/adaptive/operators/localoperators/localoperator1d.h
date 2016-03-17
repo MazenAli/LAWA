@@ -25,12 +25,14 @@
 #include <lawa/flensforlawa.h>
 #include <lawa/constructions/basis.h>
 #include <lawa/methods/adaptive/algorithms/localrefinement.h>
+#include <lawa/methods/adaptive/operators/localoperators/abstractlocaloperator1d.h>
 
 namespace lawa {
 
 template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm,
           typename BilinearForm=RefinementBilinearForm>
-class LocalOperator1D {
+class LocalOperator1D : public AbstractLocalOperator1D<typename TrialBasis::T,
+                                TestBasis, TrialBasis>{
 
     public:
         typedef typename TrialBasis::T T;
@@ -65,9 +67,15 @@ class LocalOperator1D {
 
         T
         operator()(const Index1D &row_index, const Index1D &col_index);
-        
+
         void
         clear();
+
+        const TrialBasis&
+        getTrialBasis() const;
+
+        const TestBasis&
+        getTestBasis() const;
 
     private:
         void

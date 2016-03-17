@@ -25,6 +25,32 @@ typedef lawa::SepCoefficients<
         lawa::Lexicographical, T, Index1D>      SepCoeff;
 
 
+typedef     lawa::AdaptiveLaplaceOperator1D<T,
+            lawa::Orthogonal,
+            lawa::Interval,
+            lawa::Multi>             Laplace1D;
+typedef     lawa::AdaptiveLaplaceOperator1D<T,
+            lawa::Orthogonal,
+            lawa::Interval,
+            lawa::MultiRefinement>   RefLaplace1D;
+typedef     lawa::AdaptiveIdentityOperator1D<T,
+            lawa::Orthogonal,
+            lawa::Interval,
+            lawa::Multi>             Identity1D;
+typedef     lawa::AdaptiveIdentityOperator1D<T,
+            lawa::Orthogonal,
+            lawa::Interval,
+            lawa::MultiRefinement>   RefIdentity1D;
+
+typedef     lawa::LocalOperator1D<Basis,
+            Basis, RefLaplace1D, Laplace1D>     LOp_Lapl1D;
+typedef     lawa::LocalOperator1D<Basis,
+            Basis, RefIdentity1D,
+            Identity1D>                         LOp_Id1D;
+
+typedef     lawa::Sepop<lawa::AbstractLocalOperator1D<T, Basis>>
+                                                Sepop;
+
 double
 x2(double x)
 {
@@ -123,24 +149,28 @@ main()
     std::cout << "F at\n" << x << "\nis equal\n" << F(x) << std::endl;
 
     lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
-    Index1D                         index1(1, 1, lawa::XWavelet);
+    Index1D                         index1(0, 1, lawa::XWavelet);
     Index1D                         index2(2, 1, lawa::XWavelet);
-    Index1D                         _index2(2, 3, lawa::XWavelet);
+    Index1D                         _index2(0, 3, lawa::XWavelet);
     Index1D                         index3(3, 2, lawa::XWavelet);
     Index1D                         index4(0, 1, lawa::XBSpline);
     Index1D                         index5(5, 3, lawa::XWavelet);
     std::vector<Index1D>            indexvec;
     std::vector<Index1D>            indexvec2;
     indexvec.push_back(index1);
-    indexvec.push_back(index2);
+    indexvec.push_back(index1);
+    indexvec.push_back(index1);
+    indexvec.push_back(index1);
+/*    indexvec.push_back(index2);
     indexvec.push_back(index3);
-    indexvec.push_back(index4);
+    indexvec.push_back(index4);*/
 
     indexvec2.push_back(_index2);
     indexvec2.push_back(_index2);
     indexvec2.push_back(_index2);
     indexvec2.push_back(_index2);
 
+    /*
     indexset.insert(index1);
     indexset.insert(index2);
     indexset.insert(index3);
@@ -148,7 +178,10 @@ main()
 
     indexset2.insert(index1);
     indexset2.insert(index2);
-    indexset2.insert(index3);
+    indexset2.insert(index3);*/
+
+    getFullIndexSet(basis, indexset, 1);
+    getFullIndexSet(basis, indexset2, 2);
 
     IndexD                          indexmd(indexvec);
     IndexD                          indexmd2(indexvec2);
@@ -216,41 +249,73 @@ main()
     tree.tree().print_w_UorB();
 
     htucker::DimensionIndex idx(1);
-    IDV                     _i(1);
-    _i(1) = 1;
-    idx.setValue(_i);
+    idx[0] = 4;
     std::cout << "Index << " << idx << std::endl;
     std::cout << "idx min = " << idx.min() << ", idx max = " << idx.max()
               << std::endl;
-    indexset.insert(index5);
+    //indexset.insert(index5);
     set(tree, idx, 2, Fint(i, j, indexset));
-    std::cout << "Post set tree is->\n";
-    tree.tree().print_w_UorB();
-    std::cout << std::endl;
+    //std::cout << "Post set tree is->\n";
+    //tree.tree().print_w_UorB();
+    //std::cout << std::endl;
 
     coeffset(1, 1) = Fint(i, j, indexset);
-    coeffset(2, 1) = Fint(i, j, indexset);
-    set(tree, idx, coeffset);
+    coeffset(2, 1) = Fint(1, 1, indexset2);
+
+    lawa::HTCoefficients<T, Basis>    tree2(dim, basis);
+
+    set(tree2, idx, coeffset);
     std::cout << "Post set mat tree is->\n";
-    tree.tree().print_w_UorB();
+    tree2.tree().print_w_UorB();
 
-    axpy(tree, idx, 1, -1., coeffset(2, 1));
-    axpy(tree, idx, 2, -1., coeffset(2, 1));
-    axpy(tree, idx, 1, 1.5, Fint(1, 1, indexset2));
-    std::cout << "Post axpy tree is->\n";
-    tree.tree().print_w_UorB();
+    //axpy(tree, idx, 1, -1., coeffset(2, 1));
+    //axpy(tree, idx, 2, -1., coeffset(2, 1));
+    //set(tree, idx, 1, 1.5, Fint(1, 1, indexset2));
+    //std::cout << "Post axpy tree is->\n";
+    //tree.tree().print_w_UorB();
 
-    axpy(tree, idx, 1., coeffset);
-    std::cout << "Post axpy mat tree is->\n";
-    tree.tree().print_w_UorB();
+    //axpy(tree, idx, 1., coeffset);
+    //std::cout << "Post axpy mat tree is->\n";
+    //tree.tree().print_w_UorB();
+
+    std::cout << "Coeffset is " << coeffset << std::endl;
 
     std::cout << "Evaluating set tree at " << indexmd << " = \n"
               << tree(indexmd) << std::endl;
 
     std::cout << "Extracting 1st col... ->\n"
-              << extract(tree, idx, 1);
+              << extract(tree2, idx, 1);
     std::cout << "Extracting all cols... ->\n"
-              << extract(tree, idx);
+              << extract(tree2, idx);
+
+
+    /** Here come separable operators
+     */
+
+
+    std::cout << "\n/**\n  *\n  *\n  *Here are tests for separable operators"
+              << "\n  *\n  *\n  *\n  */\n";
+    Laplace1D       LaplaceBil(basis);
+    RefLaplace1D    RefLaplaceBil(basis.refinementbasis);
+    Identity1D      IdentityBil(basis);
+    RefIdentity1D   RefIdentityBil(basis.refinementbasis);
+    LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
+    LOp_Id1D        id(basis, basis, RefIdentityBil, IdentityBil);
+
+    std::vector<lawa::AbstractLocalOperator1D<T, Basis>*>   ops;
+    for (int i=1; i<=dim; ++i) {
+        for (int j=1; j<=dim; ++j) {
+            (j==i) ? ops.push_back(&lapl) : ops.push_back(&id);
+        }
+    }
+
+    Sepop A(ops, dim, dim);
+    lawa::HTCoefficients<T, Basis>    result(dim, basis);
+    A.setIndexset(indexset);
+    std::cout << "Return indexset is\n" << A.getIndexset() << std::endl;
+    result = A*tree;
+    std::cout << "Result is\n";
+    result.tree().print_w_UorB();
 
     return 0;
 }

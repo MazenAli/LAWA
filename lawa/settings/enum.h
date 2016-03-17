@@ -107,6 +107,13 @@ enum VariationalFormulationType {
 	PetrovGalerkin
 };
 
+enum SepopType
+{
+    standard,
+    simple,
+    laplace
+};
+
 } // namespace lawa
 
 #endif // LAWA_SETTINGS_ENUM_H

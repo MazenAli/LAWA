@@ -37,6 +37,27 @@ operator()(const Index1D &row_index, const Index1D &col_index)
 	return Bil(row_index,col_index);
 }
 
+
+template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm,
+          typename BilinearForm>
+const TrialBasis&
+LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>::
+getTrialBasis() const
+{
+	return trialBasis;
+}
+
+
+template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm,
+          typename BilinearForm>
+const TestBasis&
+LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>::
+getTestBasis() const
+{
+	return testBasis;
+}
+
+
 template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm,
           typename BilinearForm>
 void

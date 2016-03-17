@@ -1,12 +1,19 @@
 #ifndef LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_HTCOEFFICIENTS_TCC
 #define LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_HTCOEFFICIENTS_TCC 1
 
-#include <lawa/methods/adaptive/datastructures/indexops.h>
+#include <lawa/methods/adaptive/algorithms/indexops.h>
 #include <flens/flens.cxx>
 #include <cassert>
+#include <cstddef>
 
 namespace lawa
 {
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>::HTCoefficients():
+    httree(),
+    basis_(nullptr){}
+
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>::HTCoefficients(const int d, const Basis& _basis):
@@ -16,7 +23,7 @@ HTCoefficients<T, Basis>::HTCoefficients(const int d, const Basis& _basis):
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>::HTCoefficients(const int d, const double split,
-                                  const Basis& _basis):
+                                         const Basis& _basis):
     httree(d, split),
     basis_(&_basis){}
 
@@ -57,6 +64,7 @@ template <typename T, typename Basis>
 const Basis&
 HTCoefficients<T, Basis>::basis() const
 {
+    assert(basis_);
     return *basis_;
 }
 
@@ -138,6 +146,16 @@ HTCoefficients<T, Basis>::operator()(const IndexD& index,
 {
     assert(index.dim()==(unsigned) dim());
     return eval(index, vardim);
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>&
+HTCoefficients<T, Basis>::operator=(const HTCoefficients<T, Basis>& copy)
+{
+    basis_ = &copy.basis();
+    httree = copy.tree();
+    return *this;
 }
 
 } // namespace lawa

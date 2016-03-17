@@ -155,6 +155,23 @@ SepCoefficients<S, T, Index>::operator()(const IndexD& index) const
     return eval(index);
 }
 
+
+template <SortingCriterion S, typename T, typename Index>
+SepCoefficients<S, T, Index>&
+SepCoefficients<S, T, Index>::
+operator=(const SepCoefficients<S, T, Index>& copy)
+{
+    assert(rank()>=copy.rank() && dim()==copy.dim());
+
+    for (size_type i=1; i<=copy.rank(); ++i) {
+        for (size_type j=1; j<=copy.dim(); ++j) {
+            getCoefficients(i, j) = copy(i, j);
+        }
+    }
+
+    return *this;
+}
+
 } // namespace lawa
 
 #endif // LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_SEPCOEFFICIENTS_TCC

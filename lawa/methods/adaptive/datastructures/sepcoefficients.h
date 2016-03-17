@@ -74,6 +74,9 @@ public:
 
     T
     operator()(const IndexD& index) const;
+
+    SepCoefficients<S, T, Index>&
+    operator=(const SepCoefficients<S, T, Index>& copy);
 };
 
 } // namespace lawa

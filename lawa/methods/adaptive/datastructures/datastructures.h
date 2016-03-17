@@ -31,6 +31,4 @@
 #include <lawa/methods/adaptive/datastructures/treecoefficients1d.h>
 #include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
 #include <lawa/methods/adaptive/datastructures/htcoefficients.h>
-#include <lawa/methods/adaptive/datastructures/indexops.h>
-#include <lawa/methods/adaptive/datastructures/coeffops.h>
 

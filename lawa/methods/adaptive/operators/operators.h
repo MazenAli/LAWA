@@ -23,3 +23,4 @@
 #include <lawa/methods/adaptive/operators/pdeoperators2d/pdeoperators2d.h>
 #include <lawa/methods/adaptive/operators/spacetimeoperators/spacetimeoperators.h>
 #include <lawa/methods/adaptive/operators/diagonalpreconditioneradaptiveoperator.h>
+#include <lawa/methods/adaptive/operators/operatorsd/operatorsd.h>

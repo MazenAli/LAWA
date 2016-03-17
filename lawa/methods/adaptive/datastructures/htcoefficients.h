@@ -19,9 +19,9 @@ private:
     const Basis*    basis_;
 
 public:
-    HTCoefficients()                        = delete;
+    HTCoefficients();
 
-    HTCoefficients(const HTCoefficients&)   = delete;
+    HTCoefficients(const HTCoefficients&)   = default;
 
     HTCoefficients(HTCoefficients&&)        = default;
 
@@ -64,6 +64,9 @@ public:
 
     T
     operator()(const IndexD& index, const int vardim) const;
+
+    HTCoefficients<T, Basis>&
+    operator=(const HTCoefficients<T, Basis>& copy);
 };
 
 } // namespace lawa
