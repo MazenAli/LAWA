@@ -103,11 +103,19 @@ std::ostream& operator<<(std::ostream &s, const Index3D &_i)
 }
 
 
-IndexD::IndexD(void):dim_(0), index_(){}
+IndexD::IndexD(void):
+    dim_(0),
+    index_(){}
 
 
-IndexD::IndexD(const std::vector<Index1D>& _index):dim_(_index.size()),
-                                                   index_(_index){}
+IndexD::IndexD(const std::vector<Index1D>& _index):
+    dim_(_index.size()),
+    index_(_index){}
+
+
+IndexD::IndexD(const size_type _dim):
+    dim_(_dim),
+    index_(_dim){}
 
 
 int

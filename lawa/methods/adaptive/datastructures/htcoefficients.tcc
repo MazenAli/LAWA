@@ -71,9 +71,20 @@ HTCoefficients<T, Basis>::basis() const
 
 template <typename T, typename Basis>
 void
-HTCoefficients<T, Basis>::orthogonolize()
+HTCoefficients<T, Basis>::orthogonalize()
 {
-    tree().orthogonolize();
+    tree().orthogonalize();
+}
+
+
+template <typename T, typename Basis>
+void
+HTCoefficients<T, Basis>::orthogonalize_svd(std::vector<
+                                            flens::DenseVector
+                                            <flens::Array<T> > >& sigmas,
+                                            const bool isorth)
+{
+    tree().orthogonalize_svd(sigmas, isorth);
 }
 
 

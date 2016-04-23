@@ -2,8 +2,11 @@
 #define LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_HTCOEFFICIENTS_H 1
 
 #include <htucker/htucker.h>
+#include <cstddef>
 #include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
 #include <lawa/methods/adaptive/datastructures/index.h>
+#include <flens/flens.cxx>
+#include <vector>
 
 namespace lawa
 {
@@ -45,7 +48,12 @@ public:
     basis() const;
 
     void
-    orthogonolize();
+    orthogonalize();
+
+    void
+    orthogonalize_svd(std::vector<
+                      flens::DenseVector<flens::Array<T> > >& sigmas,
+                      const bool isorth = false);
 
     void
     truncate(const int rank, bool isorth = false);

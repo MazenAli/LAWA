@@ -194,3 +194,6 @@ comperrs
 applications/rb_adaptive/Toy/run_backup.txt
 applications/rb_adaptive/Toy/timestat_run2.txt
 construction_site/output
+extensions/flens/libextensionsflens.a
+extensions/sparsegrid/libextensionssparsegrid.a
+construction_site/main

@@ -1,7 +1,13 @@
 #ifndef LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_TCC
 #define LAWA_METHODS_ADAPTIVE_ALGORITHMS_COEFFOPS_TCC 1
 
+#define _USE_MATH_DEFINES
+#ifndef MAX
+    #define MAX(x, y) (x>y) ? x : y
+#endif
+
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <stdlib.h>
 #include <htucker/htucker.h>
@@ -176,11 +182,9 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             if (!rows || !cols) {
                 U.resize(max, col);
             } else if (max>rows || col>cols) {
-                Matrix copy(U);
                 int sizer = (max>rows) ? max : rows;
                 int sizec = (col>cols) ? col : cols;
                 U.resize(sizer, sizec);
-                U(_(1,rows),_(1,cols)) = copy;
             } else {
                 U(_, col) = DV(rows);
             }
@@ -230,11 +234,9 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             if (!rowsnode || !colsnode) {
                 U.resize(rowsset, colsset);
             } else if (rowsset>rowsnode || colsset>colsnode) {
-                Matrix copy(U);
                 size_type sizer = (rowsset>rowsnode) ? rowsset : rowsnode;
                 size_type sizec = (colsset>colsnode) ? colsset : colsnode;
                 U.resize(sizer, sizec);
-                U(_(1,rowsnode),_(1,colsnode)) = copy;
             } else {
                 U.fill((T) 0);
             }
@@ -355,6 +357,109 @@ axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
 }
 
 
+template <typename T, SortingCriterion S, typename Index, typename Basis>
+void
+xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
+     const unsigned long col, const T alpha,
+     const Coefficients<S, T, Index>& coeff)
+{
+    assert(idx.length()>0);
+    assert(coeff.size()>0);
+    assert(col>0);
+    assert(idx.min()>=1 && idx.max()<=tree.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >  Matrix;
+    using flens::_;
+
+    for (auto tit=tree.tree().getGeneralTree().end();
+              tit>=tree.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            Matrix& U = const_cast<Matrix&>
+                        (tit.getNode()->getContent()
+                         ->getUorB());
+            unsigned long rows = U.numRows();
+            unsigned long cols = U.numCols();
+
+            unsigned long max = maxintind(coeff, tree.basis());
+            if (!rows || !cols) {
+                U.resize(max, col);
+            } else if (max>rows || col>cols) {
+                Matrix copy(U);
+                int sizer = (max>rows) ? max : rows;
+                int sizec = (col>cols) ? col : cols;
+                U.resize(sizer, sizec);
+                U(_(1,rows),_(1,cols)) = copy;
+            }
+
+            for (const auto& it : coeff) {
+                int rowi = maptoint(it.first, tree.basis());
+                U(rowi, col) = alpha*U(rowi, col)+it.second;
+            }
+
+            return;
+        }
+    }
+
+    std::cerr << "error xpay: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
+template <typename T, SortingCriterion S, typename Index, typename Basis>
+void
+xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
+     const T alpha, const SepCoefficients<S, T, Index>& coeff)
+{
+    assert(idx.length()>0);
+    assert(coeff.rank()>=1 && coeff.dim()==1);
+    assert(idx.min()>=1 && idx.max()<=tree.dim());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+    typedef typename SepCoefficients<S, T, Index>::size_type   size_type;
+    using flens::_;
+
+    for (auto tit=tree.tree().getGeneralTree().end();
+              tit>=tree.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            Matrix& U = const_cast<Matrix&>
+                        (tit.getNode()->getContent()
+                         ->getUorB());
+            size_type rowsnode = U.numRows();
+            size_type colsnode = U.numCols();
+            size_type colsset  = coeff.rank();
+            size_type rowsset  = 0;
+            for (size_type i=1; i<=colsset; ++i) {
+                auto max = maxintind(coeff(i, 1), tree.basis());
+                rowsset = (max>rowsset) ? max : rowsset;
+            }
+
+            if (!rowsnode || !colsnode) {
+                U.resize(rowsset, colsset);
+            } else if (rowsset>rowsnode || colsset>colsnode) {
+                Matrix copy(U);
+                size_type sizer = (rowsset>rowsnode) ? rowsset : rowsnode;
+                size_type sizec = (colsset>colsnode) ? colsset : colsnode;
+                U.resize(sizer, sizec);
+                U(_(1,rowsnode),_(1,colsnode)) = copy;
+            }
+
+            for (size_type i=1; i<=colsset; ++i) {
+                for (const auto& it : coeff(i, 1)) {
+                    int rowi = maptoint(it.first, tree.basis());
+                    U(rowi, i) = alpha*U(rowi, i)+it.second;
+                }
+            }
+
+            return;
+        }
+    }
+
+    std::cerr << "error xpay: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
 template <typename T, typename Basis>
 Coefficients<Lexicographical, T, Index1D>
 extract(const HTCoefficients<T, Basis>& tree,
@@ -425,24 +530,380 @@ extract(const HTCoefficients<T, Basis>& tree,
 }
 
 
-template <typename T, typename Optype, typename Basis>
-HTCoefficients<T, Basis>
+template <typename T, SortingCriterion S, typename Index>
+SepCoefficients<S, T, Index>
+add(const SepCoefficients<S, T, Index>& left,
+    const SepCoefficients<S, T, Index>& right)
+{
+    if (!(left.rank()*left.dim())) {
+        return right;
+    } else if (!(right.rank()*right.dim())) {
+        return left;
+    } else {
+        assert(left.dim()==right.dim());
+    }
+
+    typedef typename SepCoefficients<S, T, Index>::size_type    size_type;
+
+    SepCoefficients<S, T, Index> sum(left.rank()+right.rank(), left.dim());
+    for (size_type i=1; i<=sum.rank(); ++i) {
+        for (size_type j=1; j<=sum.dim(); ++j) {
+            if (i<=left.rank()) {
+                sum(i, j) = left(i, j);
+            } else {
+                sum(i, j) = right(i-left.rank(), j);
+            }
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, SortingCriterion S, typename Index>
+SepCoefficients<S, T, Index>
+operator+(const SepCoefficients<S, T, Index>& left,
+          const SepCoefficients<S, T, Index>& right)
+{
+    return add(left, right);
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+evalstandard(Sepop<Optype>& A,
+             const SepCoefficients<Lexicographical, T, Index1D>& u,
+             const std::size_t hashtablelength)
+{
+    assert(A.dim()==u.dim());
+    assert(A.type()==standard);
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    for (size_type i=1; i<=A.rank(); ++i) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, A.dim());
+            for (size_type j=1; j<=A.dim(); ++j) {
+                // Too many copies here
+                TreeCoefficients1D<T> input(hashtablelength,
+                                            A(i, j).getTrialBasis().j0);
+                TreeCoefficients1D<T> output(hashtablelength,
+                                            A(i, j).getTestBasis().j0);
+                input = u(k, j);
+                Coefficients<Lexicographical, T, Index1D> temp;
+                FillWithZeros(A.getrows(j), temp);
+                output = temp;
+
+
+                A(i, j).eval(input, output, "A");
+                fromTreeCoefficientsToCoefficients(output, temp);
+                prod(1, j) = temp;
+            }
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+evalsimple(Sepop<Optype>& A,
+           const SepCoefficients<Lexicographical, T, Index1D>& u,
+           const std::size_t hashtablelength)
+{
+    assert(A.dim()==u.dim());
+    assert(A.type()==simple);
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    for (size_type i=1; i<=A.rank(); ++i) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, A.dim());
+            for (size_type j=1; j<=prod.dim(); ++j) {
+                if (j!=i) {
+                    prod(1, j) = u(k, j);
+                }
+            }
+
+            // Too many copies here
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        A(i, 1).getTrialBasis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(i, 1).getTestBasis().j0);
+            input = u(k, i);
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(A.getrows(i), temp);
+            output = temp;
+
+            A(i, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            prod(1, i) = temp;
+
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+evallaplace(Sepop<Optype>& A,
+            const SepCoefficients<Lexicographical, T, Index1D>& u,
+            const std::size_t hashtablelength)
+{
+    assert(A.dim()==u.dim());
+    assert(A.type()==laplace);
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    for (size_type i=1; i<=A.rank(); ++i) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, A.dim());
+            for (size_type j=1; j<=prod.dim(); ++j) {
+                if (j!=i) {
+                    prod(1, j) = u(k, j);
+                }
+            }
+
+            // Too many copies here
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        A(1, 1).getTrialBasis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(1, 1).getTestBasis().j0);
+            input = u(k, i);
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(A.getrows(i), temp);
+            output = temp;
+
+            A(1, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            prod(1, i) = temp;
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
 eval(Sepop<Optype>& A,
-     const HTCoefficients<T, Basis>& u,
+     const SepCoefficients<Lexicographical, T, Index1D>& u,
      const std::size_t hashtablelength)
 {
+    assert(A.dim()==(unsigned) u.dim());
+
+    if (A.type()==standard) {
+        return evalstandard(A, u, hashtablelength);
+    } else if (A.type()==simple) {
+        return evalsimple(A, u, hashtablelength);
+    } else {
+        return evallaplace(A, u, hashtablelength);
+    }
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+operator*(Sepop<Optype>& A,
+          const SepCoefficients<Lexicographical, T, Index1D>& u)
+{
+    assert(A.dim()==u.dim());
+    return eval(A, u);
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+evalstandard(Sepop<Optype>& A,
+             const SepCoefficients<Lexicographical, T, Index1D>& u,
+             const std::vector<IndexSet<Index1D> >& rows,
+             const std::vector<IndexSet<Index1D> >& cols,
+             const std::size_t hashtablelength)
+{
+    assert(A.dim()==u.dim());
+    assert(A.type()==standard);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    for (size_type i=1; i<=A.rank(); ++i) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, A.dim());
+            for (size_type j=1; j<=A.dim(); ++j) {
+                // Too many copies here
+                TreeCoefficients1D<T> input(hashtablelength,
+                                            A(i, j).getTrialBasis().j0);
+                TreeCoefficients1D<T> output(hashtablelength,
+                                            A(i, j).getTestBasis().j0);
+                Coefficients<Lexicographical, T, Index1D> rest = u(k, j);
+                P(cols[j-1], rest);
+                input = rest;
+                Coefficients<Lexicographical, T, Index1D> temp;
+                FillWithZeros(rows[j-1], temp);
+                output = temp;
+
+                A(i, j).eval(input, output, "A");
+                fromTreeCoefficientsToCoefficients(output, temp);
+                prod(1, j) = temp;
+            }
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+evalsimple(Sepop<Optype>& A,
+           const SepCoefficients<Lexicographical, T, Index1D>& u,
+           const std::vector<IndexSet<Index1D> >& rows,
+           const std::vector<IndexSet<Index1D> >& cols,
+           const std::size_t hashtablelength)
+{
+    assert(A.dim()==u.dim());
+    assert(A.type()==simple);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    for (size_type i=1; i<=A.rank(); ++i) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, A.dim());
+            for (size_type j=1; j<=prod.dim(); ++j) {
+                if (j!=i) {
+                    prod(1, j) = u(k, j);
+                }
+            }
+
+            // Too many copies here
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        A(i, 1).getTrialBasis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(i, 1).getTestBasis().j0);
+            Coefficients<Lexicographical, T, Index1D> rest = u(k, i);
+            P(cols[i-1], rest);
+            input = rest;
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(rows[i-1], temp);
+            output = temp;
+
+            A(i, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            prod(1, i) = temp;
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+evallaplace(Sepop<Optype>& A,
+            const SepCoefficients<Lexicographical, T, Index1D>& u,
+            const std::vector<IndexSet<Index1D> >& rows,
+            const std::vector<IndexSet<Index1D> >& cols,
+            const std::size_t hashtablelength)
+{
+    assert(A.dim()==u.dim());
+    assert(A.type()==laplace);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    for (size_type i=1; i<=A.rank(); ++i) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, A.dim());
+            for (size_type j=1; j<=prod.dim(); ++j) {
+                if (j!=i) {
+                    prod(1, j) = u(k, j);
+                }
+            }
+
+            // Too many copies here
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        A(1, 1).getTrialBasis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(1, 1).getTestBasis().j0);
+            Coefficients<Lexicographical, T, Index1D> rest = u(k, i);
+            P(cols[i-1], rest);
+            input = rest;
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(rows[i-1], temp);
+            output = temp;
+
+            A(1, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            prod(1, i) = temp;
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Optype>
+SepCoefficients<Lexicographical, T, Index1D>
+eval(Sepop<Optype>& A,
+     const SepCoefficients<Lexicographical, T, Index1D>& u,
+     const std::vector<IndexSet<Index1D> >& rows,
+     const std::vector<IndexSet<Index1D> >& cols,
+     const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    if (A.type()==standard) {
+        return evalstandard(A, u, rows, cols, hashtablelength);
+    } else if (A.type()==simple) {
+        return evalsimple(A, u, rows, cols, hashtablelength);
+    } else {
+        return evallaplace(A, u, rows, cols, hashtablelength);
+    }
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalstandard(Sepop<Optype>& A,
+             const HTCoefficients<T, Basis>& u,
+             const double eps,
+             const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==standard);
+
     typedef typename Sepop<Optype>::size_type   size_type;
 
     HTCoefficients<T, Basis> sum;
-    if (!A.getIndexset().size()) {
-        std::cerr << "eval: empty Sepop<Optype>::indexset\n";
-        return sum;
-    }
-
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
     for (size_type i=1; i<=A.rank(); ++i) {
         HTCoefficients<T, Basis> prod(u);
-        std::cout << "Current prod is\n";
-        prod.tree().print_w_UorB();
         for (size_type j=1; j<=A.dim(); ++j) {
             htucker::DimensionIndex idx(1);
             idx[0] = j;
@@ -450,21 +911,18 @@ eval(Sepop<Optype>& A,
             SepCoefficients<Lexicographical, T, Index1D>
             frame = extract(prod, idx);
 
-            // Too many copies here -> efficiency loss!
+            // Too many copies here
             for (size_type k=1; k<=frame.rank(); ++k) {
                 TreeCoefficients1D<T> input(hashtablelength,
                                             u.basis().j0);
                 TreeCoefficients1D<T> output(hashtablelength,
-                                            A.ops(i, j).getTestBasis().j0);
+                                            A(i, j).getTestBasis().j0);
                 input = frame(k, 1);
                 Coefficients<Lexicographical, T, Index1D> temp;
-                FillWithZeros(A.getIndexset(), temp);
+                FillWithZeros(A.getrows(j), temp);
                 output = temp;
 
-                std::cout << "frame(" << k << ", 1)=\n" << frame(k, 1)
-                          << "\ninput=\n" << input;
-                std::cout << "\noutput=\n" << temp << std::endl;
-                A.ops(i, j).eval(input, output, "A");
+                A(i, j).eval(input, output, "A");
                 fromTreeCoefficientsToCoefficients(output, temp);
                 frame(k, 1) = temp;
             }
@@ -473,12 +931,191 @@ eval(Sepop<Optype>& A,
 
         if (i==1) {
             sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
         } else {
+            // Too many resizes here
             sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
         }
     }
 
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "evalstandard(A): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
     return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalsimple(Sepop<Optype>& A,
+           const HTCoefficients<T, Basis>& u,
+           const double eps,
+           const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==simple);
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    HTCoefficients<T, Basis> sum;
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (size_type i=1; i<=A.rank(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        htucker::DimensionIndex idx(1);
+        idx[0] = i;
+
+        SepCoefficients<Lexicographical, T, Index1D>
+        frame = extract(prod, idx);
+
+        // Too many copies here
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        u.basis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(i, 1).getTestBasis().j0);
+            input = frame(k, 1);
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(A.getrows(i), temp);
+            output = temp;
+
+            A(i, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            frame(k, 1) = temp;
+        }
+        set(prod, idx, frame);
+
+        if (i==1) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            // Too many resizes here
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "evalsimple(A): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(Sepop<Optype>& A,
+            const HTCoefficients<T, Basis>& u,
+            const double eps,
+            const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==laplace);
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    HTCoefficients<T, Basis> sum;
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (size_type i=1; i<=A.rank(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        htucker::DimensionIndex idx(1);
+        idx[0] = i;
+
+        SepCoefficients<Lexicographical, T, Index1D>
+        frame = extract(prod, idx);
+
+        // Too many copies here
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        u.basis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(1, 1).getTestBasis().j0);
+            input = frame(k, 1);
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(A.getrows(i), temp);
+            output = temp;
+
+            A(1, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            frame(k, 1) = temp;
+        }
+        set(prod, idx, frame);
+
+        if (i==1) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            // Too many resizes here
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "evallaplace(A): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+eval(Sepop<Optype>& A,
+     const HTCoefficients<T, Basis>& u,
+     const double eps,
+     const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+
+    if (A.type()==standard) {
+        return evalstandard(A, u, eps, hashtablelength);
+    } else if (A.type()==simple) {
+        return evalsimple(A, u, eps, hashtablelength);
+    } else {
+        return evallaplace(A, u, eps, hashtablelength);
+    }
 }
 
 
@@ -487,7 +1124,678 @@ HTCoefficients<T, Basis>
 operator*(Sepop<Optype>& A,
           const HTCoefficients<T, Basis>& u)
 {
+    assert(A.dim()==(unsigned) u.dim());
     return eval(A, u);
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalstandard(Sepop<Optype>& A,
+             const HTCoefficients<T, Basis>& u,
+             const std::vector<IndexSet<Index1D> >& rows,
+             const std::vector<IndexSet<Index1D> >& cols,
+             const double eps,
+             const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==standard);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    HTCoefficients<T, Basis> sum;
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (size_type i=1; i<=A.rank(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        for (size_type j=1; j<=A.dim(); ++j) {
+            htucker::DimensionIndex idx(1);
+            idx[0] = j;
+
+            SepCoefficients<Lexicographical, T, Index1D>
+            frame = extract(prod, idx);
+
+            // Too many copies here
+            for (size_type k=1; k<=frame.rank(); ++k) {
+                TreeCoefficients1D<T> input(hashtablelength,
+                                            u.basis().j0);
+                TreeCoefficients1D<T> output(hashtablelength,
+                                            A(i, j).getTestBasis().j0);
+                P(cols[j-1], frame(k, 1));
+                input = frame(k, 1);
+                Coefficients<Lexicographical, T, Index1D> temp;
+                FillWithZeros(rows[j-1], temp);
+                output = temp;
+
+                A(i, j).eval(input, output, "A");
+                fromTreeCoefficientsToCoefficients(output, temp);
+                frame(k, 1) = temp;
+            }
+            set(prod, idx, frame);
+        }
+
+        if (i==1) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            // Too many resizes here
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "evalstandard(A, rows, cols): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalsimple(Sepop<Optype>& A,
+           const HTCoefficients<T, Basis>& u,
+           const std::vector<IndexSet<Index1D> >& rows,
+           const std::vector<IndexSet<Index1D> >& cols,
+           const double eps,
+           const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==simple);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    HTCoefficients<T, Basis> sum;
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (size_type i=1; i<=A.rank(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        htucker::DimensionIndex idx(1);
+        idx[0] = i;
+
+        SepCoefficients<Lexicographical, T, Index1D>
+        frame = extract(prod, idx);
+
+        // Too many copies here
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        u.basis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(i, 1).getTestBasis().j0);
+            P(cols[i-1], frame(k, 1));
+            input = frame(k, 1);
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(rows[i-1], temp);
+            output = temp;
+
+            A(i, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            frame(k, 1) = temp;
+        }
+        set(prod, idx, frame);
+
+        if (i==1) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            // Too many resizes here
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "evalsimple(A, rows, cols): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(Sepop<Optype>& A,
+            const HTCoefficients<T, Basis>& u,
+            const std::vector<IndexSet<Index1D> >& rows,
+            const std::vector<IndexSet<Index1D> >& cols,
+            const double eps,
+            const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==laplace);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef typename Sepop<Optype>::size_type   size_type;
+
+    HTCoefficients<T, Basis> sum;
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (size_type i=1; i<=A.rank(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        htucker::DimensionIndex idx(1);
+        idx[0] = i;
+
+        SepCoefficients<Lexicographical, T, Index1D>
+        frame = extract(prod, idx);
+
+        // Too many copies here
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            TreeCoefficients1D<T> input(hashtablelength,
+                                        u.basis().j0);
+            TreeCoefficients1D<T> output(hashtablelength,
+                                        A(1, 1).getTestBasis().j0);
+            P(cols[i-1], frame(k, 1));
+            input = frame(k, 1);
+            Coefficients<Lexicographical, T, Index1D> temp;
+            FillWithZeros(rows[i-1], temp);
+            output = temp;
+
+            A(1, 1).eval(input, output, "A");
+            fromTreeCoefficientsToCoefficients(output, temp);
+            frame(k, 1) = temp;
+        }
+        set(prod, idx, frame);
+
+        if (i==1) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            // Too many resizes here
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "evallaplace(A, rows, cols): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+eval(Sepop<Optype>& A,
+     const HTCoefficients<T, Basis>& u,
+     const std::vector<IndexSet<Index1D> >& rows,
+     const std::vector<IndexSet<Index1D> >& cols,
+     const double eps,
+     const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    if (A.type()==standard) {
+        return evalstandard(A, u, rows, cols, eps, hashtablelength);
+    } else if (A.type()==simple) {
+        return evalsimple(A, u, rows, cols, eps, hashtablelength);
+    } else {
+        return evallaplace(A, u, rows, cols, eps, hashtablelength);
+    }
+}
+
+
+template <typename Basis>
+typename Sepdiagscal<Basis>::T
+compOmegamin2(const Basis& basis,
+              const typename Sepdiagscal<Basis>::size_type d,
+              const typename Sepdiagscal<Basis>::T order)
+{
+    assert(d>0);
+    return d*std::pow(2.,2.*order*basis.j0);
+}
+
+
+template <typename T, typename Basis>
+T
+compIndexscale(const SepCoefficients<Lexicographical, T, Index1D>& u,
+               const Basis& basis, const T order)
+{
+    typedef typename SepCoefficients<Lexicographical, T, Index1D>::size_type
+                                                                   size_type;
+
+    flens::DenseVector<flens::Array<int> >    jmax(u.dim());
+    for (size_type j=1; j<=u.dim(); ++j) {
+        for (size_type k=1; k<=u.rank(); ++k) {
+            for (const auto& it : u(k, j)) {
+                int level = it.first.j;
+                if (it.first.xtype==XWavelet) ++level;
+                jmax(j) = MAX(level, jmax(j));
+            }
+        }
+    }
+
+    T sum = 0;
+    for (size_type i=1; i<=u.dim(); ++i) {
+        sum += std::pow(2., 2.*order*jmax(i));
+    }
+
+    return sum/compOmegamin2(basis, u.dim(), order);
+}
+
+
+template <typename T, typename Basis>
+T
+compIndexscale(const HTCoefficients<T, Basis>& u, const T order)
+{
+    typedef typename SepCoefficients<Lexicographical, T, Index1D>::size_type
+                     size_type;
+
+    flens::DenseVector<flens::Array<int> >    jmax(u.dim());
+    for (int j=1; j<=u.dim(); ++j) {
+        htucker::DimensionIndex idx(1);
+        idx[0] = j;
+        SepCoefficients<Lexicographical, T, Index1D> frame = extract(u, idx);
+
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            for (const auto& it : frame(k, 1)) {
+                int level = it.first.j;
+                if (it.first.xtype==XWavelet) ++level;
+                jmax(j) = MAX(level, jmax(j));
+            }
+        }
+    }
+
+    T sum = 0;
+    for (int i=1; i<=u.dim(); ++i) {
+        sum += std::pow(2., 2.*order*jmax(i));
+    }
+
+    return sum/compOmegamin2(u.basis(), u.dim(), order);
+}
+
+
+template <typename Basis>
+void
+setScaling(Sepdiagscal<Basis>& S,
+           const typename Sepdiagscal<Basis>::T eps)
+{
+    S.set_eps(eps);
+    S.set_nu(eps);
+    S.comp_h();
+    S.comp_nplus();
+}
+
+
+template <typename T, typename Basis>
+SepCoefficients<Lexicographical, T, Index1D>
+eval(Sepdiagscal<Basis>& S,
+     const SepCoefficients<Lexicographical, T, Index1D>& u)
+{
+    assert(S.dim()==u.dim());
+
+    typedef typename Sepdiagscal<Basis>::size_type size_type;
+
+    T iscale = compIndexscale(u, S.basis(), S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+    T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+        T factor2 = 2.*std::pow(M_PI, -0.5)*
+                    (1./(1.+std::exp(-1.*S.h()*(T) i)));
+        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+        T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
+
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, S.dim());
+
+            for (size_type j=1; j<=S.dim(); ++j) {
+                prod(1, j) = u(k, j);
+
+                for (auto& it : prod(1, j)) {
+                    int level = it.first.j;
+                    if (it.first.xtype==XWavelet) ++level;
+                    T weight = std::pow(2., 2.*S.order()*level)/omega2;
+                    it.second *= factor2*std::exp(-alpha*weight);
+                }
+            }
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+SepCoefficients<Lexicographical, T, Index1D>
+operator*(Sepdiagscal<Basis>& S,
+          const SepCoefficients<Lexicographical, T, Index1D>& u)
+{
+    assert(S.dim()==u.dim());
+    return eval(S, u);
+}
+
+
+template <typename T, typename Basis>
+SepCoefficients<Lexicographical, T, Index1D>
+eval(Sepdiagscal<Basis>& S,
+     const SepCoefficients<Lexicographical, T, Index1D>& u,
+     const std::vector<IndexSet<Index1D> >& cols)
+{
+    assert(S.dim()==u.dim());
+    assert(cols.size()==S.dim());
+
+    typedef typename Sepdiagscal<Basis>::size_type size_type;
+
+    T iscale = compIndexscale(u, S.basis(), S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+    T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
+
+    SepCoefficients<Lexicographical, T, Index1D> sum;
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+        T factor2 = 2.*std::pow(M_PI, -0.5)*
+                    (1./(1.+std::exp(-1.*S.h()*(T) i)));
+        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+        T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
+
+        for (size_type k=1; k<=u.rank(); ++k) {
+            SepCoefficients<Lexicographical, T, Index1D> prod(1, S.dim());
+
+            for (size_type j=1; j<=S.dim(); ++j) {
+                prod(1, j) = u(k, j);
+                P(cols[j-1], prod(1, j));
+
+                for (auto& it : prod(1, j)) {
+                    int level = it.first.j;
+                    if (it.first.xtype==XWavelet) ++level;
+                    T weight = std::pow(2., 2.*S.order()*level)/omega2;
+                    it.second *= factor2*std::exp(-alpha*weight);
+                }
+            }
+            // Too many resizes here
+            sum = sum+prod;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+eval(Sepdiagscal<Basis>& S,
+     const HTCoefficients<T, Basis>& u,
+     const double eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+
+    typedef typename Sepdiagscal<Basis>::size_type  size_type;
+
+    T iscale = compIndexscale(u, S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+    T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
+
+    HTCoefficients<T, Basis> sum;
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        T factor2 = 2.*std::pow(M_PI, -0.5)*
+                    (1./(1+std::exp(-1.*S.h()*(T) i)));
+        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+        T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
+
+        for (size_type j=1; j<=S.dim(); ++j) {
+            htucker::DimensionIndex idx(1);
+            idx[0] = j;
+
+            SepCoefficients<Lexicographical, T, Index1D>
+            frame = extract(prod, idx);
+
+            for (size_type k=1; k<=frame.rank(); ++k) {
+                for (auto& it : frame(k, 1)) {
+                    int level = it.first.j;
+                    if (it.first.xtype==XWavelet) ++level;
+                    T weight = std::pow(2., 2.*S.order()*level)/omega2;
+                    it.second *= factor2*std::exp(-alpha*weight);
+                }
+            }
+            set(prod, idx, frame);
+        }
+
+        if (i==-1*(signed) S.n()) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "eval(S): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+operator*(Sepdiagscal<Basis>& S,
+          const HTCoefficients<T, Basis>& u)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    return eval(S, u);
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+eval(Sepdiagscal<Basis>& S,
+     const HTCoefficients<T, Basis>& u,
+     const std::vector<IndexSet<Index1D> >& cols,
+     const double eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(cols.size()==S.dim());
+
+    typedef typename Sepdiagscal<Basis>::size_type  size_type;
+
+    T iscale = compIndexscale(u, S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+    T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
+
+    HTCoefficients<T, Basis> sum;
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        T factor2 = 2.*std::pow(M_PI, -0.5)*
+                    (1./(1+std::exp(-1.*S.h()*(T) i)));
+        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+        T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
+
+        for (size_type j=1; j<=S.dim(); ++j) {
+            htucker::DimensionIndex idx(1);
+            idx[0] = j;
+
+            SepCoefficients<Lexicographical, T, Index1D>
+            frame = extract(prod, idx);
+
+            for (size_type k=1; k<=frame.rank(); ++k) {
+                P(cols[j-1], frame(k, 1));
+                for (auto& it : frame(k, 1)) {
+                    int level = it.first.j;
+                    if (it.first.xtype==XWavelet) ++level;
+                    T weight = std::pow(2., 2.*S.order()*level)/omega2;
+                    it.second *= factor2*std::exp(-alpha*weight);
+                }
+            }
+            set(prod, idx, frame);
+        }
+
+        if (i==-1*(signed) S.n()) {
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            sum.tree() = sum.tree()+prod.tree();
+            sum.truncate(eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "eval(S, cols): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+    return sum;
+}
+
+
+template <typename Basis>
+std::ostream& operator<<(std::ostream& s,
+                         const Sepdiagscal<Basis>& S)
+{
+    s << "dim    = " << S.dim() << std::endl;
+    s << "order  = " << S.order() << std::endl;
+    s << "eps    = " << S.eps() << std::endl;
+    s << "nu     = " << S.nu() << std::endl;
+    s << "h      = " << S.h() << std::endl;
+    s << "iscale = " << S.iscale() << std::endl;
+    s << "nplus  = " << S.nplus() << std::endl;
+    s << "n      = " << S.n();
+
+    return s;
+}
+
+
+template <typename T, typename Basis, typename Index>
+Coefficients<Lexicographical, T, Index>
+contraction(const HTCoefficients<T, Basis>& u,
+            const IndexSet<Index>& activex,
+            const flens::DenseVector<flens::Array<T> >& sigmas,
+            const int dim)
+{
+    assert(dim>=1 && dim<=u.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >  Matrix;
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = dim;
+
+    Coefficients<Lexicographical, T, Index> ret;
+    for(auto tit=u.tree().getGeneralTree().end();
+             tit>=u.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            const Matrix& U = tit.getNode()->getContent()->getUorB();
+            int numRows = U.numRows();
+            int numCols = U.numCols();
+            assert(sigmas.length()>=numCols);
+
+            for (const auto& mu : activex) {
+                int rowi = maptoint(mu, u.basis());
+                assert(rowi<=numRows);
+                T entry = 0.;
+                for (int j=1; j<=numCols; ++j) {
+                    entry += sigmas(j)*U(rowi, j)*U(rowi, j);
+                }
+                ret[mu] = std::sqrt(entry);
+            }
+
+            return ret;
+        }
+    }
+
+    std::cerr << "error contraction: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
+template <typename T, typename Basis, typename Index>
+void
+contraction(const HTCoefficients<T, Basis>& u,
+            const std::vector<IndexSet<Index> >& activex,
+            const std::vector<flens::DenseVector<flens::Array<T> > >& sigmas,
+            std::vector<Coefficients<Lexicographical, T, Index> >& ret)
+{
+    assert(activex.size()==(unsigned) u.dim() &&
+           sigmas.size()==(unsigned) u.dim());
+    if (!ret.size()) ret.resize(u.dim());
+    assert(ret.size()==(unsigned) u.dim());
+
+    for (int j=1; j<=u.dim(); ++j) {
+        ret[j-1] = contraction(u, activex[j-1], sigmas[j-1], j);
+    }
 }
 
 } // namespace lawa

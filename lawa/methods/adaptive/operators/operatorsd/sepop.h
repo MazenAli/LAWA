@@ -15,13 +15,15 @@ class Sepop
 {
 public:
     typedef typename std::vector<Optype*>               Opvec;
+    typedef typename std::vector<IndexSet<Index1D> >    IndexSetVec;
     typedef typename std::vector<Optype*>::size_type    size_type;
 
 private:
     Opvec               ops_;
     const size_type     rank_;
     const size_type     dim_;
-    IndexSet<Index1D>   indexset_;
+    IndexSetVec         indrows;
+    IndexSetVec         indcols;
     SepopType           type_;
 
 public:
@@ -33,7 +35,7 @@ public:
 
     Sepop(const Opvec& _ops, const size_type _rank, const size_type _dim);
 
-    Sepop(const Optype& op, const size_type _rank, const size_type _dim);
+    Sepop(Optype& op, const size_type _rank, const size_type _dim);
 
     size_type
     rank() const;
@@ -44,11 +46,30 @@ public:
     SepopType
     type() const;
 
+    const IndexSetVec&
+    getrows() const;
+
+    const IndexSetVec&
+    getcols() const;
+
     const IndexSet<Index1D>&
-    getIndexset() const;
+    getrows(const size_type j) const;
+
+    const IndexSet<Index1D>&
+    getcols(const size_type j) const;
 
     void
-    setIndexset(const IndexSet<Index1D>& _indexset);
+    setrows(const IndexSetVec& _indrows);
+
+    void
+    setcols(const IndexSetVec& _indcols);
+
+    void
+    setrows(const IndexSet<Index1D>& _indrows, const size_type j);
+
+    void
+    setcols(const IndexSet<Index1D>& _indcols, const size_type j);
+
 
     const Opvec&
     ops() const;
@@ -67,13 +88,6 @@ public:
 
     Optype&
     operator()(const size_type i, const size_type j);
-/*
-    template <typename T, typename Basis>
-    HTCoefficients<T, Basis>
-    eval(const HTCoefficients<T, Basis>& u,
-         const IndexSet<Index1D>& indexset,
-         const std::size_t hashtablelength=193);
-*/
 };
 
 } // namespace lawa

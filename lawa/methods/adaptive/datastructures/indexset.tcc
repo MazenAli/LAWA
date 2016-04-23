@@ -55,7 +55,20 @@ IndexSet<Index>::IndexSet(size_t n)
 
 
 template <typename Index>
-IndexSet<Index>::IndexSet(const IndexSet<Index>& _set)
+IndexSet<Index>::IndexSet(const IndexSet<Index>& _set):
+#ifdef TRONE
+    std::tr1::unordered_set<Index, index_hashfunction<Index>,
+    index_eqfunction<Index> >::unordered_set(_set.size())
+#elif BOOST
+    boost::unordered_set<Index, index_hashfunction<Index>,
+    index_eqfunction<Index> >::unordered_set(_set.size())
+#elif CONEONE
+    std::unordered_set<Index, index_hashfunction<Index>,
+    index_eqfunction<Index> >::unordered_set(_set.size())
+#else
+    __gnu_cxx::hash_set<Index, index_hashfunction<Index>,
+    index_eqfunction<Index> >::hash_set(_set.size())
+#endif
 {
     typedef typename IndexSet<Index>::const_iterator const_it;
     if (_set.size() > 0) {

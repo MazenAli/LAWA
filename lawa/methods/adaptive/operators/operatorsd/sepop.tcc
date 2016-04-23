@@ -16,10 +16,11 @@ Sepop<Optype>::Sepop(const Opvec& _ops,
     ops_(_ops),
     rank_(_rank),
     dim_(_dim),
-    indexset_()
+    indrows(_dim),
+    indcols(_dim)
 {
     assert(ops_.size()==rank()*dim() ||
-           (ops_.size()==rank() && rank()==dim()));
+           (ops_.size()==rank() && rank()<=dim()));
 
     if (ops_.size()==rank()*dim()) {
         type_ = standard;
@@ -30,13 +31,17 @@ Sepop<Optype>::Sepop(const Opvec& _ops,
 
 
 template <typename Optype>
-Sepop<Optype>::Sepop(const Optype& op,
+Sepop<Optype>::Sepop(Optype& op,
                      const size_type _rank, const size_type _dim):
     ops_(1, &op),
     rank_(_rank),
     dim_(_dim),
-    indexset_(),
-    type_(laplace){}
+    indrows(_dim),
+    indcols(_dim),
+    type_(laplace)
+{
+    assert(rank()<=dim());
+}
 
 
 template <typename Optype>
@@ -64,18 +69,72 @@ Sepop<Optype>::type() const
 
 
 template <typename Optype>
-const IndexSet<Index1D>&
-Sepop<Optype>::getIndexset() const
+const typename Sepop<Optype>::IndexSetVec&
+Sepop<Optype>::getrows() const
 {
-    return indexset_;
+    return indrows;
+}
+
+
+template <typename Optype>
+const typename Sepop<Optype>::IndexSetVec&
+Sepop<Optype>::getcols() const
+{
+    return indcols;
+}
+
+
+template <typename Optype>
+const IndexSet<Index1D>&
+Sepop<Optype>::getrows(const size_type j) const
+{
+    assert(j>=1 && j<=dim());
+    return indrows[j-1];
+}
+
+
+template <typename Optype>
+const IndexSet<Index1D>&
+Sepop<Optype>::getcols(const size_type j) const
+{
+    assert(j>=1 && j<=dim());
+    return indcols[j-1];
 }
 
 
 template <typename Optype>
 void
-Sepop<Optype>::setIndexset(const IndexSet<Index1D>& _indexset)
+Sepop<Optype>::setrows(const IndexSetVec& _indrows)
 {
-    indexset_ = _indexset;
+    assert(dim()==_indrows.size());
+    indrows = _indrows;
+}
+
+
+template <typename Optype>
+void
+Sepop<Optype>::setcols(const IndexSetVec& _indcols)
+{
+    assert(dim()==_indcols.size());
+    indcols = _indcols;
+}
+
+
+template <typename Optype>
+void
+Sepop<Optype>::setrows(const IndexSet<Index1D>& _indrows, const size_type j)
+{
+    assert(j>=1 && j<=dim());
+    indrows[j-1] = _indrows;
+}
+
+
+template <typename Optype>
+void
+Sepop<Optype>::setcols(const IndexSet<Index1D>& _indcols, const size_type j)
+{
+    assert(j>=1 && j<=dim());
+    indcols[j-1] = _indcols;
 }
 
 
@@ -99,10 +158,18 @@ template <typename Optype>
 const Optype&
 Sepop<Optype>::ops(const size_type i, const size_type j) const
 {
-    assert(type()==standard);
-    assert(i>=1 && i<=rank());
-    assert(j>=1 && j<=dim());
+    if (type()==standard) {
+        assert(i>=1 && i<=rank());
+        assert(j>=1 && j<=dim());
+    } else if (type()==simple) {
+        assert(i>=1 && i<=rank());
+        assert(j==1);
+    } else {
+        assert(i==1 && j==1);
+    }
+
     return *ops()[(j-1)*rank()+(i-1)];
+
 }
 
 
@@ -110,9 +177,16 @@ template <typename Optype>
 Optype&
 Sepop<Optype>::ops(const size_type i, const size_type j)
 {
-    assert(type()==standard);
-    assert(i>=1 && i<=rank());
-    assert(j>=1 && j<=dim());
+    if (type()==standard) {
+        assert(i>=1 && i<=rank());
+        assert(j>=1 && j<=dim());
+    } else if (type()==simple) {
+        assert(i>=1 && i<=rank());
+        assert(j==1);
+    } else {
+        assert(i==1 && j==1);
+    }
+
     return *ops()[(j-1)*rank()+(i-1)];
 }
 
@@ -121,9 +195,16 @@ template <typename Optype>
 const Optype&
 Sepop<Optype>::operator()(const size_type i, const size_type j) const
 {
-    assert(type()==standard);
-    assert(i>=1 && i<=rank());
-    assert(j>=1 && j<=dim());
+    if (type()==standard) {
+        assert(i>=1 && i<=rank());
+        assert(j>=1 && j<=dim());
+    } else if (type()==simple) {
+        assert(i>=1 && i<=rank());
+        assert(j==1);
+    } else {
+        assert(i==1 && j==1);
+    }
+
     return ops(i, j);
 }
 
@@ -132,68 +213,19 @@ template <typename Optype>
 Optype&
 Sepop<Optype>::operator()(const size_type i, const size_type j)
 {
-    assert(type()==standard);
-    assert(i>=1 && i<=rank());
-    assert(j>=1 && j<=dim());
+    if (type()==standard) {
+        assert(i>=1 && i<=rank());
+        assert(j>=1 && j<=dim());
+    } else if (type()==simple) {
+        assert(i>=1 && i<=rank());
+        assert(j==1);
+    } else {
+        assert(i==1 && j==1);
+    }
+
     return ops(i, j);
 }
 
-/*
-template <typename Optype>
-template <typename T, typename Basis>
-HTCoefficients<T, Basis>
-Sepop<Optype>::eval(const HTCoefficients<T, Basis>& u,
-                    const IndexSet<Index1D>& indexset,
-                    const std::size_t hashtablelength)
-{
-    HTCoefficients<T, Basis> sum;
-    if (!indexset.size()) {
-        std::cerr << "Sepop<Optype>::eval: empty indexset\n";
-        return sum;
-    }
-
-    for (size_type i=1; i<=rank(); ++i) {
-        HTCoefficients<T, Basis> prod(u);
-        std::cout << "Current prod is\n";
-        prod.tree().print_w_UorB();
-        for (size_type j=1; j<=dim(); ++j) {
-            htucker::DimensionIndex idx(1);
-            idx[0] = j;
-
-            SepCoefficients<Lexicographical, T, Index1D>
-            frame = extract(prod, idx);
-
-            // Too many copies here -> efficiency loss!
-            for (size_type k=1; k<=frame.rank(); ++k) {
-                TreeCoefficients1D<T> input(hashtablelength,
-                                            u.basis().j0);
-                TreeCoefficients1D<T> output(hashtablelength,
-                                            ops(i, j).getTestBasis().j0);
-                input = frame(k, 1);
-                Coefficients<Lexicographical, T, Index1D> temp;
-                FillWithZeros(indexset, temp);
-                output = temp;
-
-                std::cout << "frame(" << k << ", 1)=\n" << frame(k, 1)
-                          << "\ninput=\n" << input;
-                std::cout << "\noutput=\n" << temp << std::endl;
-                ops(i, j).eval(input, output, "A");
-                fromTreeCoefficientsToCoefficients(output, temp);
-                frame(k, 1) = temp;
-            }
-            set(prod, idx, frame);
-        }
-
-        if (i==1) {
-            sum = prod;
-        } else {
-            sum.tree() = sum.tree()+prod.tree();
-        }
-    }
-
-    return sum;
-}
-*/
 } // namespace lawa
 
 #endif // LAWA_METHODS_ADAPTIVE_OPERATORS_OPERATORSD_SEPOP_TCC

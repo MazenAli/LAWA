@@ -21,12 +21,12 @@ public:
     typedef typename CoeffVec::size_type    size_type;
 
 private:
-    const size_type     rank_;
-    const size_type     dim_;
-    CoeffVec            coeffs;
+    size_type     rank_;
+    size_type     dim_;
+    CoeffVec      coeffs;
 
 public:
-    SepCoefficients()                       = delete;
+    SepCoefficients();
 
     SepCoefficients(const SepCoefficients&) = default;
 
@@ -36,6 +36,9 @@ public:
 
     SepCoefficients(const CoeffVec& _coeffs,
                     const size_type _rank, const size_type _dim);
+
+    void
+    resize(const size_type _rank, const size_type _dim);
 
     size_type
     rank() const;

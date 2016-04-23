@@ -92,6 +92,8 @@ private:
 public:
     IndexD(void);
 
+    IndexD(const size_type _dim);
+
     IndexD(const std::vector<Index1D>& _index);
 
     int

@@ -7,6 +7,13 @@ namespace lawa
 {
 
 template <SortingCriterion S, typename T, typename Index>
+SepCoefficients<S, T, Index>::SepCoefficients():
+    rank_(0),
+    dim_(0),
+    coeffs(){}
+
+
+template <SortingCriterion S, typename T, typename Index>
 SepCoefficients<S, T, Index>::SepCoefficients(const size_type _rank,
                                               const size_type _dim):
     rank_(_rank),
@@ -23,6 +30,17 @@ SepCoefficients<S, T, Index>::SepCoefficients(const CoeffVec& _coeffs,
     coeffs(_coeffs)
 {
     assert(coeffs.size()==rank()*dim());
+}
+
+
+template <SortingCriterion S, typename T, typename Index>
+void
+SepCoefficients<S, T, Index>::resize(const size_type _rank,
+                                     const size_type _dim)
+{
+    rank_ = _rank;
+    dim_  = _dim;
+    coeffs.resize(rank_*dim_);
 }
 
 
@@ -161,7 +179,9 @@ SepCoefficients<S, T, Index>&
 SepCoefficients<S, T, Index>::
 operator=(const SepCoefficients<S, T, Index>& copy)
 {
-    assert(rank()>=copy.rank() && dim()==copy.dim());
+    if (rank()*dim()!=copy.rank()*copy.dim()) {
+        resize(copy.rank(), copy.dim());
+    }
 
     for (size_type i=1; i<=copy.rank(); ++i) {
         for (size_type j=1; j<=copy.dim(); ++j) {
