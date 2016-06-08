@@ -197,3 +197,7 @@ construction_site/output
 extensions/flens/libextensionsflens.a
 extensions/sparsegrid/libextensionssparsegrid.a
 construction_site/main
+construction_site/*.txt
+construction_site/*.out
+construction_site/output*
+construction_site/profile*

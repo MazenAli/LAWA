@@ -622,12 +622,6 @@ main()
     resultu.orthogonalize_svd(sigmas);
     std::cout << "Post orthogonalize_svd the tensor looks like=>\n";
     resultu.tree().print_w_UorB();
-    std::cout << "The singular values look like=>\n";
-    for (unsigned int i=0; i<sigmas.size(); ++i) {
-        std::cout << "Dim : " << i+1 << std::endl;
-        std::cout << sigmas[i] << std::endl;
-    }
-
 
     diff = convertcp.tree()-u.tree();
     diff.orthogonalize();
@@ -635,10 +629,42 @@ main()
               << diff.L2normorthogonal() << std::endl;
 
     std::cout << "*\n*\n*\nTesting contractions ***\n";
-    Coeff1D contractiond2 = contraction(resultu, indexset, sigmas[1], 2);
-    std::cout << "The index set is\n" << indexset << std::endl;
+    genCoefficients(cp, Fint, indexsetvec2);
+    set(u, cp);
+    u.orthogonalize_svd(sigmas);
+
+    std::cout << "The singular values look like=>\n";
+    for (unsigned int i=0; i<sigmas.size(); ++i) {
+        std::cout << "Dim : " << i+1 << std::endl;
+        std::cout << sigmas[i] << std::endl;
+    }
+
+    Coeff1D contractiond2 = contraction(u, indexsetvec2[1], sigmas[1], 2);
+    Coeff1D checkcont;
+    std::cout << "The index set is\n" << indexsetvec2[1] << std::endl;
     std::cout << "The contraction along dim 2 is " << contractiond2
               << std::endl;
+
+    for (auto& lambda2 : indexsetvec2[1]) {
+        indexmd(2) = lambda2;
+        double entry = 0.;
+        for (auto& lambda1 : indexsetvec2[0]) {
+            for (auto& lambda3 : indexsetvec2[2]) {
+                for (auto& lambda4 : indexsetvec2[3]) {
+                    indexmd(1) = lambda1;
+                    indexmd(3) = lambda3;
+                    indexmd(4) = lambda4;
+                    entry += std::pow(u(indexmd), 2.);
+                }
+            }
+        }
+        checkcont[lambda2] = std::sqrt(entry);
+    }
+
+    checkcont -= contractiond2;
+    std::cout << "Error contraction " << checkcont.norm(2.) << std::endl;
+
+    exit(1);
 
     std::vector<Coeff1D> contractionall;
     contraction(resultu, indexsetvec2, sigmas, contractionall);
@@ -663,6 +689,30 @@ main()
         std::cout << "For index " << mu << " the entry should be : "
                   << std::sqrt(entry) << std::endl;
     }
+
+    std::cout << "\n\n***Testing some blas stuff for HT***\n\n";
+
+    std::cout << "u evaled at " << indexmd << " is " << u(indexmd)
+              << std::endl;
+
+    double alpha = 0.5;
+
+    std::cout << "u scaled should be " << alpha*u(indexmd) << std::endl;
+
+    scal(alpha, u);
+
+    std::cout << "u = " << u(indexmd) << std::endl;
+
+    lawa::HTCoefficients<T, Basis>    u_copy(u);
+
+    std::cout << "Comparing dot and nrm2" << std::endl;
+    std::cout << "dot  = " << dot(u, u_copy) << std::endl;
+    std::cout << "nrm2 = " << nrm2(u)*nrm2(u) << std::endl;
+
+    std::cout << "axpy evaled should be " << u(indexmd)+alpha*u(indexmd)
+              << std::endl;
+    axpy(alpha, u, u_copy);
+    std::cout << "result = " << u_copy(indexmd) << std::endl;
 
     return 0;
 }

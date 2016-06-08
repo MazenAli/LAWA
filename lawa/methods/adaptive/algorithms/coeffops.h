@@ -11,7 +11,7 @@
 #include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
 #include <lawa/methods/adaptive/datastructures/htcoefficients.h>
 #include <lawa/methods/adaptive/operators/operatorsd/sepop.h>
-#include <lawa/methods/adaptive/operators/operatorsd/sepdiagscal.h>
+#include <lawa/methods/adaptive/preconditioners/preconditionersd/sepdiagscal.h>
 
 namespace lawa
 {
@@ -247,11 +247,30 @@ evalstandard(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
+evalsimple_old(Sepop<Optype>& A,
+               const HTCoefficients<T, Basis>& u,
+               const std::vector<IndexSet<Index1D> >&  rows,
+               const std::vector<IndexSet<Index1D> >&  cols,
+               const double eps = 1e-08,
+               const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace_old(Sepop<Optype>& A,
+                const HTCoefficients<T, Basis>& u,
+                const std::vector<IndexSet<Index1D> >&  rows,
+                const std::vector<IndexSet<Index1D> >&  cols,
+                const double eps = 1e-08,
+                const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
 evalsimple(Sepop<Optype>& A,
            const HTCoefficients<T, Basis>& u,
            const std::vector<IndexSet<Index1D> >&  rows,
            const std::vector<IndexSet<Index1D> >&  cols,
-           const double eps = 1e-08,
            const std::size_t hashtablelength=193);
 
 
@@ -261,7 +280,6 @@ evallaplace(Sepop<Optype>& A,
             const HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index1D> >&  rows,
             const std::vector<IndexSet<Index1D> >&  cols,
-            const double eps = 1e-08,
             const std::size_t hashtablelength=193);
 
 
@@ -275,9 +293,31 @@ eval(Sepop<Optype>& A,
      const std::size_t hashtablelength=193);
 
 
+template <typename T, typename Basis>
+int
+maxlevel(const HTCoefficients<T, Basis>& u);
+
+
 template <typename Basis>
 typename Sepdiagscal<Basis>::T
 compOmegamin2(const Basis& basis,
+              const typename Sepdiagscal<Basis>::size_type d,
+              const typename Sepdiagscal<Basis>::T order);
+
+
+template <typename T, typename Basis>
+T
+compOmegamax2(const HTCoefficients<T, Basis>& u, const T order);
+
+
+template <typename T, typename Basis>
+T
+compUnDistFac(const HTCoefficients<T, Basis>& u, const T order);
+
+
+template <typename Basis>
+typename Sepdiagscal<Basis>::T
+compOmegamin4(const Basis& basis,
               const typename Sepdiagscal<Basis>::size_type d,
               const typename Sepdiagscal<Basis>::T order);
 
@@ -291,6 +331,18 @@ compIndexscale(const SepCoefficients<Lexicographical, T, Index1D>& u,
 template <typename T, typename Basis>
 T
 compIndexscale(const HTCoefficients<T, Basis>& u, const T order);
+
+
+template <typename T, typename Basis>
+T
+compIndexscale2(const HTCoefficients<T, Basis>& u, const T order);
+
+
+template <typename Basis>
+typename Basis::T
+compIndexscale(const Basis& basis,
+               const std::vector<IndexSet<Index1D> >& Lambda,
+               const typename Basis::T order);
 
 
 template <typename Basis>
@@ -339,6 +391,21 @@ eval(Sepdiagscal<Basis>& S,
      const double eps = 1e-08);
 
 
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+evalS2(Sepdiagscal<Basis>& S,
+       const HTCoefficients<T, Basis>& u,
+       const std::vector<IndexSet<Index1D> >& cols,
+       const double eps);
+
+
+template <typename T, typename Basis>
+void
+assemble(Sepdiagscal<Basis>& S,
+         HTCoefficients<T, Basis>& Stree,
+         const std::vector<IndexSet<Index1D> >& cols);
+
+
 template <typename Basis>
 std::ostream& operator<<(std::ostream& s,
                          const Sepdiagscal<Basis>& S);
@@ -358,6 +425,54 @@ contraction(const HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index> >& activex,
             const std::vector<flens::DenseVector<flens::Array<T> > >& sigmas,
             std::vector<Coefficients<Lexicographical, T, Index> >& ret);
+
+
+template <typename T, typename Basis>
+void
+scal(const T alpha, HTCoefficients<T, Basis>& x);
+
+
+template <typename T, typename Basis>
+T
+dot(const HTCoefficients<T, Basis>& x, const HTCoefficients<T, Basis>& y);
+
+
+template <typename T, typename Basis>
+T
+nrm2(HTCoefficients<T, Basis>& x, bool isorth = false);
+
+
+template <typename T, typename Basis>
+void
+axpy(const T alpha,
+     const HTCoefficients<T, Basis>& x,
+           HTCoefficients<T, Basis>& y);
+
+
+template <typename T, typename Basis>
+void
+restrict(HTCoefficients<T, Basis>& f,
+         const IndexSet<Index1D>& activex,
+         const unsigned j);
+
+
+template <typename T, typename Basis>
+void
+restrict(HTCoefficients<T, Basis>& f,
+         const std::vector<IndexSet<Index1D> >& activex);
+
+
+template <typename T, typename Basis>
+void
+extend(HTCoefficients<T, Basis>& f,
+       const IndexSet<Index1D>& activex,
+       const unsigned j);
+
+
+template <typename T, typename Basis>
+void
+extend(HTCoefficients<T, Basis>& f,
+       const std::vector<IndexSet<Index1D> >& activex);
 
 } // namespace lawa
 

@@ -98,9 +98,9 @@ HTCoefficients<T, Basis>::truncate(const int rank, bool isorth)
 
 template <typename T, typename Basis>
 void
-HTCoefficients<T, Basis>::truncate(double eps, bool isorth)
+HTCoefficients<T, Basis>::truncate(double eps)
 {
-    tree().truncate(eps, isorth);
+    tree().truncate_hsvd(eps);
 }
 
 
@@ -111,14 +111,11 @@ HTCoefficients<T, Basis>::eval(const IndexD& index) const
     assert(index.dim()==(unsigned) dim());
 
     typedef htucker::DimensionIndex                          IDX;
-    typedef typename flens::DenseVector<flens::Array<int> >  IDV;
 
     IDX idx(dim());
-    IDV intindex(dim());
     for (int i=1; i<=dim(); ++i) {
-        intindex(i) = maptoint(index(i), basis());
+        idx[i-1] = maptoint(index(i), basis());
     }
-    idx.setValue(intindex);
 
     return httree.evaluate(idx);
 }

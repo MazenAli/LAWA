@@ -32,6 +32,11 @@
 namespace lawa {
 
 // ----------------- extendMultiTree 1D-3D ------------------- //
+template <typename Basis>
+void
+extendMultiTree(const Basis &basis, const IndexSet<Index1D>  &v,
+                IndexSet<Index1D>  &C_v, const char* residualType,
+                bool sparsetree=false);
 
 
 template <typename T, typename Basis>
@@ -79,6 +84,12 @@ extendMultiTreeAtBoundary(const Basis &basis, const Coefficients<Lexicographical
  */
 
 // ----------------- completeMultiTree 1D ------------------- //
+// ORIGINAL: Non-Periodic version
+template <typename Basis>
+typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, void>::value, void>::Type
+completeMultiTree(const Basis &basis, const Index1D &index1d,
+                  IndexSet<Index1D>  &v, bool sparsetree=false);
+
 
 // ORIGINAL: Non-Periodic version
 template <typename T, typename Basis>
@@ -97,7 +108,14 @@ template <typename T, typename Basis>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, T>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index1D &index1d,
                   Coefficients<Lexicographical,T,Index1D>  &v,
-                  IndexSet<Index2D>& diff_v, bool sparsetree=false);
+                  IndexSet<Index1D>& diff_v, bool sparsetree=false);
+
+template <typename Basis>
+typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, void>::value, void>::Type
+completeMultiTree(const Basis &basis, const Index1D &index1d,
+                  IndexSet<Index1D>  &v,
+                  IndexSet<Index1D>& diff_v, bool sparsetree=false);
+
 
 // ---- Periodic + returning added indizes
 template <typename T, typename Basis>

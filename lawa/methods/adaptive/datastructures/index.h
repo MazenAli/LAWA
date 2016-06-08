@@ -50,12 +50,23 @@ struct Index1D
 
     Index1D(void);
     //Index1D(int j, long k, XType _xtype);
-    Index1D(int j, int k, XType _xtype);
+    Index1D(int _j, int _k, XType _xtype);
     Index1D(const Index1D &index);
     short levelSum() const;
 };
 
+struct Index1DC : public Index1D
+{
+    unsigned d;
+
+    Index1DC(void);
+    Index1DC(int _j, int _k, XType _xtype, unsigned _d=0);
+    Index1DC(const Index1DC &index);
+};
+
 std::ostream& operator<<(std::ostream &s, const Index1D &_Index);
+
+std::ostream& operator<<(std::ostream &s, const Index1DC &_Index);
 
 struct Index2D
 {
@@ -246,6 +257,25 @@ struct index_eqfunction<Index1D>
 };
 
 template <>
+struct index_eqfunction<Index1DC>
+{
+    inline
+    bool operator()(const Index1DC& leftindex, const Index1DC& rightindex) const
+    {
+        if (leftindex.k != rightindex.k
+            || leftindex.d != rightindex.d) return false;
+        else {
+            int leftval = leftindex.xtype;
+            leftval = (((leftval << 16) | (unsigned short) leftindex.j));
+            int rightval = rightindex.xtype;
+            rightval = (((rightval << 16) | (unsigned short) rightindex.j));
+            return (leftval==rightval);
+        }
+    }
+};
+
+
+template <>
 struct index_eqfunction<Index2D>
 {
     inline
@@ -378,6 +408,34 @@ struct index_hashfunction<Index1D>
 
     }
 };
+
+
+template <>
+struct index_hashfunction<Index1DC>
+{
+    inline
+    std::size_t operator()(const Index1DC& index) const
+    {
+        // Note: hash_values is taken mod "length of hashtable" automatically!!
+        /*
+        long pow2ij = (1L << (index.j+JMINOFFSET+index.xtype));
+        std::size_t hash_value = (pow2ij + index.k);
+
+        return hash_value;
+        */
+
+        int val = index.xtype;
+        val = (((val << 16) | (unsigned short) index.j));
+
+        std::size_t hash_value = 0;
+        boost::hash_combine(hash_value, val);
+        boost::hash_combine(hash_value, index.k);
+        boost::hash_combine(hash_value, index.d);
+        return hash_value;
+
+    }
+};
+
 
 template <>
 struct index_hashfunction<Index2D>

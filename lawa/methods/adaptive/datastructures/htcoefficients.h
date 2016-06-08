@@ -59,7 +59,7 @@ public:
     truncate(const int rank, bool isorth = false);
 
     void
-    truncate(double eps, bool isorth = false);
+    truncate(double eps);
 
     T
     eval(const IndexD& index) const;

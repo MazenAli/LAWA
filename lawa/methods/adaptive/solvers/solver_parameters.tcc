@@ -226,4 +226,21 @@ ISWGM_PG_Information::reset()
 }
 
 
+std::ostream& operator<<(std::ostream& s,
+                         const HTAWGM_Params& params)
+{
+    s << "uzero      = " << params.uzero      << std::endl;
+    s << "tol_awgm   = " << params.tol_awgm   << std::endl;
+    s << "gamma      = " << params.gamma      << std::endl;
+    s << "maxit_awgm = " << params.maxit_awgm << std::endl;
+    s << "maxit_pcg  = " << params.maxit_pcg  << std::endl;
+    s << "delta_pcg  = " << params.delta_pcg  << std::endl;
+    s << "trunc_pres = " << params.trunc_pres << std::endl;
+    s << "alpha      = " << params.alpha      << std::endl;
+    s << "maxit_bulk = " << params.maxit_bulk << std::endl;
+
+    return s;
+}
+
+
 } // namespace lawa

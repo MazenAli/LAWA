@@ -41,7 +41,7 @@ ifeq ($(TARGET),Linux)
     CXX = g++
     ifeq ($(BLASLAPACK),platform)
       CPPFLAGS += -DWITH_OPENBLAS -DHAVE_CBLAS
-      LDLIBS   += -llapack -lopenblas -lcblas -lblas -lgfortran
+      LDLIBS   += -llapack -lopenblas -lgfortran
       # Multi-Precision stuff -lmpfr -lgmpxx -lgmp
     endif
   endif
@@ -61,7 +61,9 @@ HASHTYPE = -DBOOST -DBOOST_HAS_TR1_TUPLE
 CPPFLAGS += -DINCLUDE_TYPE_TRAITS
 
 # --- debug mode -----------------------
-DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION -DDEBUG_SAMPLER -DDEBUG_CANCEL
+DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION -DDEBUG_SAMPLER \
+             -DVERBOSE
+#DEBUGLAWA += -DDEBUG_CANCEL
 DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
             -O0 -Wfatal-errors -pedantic -Wextra \
             -fPIC -Wall -Wno-attributes
@@ -69,13 +71,15 @@ DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
 # --- release mode ----------------------
 RELEASEMODE = -O3 $(HASHTYPE) -fPIC -Wno-attributes
 RELEASEMODE += -DNDEBUG
+RELEASEMODE += -DVERBOSE
 
 # --- profiling mode --------------------
-PROFILEMODE = -p -g -DNDEBUG $(HASHTYPE)
+PROFILEMODE = -pg -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
+PROFILEMODE += -DVERBOSE
 
 # --- select compilation-mode here by commenting / uncommenting
-CXXFLAGS += $(DEBUGMODE)
-#CXXFLAGS += $(RELEASEMODE)
+#CXXFLAGS += $(DEBUGMODE)
+CXXFLAGS += $(RELEASEMODE)
 #CXXFLAGS += $(PROFILEMODE)
 
 #CPPFLAGS += -D_GLIBCXX_PERMIT_BACKWARD_HASH

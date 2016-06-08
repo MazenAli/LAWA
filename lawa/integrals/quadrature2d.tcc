@@ -23,7 +23,7 @@ namespace lawa {
 
 template <typename _Integral2D>
 Quadrature2D<SparseGridGP,_Integral2D>::Quadrature2D(const _Integral2D &integral)
-   : _integral(integral), _level(1), numGridPoints(0)
+   : numGridPoints(0), _integral(integral), _level(1)
 {
     _initSparseGrid();
 }

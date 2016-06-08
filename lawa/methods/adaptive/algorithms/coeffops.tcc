@@ -6,6 +6,10 @@
     #define MAX(x, y) (x>y) ? x : y
 #endif
 
+#ifndef MIN
+    #define MIN(x, y) (x<y) ? x : y
+#endif
+
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -1208,12 +1212,12 @@ evalstandard(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
-evalsimple(Sepop<Optype>& A,
-           const HTCoefficients<T, Basis>& u,
-           const std::vector<IndexSet<Index1D> >& rows,
-           const std::vector<IndexSet<Index1D> >& cols,
-           const double eps,
-           const std::size_t hashtablelength)
+evalsimple_old(Sepop<Optype>& A,
+               const HTCoefficients<T, Basis>& u,
+               const std::vector<IndexSet<Index1D> >& rows,
+               const std::vector<IndexSet<Index1D> >& cols,
+               const double eps,
+               const std::size_t hashtablelength)
 {
     assert(A.dim()==(unsigned) u.dim());
     assert(A.type()==simple);
@@ -1283,12 +1287,12 @@ evalsimple(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
-evallaplace(Sepop<Optype>& A,
-            const HTCoefficients<T, Basis>& u,
-            const std::vector<IndexSet<Index1D> >& rows,
-            const std::vector<IndexSet<Index1D> >& cols,
-            const double eps,
-            const std::size_t hashtablelength)
+evallaplace_old(Sepop<Optype>& A,
+                const HTCoefficients<T, Basis>& u,
+                const std::vector<IndexSet<Index1D> >& rows,
+                const std::vector<IndexSet<Index1D> >& cols,
+                const double eps,
+                const std::size_t hashtablelength)
 {
     assert(A.dim()==(unsigned) u.dim());
     assert(A.type()==laplace);
@@ -1358,6 +1362,342 @@ evallaplace(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
+evalsimple(Sepop<Optype>& A,
+           const HTCoefficients<T, Basis>& u,
+           const std::vector<IndexSet<Index1D> >& rows,
+           const std::vector<IndexSet<Index1D> >& cols,
+           const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==simple);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    using flens::_;
+
+    HTCoefficients<T, Basis> Au(u.dim(), u.basis());
+    Au.tree().set_tree(u.tree());
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titu = u.tree().getGeneralTree().end();
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titAu = Au.tree().getGeneralTree().end();
+    for (;titu>=u.tree().getGeneralTree().begin(); titu--, titAu--) {
+        auto nodeu  = titu.getNode();
+        auto nodeAu = titAu.getNode();
+
+        /* Apply operator to leafs */
+        if (nodeu->isLeaf()) {
+            htucker::DimensionIndex idx = nodeu->getContent()->getIndex();
+            Matrix& Uu  = nodeu->getContent()->getUorB();
+            Matrix& UAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            auto rowsU  = Uu.numRows();
+            auto colsU  = Uu.numCols();
+            auto max    = maxintind(rows[idx[0]-1], u.basis());
+            assert(max>=(unsigned) rowsU);
+            UAu.resize(max, 2*colsU);
+            UAu(_(1, rowsU), _(1, colsU)) = Uu;
+
+            /* Apply operator to columns */
+            for (int k=1; k<=(int) colsU; ++k) {
+                TreeCoefficients1D<T> input(hashtablelength, u.basis().j0);
+                TreeCoefficients1D<T> output(hashtablelength, u.basis().j0);
+                typedef typename TreeCoefficients1D<T>::val_type val_type;
+
+                /* Set input */
+                for (auto& lambda : cols[idx[0]-1]) {
+                    auto i = maptoint(lambda, u.basis());
+                    assert(i<=(unsigned) rowsU);
+
+                    auto j     = lambda.j;
+                    auto _k     = lambda.k;
+                    auto xtype = lambda.xtype;
+                    if (xtype==XBSpline) {
+                        input.bylevel[j-1-input.offset].
+                              map.insert(val_type(_k, Uu(i, k)));
+                    } else {
+                        input.bylevel[j-input.offset].
+                              map.insert(val_type(_k, Uu(i, k)));
+                    }
+                }
+
+                /* Set output */
+                for (auto& lambda : rows[idx[0]-1]) {
+                    #ifndef NDEBUG
+                        auto i = maptoint(lambda, u.basis());
+                        assert(i<=max);
+                    #endif
+
+                    auto j     = lambda.j;
+                    auto _k     = lambda.k;
+                    auto xtype = lambda.xtype;
+                    if (xtype==XBSpline) {
+                        output.bylevel[j-1-output.offset].
+                              map.insert(val_type(_k, (T) 0));
+                    } else {
+                        output.bylevel[j-output.offset].
+                              map.insert(val_type(_k, (T) 0));
+                    }
+                }
+
+                /* Apply A */
+                A(idx[0], 1).eval(input, output, "A");
+
+                /* Save result */
+                for (typename CoefficientsByLevel<T>::const_it it=
+                     output.bylevel[0].map.begin();
+                     it!=output.bylevel[0].map.end(); ++it) {
+                        Index1D lambda(output.offset+1, (*it).first,XBSpline);
+                        auto i = maptoint(lambda, u.basis());
+                        UAu(i, colsU+k) = (*it).second;
+                }
+                for (int i=1; i<=JMAX; ++i) {
+                    if (output.bylevel[i].map.size()==0) break;
+                    for (typename CoefficientsByLevel<T>::const_it it=
+                         output.bylevel[i].map.begin();
+                         it!=output.bylevel[i].map.end(); ++it) {
+                            Index1D lambda(output.offset+i,
+                                           (*it).first,XWavelet);
+                            auto j = maptoint(lambda, u.basis());
+                            UAu(j, colsU+k) = (*it).second;
+                    }
+                }
+            }
+        } else if (nodeu->isInner()) {
+
+            /* Set (sparse) transfer tensors */
+            auto nodenumel   = nodeu->getContent()->getNumRows();
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(4*nodenumel*nodercnumel, 2*nodelcnumel);
+
+            /* First column B of HT(A) */
+            for (int i=1; i<=nodenumel; ++i) {
+                BAu(_(2*nodercnumel*(i-1)+1, (2*i-1)*nodercnumel)
+                   ,_(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Second column B of HT(A) */
+            int offset1 = (2*nodenumel+1)*nodercnumel;
+            int offset2 = 2*nodenumel*nodercnumel;
+            for (int i=1; i<=nodenumel; ++i) {
+                /* Left block column */
+                BAu(_(offset1+2*nodercnumel*(i-1)+1,
+                      offset1+(2*i-1)*nodercnumel), _(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+
+                /* Right block column */
+                BAu(_(offset2+2*nodercnumel*(i-1)+1,
+                      offset2+(2*i-1)*nodercnumel),
+                    _(nodelcnumel+1, 2*nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(2*nodenumel);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        } else {
+
+            /* Set root */
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(2*nodercnumel, 2*nodelcnumel);
+
+            /* Left block column */
+            BAu(_(nodercnumel+1, 2*nodercnumel), _(1, nodelcnumel)) = Bu;
+
+            /* Right block column */
+            BAu(_(1, nodercnumel), _(nodelcnumel+1, 2*nodelcnumel)) = Bu;
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(1);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        }
+    }
+
+    return Au;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(Sepop<Optype>& A,
+            const HTCoefficients<T, Basis>& u,
+            const std::vector<IndexSet<Index1D> >& rows,
+            const std::vector<IndexSet<Index1D> >& cols,
+            const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==laplace);
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    using flens::_;
+
+    HTCoefficients<T, Basis> Au(u.dim(), u.basis());
+    Au.tree().set_tree(u.tree());
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titu = u.tree().getGeneralTree().end();
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titAu = Au.tree().getGeneralTree().end();
+    for (;titu>=u.tree().getGeneralTree().begin(); titu--, titAu--) {
+        auto nodeu  = titu.getNode();
+        auto nodeAu = titAu.getNode();
+
+        /* Apply operator to leafs */
+        if (nodeu->isLeaf()) {
+            htucker::DimensionIndex idx = nodeu->getContent()->getIndex();
+            Matrix& Uu  = nodeu->getContent()->getUorB();
+            Matrix& UAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            auto rowsU  = Uu.numRows();
+            auto colsU  = Uu.numCols();
+            auto max    = maxintind(rows[idx[0]-1], u.basis());
+            assert(max>=(unsigned) rowsU);
+            UAu.resize(max, 2*colsU);
+            UAu(_(1, rowsU), _(1, colsU)) = Uu;
+
+            /* Apply operator to columns */
+            for (int k=1; k<=(int) colsU; ++k) {
+                TreeCoefficients1D<T> input(hashtablelength, u.basis().j0);
+                TreeCoefficients1D<T> output(hashtablelength, u.basis().j0);
+                typedef typename TreeCoefficients1D<T>::val_type val_type;
+
+                /* Set input */
+                for (auto& lambda : cols[idx[0]-1]) {
+                    auto i = maptoint(lambda, u.basis());
+                    assert(i<=(unsigned) rowsU);
+
+                    auto j     = lambda.j;
+                    auto _k     = lambda.k;
+                    auto xtype = lambda.xtype;
+                    if (xtype==XBSpline) {
+                        input.bylevel[j-1-input.offset].
+                              map.insert(val_type(_k, Uu(i, k)));
+                    } else {
+                        input.bylevel[j-input.offset].
+                              map.insert(val_type(_k, Uu(i, k)));
+                    }
+                }
+
+                /* Set output */
+                for (auto& lambda : rows[idx[0]-1]) {
+                    #ifndef NDEBUG
+                        auto i = maptoint(lambda, u.basis());
+                        assert(i<=max);
+                    #endif
+
+                    auto j     = lambda.j;
+                    auto _k     = lambda.k;
+                    auto xtype = lambda.xtype;
+                    if (xtype==XBSpline) {
+                        output.bylevel[j-1-output.offset].
+                              map.insert(val_type(_k, (T) 0));
+                    } else {
+                        output.bylevel[j-output.offset].
+                              map.insert(val_type(_k, (T) 0));
+                    }
+                }
+
+                /* Apply A */
+                A(1, 1).eval(input, output, "A");
+
+                /* Save result */
+                for (typename CoefficientsByLevel<T>::const_it it=
+                     output.bylevel[0].map.begin();
+                     it!=output.bylevel[0].map.end(); ++it) {
+                        Index1D lambda(output.offset+1, (*it).first,XBSpline);
+                        auto i = maptoint(lambda, u.basis());
+                        UAu(i, colsU+k) = (*it).second;
+                }
+                for (int i=1; i<=JMAX; ++i) {
+                    if (output.bylevel[i].map.size()==0) break;
+                    for (typename CoefficientsByLevel<T>::const_it it=
+                         output.bylevel[i].map.begin();
+                         it!=output.bylevel[i].map.end(); ++it) {
+                            Index1D lambda(output.offset+i,
+                                           (*it).first,XWavelet);
+                            auto j = maptoint(lambda, u.basis());
+                            UAu(j, colsU+k) = (*it).second;
+                    }
+                }
+            }
+        } else if (nodeu->isInner()) {
+
+            /* Set (sparse) transfer tensors */
+            auto nodenumel   = nodeu->getContent()->getNumRows();
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(4*nodenumel*nodercnumel, 2*nodelcnumel);
+
+            /* First column B of HT(A) */
+            for (int i=1; i<=nodenumel; ++i) {
+                BAu(_(2*nodercnumel*(i-1)+1, (2*i-1)*nodercnumel)
+                   ,_(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Second column B of HT(A) */
+            int offset1 = (2*nodenumel+1)*nodercnumel;
+            int offset2 = 2*nodenumel*nodercnumel;
+            for (int i=1; i<=nodenumel; ++i) {
+                /* Left block column */
+                BAu(_(offset1+2*nodercnumel*(i-1)+1,
+                      offset1+(2*i-1)*nodercnumel), _(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+
+                /* Right block column */
+                BAu(_(offset2+2*nodercnumel*(i-1)+1,
+                      offset2+(2*i-1)*nodercnumel),
+                    _(nodelcnumel+1, 2*nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(2*nodenumel);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        } else {
+
+            /* Set root */
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(2*nodercnumel, 2*nodelcnumel);
+
+            /* Left block column */
+            BAu(_(nodercnumel+1, 2*nodercnumel), _(1, nodelcnumel)) = Bu;
+
+            /* Right block column */
+            BAu(_(1, nodercnumel), _(nodelcnumel+1, 2*nodelcnumel)) = Bu;
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(1);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        }
+    }
+
+    return Au;
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
 eval(Sepop<Optype>& A,
      const HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >& rows,
@@ -1371,10 +1711,33 @@ eval(Sepop<Optype>& A,
     if (A.type()==standard) {
         return evalstandard(A, u, rows, cols, eps, hashtablelength);
     } else if (A.type()==simple) {
-        return evalsimple(A, u, rows, cols, eps, hashtablelength);
+        return evalsimple(A, u, rows, cols, hashtablelength);
     } else {
-        return evallaplace(A, u, rows, cols, eps, hashtablelength);
+        return evallaplace(A, u, rows, cols, hashtablelength);
     }
+}
+
+
+template <typename T, typename Basis>
+int
+maxlevel(const HTCoefficients<T, Basis>& u)
+{
+    int jmax = u.basis().j0;
+
+    for (auto tit=u.tree().getGeneralTree().end();
+              tit>=u.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->isLeaf()) {
+            int rows    = tit.getNode()->getContent()->getUorB().numRows();
+            auto lambda = maptowav(rows, u.basis());
+            int j       = lambda.j;
+            if (lambda.xtype==XWavelet) ++j;
+            jmax = MAX(jmax, j);
+        } else {
+            break;
+        }
+    }
+
+    return jmax;
 }
 
 
@@ -1385,7 +1748,48 @@ compOmegamin2(const Basis& basis,
               const typename Sepdiagscal<Basis>::T order)
 {
     assert(d>0);
-    return d*std::pow(2.,2.*order*basis.j0);
+    return d*std::pow(2., 2.*order*basis.j0);
+}
+
+
+template <typename T, typename Basis>
+T
+compOmegamax2(const HTCoefficients<T, Basis>& u, const T order)
+{
+    auto d = u.dim();
+
+    int jmax = maxlevel(u);
+
+    return d*std::pow(2., 2.*order*jmax);
+}
+
+
+template <typename T, typename Basis>
+T
+compUnDistFac(const HTCoefficients<T, Basis>& u, const T order)
+{
+    auto d   = u.dim();
+    int j0   = u.basis().j0;
+    int jmax = maxlevel(u);
+
+    T factor = std::pow(2., (order+1)*j0-jmax-1.);
+    for (int j=j0+1; j<=jmax; ++j) {
+        factor += std::pow(2., (order+1.)*j-jmax-2.);
+    }
+    factor *= std::sqrt(d);
+
+    return 1./factor;
+}
+
+
+template <typename Basis>
+typename Sepdiagscal<Basis>::T
+compOmegamin4(const Basis& basis,
+              const typename Sepdiagscal<Basis>::size_type d,
+              const typename Sepdiagscal<Basis>::T order)
+{
+    assert(d>0);
+    return d*std::pow(2., 4.*order*basis.j0);
 }
 
 
@@ -1448,13 +1852,72 @@ compIndexscale(const HTCoefficients<T, Basis>& u, const T order)
 }
 
 
+template <typename T, typename Basis>
+T
+compIndexscale2(const HTCoefficients<T, Basis>& u, const T order)
+{
+    typedef typename SepCoefficients<Lexicographical, T, Index1D>::size_type
+                     size_type;
+
+    flens::DenseVector<flens::Array<int> >    jmax(u.dim());
+    for (int j=1; j<=u.dim(); ++j) {
+        htucker::DimensionIndex idx(1);
+        idx[0] = j;
+        SepCoefficients<Lexicographical, T, Index1D> frame = extract(u, idx);
+
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            for (const auto& it : frame(k, 1)) {
+                int level = it.first.j;
+                if (it.first.xtype==XWavelet) ++level;
+                jmax(j) = MAX(level, jmax(j));
+            }
+        }
+    }
+
+    T sum = 0;
+    for (int i=1; i<=u.dim(); ++i) {
+        sum += std::pow(2., 4.*order*jmax(i));
+    }
+
+    return sum/compOmegamin2(u.basis(), u.dim(), order);
+}
+
+
+template <typename Basis>
+typename Basis::T
+compIndexscale(const Basis& basis,
+               const std::vector<IndexSet<Index1D> >& Lambda,
+               const typename Basis::T order)
+{
+    assert(Lambda.size()>0);
+
+    typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
+
+    flens::DenseVector<flens::Array<int> >    jmax(Lambda.size());
+    for (size_type j=1; j<=Lambda.size(); ++j) {
+        for (const auto& it : Lambda[j-1]) {
+            int level = it.j;
+            if (it.xtype==XWavelet) ++level;
+            jmax(j) = MAX(level, jmax(j));
+        }
+    }
+
+    typename Basis::T sum = 0;
+    for (unsigned i=1; i<=Lambda.size(); ++i) {
+        sum += std::pow(2., 2.*order*jmax(i));
+    }
+
+    return sum/compOmegamin2(basis, Lambda.size(), order);
+}
+
+
 template <typename Basis>
 void
 setScaling(Sepdiagscal<Basis>& S,
            const typename Sepdiagscal<Basis>::T eps)
 {
     S.set_eps(eps);
-    S.set_nu(eps);
+    S.set_nu(eps/2.);
     S.comp_h();
     S.comp_nplus();
 }
@@ -1662,13 +2125,16 @@ eval(Sepdiagscal<Basis>& S,
     S.comp_n();
     T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
 
-    HTCoefficients<T, Basis> sum;
     T factor1 = S.h()*(1./std::sqrt(omega2));
     #ifdef DEBUG_CANCEL
         HTCoefficients<T, Basis> sumexact;
         T                        sumnorms = 0.;
     #endif
-    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+
+    HTCoefficients<T, Basis>    sum(u.dim(), u.basis());
+
+    unsigned counter = 0;
+    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i, ++counter) {
         HTCoefficients<T, Basis> prod(u);
         T factor2 = 2.*std::pow(M_PI, -0.5)*
                     (1./(1+std::exp(-1.*S.h()*(T) i)));
@@ -1694,16 +2160,18 @@ eval(Sepdiagscal<Basis>& S,
             set(prod, idx, frame);
         }
 
+
         if (i==-1*(signed) S.n()) {
             sum = prod;
+            sum.truncate(eps);
             #ifdef DEBUG_CANCEL
                 sumexact  = prod;
                 prod.orthogonalize();
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
         } else {
-            sum.tree() = sum.tree()+prod.tree();
-            sum.truncate(eps);
+            prod.truncate(eps);
+            sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
                 prod.orthogonalize();
@@ -1718,7 +2186,138 @@ eval(Sepdiagscal<Basis>& S,
                   << sumnorms/(T) sumexact.tree().L2normorthogonal()
                   << std::endl;
     #endif
+
     return sum;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+evalS2(Sepdiagscal<Basis>& S,
+       const HTCoefficients<T, Basis>& u,
+       const std::vector<IndexSet<Index1D> >& cols,
+       const double eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(cols.size()==S.dim());
+
+    typedef typename Sepdiagscal<Basis>::size_type  size_type;
+
+    T iscale = compIndexscale2(u, S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+    T omega2 = compOmegamin4(S.basis(), S.dim(), S.order());
+
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    #ifdef DEBUG_CANCEL
+        HTCoefficients<T, Basis> sumexact;
+        T                        sumnorms = 0.;
+    #endif
+
+    HTCoefficients<T, Basis>    sum(u.dim(), u.basis());
+
+    std::cout << "maxlevel = " << maxlevel(u) << std::endl;
+    std::cout << "Current S =>\n" << S << std::endl;
+
+    for (long i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+        HTCoefficients<T, Basis> prod(u);
+        T factor2 = 2.*std::pow(M_PI, -0.5)*
+                    (1./(1+std::exp(-1.*S.h()*(T) i)));
+        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+        T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
+
+        for (size_type j=1; j<=S.dim(); ++j) {
+            htucker::DimensionIndex idx(1);
+            idx[0] = j;
+
+            SepCoefficients<Lexicographical, T, Index1D>
+            frame = extract(prod, idx);
+
+            for (size_type k=1; k<=frame.rank(); ++k) {
+                P(cols[j-1], frame(k, 1));
+                for (auto& it : frame(k, 1)) {
+                    int level = it.first.j;
+                    if (it.first.xtype==XWavelet) ++level;
+                    T weight = std::pow(2., 4.*S.order()*level)/omega2;
+                    it.second *= factor2*std::exp(-alpha*weight);
+                }
+            }
+            set(prod, idx, frame);
+        }
+
+
+        if (i==-1*(signed) S.n()) {
+            prod.truncate(eps);
+            sum = prod;
+            #ifdef DEBUG_CANCEL
+                sumexact  = prod;
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        } else {
+            prod.truncate(eps);
+            sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
+            #ifdef DEBUG_CANCEL
+                sumexact.tree() = sumexact.tree()+prod.tree();
+                prod.orthogonalize();
+                sumnorms += prod.tree().L2normorthogonal();
+            #endif
+        }
+    }
+
+    #ifdef DEBUG_CANCEL
+        sumexact.orthogonalize();
+        std::cout << "eval(S, cols): kappa = "
+                  << sumnorms/(T) sumexact.tree().L2normorthogonal()
+                  << std::endl;
+    #endif
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+void
+assemble(Sepdiagscal<Basis>& S,
+         HTCoefficients<T, Basis>& Stree,
+         const std::vector<IndexSet<Index1D> >& cols)
+{
+    assert(S.dim()==(unsigned) Stree.dim());
+    assert(S.dim()==cols.size());
+
+    typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
+    typedef typename flens::DenseVector<flens::Array<T> >       DV;
+    typedef typename htucker::DenseVectorList<T>                DVList;
+
+    DVList  list;
+
+    /* Assemble HT tree */
+    S.set_iscale(compIndexscale(S.basis(), cols, S.order()));
+    S.comp_n();
+    T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+
+    for (size_type j=1; j<=cols.size(); ++j) {
+        auto max = maxintind(cols[j-1], S.basis());
+        for (long k=-1*S.n(); k<=(signed) S.nplus(); ++k) {
+            DV vecA(max*max);
+
+            T factor2 = 2.*std::pow(M_PI, -0.5)*
+                        (1./(1+std::exp(-1.*S.h()*(T) k)));
+            factor2   = std::pow(factor2*factor1, 1./(T) S.dim());
+            T alpha   = std::pow(std::log(1.+std::exp((T) k*S.h())), 2.);
+            for (int i=1; i<=(signed) max; ++i) {
+                auto index        = maptowav(i, S.basis());
+                int level         = index.j;
+                if (index.xtype==XWavelet) ++level;
+                T weight          = std::pow(2., 2.*S.order()*level)/omega2;
+                vecA((i-1)*max+i) = factor2*std::exp(-alpha*weight);
+            }
+            list.add(vecA);
+        }
+    }
+
+    Stree.tree().generateTofElementary(list, S.n()+S.nplus()+1, S.dim());
 }
 
 
@@ -1795,6 +2394,180 @@ contraction(const HTCoefficients<T, Basis>& u,
 
     for (int j=1; j<=u.dim(); ++j) {
         ret[j-1] = contraction(u, activex[j-1], sigmas[j-1], j);
+    }
+}
+
+
+template <typename T, typename Basis>
+void
+scal(const T alpha, HTCoefficients<T, Basis>& x)
+{
+    x.tree().scal(alpha);
+}
+
+
+template <typename T, typename Basis>
+T
+dot(const HTCoefficients<T, Basis>& x, const HTCoefficients<T, Basis>& y)
+{
+    assert(x.dim()==y.dim());
+    return x.tree().ScalarProduct(y.tree());
+}
+
+
+template <typename T, typename Basis>
+T
+nrm2(HTCoefficients<T, Basis>& x, bool isorth)
+{
+    if (!isorth) x.tree().orthogonalize();
+    return x.tree().L2normorthogonal();
+}
+
+
+template <typename T, typename Basis>
+void
+axpy(const T alpha,
+     const HTCoefficients<T, Basis>& x,
+           HTCoefficients<T, Basis>& y)
+{
+    assert(x.dim()==y.dim());
+
+    if (alpha==(T) 0) return;
+
+    y.tree() = alpha*x.tree()+y.tree();
+}
+
+
+template <typename T, typename Basis>
+void
+restrict(HTCoefficients<T, Basis>& f,
+         const IndexSet<Index1D>& activex,
+         const unsigned j)
+{
+    assert(j>0 && j<=(unsigned) f.dim());
+
+    typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = j;
+
+    SepCoefficients<Lexicographical, T, Index1D>
+    frame = extract(f, idx);
+
+    for (size_type k=1; k<=frame.rank(); ++k) {
+        P(activex, frame(k, 1));
+    }
+
+    set(f, idx, frame);
+}
+
+
+template <typename T, typename Basis>
+void
+restrict(HTCoefficients<T, Basis>& f,
+         const std::vector<IndexSet<Index1D> >& activex)
+{
+    assert(activex.size()==(unsigned) f.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    for (auto tit=f.tree().getGeneralTree().end();
+              tit>=f.tree().getGeneralTree().begin();
+              tit--) {
+        auto node = tit.getNode();
+
+        if (node->isLeaf()) {
+            htucker::DimensionIndex idx = node->getContent()->getIndex();
+            Matrix& U = const_cast<Matrix&>(node->getContent()->getUorB());
+            auto max = maxintind(activex[idx[0]-1], f.basis());
+            assert(max<=(unsigned) U.numRows());
+
+            Matrix copy = U;
+            if (max!=(unsigned) U.numRows()) {
+                U.resize(max, U.numCols());
+            } else {
+                U.fill((T) 0);
+            }
+
+            for (auto& lambda : activex[idx[0]-1]) {
+                auto i = maptoint(lambda, f.basis());
+                for (int k=1; k<=U.numCols(); ++k) {
+                    U(i, k) = copy(i, k);
+                }
+            }
+        }
+    }
+}
+
+
+template <typename T, typename Basis>
+void
+extend(HTCoefficients<T, Basis>& f,
+       const IndexSet<Index1D>& activex,
+       const unsigned j)
+{
+    assert(j>0 && j<=(unsigned) f.dim());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+    using flens::_;
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = j;
+
+    for (auto tit=f.tree().getGeneralTree().end();
+              tit>=f.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            Matrix& U = const_cast<Matrix&>
+                        (tit.getNode()->getContent()
+                         ->getUorB());
+            int      rowsold = U.numRows();
+            int      cols    = U.numCols();
+            unsigned rowsnew = maxintind(activex, f.basis());
+
+            if (rowsnew>(unsigned) rowsold) {
+                Matrix copy = U;
+                U.resize(rowsnew, cols);
+                U(_(1,rowsold), _) = copy;
+            }
+
+            return;
+        }
+    }
+
+    std::cerr << "extend: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
+template <typename T, typename Basis>
+void
+extend(HTCoefficients<T, Basis>& f,
+       const std::vector<IndexSet<Index1D> >& activex)
+{
+    assert(activex.size()==(unsigned) f.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    using flens::_;
+
+    for (auto tit=f.tree().getGeneralTree().end();
+              tit>=f.tree().getGeneralTree().begin();
+              tit--) {
+        auto node = tit.getNode();
+
+        if (node->isLeaf()) {
+            htucker::DimensionIndex idx = node->getContent()->getIndex();
+            Matrix& U = const_cast<Matrix&>(node->getContent()->getUorB());
+            auto max = maxintind(activex[idx[0]-1], f.basis());
+            assert(max>=(unsigned) U.numRows());
+
+            if (max!=(unsigned) U.numRows()) {
+                Matrix copy = U;
+                U.resize(max, U.numCols());
+                U(_(1, copy.numRows()), _) = copy;
+            }
+        }
     }
 }
 

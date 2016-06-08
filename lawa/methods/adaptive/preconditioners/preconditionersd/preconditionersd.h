@@ -18,15 +18,4 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
  
-#include <lawa/methods/adaptive/solvers/ghsadwav.h>
-#include <lawa/methods/adaptive/solvers/ghsnonsymadwav.h>
-#include <lawa/methods/adaptive/solvers/multitreeawgm.h>
-#include <lawa/methods/adaptive/solvers/s_adwav.h>
-#include <lawa/methods/adaptive/solvers/s_adwav_optimized.h>
-#include <lawa/methods/adaptive/solvers/s_adwav_spacetime.h>
-#include <lawa/methods/adaptive/solvers/thetaschemeawgm.h>
-#include <lawa/methods/adaptive/solvers/multitreeawgm_pg.h>
-#include <lawa/methods/adaptive/solvers/solver_parameters.h>
-#include <lawa/methods/adaptive/solvers/multitreeawgm2.h>
-#include <lawa/methods/adaptive/solvers/htawgm.h>
-
+#include <lawa/methods/adaptive/preconditioners/preconditionersd/sepdiagscal.h>

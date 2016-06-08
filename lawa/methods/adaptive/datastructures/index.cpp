@@ -42,12 +42,36 @@ Index1D::levelSum(void) const
 }
 
 
+Index1DC::Index1DC(void):
+    Index1D(),
+    d(0){}
+
+Index1DC::Index1DC(int _j, int _k, XType _xtype, unsigned _d):
+    Index1D(_j, _k, _xtype),
+    d(_d){}
+
+Index1DC::Index1DC(const Index1DC &index):
+    Index1D(index),
+    d(index.d){}
+
+
 std::ostream& operator<<(std::ostream &s, const Index1D &_i)
 {
     if (_i.xtype==XBSpline) {
         s << "scaling," << _i.j << "," << _i.k;
     } else {
         s << "wavelet," << _i.j << "," << _i.k;
+    }
+    return s;
+}
+
+
+std::ostream& operator<<(std::ostream &s, const Index1DC &_i)
+{
+    if (_i.xtype==XBSpline) {
+        s << "scaling," << _i.j << "," << _i.k << "," << _i.d;
+    } else {
+        s << "wavelet," << _i.j << "," << _i.k << "," << _i.d;
     }
     return s;
 }

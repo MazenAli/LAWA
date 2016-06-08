@@ -79,8 +79,8 @@ zero(T, T)
 double
 ux(double x)
 {
-    //return std::exp(-1*std::pow(x-mx, 2.)/(a*a));
-    return -1.*(x-0.5)*(x-0.5)+0.25;
+    return std::exp(-1*std::pow(x-mx, 2.)/(a*a));
+    //return -1.*(x-0.5)*(x-0.5)+0.25;
     /*
     if (x >= 0.4 && x <= 0.6) {
         return 1.;
@@ -93,8 +93,8 @@ ux(double x)
 double
 uy(double y)
 {
-    //return std::exp(-1*std::pow(y-my, 2.)/(b*b));
-    return -1.*(y-0.5)*(y-0.5)+0.25;
+    return std::exp(-1*std::pow(y-my, 2.)/(b*b));
+    //return -1.*(y-0.5)*(y-0.5)+0.25;
     /*
     if (y >= 0.4 && y <= 0.6) {
         return 1.;
@@ -130,51 +130,7 @@ fxy(double x, double y)
 }
 
 
-// Basis
-int                                               d(4);
-Basis_XY                                          basis_xy(d, 2);
-Basis2D                                           basis2d(basis_xy, basis_xy);
-
-
-// Input u
-DenseVectorT                                      sing_support;
-FullColMatrixT                                    nodeltas;
-lawa::SeparableFunction2D<T>                      uxy(ux, sing_support,
-                                                      uy, sing_support);
-RHSINTEGRAL                                       _u(basis2d, uxy,
-                                                       nodeltas, nodeltas, 100);
-Preconditioner                                    prec;
-lawa::RHS<T, Index, RHSINTEGRAL, Preconditioner>  u(_u, prec);
-
-
-// Data f
-lawa::Function2D<T>                                 __f(fxy, sing_support,
-                                                          sing_support);
-RHSINTEGRAL2                                        _f(basis2d, __f, 100);
-Prec2D                                              P(basis2d);
-lawa::RHS<T, Index, RHSINTEGRAL2, Preconditioner>   f(_f, prec);
-
-
-// Operator A
-Laplace1D                                         LaplaceBil(basis_xy);
-RefLaplace1D                                      RefLaplaceBil(
-                                                  basis_xy.refinementbasis);
-Identity1D                                        IdentityBil(basis_xy);
-RefIdentity1D                                     RefIdentityBil(
-                                                  basis_xy.refinementbasis);
-LOp_Lapl1D                                        lOp_Lapl1D(basis_xy,
-                                                  basis_xy, RefLaplaceBil,
-                                                  LaplaceBil);
-LOp_Id1D                                          lOp_Id1D(basis_xy,
-                                                  basis_xy, RefIdentityBil,
-                                                  IdentityBil);
-LOp_Lapl_Id_2D                                    localLaplId(lOp_Lapl1D,
-                                                  lOp_Id1D);
-LOp_Id_Lapl_2D                                    localIdLapl(lOp_Id1D,
-                                                  lOp_Lapl1D);
-std::vector<lawa::AbstractLocalOperator2D<T>*>    ops;
-
-
+/*
 template <typename _Int, typename _Prec>
 void
 sample(IndexSet Lambda, lawa::RHS<T, Index, _Int, _Prec>& f,
@@ -194,7 +150,7 @@ sample(IndexSet Lambda, lawa::RHS<T, Index, _Int, _Prec>& f,
 
     // Sampling loop
     for (std::size_t k = 0; k < max_it; ++k) {
-        lawa::extendMultiTree(basis2d, sweep, total, "standard", true/*false*/, true);
+        lawa::extendMultiTree(basis2d, sweep, total, "standard", true, true);
         IndexSet diff = lawa::supp(total);
 
         for (auto& lambda : Lambda) {
@@ -290,7 +246,7 @@ eval(IndexSet Lambda, Flex_COp_2D& A,
 
     // Sampling loop
     for (std::size_t k = 0; k < max_it; ++k) {
-        lawa::extendMultiTree(basis2d, sweep, total, "standard", true/*false*/, true);
+        lawa::extendMultiTree(basis2d, sweep, total, "standard", true, true);
         Coefficients res = total;
         A.eval(u, res, P);
 
@@ -365,16 +321,60 @@ eval(IndexSet Lambda, Flex_COp_2D& A,
 
     std::cerr << "Warning! Max iterations " << max_it << " reached!\n";
 }
-
+*/
 
 int
 main()
 {
+    // Basis
+    int                                               d(4);
+    Basis_XY                                          basis_xy(d, 2);
+    Basis2D                                           basis2d(basis_xy, basis_xy);
+
+
+    // Input u
+    DenseVectorT                                      sing_support;
+    FullColMatrixT                                    nodeltas;
+    lawa::SeparableFunction2D<T>                      uxy(ux, sing_support,
+                                                          uy, sing_support);
+    RHSINTEGRAL                                       _u(basis2d, uxy,
+                                                           nodeltas, nodeltas, 100);
+    Preconditioner                                    prec;
+    lawa::RHS<T, Index, RHSINTEGRAL, Preconditioner>  u(_u, prec);
+
+
+    // Data f
+    lawa::Function2D<T>                                 __f(fxy, sing_support,
+                                                              sing_support);
+    RHSINTEGRAL2                                        _f(basis2d, __f, 100);
+    Prec2D                                              P(basis2d);
+    lawa::RHS<T, Index, RHSINTEGRAL2, Preconditioner>   f(_f, prec);
+
+
+    // Operator A
+    Laplace1D                                         LaplaceBil(basis_xy);
+    RefLaplace1D                                      RefLaplaceBil(
+                                                      basis_xy.refinementbasis);
+    Identity1D                                        IdentityBil(basis_xy);
+    RefIdentity1D                                     RefIdentityBil(
+                                                      basis_xy.refinementbasis);
+    LOp_Lapl1D                                        lOp_Lapl1D(basis_xy,
+                                                      basis_xy, RefLaplaceBil,
+                                                      LaplaceBil);
+    LOp_Id1D                                          lOp_Id1D(basis_xy,
+                                                      basis_xy, RefIdentityBil,
+                                                      IdentityBil);
+    LOp_Lapl_Id_2D                                    localLaplId(lOp_Lapl1D,
+                                                      lOp_Id1D);
+    LOp_Id_Lapl_2D                                    localIdLapl(lOp_Id1D,
+                                                      lOp_Lapl1D);
+    std::vector<lawa::AbstractLocalOperator2D<T>*>    ops;
+
     basis_xy.enforceBoundaryCondition<lawa::DirichletBC>();
     Coefficients F, U, AU, res;
     IndexSet Lambda;
     T gamma     = 0.2;
-    T tol_U     = 1e-08;
+    T tol_U     = 1e-04;
     T tol_F     = 1e-08;
     T tol_AU    = 1e-08;
     lawa::getSparseGridIndexSet(basis2d, Lambda, 1, 0, gamma);
@@ -384,6 +384,7 @@ main()
     Flex_COp_2D                                       A(ops);
 
     lawa::sample_f(basis2d, Lambda, u, U, tol_U, true);
+    exit(1);
     precon _p;
     lawa::saveCoeffVector2D(U, basis2d, "u.dat");
     lawa::plot2D(basis2d, U, _p, zero, 0., 1., 0., 1., 1e-02, "plot_u");

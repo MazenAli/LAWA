@@ -24,6 +24,7 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
+#include <iostream>
 
 namespace lawa {
 
@@ -232,6 +233,24 @@ struct ISWGM_PG_Information{
 
     void reset();
 };
+
+
+/* HTAWGM solver parameters */
+struct HTAWGM_Params
+{
+    bool     uzero      = true;  /* u_0=0? */
+    double   tol_awgm   = 1e-08; /* AWGM solve accuracy */
+    double   gamma      = 1e-02; /* galerkin_pcg adaptive accuracy */
+    unsigned maxit_awgm = 5e+01; /* Maxit for AWGM */
+    unsigned maxit_pcg  = 5e+01; /* Maxit for galerkin_pcg */
+    double   delta_pcg  = 1e-01; /* Adaptive trunc tolerance galerkin_pcg */
+    double   trunc_pres = 1e-08; /* Truncation accuracy presidual */
+    double   alpha      = 0.8;   /* Bulk chasing parameter */
+    unsigned maxit_bulk = 1e+01; /* Maxit bulk chasing */
+};
+
+std::ostream& operator<<(std::ostream& s,
+                         const HTAWGM_Params& params);
 
 } // namespace lawa
 

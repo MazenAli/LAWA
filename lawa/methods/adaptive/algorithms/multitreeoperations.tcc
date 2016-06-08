@@ -1,4 +1,31 @@
 namespace lawa {
+template <typename Basis>
+void
+extendMultiTree(const Basis &basis, const IndexSet<Index1D>  &v,
+                IndexSet<Index1D>  &C_v, const char* residualType,
+                bool sparsetree)
+{
+    typedef IndexSet<Index1D>::const_iterator                 const_set1d_it;
+
+    for (const_set1d_it it=v.begin(); it!=v.end(); ++it) {
+        C_v.insert(*it);
+        IndexSet<Index1D > C_index;
+        C_index = C(*it, 1., basis);
+        if (strcmp(residualType,"standard")==0) {
+            for (const_set1d_it newindex=C_index.begin(); newindex!=C_index.end(); ++newindex) {
+                if (C_v.find(*newindex)==C_v.end()) {
+                    completeMultiTree(basis,*newindex,C_v, sparsetree);
+                }
+            }
+        }
+        else {
+            std::cerr << "extendMultiTree: unknown residual type " << residualType << std::endl;
+            exit(1);
+        }
+    }
+    return;
+}
+
 
 template <typename T, typename Basis>
 void
@@ -578,15 +605,15 @@ completeMultiTree(const Basis &basis, const Index1D &index1d,
 */
 
 // Non-Periodic Version
-template <typename T, typename Basis>
-typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, T>::value, void>::Type
+template <typename Basis>
+typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, void>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index1D &index1d,
-                  Coefficients<Lexicographical,T,Index1D>  &v, bool sparsetree)
+                  IndexSet<Index1D>  &v, bool sparsetree)
 {
     int j0 = basis.j0;
 
     if (v.find(index1d)!=v.end())  return;
-    else                            v[index1d] = 0.;
+    else                            v.insert(index1d);
 
     int  j = index1d.j;
     long k = index1d.k;
@@ -928,7 +955,7 @@ template <typename T, typename Basis>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, T>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index1D &index1d,
                   Coefficients<Lexicographical,T,Index1D>  &v,
-                  IndexSet<Index1D>& diff_v, bool sparsetree=false)
+                  IndexSet<Index1D>& diff_v, bool sparsetree)
 {
     int j0 = basis.j0;
 
@@ -1017,6 +1044,103 @@ completeMultiTree(const Basis &basis, const Index1D &index1d,
     }
     return;
 }
+
+
+// ---- Non-Periodic + returning added indizes
+template <typename Basis>
+typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<Basis>::value, void>::value, void>::Type
+completeMultiTree(const Basis &basis, const Index1D &index1d,
+                  IndexSet<Index1D>  &v,
+                  IndexSet<Index1D>& diff_v, bool sparsetree)
+{
+    int j0 = basis.j0;
+
+    if (v.find(index1d)!=v.end()){
+    	return;
+    }
+    else{
+    	diff_v.insert(index1d);
+    	v.insert(index1d);
+    }
+
+    int  j = index1d.j;
+    long k = index1d.k;
+
+    Support<typename Basis::T> supp = basis.generator(index1d.xtype).support(j,k);
+
+    int new_j = 0;
+    long new_k_first = 0, new_k_last = 0;
+    bool checkPredecessors=true;
+    XType new_type = XWavelet;
+    if (j==j0 && index1d.xtype==XWavelet) {
+        basis.getScalingNeighborsForWavelet(j,k,basis,new_j,new_k_first,new_k_last);
+        new_type = XBSpline;
+        assert(new_j==j);
+    }
+    else if (j>j0 && index1d.xtype==XWavelet) {
+        basis.getLowerWaveletNeighborsForWavelet(j,k,basis,new_j,new_k_first,new_k_last);
+        new_type = XWavelet;
+        assert(new_j==j-1);
+    }
+    else checkPredecessors = false;    // Index corresponds to a scaling function -> no predecessor
+
+    if (checkPredecessors) {
+        if (!sparsetree) {
+            for (long new_k=new_k_first; new_k<=new_k_last; ++new_k) {
+                Support<typename Basis::T> new_supp = basis.generator(new_type).support(new_j,new_k);
+                if (overlap(supp,new_supp)>0) {
+                    Index1D new_index1d(Index1D(new_j,new_k,new_type));
+                    if (v.find(new_index1d)==v.end()) completeMultiTree(basis,new_index1d,v, diff_v);
+                }
+            }
+        }
+        else {
+            bool foundPredecessor = false;
+            bool foundCoveredSupp = false;
+            long covering_k = new_k_last;
+            for (long new_k=new_k_first; new_k<=new_k_last; ++new_k) {
+                Support<typename Basis::T> covered_supp = basis.generator(new_type).support(new_j,new_k);
+                if (covered_supp.l1<=supp.l1 && covered_supp.l2>=supp.l2) {
+                    Index1D new_index1d(new_j,new_k,new_type);
+                    if (v.find(new_index1d)!=v.end()) {
+                        foundPredecessor = true;
+                        break;
+                    }
+                	foundCoveredSupp = true;
+                	covering_k = std::min(covering_k, new_k);
+                }
+            }
+            if (!foundPredecessor) {
+            	if(foundCoveredSupp){
+                    Index1D new_index1d(new_j,covering_k,new_type);
+                    completeMultiTree(basis,new_index1d,v,diff_v,sparsetree);
+            	}
+            	else{
+                    for (long new_k=new_k_first; new_k<=new_k_last; ++new_k) {
+                 //       std::cerr << "¤¤¤ ==== > Support to be covered: " << supp << std::endl;
+                        Support<typename Basis::T> new_supp = basis.generator(new_type).support(new_j,new_k);
+                        if (new_supp.l1 > supp.l1) {
+                //            std::cerr << "¤¤¤       Covering with: " << basis.generator(new_type).support(new_j,new_k-1) << std::endl;
+               //             std::cerr << "¤¤¤       Covering with: " << new_supp << std::endl;
+                            completeMultiTree(basis, Index1D(new_j,new_k - 1,new_type),v,diff_v,sparsetree);
+                            completeMultiTree(basis, Index1D(new_j,new_k,new_type),v,diff_v,sparsetree);
+                            while(new_supp.l2 < supp.l2){
+                            	new_k++;
+                            	new_supp = basis.generator(new_type).support(new_j,new_k);
+                //                std::cerr << "¤¤¤       Covering with: " << new_supp << std::endl;
+                                completeMultiTree(basis, Index1D(new_j,new_k,new_type),v,diff_v,sparsetree);
+                            }
+               //             std::cerr << "¤¤¤ <==============   " << std::endl;
+                            break;
+                        }
+                    }
+            	}
+            }
+        }
+    }
+    return;
+}
+
 
 // ---- Periodic + returning added indizes
 template <typename T, typename Basis>
