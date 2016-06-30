@@ -9859,3 +9859,4 @@ Primal : 1.706790434208e-05
        CGLS Iteration 348: current error NE 9.452581005074e-06, Au-f 1.498993672099e-04
        CGLS Iteration 349: current error NE 9.438322100733e-06, Au-f 1.498776351834e-04
        CGLS Iteration 350: current error NE 9.436706142784e-06, Au-f 1.498559057584e-04
+       CGLS Iteration 351: current error NE 9.410530313975e-06, Au-f 1.498342951850e-04

@@ -207,3 +207,5 @@ applications/rb_adaptive/CDR/3/training_data_stage8/
 applications/rb_adaptive/Stempel/1/training_data_stempel/
 applications/rb_adaptive/Stempel/2/training_data_stempel/
 applications/rb_adaptive/Stempel/3/training_data_stempel/
+*.txt
+*.dat
