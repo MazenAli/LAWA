@@ -22,7 +22,7 @@
 namespace lawa {
 
 /*template <typename T>
-Wavelet<T,Primal,Periodic,CDF>::Wavelet(int _d, int _d_)
+Wavelet<T,Primal,Periodic,CDF>::Wavelet(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_)
     : d(_d), d_(_d_), mu(d&1),
       vanishingMoments(_d_), psiR(_d, _d_)
 {
@@ -48,7 +48,7 @@ Wavelet<T,Primal,Periodic,CDF>::Wavelet(const Basis<T,Primal,Periodic,CDF> &_bas
 
 template <typename T>
 T
-Wavelet<T,Primal,Periodic,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Primal,Periodic,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     // maximal support: [0,1]
     if((x < 0.) || (x > 1.)){
@@ -58,7 +58,7 @@ Wavelet<T,Primal,Periodic,CDF>::operator()(T x, int j, long k, unsigned short de
     // sum contributions of original spline on R
     // = 'wrapping' around [0,1]
     T val = 0;
-    for(int l = ifloor(psiR.support(j,k).l1); l < iceil<int>(psiR.support(j,k).l2); ++l){
+    for(FLENS_DEFAULT_INDEXTYPE l = ifloor(psiR.support(j,k).l1); l < iceil<FLENS_DEFAULT_INDEXTYPE>(psiR.support(j,k).l2); ++l){
         val += psiR(l+x, j, k, deriv);
     }
     return val;
@@ -66,7 +66,7 @@ Wavelet<T,Primal,Periodic,CDF>::operator()(T x, int j, long k, unsigned short de
 
 template <typename T>
 PeriodicSupport<T>
-Wavelet<T,Primal,Periodic,CDF>::support(int j, long k) const
+Wavelet<T,Primal,Periodic,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {    
     Support<T> suppR = psiR.support(j,k);
     if(suppR.length() >= 1){
@@ -83,7 +83,7 @@ Wavelet<T,Primal,Periodic,CDF>::support(int j, long k) const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,Periodic,CDF>::singularSupport(int j, long k) const
+Wavelet<T,Primal,Periodic,CDF>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {    
     if((psiR.support(j,k).l1 >= 0) && (psiR.support(j,k).l2 <= 1)){
          return linspace(support(j,k).l1, support(j,k).l2, 2*(d+d_)-1);
@@ -93,14 +93,14 @@ Wavelet<T,Primal,Periodic,CDF>::singularSupport(int j, long k) const
     flens::DenseVector<flens::Array<T> > singSuppR = linspace(psiR.support(j,k).l1, psiR.support(j,k).l2, 2*(d+d_)-1);
     temp.push_back(0.);
     temp.push_back(1.);
-    for(int i = singSuppR.firstIndex(); i <= singSuppR.lastIndex(); ++i){
+    for(FLENS_DEFAULT_INDEXTYPE i = singSuppR.firstIndex(); i <= singSuppR.lastIndex(); ++i){
         temp.push_back(singSuppR(i) - ifloor(singSuppR(i)));
     }
     temp.sort();
     temp.unique();
     
     flens::DenseVector<flens::Array<T> > singSupp(temp.size());
-    int i = 1;
+    FLENS_DEFAULT_INDEXTYPE i = 1;
     for (typename std::list<T>::const_iterator it = temp.begin(); it != temp.end(); ++it, ++i) {
         singSupp(i) = *it;
     }
@@ -110,15 +110,15 @@ Wavelet<T,Primal,Periodic,CDF>::singularSupport(int j, long k) const
 
 template <typename T>
 T
-Wavelet<T,Primal,Periodic,CDF>::tic(int j) const
+Wavelet<T,Primal,Periodic,CDF>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+1));
 }
 
 template <typename T>
 flens::DenseVector<flens::Array<long double> > *
-Wavelet<T,Primal,Periodic,CDF>::getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-												long &split, long &refinement_k_restart) const
+Wavelet<T,Primal,Periodic,CDF>::getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+												FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const
 {
     refinement_j = j + 1;
 
@@ -139,7 +139,7 @@ Wavelet<T,Primal,Periodic,CDF>::getRefinement(int j, long k, int &refinement_j, 
 	}
 	// Right part
 	//flens::DenseVector<flens::Array<long double> >* coeffs =  mra._RefCoeffs[0];
-	int type = k - basis.rangeJR(j).firstIndex();
+	FLENS_DEFAULT_INDEXTYPE type = k - basis.rangeJR(j).firstIndex();
 	refinement_k_first = 2*k + basis._innerOffsets[0];
 	split = basis._split[type];
 	refinement_k_restart = 1;
@@ -147,23 +147,23 @@ Wavelet<T,Primal,Periodic,CDF>::getRefinement(int j, long k, int &refinement_j, 
 }
 
 template <typename T>
-int
-Wavelet<T,Primal,Periodic,CDF>::getRefinementLevel(int j) const {
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Primal,Periodic,CDF>::getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const {
 	return j+1;
 }
 
 template <typename T>
 T
-Wavelet<T,Primal,Periodic,CDF>::getL2Norm(int j, long k) const
+Wavelet<T,Primal,Periodic,CDF>::getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return basis._periodicL2Norms[0];
 }
 
 template <typename T>
 T
-Wavelet<T,Primal,Periodic,CDF>::getH1SemiNorm(int j, long k) const
+Wavelet<T,Primal,Periodic,CDF>::getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    T pow2ij = (T)(1L << j);
+    T pow2ij = (T)((FLENS_DEFAULT_INDEXTYPE) 1 << j);
     return pow2ij*basis._periodicH1SemiNorms[0];
 }
 
@@ -176,16 +176,16 @@ Wavelet<T,Primal,Periodic,CDF>::mask() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,Periodic,CDF>::mask(int d, int d_)
+Wavelet<T,Primal,Periodic,CDF>::mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {   
     assert(d<=d_);
     assert(((d+d_)&1)==0);
 
-    int mu = d & 1;
+    FLENS_DEFAULT_INDEXTYPE mu = d & 1;
     BSpline<T,Dual,R,CDF> phi_(d,d_);
     flens::DenseVector<flens::Array<T> > b(flens::_(2-(d+mu)/2-d_, (d-mu)/2+d_));
-    for (int k=b.firstIndex(); k<=b.lastIndex(); ++k) {
-        int sign = (k&1) ? -1 : 1;
+    for (FLENS_DEFAULT_INDEXTYPE k=b.firstIndex(); k<=b.lastIndex(); ++k) {
+        FLENS_DEFAULT_INDEXTYPE sign = (k&1) ? -1 : 1;
         b(k) = sign * phi_.a_(1-k);
     }
     return b;

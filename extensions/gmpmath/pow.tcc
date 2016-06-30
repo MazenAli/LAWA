@@ -21,7 +21,7 @@
 
 template <typename T>
 __gmp_expr<T,T>
-pow(const __gmp_expr<T,T> &x, int i)
+pow(const __gmp_expr<T,T> &x, FLENS_DEFAULT_INDEXTYPE i)
 {
     mpf_class ret, y(x);
     mpf_pow_ui(ret.get_mpf_t(), y.get_mpf_t(), i);
@@ -30,7 +30,7 @@ pow(const __gmp_expr<T,T> &x, int i)
 
 template <typename T, typename U>
 typename __gmp_resolve_expr<T,U>::value_type
-pow(const __gmp_expr<T,U> &x, int i)
+pow(const __gmp_expr<T,U> &x, FLENS_DEFAULT_INDEXTYPE i)
 {
     mpf_class ret, y(x);
     mpf_pow_ui(ret.get_mpf_t(), y.get_mpf_t(), i);

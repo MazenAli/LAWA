@@ -42,7 +42,7 @@ struct CompressionPDE1D_WO_XBSpline
     setParameters(const IndexSet<Index1D> &LambdaRow);
 
     IndexSet<Index1D>
-    SparsityPattern(const Index1D &lambda, const IndexSet<Index1D> &Lambda, int J=-1);
+    SparsityPattern(const Index1D &lambda, const IndexSet<Index1D> &Lambda, FLENS_DEFAULT_INDEXTYPE J=-1);
 
 };
 

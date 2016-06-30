@@ -23,8 +23,8 @@
 
 namespace lawa {
 
-long
-factorial(int n);
+FLENS_DEFAULT_INDEXTYPE
+factorial(FLENS_DEFAULT_INDEXTYPE n);
 
 } // namespace lawa
 

@@ -18,8 +18,8 @@ H1NormPreconditioner2D<T,Basis2D>::H1NormPreconditioner2D(const Basis2D &basis)
 
 template <typename T, typename Basis2D>
 T
-H1NormPreconditioner2D<T,Basis2D>::operator()(XType xtype1, int j1, long k1,
-                                              XType xtype2, int j2, long k2) const
+H1NormPreconditioner2D<T,Basis2D>::operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                                              XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {
     T dd_x, id_x, dd_y, id_y;
     if (    (flens::IsSame<Basis_x, Basis<T,Primal,R,CDF> >::value)

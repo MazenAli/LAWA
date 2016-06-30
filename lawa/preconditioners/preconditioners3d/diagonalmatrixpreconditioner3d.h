@@ -36,9 +36,9 @@ class DiagonalMatrixPreconditioner3D
         DiagonalMatrixPreconditioner3D(const BilinearForm &a);
 
         T
-        operator()(XType xtype1, int j1, long k1,
-                   XType xtype2, int j2, long k2,
-                   XType xtype3, int j3, long k3) const;
+        operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                   XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2,
+                   XType xtype3, FLENS_DEFAULT_INDEXTYPE j3, FLENS_DEFAULT_INDEXTYPE k3) const;
 
         T
         operator()(const Index3D &index) const;

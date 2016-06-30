@@ -24,7 +24,7 @@ namespace lawa {
 template <typename T, typename Basis>
 RHSWithPeaks1D<T,Basis>::RHSWithPeaks1D(const Basis &_basis, Function<T> _f,
                                         const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &_deltas,
-                                        int order, bool _with_singular_part, bool _with_smooth_part)
+                                        FLENS_DEFAULT_INDEXTYPE order, bool _with_singular_part, bool _with_smooth_part)
     : basis(_basis), f(_f), deltas(_deltas), with_singular_part(_with_singular_part),
       with_smooth_part(_with_smooth_part), integralf(f, basis)
 {
@@ -33,12 +33,12 @@ RHSWithPeaks1D<T,Basis>::RHSWithPeaks1D(const Basis &_basis, Function<T> _f,
 
 template <typename T, typename Basis>
 T
-RHSWithPeaks1D<T,Basis>::operator()(XType xtype, int j, long k) const
+RHSWithPeaks1D<T,Basis>::operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     T ret = 0.;
     if (with_smooth_part) ret += integralf(j,k,xtype,0);
     if (with_singular_part) {
-        for (int i=1; i<=deltas.numRows(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=deltas.numRows(); ++i) {
             ret += deltas(i,2) * basis.generator(xtype)(deltas(i,1),j,k,0);
         }
     }
@@ -59,7 +59,7 @@ RHSWithPeaks1D_WO_XBSpline<T>::RHSWithPeaks1D_WO_XBSpline
                                (const Wavelet<T,Primal,R,CDF> &_psi, T (*_f)(T),
                                 const flens::DenseVector<flens::Array<T> > &_f_singularPoints,
                                 flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > &_deltas,
-                                T _left_bound, T _right_bound, T _h, int _order,
+                                T _left_bound, T _right_bound, T _h, FLENS_DEFAULT_INDEXTYPE _order,
                                 bool _with_singular_part, bool _with_smooth_part)
 : psi(_psi), f(_f), f_singularPoints(_f_singularPoints), deltas(_deltas),
   left_bound(_left_bound), right_bound(_right_bound), h(_h), order(_order),
@@ -69,7 +69,7 @@ RHSWithPeaks1D_WO_XBSpline<T>::RHSWithPeaks1D_WO_XBSpline
     bounds(1) = left_bound;
     bounds(2) = right_bound;
 
-    int nFirst  = bounds.length(),
+    FLENS_DEFAULT_INDEXTYPE nFirst  = bounds.length(),
         nSecond = f_singularPoints.length();
 
     f_singularPoints_interval.engine().resize(nFirst + nSecond);
@@ -87,17 +87,17 @@ RHSWithPeaks1D_WO_XBSpline<T>::RHSWithPeaks1D_WO_XBSpline
 
     T x1 = -1,
       x2 =  1;
-    for (int k=1; k<=_order; ++k) {
-        int     m = (k+1)/2;
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=_order; ++k) {
+        FLENS_DEFAULT_INDEXTYPE     m = (k+1)/2;
         T xm = 0.5 * (x2+x1),
           xl = 0.5 * (x2-x1);
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             T z = cos(M_PI*(i-0.25)/(k+0.5)),
               z1, pp;
             do {
                 T p1 = 1.0,
                   p2 = 2.0;
-                for (int j=1; j<=k; ++j) {
+                for (FLENS_DEFAULT_INDEXTYPE j=1; j<=k; ++j) {
                     T p3 = p2;
                     p2 = p1;
                     p1 = ((2.0*j-1.0)*z*p2-(j-1.0)*p3)/j;
@@ -142,7 +142,7 @@ RHSWithPeaks1D_WO_XBSpline<T>::operator()(const Index1D &lambda) const
     long double ret = 0.0L;
 
     if (with_singular_part) {
-        for (int i=1; i<=deltas.numRows(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=deltas.numRows(); ++i) {
             ret += deltas(i,2) * psi(deltas(i,1),lambda.j,lambda.k,0);
         }
     }
@@ -151,7 +151,7 @@ RHSWithPeaks1D_WO_XBSpline<T>::operator()(const Index1D &lambda) const
         flens::DenseVector<flens::Array<T> > psi_singularPoints = psi.singularSupport(lambda.j,lambda.k);
 
         if (lambda.j >= 0) {
-            int nFirst  = psi_singularPoints.length(),
+            FLENS_DEFAULT_INDEXTYPE nFirst  = psi_singularPoints.length(),
                 nSecond = f_singularPoints.length();
 
             flens::DenseVector<flens::Array<T> > singularPoints(nFirst + nSecond);
@@ -163,12 +163,12 @@ RHSWithPeaks1D_WO_XBSpline<T>::operator()(const Index1D &lambda) const
                        singularPoints.engine().data());
 
 
-            for (int i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
                 ret += this->operator()(lambda.j,lambda.k,singularPoints(i),singularPoints(i+1));
             }
         }
         else {
-            int nFirst  = psi_singularPoints.length(),
+            FLENS_DEFAULT_INDEXTYPE nFirst  = psi_singularPoints.length(),
                 nSecond = f_singularPoints_interval.length();
 
             flens::DenseVector<flens::Array<T> > singularPoints(nFirst + nSecond);
@@ -182,7 +182,7 @@ RHSWithPeaks1D_WO_XBSpline<T>::operator()(const Index1D &lambda) const
             T left_integral_bound  = std::max(left_bound-1, psi.support(lambda.j,lambda.k).l1);
             T right_integral_bound = std::min(right_bound+1,psi.support(lambda.j,lambda.k).l2);
 
-            for (int i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
 
                 if      (singularPoints(i+1)<=left_integral_bound)  continue;
                 else if (singularPoints(i)  >=right_integral_bound) break;
@@ -229,10 +229,10 @@ RHSWithPeaks1D_WO_XBSpline<T>::operator()(const Index1D &lambda) const
 
 template <typename T>
 T
-RHSWithPeaks1D_WO_XBSpline<T>::operator()(int j, long k, T a, T b) const
+RHSWithPeaks1D_WO_XBSpline<T>::operator()(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, T a, T b) const
 {
     long double ret = 0.0L;
-    for (int i=1; i<=order; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=order; ++i) {
         T x = 0.5*(b-a)*_knots(order,i)+0.5*(b+a);
         ret += (long double)(_weights(order,i) * psi(x,j,k,0) * truncated_f(x));
     }

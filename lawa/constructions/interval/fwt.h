@@ -29,37 +29,37 @@ namespace lawa {
 template <typename X, typename Y, Construction Cons>
     void
     decompose(const flens::DenseVector<X> &x, 
-              const Basis<typename X::ElementType,Dual,Interval,Cons> &basis_, int j,
+              const Basis<typename X::ElementType,Dual,Interval,Cons> &basis_, FLENS_DEFAULT_INDEXTYPE j,
               flens::DenseVector<Y> &y);
 
 template <typename X, typename Y, Construction Cons>
     void
     decompose_(const flens::DenseVector<X> &x,
-               const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, int j,
+               const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, FLENS_DEFAULT_INDEXTYPE j,
                flens::DenseVector<Y> &y);
 
 template <typename X, typename Y, Construction Cons>
     void
     reconstruct(const flens::DenseVector<X> &x, 
-                const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, int j,
+                const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, FLENS_DEFAULT_INDEXTYPE j,
                 flens::DenseVector<Y> &y);
 
 template <typename X, typename Y, Construction Cons>
     void
     reconstruct_(const flens::DenseVector<X> &x,
-                 const Basis<typename X::ElementType,Dual,Interval,Cons> &basis, int j,
+                 const Basis<typename X::ElementType,Dual,Interval,Cons> &basis, FLENS_DEFAULT_INDEXTYPE j,
                  flens::DenseVector<Y> &y);
 
 template <typename X, typename Y, Construction Cons>
     void
     fwt(const flens::DenseVector<X> &x, 
-        const Basis<typename X::ElementType,Dual,Interval,Cons> &basis_, int j,
+        const Basis<typename X::ElementType,Dual,Interval,Cons> &basis_, FLENS_DEFAULT_INDEXTYPE j,
         flens::DenseVector<Y> &y);
 
 template <typename X, typename Y, Construction Cons>
     void
     ifwt(const flens::DenseVector<X> &x, 
-         const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, int j,
+         const Basis<typename X::ElementType,Primal,Interval,Cons> &basis, FLENS_DEFAULT_INDEXTYPE j,
          flens::DenseVector<Y> &y);
 
 } // namespace lawa

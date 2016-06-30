@@ -40,13 +40,13 @@ class S_ADWAV_Optimized {
     public:
         S_ADWAV_Optimized(AdaptiveOperator &A, RHS &F, PP_AdaptiveOperator &PP_A, PP_RHS &PP_F,
                           T contraction, T start_threshTol,
-                          T _linTol, T _resTol, int _NumOfIterations, int _MaxItsPerThreshTol,
+                          T _linTol, T _resTol, FLENS_DEFAULT_INDEXTYPE _NumOfIterations, FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol,
                           T _eps=1e-2);
 
         //solver for stationary problems
         void
         solve(const IndexSet<Index> &Initial_Lambda, Coefficients<Lexicographical,T,Index> &u,
-              const char *linsolvertype, const char *filename, int assemble_matrix, T H1norm=0.);
+              const char *linsolvertype, const char *filename, FLENS_DEFAULT_INDEXTYPE assemble_matrix, T H1norm=0.);
 
         std::vector<T>               residuals;
         std::vector<T>               times;
@@ -59,8 +59,8 @@ class S_ADWAV_Optimized {
         PP_AdaptiveOperator &PP_A;
         PP_RHS &PP_F;
         T contraction, threshTol, linTol, resTol;
-        int NumOfIterations;
-        int MaxItsPerThreshTol;
+        FLENS_DEFAULT_INDEXTYPE NumOfIterations;
+        FLENS_DEFAULT_INDEXTYPE MaxItsPerThreshTol;
         T eps;
 
 };

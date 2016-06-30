@@ -69,13 +69,13 @@ extendMultiTree(const Basis &basis, const Coefficients<Lexicographical,T,Index3D
 template <typename T, typename Basis>
 void
 extendMultiTreeAtBoundary(const Basis &basis, const Coefficients<Lexicographical,T,Index2D>  &v,
-                          Coefficients<Lexicographical,T,Index2D>  &C_v, int J,
+                          Coefficients<Lexicographical,T,Index2D>  &C_v, FLENS_DEFAULT_INDEXTYPE J,
                           bool sparsetree=false);
 
 template <typename T, typename Basis>
 void
 extendMultiTreeAtBoundary(const Basis &basis, const Coefficients<Lexicographical,T,Index3D>  &v,
-                          Coefficients<Lexicographical,T,Index3D>  &C_v, int J,
+                          Coefficients<Lexicographical,T,Index3D>  &C_v, FLENS_DEFAULT_INDEXTYPE J,
                           bool sparsetree=false);
 
 
@@ -133,7 +133,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<typename Basis::FirstBas
 					and !IsPeriodic<typename Basis::SecondBasisType>::value, T>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
-                  int coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
 
 // Periodic version
 template <typename T, typename Basis>
@@ -141,7 +141,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<typename Basis::FirstBasi
 					and IsPeriodic<typename Basis::SecondBasisType>::value, T>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
-                  int coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
 
 // Periodic-NonPeriodic version
 template <typename T, typename Basis>
@@ -149,7 +149,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<typename Basis::FirstBasi
 					and !IsPeriodic<typename Basis::SecondBasisType>::value, T>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
-                  int coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
 
 // NonPeriodic-Periodic version
 template <typename T, typename Basis>
@@ -157,7 +157,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<typename Basis::FirstBas
 					and IsPeriodic<typename Basis::SecondBasisType>::value, T>::value, void>::Type
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
-                  int coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false, bool isAlreadyMultiTree=true);
 
 // ---- Non-Periodic + returning added indizes
 template <typename T, typename Basis>
@@ -166,7 +166,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<typename Basis::FirstBas
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
                   IndexSet<Index2D>& diff_v,
-                  int coordDirec=0, bool sparsetree=false);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false);
 
 // ---- Periodic + returning added indizes
 template <typename T, typename Basis>
@@ -175,7 +175,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<typename Basis::FirstBasi
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
                   IndexSet<Index2D>& diff_v,
-                  int coordDirec=0, bool sparsetree=false);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false);
 
 // ---- Periodic-NonPeriodic + returning added indizes
 template <typename T, typename Basis>
@@ -184,7 +184,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<typename Basis::FirstBasi
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
                   IndexSet<Index2D>& diff_v,
-                  int coordDirec=0, bool sparsetree=false);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false);
 
 // ---- NonPeriodic-Periodic + returning added indizes
 template <typename T, typename Basis>
@@ -193,7 +193,7 @@ typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<typename Basis::FirstBas
 completeMultiTree(const Basis &basis, const Index2D &index2d,
                   Coefficients<Lexicographical,T,Index2D>  &v,
                   IndexSet<Index2D>& diff_v,
-                  int coordDirec=0, bool sparsetree=false);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false);
 
 // ----------------- completeMultiTree 3D ------------------- //
 
@@ -208,17 +208,17 @@ template <typename T, typename Basis>
 void
 completeMultiTree(const Basis &basis, const Index3D &index3d,
                   Coefficients<Lexicographical,T,Index3D>  &v,
-                  int coordDirec=0, bool sparsetree=false);
+                  FLENS_DEFAULT_INDEXTYPE coordDirec=0, bool sparsetree=false);
 
 
 
 template <typename T, typename Basis>
 void
-getSparseGridVector(const Basis &basis, Coefficients<Lexicographical,T,Index2D> &v, int j, T gamma);
+getSparseGridVector(const Basis &basis, Coefficients<Lexicographical,T,Index2D> &v, FLENS_DEFAULT_INDEXTYPE j, T gamma);
 
 template <typename T, typename Basis>
 void
-getSparseGridVector(const Basis &basis, Coefficients<Lexicographical,T,Index3D> &v, int j, T gamma);
+getSparseGridVector(const Basis &basis, Coefficients<Lexicographical,T,Index3D> &v, FLENS_DEFAULT_INDEXTYPE j, T gamma);
 
 // ----------------- extendMultiTree ------------------- //
 
@@ -252,25 +252,25 @@ extendMultiTree(const Basis &basis, const Index &index2d, IndexSet<Index> &Lambd
 template <typename Index, typename Basis>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<typename Basis::FirstBasisType>::value
 					and !IsPeriodic<typename Basis::SecondBasisType>::value, Basis>::value, void>::Type
-extendMultiTree2(const Basis &basis, const Index &index2d, const int offset, IndexSet<Index> &Lambda);
+extendMultiTree2(const Basis &basis, const Index &index2d, const FLENS_DEFAULT_INDEXTYPE offset, IndexSet<Index> &Lambda);
 
 // Periodic version
 template <typename Index, typename Basis>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<typename Basis::FirstBasisType>::value
 					and IsPeriodic<typename Basis::SecondBasisType>::value, Basis>::value, void>::Type
-extendMultiTree2(const Basis &basis, const Index &index2d, const int offset, IndexSet<Index> &Lambda);
+extendMultiTree2(const Basis &basis, const Index &index2d, const FLENS_DEFAULT_INDEXTYPE offset, IndexSet<Index> &Lambda);
 
 // Periodic-NonPeriodic version
 template <typename Index, typename Basis>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<typename Basis::FirstBasisType>::value
 					and !IsPeriodic<typename Basis::SecondBasisType>::value, Basis>::value, void>::Type
-extendMultiTree2(const Basis &basis, const Index &index2d, const int offset, IndexSet<Index> &Lambda);
+extendMultiTree2(const Basis &basis, const Index &index2d, const FLENS_DEFAULT_INDEXTYPE offset, IndexSet<Index> &Lambda);
 
 // NonPeriodic-Periodic version
 template <typename Index, typename Basis>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<typename Basis::FirstBasisType>::value
 					and IsPeriodic<typename Basis::SecondBasisType>::value, Basis>::value, void>::Type
-extendMultiTree2(const Basis &basis, const Index &index2d, const int offset, IndexSet<Index> &Lambda);
+extendMultiTree2(const Basis &basis, const Index &index2d, const FLENS_DEFAULT_INDEXTYPE offset, IndexSet<Index> &Lambda);
 
 // ----------------- getCounterpart / getStableExpansion ------------------- //
 

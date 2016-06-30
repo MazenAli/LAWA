@@ -21,7 +21,7 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Primal,RPlus,SparseMulti>::MRA(int _d, int j)
+MRA<T,Primal,RPlus,SparseMulti>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), j0(j), _bc(1,0), _j(j0), phi(*this)
 {
     assert(d>=2);
@@ -40,8 +40,8 @@ MRA<T,Primal,RPlus,SparseMulti>::~MRA()
 //--- cardinalities of left index sets. -------------------
 
 template <typename T>
-long
-MRA<T,Primal,RPlus,SparseMulti>::cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,RPlus,SparseMulti>::cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numLeftParts;
 }
@@ -49,14 +49,14 @@ MRA<T,Primal,RPlus,SparseMulti>::cardIL(int /*j*/) const
 //--- ranges of left index sets. --------------------------
 
 template <typename T>
-flens::Range<long>
-MRA<T,Primal,RPlus,SparseMulti>::rangeIL(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,RPlus,SparseMulti>::rangeIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<long>(0,0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,0);
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Primal,RPlus,SparseMulti>::level() const
 {
     return _j;
@@ -64,7 +64,7 @@ MRA<T,Primal,RPlus,SparseMulti>::level() const
 
 template <typename T>
 void
-MRA<T,Primal,RPlus,SparseMulti>::setLevel(int j) const
+MRA<T,Primal,RPlus,SparseMulti>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;

@@ -39,7 +39,7 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
          typename L2ScalarProduct>
 flens::DenseVector<flens::Array<T> > 
 ThetaScheme1D_LTI<T, Basis, BilinearForm, RHSIntegral, L2ScalarProduct>::
-solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, int level)
+solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, FLENS_DEFAULT_INDEXTYPE level)
 {   
     op_RHSVector.setTimes(time_old, time_new);
     if(level != currentLevel){
@@ -64,8 +64,8 @@ solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, int l
         pcg(P,lhsmatrix, u, rhs, lintol);
     }
     else {
-        //int iters = gmres(lhsmatrix, u, rhs, lintol);
-        int iters = pgmresm(P,lhsmatrix, u, rhs, lintol,10);
+        //FLENS_DEFAULT_INDEXTYPE iters = gmres(lhsmatrix, u, rhs, lintol);
+        FLENS_DEFAULT_INDEXTYPE iters = pgmresm(P,lhsmatrix, u, rhs, lintol,10);
         //std::cerr << "Solve by gmres with iters = " << std::endl;
         //pgmresm(P,lhsmatrix, u, rhs, lintol, 20);
     }
@@ -82,7 +82,7 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
 flens::DenseVector<flens::Array<T> > 
 ThetaScheme1D_LTI<T, Basis, BilinearForm, RHSIntegral, L2ScalarProduct>::
 solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, 
-      flens::DenseVector<flens::Array<T> > f, int level)
+      flens::DenseVector<flens::Array<T> > f, FLENS_DEFAULT_INDEXTYPE level)
 {
      if(level != currentLevel){
          op_LHSMatrix.setTimes(time_old, time_new);
@@ -120,7 +120,7 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
          typename L2ScalarProduct>
 flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > 
 ThetaScheme1D_LTI<T, Basis, BilinearForm, RHSIntegral, L2ScalarProduct>::
-getLHSMatrix(int level)
+getLHSMatrix(FLENS_DEFAULT_INDEXTYPE level)
 {   
     if (level != currentLevel) {
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > matrix
@@ -146,8 +146,8 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
          typename L2ScalarProduct>
 T 
 ThetaScheme1D_LTI<T, Basis, BilinearForm, RHSIntegral, L2ScalarProduct>::Operator_LHSMatrix::
-operator()(XType xtype1, int j1, int k1,
-           XType xtype2, int j2, int k2) const
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {
     // (M + deltaT * theta * A_k+1)
     //return scheme->integral(j1, k1, xtype1, 0, j2, k2, xtype2, 0)
@@ -175,8 +175,8 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
          typename L2ScalarProduct>
 T 
 ThetaScheme1D_LTI<T, Basis, BilinearForm, RHSIntegral, L2ScalarProduct>::Operator_RHSMatrix::
-operator()(XType xtype1, int j1, int k1,
-           XType xtype2, int j2, int k2) const
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {
    // (M - deltaT * (1-theta) * A_k)
    //return scheme->integral(j1, k1, xtype1, 0, j2, k2, xtype2, 0)
@@ -202,7 +202,7 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
          typename L2ScalarProduct>
 T 
 ThetaScheme1D_LTI<T, Basis, BilinearForm, RHSIntegral, L2ScalarProduct>::Operator_RHSVector::
-operator()(XType xtype, int j, int k) const
+operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {   
     // deltaT * (theta*f_k+1 - (1-theta)*f_k)
     return (time_new - time_old)*(scheme->theta * rhs(time_new, xtype, j, k)

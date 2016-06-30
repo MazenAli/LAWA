@@ -5,7 +5,7 @@ namespace lawa {
 template<typename T, typename PrimalBasis, typename DualBasis, typename Smoother, typename Solver> 
 MultigridSolver<T, PrimalBasis, DualBasis, Smoother, Solver>::
 MultigridSolver(PrimalBasis& _primalbasis, DualBasis& _dualbasis, Smoother& _smoother, 
-                Solver& _solver, int _nu1, int _nu2, int _minLevel)
+                Solver& _solver, FLENS_DEFAULT_INDEXTYPE _nu1, FLENS_DEFAULT_INDEXTYPE _nu2, FLENS_DEFAULT_INDEXTYPE _minLevel)
     : primalbasis(_primalbasis), dualbasis(_dualbasis), smoother(_smoother), solver(_solver),
       nu1(_nu1), nu2(_nu2), minLevel(_minLevel)
 {
@@ -15,7 +15,7 @@ MultigridSolver(PrimalBasis& _primalbasis, DualBasis& _dualbasis, Smoother& _smo
 template<typename T, typename PrimalBasis, typename DualBasis, typename Smoother, typename Solver>
 flens::DenseVector<flens::Array<T> >
 MultigridSolver<T, PrimalBasis, DualBasis, Smoother, Solver>::
-vCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
+vCycle(FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE level, DenseVectorT& u, DenseVectorT& f)
 {
     
     if(level == minLevel){
@@ -23,10 +23,10 @@ vCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
         u = solver.solve(u,f);
     }
     else{
-        for(int j = 1; j <= i; ++j){
+        for(FLENS_DEFAULT_INDEXTYPE j = 1; j <= i; ++j){
             // Smoothing
             smoother.setLevel(level);
-            for(int i = 1; i <= nu1; ++i){
+            for(FLENS_DEFAULT_INDEXTYPE i = 1; i <= nu1; ++i){
                 u = smoother.solve(u,f);                
             }            
             // Residuum Restriction
@@ -47,7 +47,7 @@ vCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
             u = u + corr;
                         
             // Smoothing
-            for(int i = 1; i <= nu2; ++i){
+            for(FLENS_DEFAULT_INDEXTYPE i = 1; i <= nu2; ++i){
                 u = smoother.solve(u,f);                
             }
         }
@@ -59,7 +59,7 @@ vCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
 template<typename T, typename PrimalBasis, typename DualBasis, typename Smoother, typename Solver>
 flens::DenseVector<flens::Array<T> >
 MultigridSolver<T, PrimalBasis, DualBasis, Smoother, Solver>::
-wCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
+wCycle(FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE level, DenseVectorT& u, DenseVectorT& f)
 {    
     if(level == minLevel){
         //std::cout << "Solver Level " << level << std::endl;
@@ -67,11 +67,11 @@ wCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
         u = solver.solve(u,f);
     }
     else{
-        for(int j = 1; j <= i; ++j){
+        for(FLENS_DEFAULT_INDEXTYPE j = 1; j <= i; ++j){
             // Smoothing
             //std::cout << "Smoothing Level " << level << std::endl;
             smoother.setLevel(level);
-            for(int i = 1; i <= nu1; ++i){
+            for(FLENS_DEFAULT_INDEXTYPE i = 1; i <= nu1; ++i){
                 u = smoother.solve(u,f);                
             }            
             // Residuum Restriction
@@ -96,7 +96,7 @@ wCycle(int i, int level, DenseVectorT& u, DenseVectorT& f)
             
             
             // Smoothing
-            for(int i = 1; i <= nu2; ++i){
+            for(FLENS_DEFAULT_INDEXTYPE i = 1; i <= nu2; ++i){
                 u = smoother.solve(u,f);                
             }
         }

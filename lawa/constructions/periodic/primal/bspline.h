@@ -37,7 +37,7 @@ struct BSpline<_T,Primal,Periodic,CDF>
     static const DomainType Domain = Periodic;
     static const Construction Cons = CDF;
 
-    //BSpline(int _d);                        // Periodized Bspline on [0,1]
+    //BSpline(FLENS_DEFAULT_INDEXTYPE _d);                        // Periodized Bspline on [0,1]
 
     BSpline(const MRA<T,Primal,Periodic,CDF> &_mra);
 
@@ -45,38 +45,38 @@ struct BSpline<_T,Primal,Periodic,CDF>
     ~BSpline();
 
     T
-    operator()(T x, int j, long k, unsigned short deriv) const;    // (cumulated) evaluation on [0,1]
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;    // (cumulated) evaluation on [0,1]
 
     PeriodicSupport<T>
-    support(int j, long k) const;            // subset of [0,1], may be divided in 2 parts
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;            // subset of [0,1], may be divided in 2 parts
 
     flens::DenseVector<flens::Array<T> >
-    singularSupport(int j, long k) const;    // Points in [0,1]
+    singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;    // Points in [0,1]
 
     T
-/**/tic(int j) const;                       // -> ???
+/**/tic(FLENS_DEFAULT_INDEXTYPE j) const;                       // -> ???
 
     /**
      * Get coefficients in _DIJKEMA_ Basis (not really a refinement here!!)
      */
     flens::DenseVector<flens::Array<long double> > *
-    getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-    				long &split, long &refinement_k_restart) const;
+    getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+    				FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const;
 
-    int
-    getRefinementLevel(int j) const;
+    FLENS_DEFAULT_INDEXTYPE
+    getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
-
-    T
-    getL2Norm(int j, long k) const;
 
     T
-    getH1SemiNorm(int j, long k) const;
+    getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
+
+    T
+    getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     const flens::DenseVector<flens::Array<T> > &
     mask() const;                           // mask of original Spline on R
 
-    const int d, mu;
+    const FLENS_DEFAULT_INDEXTYPE d, mu;
     const BSpline<T, Primal, R, CDF> phiR;  // ''original'' Bspline on R
 
     const MRA<T,Primal,Periodic,CDF> &mra;

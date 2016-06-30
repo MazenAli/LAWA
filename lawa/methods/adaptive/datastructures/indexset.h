@@ -72,7 +72,7 @@ template <typename Index>
 std::ostream& operator<< (std::ostream &s, const IndexSet<Index> &i);
 
 void
-getMinAndMaxLevel(const IndexSet<Index1D> &Lambda, int &jmin, int &jmax);
+getMinAndMaxLevel(const IndexSet<Index1D> &Lambda, FLENS_DEFAULT_INDEXTYPE &jmin, FLENS_DEFAULT_INDEXTYPE &jmax);
 
 void
 split(const IndexSet<Index2D> &Lambda, IndexSet<Index1D> &Lambda_x, IndexSet<Index1D> &Lambda_y);

@@ -386,7 +386,7 @@ typedef MultiTreeAWGM2<Index2D,Basis2D, H1_InnProd_2D,
 
 typedef MT_Truth<DataType,ParamType,MT_AWGM_Truth,
 				 MT_AWGM_Riesz_F,MT_AWGM_Riesz_A,H1_InnProd_2D,
-				 Affine_Op_2D, Flex_Rhs_2D, MT_AWGM_Riesz_Res>				MTTruthSolver;
+				 Flex_COp_2D, Flex_Rhs_2D, MT_AWGM_Riesz_Res>				MTTruthSolver;
 
 typedef LB_Base<ParamType, MTTruthSolver> 									        LB_Type;
 typedef Simple_RB_System<T,ParamType, LB_Type>								        RB_Model;

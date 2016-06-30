@@ -8,9 +8,9 @@ SpaceTimeInitialCondition1D<T, Basis>::SpaceTimeInitialCondition1D(const Basis& 
 
 template <typename T, typename Basis>
 T
-SpaceTimeInitialCondition1D<T, Basis>::operator()(XType row_xtype_x, int j1_x, long k1_x,
-                                                  XType col_xtype_t, int j2_t, long k2_t,
-                                                  XType col_xtype_x, int j2_x, long k2_x) const
+SpaceTimeInitialCondition1D<T, Basis>::operator()(XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                                                  XType col_xtype_t, FLENS_DEFAULT_INDEXTYPE j2_t, FLENS_DEFAULT_INDEXTYPE k2_t,
+                                                  XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x) const
 {
     T factor = basis.first.generator(col_xtype_t)(0, j2_t, k2_t, 0);
     

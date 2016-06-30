@@ -46,16 +46,16 @@ class Basis<_T,Primal,RPlus,SparseMulti>
         typedef BSpline<T,Primal,RPlus,SparseMulti>       BSplineType;
         typedef Wavelet<T,Primal,RPlus,SparseMulti>       WaveletType;
 
-        Basis(const int d, const int j=-1);
+        Basis(const FLENS_DEFAULT_INDEXTYPE d, const FLENS_DEFAULT_INDEXTYPE j=-1);
     
         virtual
         ~Basis();
     
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
     
         void
-        setLevel(const int j) const;
+        setLevel(const FLENS_DEFAULT_INDEXTYPE j) const;
     
         template <BoundaryCondition BC>
             void
@@ -65,29 +65,29 @@ class Basis<_T,Primal,RPlus,SparseMulti>
         generator(XType xtype) const;
 
         //--- cardinalities of left index set.
-        long
-        cardJL(const int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJL(const FLENS_DEFAULT_INDEXTYPE j) const;
 
         //--- ranges of left index set.
-        const flens::Range<long>
-        rangeJL(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJL(const FLENS_DEFAULT_INDEXTYPE j) const;
     
         MRA<T,Primal,RPlus,SparseMulti> mra;
     
-        const int d;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
     
     private:
-        flens::DenseVector<flens::Array<int> > _bc;  // the boundary conditions
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > _bc;  // the boundary conditions
                                        // bc(0) = 1 -> Dirichlet BC left.
         
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
     
         typedef T (*Evaluator)(T x, unsigned short deriv);
         
         friend class Wavelet<T,Primal,RPlus,SparseMulti>;
 
-        unsigned int _numLeftParts,
+        unsigned FLENS_DEFAULT_INDEXTYPE _numLeftParts,
                      _numInnerParts;
         Evaluator *_leftEvaluator, 
                   *_innerEvaluator;

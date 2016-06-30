@@ -71,7 +71,7 @@ class CRS
         // -- constructors -----------------------------------------------------
         CRS();
 
-        CRS(int numRows, int numCols, int approxBandwidth=1);
+        CRS(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols, FLENS_DEFAULT_INDEXTYPE approxBandwidth=1);
 
         ~CRS();
 
@@ -90,15 +90,15 @@ class CRS
         initializer(Initializer *rhs);
 
         void
-        allocate(int numNonZeros);
+        allocate(FLENS_DEFAULT_INDEXTYPE numNonZeros);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numNonZeros() const;
 
         const_iterator
@@ -114,10 +114,10 @@ class CRS
         end();
 
         DenseVector<Array<T> >    values;
-        DenseVector<Array<int> >  columns, rows;
+        DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> >  columns, rows;
 
     private:
-        int  _numRows, _numCols, _k;
+        FLENS_DEFAULT_INDEXTYPE  _numRows, _numCols, _k;
 };
 
 } // namespace extensions
@@ -129,9 +129,9 @@ class CRS
 template <typename T>
 struct CRS_Coordinate
 {
-    CRS_Coordinate(int _row, int _col, T _value);
+    CRS_Coordinate(FLENS_DEFAULT_INDEXTYPE _row, FLENS_DEFAULT_INDEXTYPE _col, T _value);
 
-    int row, col;
+    FLENS_DEFAULT_INDEXTYPE row, col;
     T   value;
 };
 
@@ -153,9 +153,9 @@ template <typename T, CRS_Storage Storage>
 class CRS_Initializer
 {
     public:
-        CRS_Initializer(CRS<T, Storage> &crs, int k);
+        CRS_Initializer(CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE k);
 
-        CRS_Initializer(CRS<T, Storage> &crs, int k, std::vector<CRS_Coordinate<T> > &coordinates,
+        CRS_Initializer(CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE k, std::vector<CRS_Coordinate<T> > &coordinates,
                         size_t lastSortedCoord);
 
         ~CRS_Initializer();
@@ -164,7 +164,7 @@ class CRS_Initializer
         sort();
 
         T &
-        operator()(int row, int col);
+        operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col);
 
 //    private:
         typedef std::vector<CRS_Coordinate<T> > Coordinates;
@@ -187,7 +187,7 @@ template <typename T, CRS_Storage Storage>
 class CRS_ConstIterator
 {
     public:
-        typedef std::pair<int,int>                      key_type;
+        typedef std::pair<FLENS_DEFAULT_INDEXTYPE,FLENS_DEFAULT_INDEXTYPE>                      key_type;
         typedef T                                       mapped_type;
         typedef std::pair<key_type, mapped_type>        value_type;
 
@@ -195,7 +195,7 @@ class CRS_ConstIterator
 
         CRS_ConstIterator(const CRS_Iterator<T, Storage> &rhs);
 
-        CRS_ConstIterator(const CRS<T, Storage> &crs, int pos);
+        CRS_ConstIterator(const CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE pos);
 
         bool
         operator==(const CRS_ConstIterator &rhs) const;
@@ -213,7 +213,7 @@ class CRS_ConstIterator
         operator->() const;
 
         const CRS<T, Storage>  &_crs;
-        int                    _pos;
+        FLENS_DEFAULT_INDEXTYPE                    _pos;
         value_type             _value;
 };
 
@@ -223,13 +223,13 @@ template <typename T, CRS_Storage Storage>
 class CRS_Iterator
 {
     public:
-        typedef std::pair<int,int>                      key_type;
+        typedef std::pair<FLENS_DEFAULT_INDEXTYPE,FLENS_DEFAULT_INDEXTYPE>                      key_type;
         typedef T                                       mapped_type;
         typedef std::pair<key_type, mapped_type>        value_type;
 
         CRS_Iterator(const CRS_Iterator &rhs);
 
-        CRS_Iterator(const CRS<T, Storage> &crs, int pos);
+        CRS_Iterator(const CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE pos);
 
         bool
         operator==(const CRS_Iterator &rhs) const;
@@ -247,7 +247,7 @@ class CRS_Iterator
         operator->();
 
         const CRS<T, Storage>  &_crs;
-        int                    _pos;
+        FLENS_DEFAULT_INDEXTYPE                    _pos;
         value_type             _value;
 };
 

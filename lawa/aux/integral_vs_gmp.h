@@ -53,15 +53,15 @@ struct IntegralInt
 };
 
 template <>
-struct IntegralInt<int>
+struct IntegralInt<FLENS_DEFAULT_INDEXTYPE>
 {
-    typedef int Type;
+    typedef FLENS_DEFAULT_INDEXTYPE Type;
 };
 
 template <>
-struct IntegralInt<long>
+struct IntegralInt<FLENS_DEFAULT_INDEXTYPE>
 {
-    typedef long Type;
+    typedef FLENS_DEFAULT_INDEXTYPE Type;
 };
 
 //------------------------------------------------------------------------------

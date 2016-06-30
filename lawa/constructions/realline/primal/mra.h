@@ -40,20 +40,20 @@ class MRA<_T,Primal,R,CDF>
         typedef BasisFunction<T,Primal,R,CDF> BasisFunctionType;
         typedef BSpline<T,Primal,R,CDF> BSplineType;
 
-        MRA(int _d, int j=0);
+        MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j=0);
 
-        int 
+        FLENS_DEFAULT_INDEXTYPE 
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const int d, j0;
+        const FLENS_DEFAULT_INDEXTYPE d, j0;
         BSpline<T,Primal,R,CDF> phi;
         flens::RefinementMatrix<T,R,CDF> M0;
 
     private:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 };
 
 } // namespace lawa

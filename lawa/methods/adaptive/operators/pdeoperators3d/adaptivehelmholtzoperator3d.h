@@ -76,7 +76,7 @@ struct AdaptiveHelmholtzOperator3D<T, Basis3D, HelmholtzOperator3D<T, Basis3D>, 
                                
 
     AdaptiveHelmholtzOperator3D(const Basis3D &_basis, T _c, const Preconditioner &_Prec, 
-                                T entrybound=0., int NumOfRows=4096, int NumOfCols=2048);
+                                T entrybound=0., FLENS_DEFAULT_INDEXTYPE NumOfRows=4096, FLENS_DEFAULT_INDEXTYPE NumOfCols=2048);
 
     T
     operator()(const Index3D &row_index, const Index3D &col_index);
@@ -104,7 +104,7 @@ struct AdaptiveHelmholtzOperator3D<T, Basis3D, HelmholtzOperator3D<T, Basis3D>, 
     const LaplaceOperator_z    op_laplace_z;
 
     T entrybound;
-    int NumOfRows, NumOfCols;
+    FLENS_DEFAULT_INDEXTYPE NumOfRows, NumOfCols;
 
     DataIdentity_x   data_identity_x;
     DataIdentity_y   data_identity_y;

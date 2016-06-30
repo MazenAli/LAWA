@@ -227,8 +227,8 @@ main()
     params.tol_awgm   = 1e-08;
     params.trunc_pres = 1e-09;
     params.delta_pcg  = 1e-01;
-    params.alpha      = 0.95;
-    params.gamma      = 0.1;
+    params.alpha      = 0.9;
+    params.gamma      = 0.8;
 
     /*
     double cmax = 1./(1.+params.kappaA);

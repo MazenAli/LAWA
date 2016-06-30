@@ -147,9 +147,9 @@ struct RB_Greedy_Information{
 
 	void print(const char* filename = "greedy_info.txt");
 
-	void read(const char* filename, std::size_t Qf, std::size_t Qa, int nb = -1);
+	void read(const char* filename, std::size_t Qf, std::size_t Qa, FLENS_DEFAULT_INDEXTYPE nb = -1);
 	
-    void read_repr_accuracies(const char* filename, std::size_t Qf, std::size_t Qa, int Nmax);
+    void read_repr_accuracies(const char* filename, std::size_t Qf, std::size_t Qa, FLENS_DEFAULT_INDEXTYPE Nmax);
 
 	void print_bound_info(const char* filename = "greedy_info_eps_errest");
 };

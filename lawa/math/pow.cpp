@@ -23,13 +23,13 @@
 namespace lawa {
 
 double
-pow(double x, int expo)
+pow(double x, FLENS_DEFAULT_INDEXTYPE expo)
 {
     return std::pow(x, expo);
 }
 
 double
-powii(int x, int expo)
+powii(FLENS_DEFAULT_INDEXTYPE x, FLENS_DEFAULT_INDEXTYPE expo)
 {
     return std::pow(static_cast<double>(x), expo);
 }

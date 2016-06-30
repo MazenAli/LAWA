@@ -33,7 +33,7 @@ struct DiagonalLevelPreconditioner1D
     DiagonalLevelPreconditioner1D(void) { }
 
     T
-    operator()(XType xtype1, int j1, long k1) const;
+    operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1) const;
 
     T
     operator()(const Index1D &index) const;

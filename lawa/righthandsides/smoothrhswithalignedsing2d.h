@@ -30,11 +30,11 @@ template<typename T, typename Basis2D, QuadratureType Quad>
 struct SmoothRHSWithAlignedSing2D
 {
     SmoothRHSWithAlignedSing2D(const Basis2D& _basis, const Function2D<T>& _F,
-                               int order, unsigned short _derivx=0, unsigned short _derivy=0);
+                               FLENS_DEFAULT_INDEXTYPE order, unsigned short _derivx=0, unsigned short _derivy=0);
 
     T
-    operator()(XType xtype_x, int j_x, long k_x,
-               XType xtype_y, int j_y, long k_y) const;
+    operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+               XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y) const;
 
     T
     operator()(const Index2D &index) const;

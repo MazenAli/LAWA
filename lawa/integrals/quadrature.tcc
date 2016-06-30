@@ -38,7 +38,7 @@ const typename Integral::T
 Quadrature<Gauss,Integral>::operator()(T a, T b) const
 {
     T ret = 0.0;
-    for (int i=1; i<=_order; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_order; ++i) {
         ret += _weights(_order,i) * integral.integrand(0.5*(b-a)*_knots(_order,i)+0.5*(b+a));
     }
     ret *= 0.5*(b-a);
@@ -48,7 +48,7 @@ Quadrature<Gauss,Integral>::operator()(T a, T b) const
 
 template <typename Integral>
 void
-Quadrature<Gauss,Integral>::setOrder(int order)
+Quadrature<Gauss,Integral>::setOrder(FLENS_DEFAULT_INDEXTYPE order)
 {
     assert(order>0);
 
@@ -60,7 +60,7 @@ Quadrature<Gauss,Integral>::setOrder(int order)
 }
 
 template <typename Integral>
-int
+FLENS_DEFAULT_INDEXTYPE
 Quadrature<Gauss,Integral>::order() const
 {
     return _order;
@@ -68,7 +68,7 @@ Quadrature<Gauss,Integral>::order() const
 
 template <typename Integral>
 void
-Quadrature<Gauss,Integral>::_legendre(int order)
+Quadrature<Gauss,Integral>::_legendre(FLENS_DEFAULT_INDEXTYPE order)
 {
     T eps = Const<T>::EQUALITY_EPS;
     _knots.engine().resize(order, order);
@@ -76,17 +76,17 @@ Quadrature<Gauss,Integral>::_legendre(int order)
 
     T x1 = -1,
       x2 =  1;
-    for (int k=1; k<=order; ++k) {
-        int     m = (k+1)/2;
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=order; ++k) {
+        FLENS_DEFAULT_INDEXTYPE     m = (k+1)/2;
         T xm = 0.5 * (x2+x1),
           xl = 0.5 * (x2-x1);
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             T z = cos(M_PI*(i-0.25)/(k+0.5)),
               z1, pp;
             do {
                 T p1 = 1.0,
                   p2 = 2.0;
-                for (int j=1; j<=k; ++j) {
+                for (FLENS_DEFAULT_INDEXTYPE j=1; j<=k; ++j) {
                     T p3 = p2;
                     p2 = p1;
                     p1 = ((2.0*j-1.0)*z*p2-(j-1.0)*p3)/j;
@@ -112,7 +112,7 @@ flens::GeMatrix<flens::FullStorage<typename Integral::T,cxxblas::ColMajor> >
 Quadrature<Gauss,Integral>::_knots;
 
 template <typename Integral>
-int
+FLENS_DEFAULT_INDEXTYPE
 Quadrature<Gauss,Integral>::_precalculatedOrder = 10;
 
 //---  Trapezoidal rule -------------------------------------------------------
@@ -130,7 +130,7 @@ Quadrature<Trapezoidal,Integral>::operator()(T a, T b) const
     T h = (b-a) / _n;
     T ret = .5 * h * integral.integrand(a);
     a += h;
-    for (int i=1; i<_n; ++i, a+=h) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<_n; ++i, a+=h) {
         ret += h * integral.integrand(a);
     }
     ret += .5 * h * integral.integrand(b);
@@ -139,7 +139,7 @@ Quadrature<Trapezoidal,Integral>::operator()(T a, T b) const
 }
 
 template <typename Integral>
-int
+FLENS_DEFAULT_INDEXTYPE
 Quadrature<Trapezoidal,Integral>::n() const
 {
     return _n;
@@ -147,7 +147,7 @@ Quadrature<Trapezoidal,Integral>::n() const
 
 template <typename Integral>
 void
-Quadrature<Trapezoidal,Integral>::setN(const int n)
+Quadrature<Trapezoidal,Integral>::setN(const FLENS_DEFAULT_INDEXTYPE n)
 {
     assert(n>0);
 

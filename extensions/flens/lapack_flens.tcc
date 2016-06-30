@@ -43,10 +43,10 @@ using std::complex;
 //-- getrf ---------------------------------------------------------------------
 
 template <typename FS>
-int
-trf(GeMatrix<FS> &A, DenseVector<Array<int> > &P)
+FLENS_DEFAULT_INDEXTYPE
+trf(GeMatrix<FS> &A, DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > &P)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     info = getrf(A.numRows(), A.numCols(),
                  A.engine().data(), A.engine().leadingDimension(),
                  P.engine().data());
@@ -57,7 +57,7 @@ trf(GeMatrix<FS> &A, DenseVector<Array<int> > &P)
 //-- potrf ---------------------------------------------------------------------
 
 template <typename FS>
-int
+FLENS_DEFAULT_INDEXTYPE
 trf(SyMatrix<FS> &A)
 {
     return potrf(A.upLo(), A.dim(), A.engine().data(),A.engine().leadingDimension());
@@ -66,15 +66,15 @@ trf(SyMatrix<FS> &A)
 //-- getri ---------------------------------------------------------------------
 
 template <typename MA>
-int
-tri(GeMatrix<MA> &A, DenseVector<Array<int> > &P)
+FLENS_DEFAULT_INDEXTYPE
+tri(GeMatrix<MA> &A, DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > &P)
 {
     assert(A.numRows()==A.numCols());
     assert(P.length()==A.numCols());
 
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query optimal work space size
     info = getri(A.numCols(), A.engine().data(), A.engine().leadingDimension(), P.engine().data(),
@@ -90,9 +90,9 @@ tri(GeMatrix<MA> &A, DenseVector<Array<int> > &P)
 //-- getrs ---------------------------------------------------------------------
 
 template <typename MA, typename MB>
-int
+FLENS_DEFAULT_INDEXTYPE
 trs(cxxblas::Transpose trans, const GeMatrix<MA> &LU,
-    const DenseVector<Array<int> > &P, GeMatrix<MB> &B)
+    const DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > &P, GeMatrix<MB> &B)
 {
     assert(LU.numRows()==LU.numCols());
     assert(P.length()==LU.numRows());
@@ -103,9 +103,9 @@ trs(cxxblas::Transpose trans, const GeMatrix<MA> &LU,
 }
 
 template <typename MA, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 trs(cxxblas::Transpose trans, const GeMatrix<MA> &LU,
-    const DenseVector<Array<int> > &P,
+    const DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > &P,
     DenseVector<VB> &B)
 {
     assert(LU.numRows()==LU.numCols());
@@ -120,13 +120,13 @@ trs(cxxblas::Transpose trans, const GeMatrix<MA> &LU,
 //-- gesv ----------------------------------------------------------------------
 
 template <typename MA, typename MB>
-int
-sv(GeMatrix<MA> &A, DenseVector<Array<int> > &P, GeMatrix<MB> &B)
+FLENS_DEFAULT_INDEXTYPE
+sv(GeMatrix<MA> &A, DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > &P, GeMatrix<MB> &B)
 {
     assert(A.numRows()==A.numCols());
     assert(B.numRows()==A.numRows());
 
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     info = gesv(A.numRows(), B.numCols(), A.engine().data(), A.engine().leadingDimension(),
                 P.engine().data(), B.engine().data(), B.engine().leadingDimension());
     assert(info>=0);
@@ -134,14 +134,14 @@ sv(GeMatrix<MA> &A, DenseVector<Array<int> > &P, GeMatrix<MB> &B)
 }
 
 template <typename MA, typename VB>
-int
-sv(GeMatrix<MA> &A, DenseVector<Array<int> > &P, DenseVector<VB> &B)
+FLENS_DEFAULT_INDEXTYPE
+sv(GeMatrix<MA> &A, DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > &P, DenseVector<VB> &B)
 {
     assert(A.numRows()==A.numCols());
     assert(B.length()==A.numRows());
     assert(B.engine().stride()==1);
 
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     info = gesv(A.numRows(), 1, A.engine().data(), A.engine().leadingDimension(),
                 P.engine().data(), B.engine().data(), B.length());
     assert(info>=0);
@@ -151,7 +151,7 @@ return info;
 //-- trtrs ---------------------------------------------------------------------
 
 template <typename MA, typename MB>
-int
+FLENS_DEFAULT_INDEXTYPE
 trs(cxxblas::Transpose trans, const TrMatrix<MA> &A, GeMatrix<MB> &B)
 {
     return trtrs(A.upLo(), trans, A.unitDiag(), A.dim(), B.numCols(),
@@ -160,7 +160,7 @@ trs(cxxblas::Transpose trans, const TrMatrix<MA> &A, GeMatrix<MB> &B)
 }
 
 template <typename MA, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 trs(cxxblas::Transpose trans, const TrMatrix<MA> &A, DenseVector<VB> &B)
 {
     assert(B.engine().stride()==1);
@@ -172,12 +172,12 @@ trs(cxxblas::Transpose trans, const TrMatrix<MA> &A, DenseVector<VB> &B)
 //-- geqrf ---------------------------------------------------------------------
 
 template <typename MA, typename VT>
-int
+FLENS_DEFAULT_INDEXTYPE
 qrf(GeMatrix<MA> &A, DenseVector<VT> &tau)
 {
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     tau.engine().resize(std::min(A.numRows(),A.numCols()));
 
     // query optimal work space size
@@ -187,7 +187,7 @@ qrf(GeMatrix<MA> &A, DenseVector<VT> &tau)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return geqrf(A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                  tau.engine().data(), work.engine().data(), work.length());
 }
@@ -195,12 +195,12 @@ qrf(GeMatrix<MA> &A, DenseVector<VT> &tau)
 //-- geqp3 ---------------------------------------------------------------------
 
 template <typename MA, typename VT>
-int
-qp3(GeMatrix<MA> &A, DenseVector<Array<int> >& p, DenseVector<VT> &tau)
+FLENS_DEFAULT_INDEXTYPE
+qp3(GeMatrix<MA> &A, DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> >& p, DenseVector<VT> &tau)
 {
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     p.engine().resize(A.numCols());
     tau.engine().resize(std::min(A.numRows(),A.numCols()));
 
@@ -211,7 +211,7 @@ qp3(GeMatrix<MA> &A, DenseVector<Array<int> >& p, DenseVector<VT> &tau)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return geqp3(A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
     			 p.engine().data(), tau.engine().data(), work.engine().data(), work.length());
 }
@@ -219,12 +219,12 @@ qp3(GeMatrix<MA> &A, DenseVector<Array<int> >& p, DenseVector<VT> &tau)
 //-- orgqr ---------------------------------------------------------------------
 
 template <typename MA, typename VT>
-int
+FLENS_DEFAULT_INDEXTYPE
 orgqr(GeMatrix<MA> &A, const DenseVector<VT> &tau)
 {
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query optimal work space size
     info = orgqr(A.numRows(), A.numCols(), tau.length(),
@@ -233,7 +233,7 @@ orgqr(GeMatrix<MA> &A, const DenseVector<VT> &tau)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return orgqr(A.numRows(), A.numCols(), tau.length(),
                  A.engine().data(), A.engine().leadingDimension(), tau.engine().data(),
                  work.engine().data(), work.length());
@@ -242,14 +242,14 @@ orgqr(GeMatrix<MA> &A, const DenseVector<VT> &tau)
 //-- ormqr ---------------------------------------------------------------------
 
 template <typename MA, typename VT, typename MC>
-int
+FLENS_DEFAULT_INDEXTYPE
 ormqr(cxxblas::Side side, cxxblas::Transpose trans,
       const GeMatrix<MA> &A, const DenseVector<VT> &tau,
       GeMatrix<MC> &C)
 {
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query optimal work space size
     info = ormqr(side, trans, C.numRows(), C.numCols(), tau.length(),
@@ -259,7 +259,7 @@ ormqr(cxxblas::Side side, cxxblas::Transpose trans,
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return ormqr(side, trans, C.numRows(), C.numCols(), tau.length(),
                  A.engine().data(), A.engine().leadingDimension(), tau.engine().data(),
                  C.engine().data(), C.engine().leadingDimension(),
@@ -269,12 +269,12 @@ ormqr(cxxblas::Side side, cxxblas::Transpose trans,
 //-- gels ----------------------------------------------------------------------
 
 template <typename MA, typename MB>
-int
+FLENS_DEFAULT_INDEXTYPE
 ls(cxxblas::Transpose trans, GeMatrix<MA> &A, GeMatrix<MB> &B)
 {
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query work space size
     info = gels(trans, A.numRows(), A.numCols(), B.numCols(),
@@ -284,7 +284,7 @@ ls(cxxblas::Transpose trans, GeMatrix<MA> &A, GeMatrix<MB> &B)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return gels(trans, A.numRows(), A.numCols(), B.numCols(),
                 A.engine().data(), A.engine().leadingDimension(),
                 B.engine().data(), B.engine().leadingDimension(),
@@ -294,17 +294,17 @@ ls(cxxblas::Transpose trans, GeMatrix<MA> &A, GeMatrix<MB> &B)
 //-- gelss ----------------------------------------------------------------------
 
 template <typename MA, typename MB>
-int
+FLENS_DEFAULT_INDEXTYPE
 lss(GeMatrix<MA> &A, GeMatrix<MB> &B)
 {
     typedef typename MA::ElementType T;
     T lwork;
     T rcond = -1.;
-    int rank = -1;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE rank = -1;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // singular values output
-    int ssize = A.numRows()<A.numCols() ? A.numRows() : A.numCols();
+    FLENS_DEFAULT_INDEXTYPE ssize = A.numRows()<A.numCols() ? A.numRows() : A.numCols();
     DenseVector<Array<T> > s(ssize);
 
     // query work space size
@@ -315,7 +315,7 @@ lss(GeMatrix<MA> &A, GeMatrix<MB> &B)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return gelss(A.numRows(), A.numCols(), B.numCols(),
                  A.engine().data(), A.engine().leadingDimension(),
                  B.engine().data(), B.engine().leadingDimension(),
@@ -327,15 +327,15 @@ lss(GeMatrix<MA> &A, GeMatrix<MB> &B)
 // real version
 
 template <typename MA, typename WR, typename WI, typename MVS>
-int
+FLENS_DEFAULT_INDEXTYPE
 es(bool CalcEv, bool sort,
    typename ESSelectInfo<typename MA::ElementType>::pfunc select,
-   GeMatrix<MA> &A, int &sdim,
+   GeMatrix<MA> &A, FLENS_DEFAULT_INDEXTYPE &sdim,
    DenseVector<WR> &wr, DenseVector<WI> &wi,
    GeMatrix<MVS> &VS)
 {
     typedef typename MA::ElementType T;
-    int N = A.numCols();
+    FLENS_DEFAULT_INDEXTYPE N = A.numCols();
 
     assert(A.numRows()==N);
     assert(wr.length()==N);
@@ -344,24 +344,24 @@ es(bool CalcEv, bool sort,
         assert (VS.numRows()==N);
         assert (VS.numCols()==N);
     }
-    DenseVector< Array<int> > bwork;
+    DenseVector< Array<FLENS_DEFAULT_INDEXTYPE> > bwork;
     if (sort) {
         bwork.engine().resize(N);
     }
 
-    int * bwork_data = (sort ? bwork.engine().data() : 0);
+    FLENS_DEFAULT_INDEXTYPE * bwork_data = (sort ? bwork.engine().data() : 0);
     T *    vs_data    = (CalcEv ? VS.engine().data() : 0);
-    int    ldvs       = (CalcEv ? VS.engine().leadingDimension() : 1);
+    FLENS_DEFAULT_INDEXTYPE    ldvs       = (CalcEv ? VS.engine().leadingDimension() : 1);
 
     // query optimal work space size
     T lwork;
-    int info = gees(CalcEv, sort, select,
+    FLENS_DEFAULT_INDEXTYPE info = gees(CalcEv, sort, select,
                     N, A.engine().data(), A.engine().leadingDimension(), sdim,
                     wr.engine().data(), wi.engine().data(), vs_data, ldvs,
                     &lwork, -1, bwork_data );
     assert (info==0);
 
-    DenseVector< Array<T> > work(int(lwork.real()));
+    DenseVector< Array<T> > work((FLENS_DEFAULT_INDEXTYPE)(lwork.real()));
     return gees(CalcEv, sort, select,
                 N, A.engine().data(), A.engine().leadingDimension(), sdim,
                 wr.engine().data(), wi.engine().data(), vs_data, ldvs,
@@ -371,15 +371,15 @@ es(bool CalcEv, bool sort,
 // complex version
 
 template <typename MA, typename VW, typename MVS>
-int
+FLENS_DEFAULT_INDEXTYPE
 es(bool CalcEv, bool sort,
    typename ESSelectInfo<typename MA::ElementType>::pfunc select,
-   GeMatrix<MA> &A, int &sdim,
+   GeMatrix<MA> &A, FLENS_DEFAULT_INDEXTYPE &sdim,
    DenseVector<VW> &w, GeMatrix<MVS> &VS)
 {
     typedef typename MA::ElementType T;
     typedef typename MA::ElementType::value_type RT;
-    int N = A.numCols();
+    FLENS_DEFAULT_INDEXTYPE N = A.numCols();
 
     assert(A.numRows()==N);
     assert(w.length()==N);
@@ -387,25 +387,25 @@ es(bool CalcEv, bool sort,
         assert (VS.numRows()==N);
         assert (VS.numCols()==N);
     }
-    DenseVector< Array<int> > bwork;
+    DenseVector< Array<FLENS_DEFAULT_INDEXTYPE> > bwork;
     if (sort) {
         bwork.engine().resize(N);
     }
 
-    int * bwork_data = (sort ? bwork.engine().data() : 0);
+    FLENS_DEFAULT_INDEXTYPE * bwork_data = (sort ? bwork.engine().data() : 0);
     T *    vs_data    = (CalcEv ? VS.engine().data() : 0);
-    int    ldvs       = (CalcEv ? VS.engine().leadingDimension() : 1);
+    FLENS_DEFAULT_INDEXTYPE    ldvs       = (CalcEv ? VS.engine().leadingDimension() : 1);
 
     DenseVector< Array<RT> > rwork(A.numCols());
     // query optimal work space size
     T lwork;
-    int info = gees(CalcEv, sort, select,
+    FLENS_DEFAULT_INDEXTYPE info = gees(CalcEv, sort, select,
                     N, A.engine().data(), A.engine().leadingDimension(), sdim, w.engine().data(),
                     vs_data, ldvs,
                     &lwork, -1, rwork.engine().data(), bwork_data );
     assert (info==0);
 
-    DenseVector< Array<T> > work(int(lwork.real()));
+    DenseVector< Array<T> > work((FLENS_DEFAULT_INDEXTYPE)(lwork.real()));
     return gees(CalcEv, sort, select,
                 N, A.engine().data(), A.engine().leadingDimension(), sdim, w.engine().data(),
                 vs_data, ldvs,
@@ -415,7 +415,7 @@ es(bool CalcEv, bool sort,
 //-- geev ----------------------------------------------------------------------
 
 template <typename MA, typename WR, typename WI, typename VL, typename VR>
-int
+FLENS_DEFAULT_INDEXTYPE
 ev(bool leftEV, bool rightEV,
    GeMatrix<MA> &A, DenseVector<WR> &wr, DenseVector<WI> &wi,
    GeMatrix<VL> &vl, GeMatrix<VR> &vr)
@@ -430,10 +430,10 @@ ev(bool leftEV, bool rightEV,
 
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
-    int ldvl = leftEV  ? vl.engine().leadingDimension() : 1;
-    int ldvr = rightEV ? vr.engine().leadingDimension() : 1;
+    FLENS_DEFAULT_INDEXTYPE ldvl = leftEV  ? vl.engine().leadingDimension() : 1;
+    FLENS_DEFAULT_INDEXTYPE ldvr = rightEV ? vr.engine().leadingDimension() : 1;
     T *vldata = leftEV  ? vl.engine().data() : 0;
     T *vrdata = rightEV ? vr.engine().data() : 0;
 
@@ -443,10 +443,10 @@ ev(bool leftEV, bool rightEV,
                 vldata, ldvl,
                 vrdata, ldvr,
                 &lwork, -1);
-    assert(info==0);
+    assert(info>=0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return geev(leftEV, rightEV, A.numRows(), A.engine().data(), A.engine().leadingDimension(),
                 wr.engine().data(), wi.engine().data(),
                 vldata, ldvl,
@@ -455,7 +455,7 @@ ev(bool leftEV, bool rightEV,
 }
 
 template <typename MA, typename W, typename VL, typename VR>
-int
+FLENS_DEFAULT_INDEXTYPE
 ev(bool leftEV, bool rightEV,
    GeMatrix<MA> &A, DenseVector<W> &w, GeMatrix<VL> &vl, GeMatrix<VR> &vr)
 {
@@ -466,14 +466,14 @@ ev(bool leftEV, bool rightEV,
     assert(!leftEV || (vl.numRows()==A.numRows()));
     assert(!rightEV || (vr.numRows()==A.numRows()));
 
-    int ldvl = leftEV  ? vl.engine().leadingDimension() : 1;
-    int ldvr = rightEV ? vr.engine().leadingDimension() : 1;
+    FLENS_DEFAULT_INDEXTYPE ldvl = leftEV  ? vl.engine().leadingDimension() : 1;
+    FLENS_DEFAULT_INDEXTYPE ldvr = rightEV ? vr.engine().leadingDimension() : 1;
     typename VL::ElementType *vldata = leftEV  ? vl.engine().data() : 0;
     typename VR::ElementType *vrdata = rightEV ? vr.engine().data() : 0;
     typedef typename MA::ElementType T;
     T lwork;
     DenseVector<Array<typename T::value_type> > rwork(2*A.numRows());
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query optimal work space size
     info = geev(leftEV, rightEV, A.numRows(), A.engine().data(), A.engine().leadingDimension(),
@@ -484,7 +484,7 @@ ev(bool leftEV, bool rightEV,
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork.real()));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork.real()));
     return geev(leftEV, rightEV, A.numRows(), A.engine().data(), A.engine().leadingDimension(),
                 w.engine().data(),
                 vldata, ldvl,
@@ -495,7 +495,7 @@ ev(bool leftEV, bool rightEV,
 //-- ggev ----------------------------------------------------------------------
 
 template <typename MA, typename WR, typename WI, typename VL, typename VR>
-int
+FLENS_DEFAULT_INDEXTYPE
 gv(bool leftEV, bool rightEV,
    GeMatrix<MA> &A, GeMatrix<MA> &B, DenseVector<WR> &wr, DenseVector<WI> &wi,
    DenseVector<WR> &beta,
@@ -513,10 +513,10 @@ gv(bool leftEV, bool rightEV,
     
     typedef typename MA::ElementType T;
     T lwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     
-    int ldvl = leftEV  ? vl.engine().leadingDimension() : 1;
-    int ldvr = rightEV ? vr.engine().leadingDimension() : 1;
+    FLENS_DEFAULT_INDEXTYPE ldvl = leftEV  ? vl.engine().leadingDimension() : 1;
+    FLENS_DEFAULT_INDEXTYPE ldvr = rightEV ? vr.engine().leadingDimension() : 1;
     T *vldata = leftEV  ? vl.engine().data() : 0;
     T *vrdata = rightEV ? vr.engine().data() : 0;
     
@@ -529,10 +529,10 @@ gv(bool leftEV, bool rightEV,
                 vldata, ldvl,
                 vrdata, ldvr,
                 &lwork, -1);
-    assert(info==0);
-    
+    assert(info>=0);
+
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(lwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
     return ggev(leftEV, rightEV, A.numRows(), 
                 A.engine().data(), A.engine().leadingDimension(),
                 B.engine().data(), B.engine().leadingDimension(),
@@ -546,7 +546,7 @@ gv(bool leftEV, bool rightEV,
 //-- syev ----------------------------------------------------------------------
 
 template <typename MA, typename VW>
-int
+FLENS_DEFAULT_INDEXTYPE
 ev(bool computeEigenvectors, SyMatrix<MA> &A, DenseVector<VW> &w)
 {
     if (w.length()!=A.dim()) {
@@ -555,7 +555,7 @@ ev(bool computeEigenvectors, SyMatrix<MA> &A, DenseVector<VW> &w)
 
     typedef typename MA::ElementType T;
     T optwork;
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query optimal work space size
     info = syev(computeEigenvectors, A.upLo(), A.dim(),
@@ -564,7 +564,7 @@ ev(bool computeEigenvectors, SyMatrix<MA> &A, DenseVector<VW> &w)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(static_cast<int>(optwork));
+    DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(optwork));
     return syev(computeEigenvectors, A.upLo(), A.dim(),
                 A.engine().data(), A.engine().leadingDimension(), w.engine().data(),
                 work.engine().data(), work.length());
@@ -573,7 +573,7 @@ ev(bool computeEigenvectors, SyMatrix<MA> &A, DenseVector<VW> &w)
 //-- heev ----------------------------------------------------------------------
 
 template <typename MA, typename VW>
-int
+FLENS_DEFAULT_INDEXTYPE
 ev(bool computeEigenvectors, HeMatrix<MA> &A, DenseVector<VW> &w)
 {
     if (w.length()!=A.dim()) {
@@ -583,7 +583,7 @@ ev(bool computeEigenvectors, HeMatrix<MA> &A, DenseVector<VW> &w)
     typedef typename MA::ElementType T;
     T optwork;
     DenseVector<Array<typename T::value_type> > rwork(3*A.dim()-2);
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
 
     // query optimal work space size
     info = heev(computeEigenvectors, A.upLo(), A.dim(),
@@ -594,7 +594,7 @@ ev(bool computeEigenvectors, HeMatrix<MA> &A, DenseVector<VW> &w)
     assert(info==0);
 
     // allocate work space
-    DenseVector<Array<T> > work(int(optwork.real()));
+    DenseVector<Array<T> > work((FLENS_DEFAULT_INDEXTYPE)(optwork.real()));
     return heev(computeEigenvectors, A.upLo(), A.dim(),
                 A.engine().data(), A.engine().leadingDimension(),
                 w.engine().data(),
@@ -604,7 +604,7 @@ ev(bool computeEigenvectors, HeMatrix<MA> &A, DenseVector<VW> &w)
 
 //-- gesvd ---------------------------------------------------------------------
 template <typename MA, typename VS, typename MU, typename MV>
-int
+FLENS_DEFAULT_INDEXTYPE
 svd(GeMatrix<MA> &A,
     DenseVector<VS> &s,
     GeMatrix<MU> &U,
@@ -620,14 +620,14 @@ svd(GeMatrix<MA> &A,
 
 template <typename T, typename MA, typename VS, typename VU, typename VVT>
 struct SvdImpl {
-    static int
+    static FLENS_DEFAULT_INDEXTYPE
     func(SVectorsJob jobu, SVectorsJob jobvt,
          GeMatrix<MA> &A,
          DenseVector<VS> &S, GeMatrix<VU> &U, GeMatrix<VVT> &VT)
     {
-        int m = A.numRows();
-        int n = A.numCols();
-        int mindim = (m<n ? m : n);
+        auto m = A.numRows();
+        auto n = A.numCols();
+        auto mindim = (m<n ? m : n);
         if (S.length()!=mindim) {
             S.engine().resize(mindim);
         }
@@ -668,17 +668,17 @@ struct SvdImpl {
 
         // query work space size
         T lwork;
-        int
+        FLENS_DEFAULT_INDEXTYPE
         info = gesvd(jobu, jobvt,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
                      U.engine().data(), U.engine().leadingDimension(),
                      VT.engine().data(), VT.engine().leadingDimension(),
                      &lwork, -1 );
-        assert(info==0);
+        assert(info>=0);
 
         // allocate work space
-        DenseVector<Array<T> > work(static_cast<int>(lwork));
+        DenseVector<Array<T> > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork));
         return gesvd(jobu, jobvt,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -692,14 +692,14 @@ struct SvdImpl {
 
 template <typename T, typename MA, typename VS, typename VU, typename VVT>
 struct SvdImpl<complex<T>, MA,VS,VU,VVT> {
-    static int
+    static FLENS_DEFAULT_INDEXTYPE
     func(SVectorsJob jobu, SVectorsJob jobvt,
          GeMatrix<MA> &A,
          DenseVector<VS> &S, GeMatrix<VU> &U, GeMatrix<VVT> &VT)
     {
-        int m = A.numRows();
-        int n = A.numCols();
-        int mindim = (m<n ? m : n);
+        FLENS_DEFAULT_INDEXTYPE m = A.numRows();
+        FLENS_DEFAULT_INDEXTYPE n = A.numCols();
+        FLENS_DEFAULT_INDEXTYPE mindim = (m<n ? m : n);
         if (S.length()!=mindim) {
             S.engine().resize(mindim);
         }
@@ -743,7 +743,7 @@ struct SvdImpl<complex<T>, MA,VS,VU,VVT> {
 
         // query work space size
         complex<T> lwork;
-        int
+        FLENS_DEFAULT_INDEXTYPE
         info = gesvd(jobu, jobvt,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -753,7 +753,7 @@ struct SvdImpl<complex<T>, MA,VS,VU,VVT> {
         assert(info==0);
 
         // allocate work space
-        DenseVector< Array<complex<T> > > work(static_cast<int>(lwork.real()));
+        DenseVector< Array<complex<T> > > work(static_cast<FLENS_DEFAULT_INDEXTYPE>(lwork.real()));
         return gesvd(jobu, jobvt,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -764,7 +764,7 @@ struct SvdImpl<complex<T>, MA,VS,VU,VVT> {
 };
 
 template <typename MA, typename VS, typename VU, typename VVT>
-int
+FLENS_DEFAULT_INDEXTYPE
 svd(SVectorsJob jobu, SVectorsJob jobvt,
     GeMatrix<MA> &A, DenseVector<VS> &S, GeMatrix<VU> &U, GeMatrix<VVT> &VT)
 {
@@ -781,12 +781,12 @@ svd(SVectorsJob jobu, SVectorsJob jobvt,
 
 template <typename T, typename MA, typename VS, typename VU, typename VVT>
 struct SddImpl {
-    static int
+    static FLENS_DEFAULT_INDEXTYPE
     func(SVectorsJob jobz,
          GeMatrix<MA> &A,
          DenseVector<VS> &S, GeMatrix<VU> &U, GeMatrix<VVT> &VT)
     {
-        int mindim = (A.numRows()<A.numCols() ? A.numRows() : A.numCols());
+        FLENS_DEFAULT_INDEXTYPE mindim = (A.numRows()<A.numCols() ? A.numRows() : A.numCols());
         assert(S.length()==mindim);
 
         switch (jobz) {
@@ -815,11 +815,11 @@ struct SddImpl {
                 assert(0); // case 'None' not allowed!
         }
 
-        DenseVector< Array<int> > iwork(8*mindim);
+        DenseVector< Array<FLENS_DEFAULT_INDEXTYPE> > iwork(8*mindim);
 
         // query work space size
         T lwork;
-        int
+        FLENS_DEFAULT_INDEXTYPE
         info = gesdd(jobz,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -829,7 +829,7 @@ struct SddImpl {
         assert(info==0);
 
         // allocate work space
-        DenseVector<Array<T> > work((int) lwork);
+        DenseVector<Array<T> > work((FLENS_DEFAULT_INDEXTYPE) lwork);
         return gesvd(jobz,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -843,15 +843,15 @@ struct SddImpl {
 
 template <typename T, typename MA, typename VS, typename VU, typename VVT>
 struct SddImpl<complex<T>, MA,VS,VU,VVT> {
-    static int
+    static FLENS_DEFAULT_INDEXTYPE
     func(SVectorsJob jobz,
          GeMatrix<MA> &A,
          DenseVector<VS> &S, GeMatrix<VU> &U, GeMatrix<VVT> &VT)
     {
-        int mindim = (A.numRows()<A.numCols() ? A.numRows() : A.numCols());
+        FLENS_DEFAULT_INDEXTYPE mindim = (A.numRows()<A.numCols() ? A.numRows() : A.numCols());
         assert(S.length()==mindim);
 
-        int lrwork = 5*(mindim*mindim + mindim);
+        FLENS_DEFAULT_INDEXTYPE lrwork = 5*(mindim*mindim + mindim);
         switch (jobz) {
             case All:
                 assert(U.numRows()==A.numRows());
@@ -879,11 +879,11 @@ struct SddImpl<complex<T>, MA,VS,VU,VVT> {
         }
 
         DenseVector< Array<T> > rwork(lrwork);
-        DenseVector< Array<int> > iwork(8*mindim);
+        DenseVector< Array<FLENS_DEFAULT_INDEXTYPE> > iwork(8*mindim);
 
         // query work space size
         complex<T> lwork;
-        int
+        FLENS_DEFAULT_INDEXTYPE
         info = gesdd(jobz,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -893,7 +893,7 @@ struct SddImpl<complex<T>, MA,VS,VU,VVT> {
         assert(info==0);
 
         // allocate work space
-        DenseVector< Array<complex<T> > > work((int) lwork.real());
+        DenseVector< Array<complex<T> > > work((FLENS_DEFAULT_INDEXTYPE) lwork.real());
         return gesdd(jobz,
                      A.numRows(), A.numCols(), A.engine().data(), A.engine().leadingDimension(),
                      S.engine().data(),
@@ -904,7 +904,7 @@ struct SddImpl<complex<T>, MA,VS,VU,VVT> {
 };
 
 template <typename MA, typename VS, typename VU, typename VVT>
-int
+FLENS_DEFAULT_INDEXTYPE
 sdd(SVectorsJob jobz,
     GeMatrix<MA> &A, DenseVector<VS> &S, GeMatrix<VU> &U, GeMatrix<VVT> &VT)
 {

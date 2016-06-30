@@ -16,7 +16,7 @@ Wavelet<T,Primal,Interval,SparseMulti>::~Wavelet()
 
 template <typename T>
 T
-Wavelet<T,Primal,Interval,SparseMulti>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Primal,Interval,SparseMulti>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     if (d==4) {
         k-=1;
@@ -28,15 +28,15 @@ Wavelet<T,Primal,Interval,SparseMulti>::operator()(T x, int j, long k, unsigned 
         k-=(basis._numLeftParts-1);
         // inner part
         if (k!=basis.rangeJ(j).lastIndex()-basis._numLeftParts) {
-            int type  = (int)(k % basis._numInnerParts);
-            long shift = 2*std::ceil((T(k) / T(basis._numInnerParts)));
+            FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k % basis._numInnerParts);
+            FLENS_DEFAULT_INDEXTYPE shift = 2*std::ceil((T(k) / T(basis._numInnerParts)));
             //std::cerr << "type = " << type << ", shift = " << shift << " "  << std::endl;
             return pow2ih<T>(2*j*deriv+j) * basis._innerScalingFactors(type) *
                    basis._innerEvaluator[type](pow2i<T>(j)*x-shift,deriv);
         }
 
         // right boundary
-        long shift = basis.cardJ(j)/2;
+        FLENS_DEFAULT_INDEXTYPE shift = basis.cardJ(j)/2;
         return pow2ih<T>(2*j*deriv+j) * basis._rightScalingFactors(0) *
                basis._rightEvaluator[0](pow2i<T>(j)*x-shift,deriv);
     }
@@ -49,7 +49,7 @@ Wavelet<T,Primal,Interval,SparseMulti>::operator()(T x, int j, long k, unsigned 
     
 template <typename T>
 Support<T>
-Wavelet<T,Primal,Interval,SparseMulti>::support(int j, long k) const
+Wavelet<T,Primal,Interval,SparseMulti>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (d==4) {
         k-=1;
@@ -61,13 +61,13 @@ Wavelet<T,Primal,Interval,SparseMulti>::support(int j, long k) const
         k-=(basis._numLeftParts-1);
         // inner part
         if (k!=basis.rangeJ(j).lastIndex()-basis._numLeftParts) {
-            int type  = (int)(k % basis._numInnerParts);
-            long shift = 2*std::ceil((T(k) / T(basis._numInnerParts)));
+            FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k % basis._numInnerParts);
+            FLENS_DEFAULT_INDEXTYPE shift = 2*std::ceil((T(k) / T(basis._numInnerParts)));
             return pow2i<T>(-j) * (basis._innerSupport[type]+shift);
         }
 
         // right boundary
-        long shift = basis.cardJ(j)/2;
+        FLENS_DEFAULT_INDEXTYPE shift = basis.cardJ(j)/2;
         return pow2i<T>(-j) * (basis._rightSupport[0]+shift);
     }
     else { // Control may reach end of non-void function
@@ -78,7 +78,7 @@ Wavelet<T,Primal,Interval,SparseMulti>::support(int j, long k) const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,Interval,SparseMulti>::singularSupport(int j, long k) const
+Wavelet<T,Primal,Interval,SparseMulti>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (d==4) {
         k-=1;
@@ -90,15 +90,15 @@ Wavelet<T,Primal,Interval,SparseMulti>::singularSupport(int j, long k) const
         k-=(basis._numLeftParts-1);
         // inner part
         if (k!=basis.rangeJ(j).lastIndex()-basis._numLeftParts) {
-            int type  = (int)(k % basis._numInnerParts);
-            long shift = 2*std::ceil((T(k) / T(basis._numInnerParts)));
+            FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k % basis._numInnerParts);
+            FLENS_DEFAULT_INDEXTYPE shift = 2*std::ceil((T(k) / T(basis._numInnerParts)));
             flens::DenseVector<flens::Array<T> > result = basis._innerSingularSupport[type];
             result += shift;
             return pow2i<T>(-j) * result;
         }
 
         // right boundary
-        long shift = basis.cardJ(j)/2;
+        FLENS_DEFAULT_INDEXTYPE shift = basis.cardJ(j)/2;
         flens::DenseVector<flens::Array<T> > result = basis._rightSingularSupport[0];
         result += shift;
         return pow2i<T>(-j) * result;
@@ -112,7 +112,7 @@ Wavelet<T,Primal,Interval,SparseMulti>::singularSupport(int j, long k) const
     
 template <typename T>
 T
-Wavelet<T,Primal,Interval,SparseMulti>::tic(int j) const
+Wavelet<T,Primal,Interval,SparseMulti>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+3));
 }

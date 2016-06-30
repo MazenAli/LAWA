@@ -30,14 +30,14 @@ namespace lawa {
 template <typename X>
     typename X::ElementType   
     evaluate(const MRA<typename X::ElementType,Primal,Periodic,CDF> &mra, 
-             int j, const flens::DenseVector<X> &coeffs, typename X::ElementType x, 
-             int deriv);
+             FLENS_DEFAULT_INDEXTYPE j, const flens::DenseVector<X> &coeffs, typename X::ElementType x, 
+             FLENS_DEFAULT_INDEXTYPE deriv);
 
 template <typename X>
     typename X::ElementType
     evaluate(const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, 
-             int J, const flens::DenseVector<X> &coeffs, typename X::ElementType x, 
-             int deriv);
+             FLENS_DEFAULT_INDEXTYPE J, const flens::DenseVector<X> &coeffs, typename X::ElementType x, 
+             FLENS_DEFAULT_INDEXTYPE deriv);
 
 } // namespace lawa
 

@@ -40,7 +40,7 @@ struct Wavelet<_T,Dual,Periodic,CDF>
     static const DomainType Domain = Periodic;
     static const Construction Cons = CDF;
 
-    Wavelet(int _d, int _d_);
+    Wavelet(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_);
 
     Wavelet(const BSpline<T,Primal,Periodic,CDF> &_phi,
             const BSpline<T,Dual,Periodic,CDF> &_phi_);
@@ -48,18 +48,18 @@ struct Wavelet<_T,Dual,Periodic,CDF>
     Wavelet(const Basis<T,Dual,Periodic,CDF> &_basis);
 
     T
-    operator()(T x, int j, long k, unsigned short deriv=0) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv=0) const;
 
     PeriodicSupport<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     const flens::DenseVector<flens::Array<T> > &
     mask() const;
 
     static flens::DenseVector<flens::Array<T> >
-    mask(int d, int d_);
+    mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_);
 
-    const int d, d_, mu;
+    const FLENS_DEFAULT_INDEXTYPE d, d_, mu;
     const Wavelet<T, Dual, R, CDF> psiR_;
 };
 

@@ -33,7 +33,7 @@ template <typename T, typename Index, typename SpaceIndex, typename Basis, typen
 class S_ADWAV_SPACETIME {
     public:
         S_ADWAV_SPACETIME(const Basis &basis, MA &A, RHSOperator &F, RHSInitialCond &U0, T contraction, T _threshTol,
-                          T _linTol, T _resTol=1e-4, int _NumOfIterations=10, int MaxItsPerThreshTol=5, T eps=1e-2);
+                          T _linTol, T _resTol=1e-4, FLENS_DEFAULT_INDEXTYPE _NumOfIterations=10, FLENS_DEFAULT_INDEXTYPE MaxItsPerThreshTol=5, T eps=1e-2);
 
         void solve_cgls(const IndexSet<Index> &Initial_Lambda);
 
@@ -47,8 +47,8 @@ class S_ADWAV_SPACETIME {
         RHSOperator &F;
         RHSInitialCond &U0;
         T contraction, threshTol, linTol, resTol;
-        int NumOfIterations;
-        int MaxItsPerThreshTol;
+        FLENS_DEFAULT_INDEXTYPE NumOfIterations;
+        FLENS_DEFAULT_INDEXTYPE MaxItsPerThreshTol;
         T eps;
 
 };

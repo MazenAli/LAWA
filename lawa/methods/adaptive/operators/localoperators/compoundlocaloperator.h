@@ -73,7 +73,7 @@ class CompoundLocalOperator {
         template <typename Preconditioner>
         void
         eval(Coefficients<Lexicographical,T,Index> &v,
-             Coefficients<Lexicographical,T,Index> &Av, Preconditioner &P, int operatornumber);
+             Coefficients<Lexicographical,T,Index> &Av, Preconditioner &P, FLENS_DEFAULT_INDEXTYPE operatornumber);
 
         template <typename Preconditioner>
         void
@@ -91,7 +91,7 @@ class CompoundLocalOperator {
         void
         clear();
 
-        int                         numOfLocalOp;
+        FLENS_DEFAULT_INDEXTYPE                         numOfLocalOp;
         FirstLocalOperator          &firstLocalOp;
         SecondLocalOperator         &secondLocalOp;
         ThirdLocalOperator          &thirdLocalOp;

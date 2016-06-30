@@ -42,26 +42,26 @@ class Basis<_T,Orthogonal,R,Multi>
         typedef BSpline<T,Orthogonal,R,Multi>       BSplineType;
         typedef Wavelet<T,Orthogonal,R,Multi>       WaveletType;
 
-        Basis(const int d, const int j=-1);
+        Basis(const FLENS_DEFAULT_INDEXTYPE d, const FLENS_DEFAULT_INDEXTYPE j=-1);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         const BasisFunctionType &
         generator(XType xtype) const;
 
         MRA<T,Orthogonal,R,Multi> mra;
 
-        const int d, j0;
+        const FLENS_DEFAULT_INDEXTYPE d, j0;
 
         Wavelet<T,Orthogonal,R,Multi> psi;
 
 
     private:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 };
 
 } // namespace lawa

@@ -4,7 +4,7 @@ namespace lawa {
 template<typename T, typename Basis1D>
 T
 calculateL2Error(T t, const flens::DenseVector<flens::Array<T> >& u, T (*sol)(T,T), 
-                const Basis1D& basis, const int J, const double deltaX)
+                const Basis1D& basis, const FLENS_DEFAULT_INDEXTYPE J, const double deltaX)
 {    
     T L2_error = 0.5*(evaluate(basis, J, u, 0., 0) - sol(t, 0.))*(evaluate(basis, J, u, 0., 0) - sol(t, 0.));
     for(double x = deltaX; x < 1.; x += deltaX){
@@ -21,7 +21,7 @@ calculateL2Error(T t, const flens::DenseVector<flens::Array<T> >& u, T (*sol)(T,
 template<typename T, typename Basis1D>
 T
 calculateH1Error(T t, const flens::DenseVector<flens::Array<T> >& u, T (*sol)(T,T), T (*dx_sol)(T,T),
-                 const Basis1D& basis, const int J, const double deltaX)
+                 const Basis1D& basis, const FLENS_DEFAULT_INDEXTYPE J, const double deltaX)
 {    
     T L2_error = 0.5*(evaluate(basis, J, u, 0., 0) - sol(t, 0.))*(evaluate(basis, J, u, 0., 0) - sol(t, 0.));
     T dx_L2_error = 0.5*(evaluate(basis, J, u, 0., 1) - dx_sol(t, 0.))*(evaluate(basis, J, u, 0., 1) - dx_sol(t, 0.));
@@ -43,13 +43,13 @@ calculateH1Error(T t, const flens::DenseVector<flens::Array<T> >& u, T (*sol)(T,
 template<typename T, typename Basis1D>
 T
 calculateL2_L2_Error(const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U, T (*sol)(T,T), 
-                     const Basis1D& basis, const int J, const double deltaT, const int K, 
+                     const Basis1D& basis, const FLENS_DEFAULT_INDEXTYPE J, const double deltaT, const FLENS_DEFAULT_INDEXTYPE K, 
                      const double /*deltaX*/)
 {
     T L2_error = 0;
     
     T factor, val_L2;
-    for(int k = 0; k <= K; ++k){
+    for(FLENS_DEFAULT_INDEXTYPE k = 0; k <= K; ++k){
         if ((k == 0) || (k == K)) {
             factor = 0.5;
         }
@@ -68,12 +68,12 @@ calculateL2_L2_Error(const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMaj
 template<typename T, typename Basis1D>
 T
 calculateL2_H1_Error(const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U, 
-                     T (*sol)(T,T), T (*dx_sol)(T,T), const Basis1D& basis, const int J, 
-                     const double deltaT, const int K, const double /*deltaX*/)
+                     T (*sol)(T,T), T (*dx_sol)(T,T), const Basis1D& basis, const FLENS_DEFAULT_INDEXTYPE J, 
+                     const double deltaT, const FLENS_DEFAULT_INDEXTYPE K, const double /*deltaX*/)
 {
     T H1_error = 0;
     T factor, val_H1;
-    for(int k = 0; k <= K; ++k){
+    for(FLENS_DEFAULT_INDEXTYPE k = 0; k <= K; ++k){
         if ((k == 0) || (k == K)) {
             factor = 0.5;
         }

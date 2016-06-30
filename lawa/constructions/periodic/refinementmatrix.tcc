@@ -51,8 +51,8 @@ mv(Transpose transA, typename X::ElementType alpha,
     assert(x.engine().stride()==1);
 
     const flens::DenseVector<flens::Array<T> > &a = A.band;
-    int lx = x.length();
-    int la = a.length();
+    FLENS_DEFAULT_INDEXTYPE lx = x.length();
+    FLENS_DEFAULT_INDEXTYPE la = a.length();
     
     if (transA==cxxblas::NoTrans) {
         const T *xp = x.engine().data();
@@ -61,15 +61,15 @@ mv(Transpose transA, typename X::ElementType alpha,
         } else {
             assert(y.length()==2*lx);
         }
-        int ly = y.length();
+        FLENS_DEFAULT_INDEXTYPE ly = y.length();
         if (la>ly) {
             // TODO: eliminate z (only needed since y can be a view and 
             // calculations are 0-based. Thus y can not be re-indexed.
             flens::DenseVector<flens::Array<T> > z = y;
             z.engine().changeIndexBase(0);
-            for (int k=0; k<lx; ++k, ++xp) {
-                int pos = (z.lastIndex() - (-a.firstIndex() % ly) + 1 + 2*k)%ly;
-                for (int i=a.firstIndex(); i<=a.lastIndex(); ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE k=0; k<lx; ++k, ++xp) {
+                FLENS_DEFAULT_INDEXTYPE pos = (z.lastIndex() - (-a.firstIndex() % ly) + 1 + 2*k)%ly;
+                for (FLENS_DEFAULT_INDEXTYPE i=a.firstIndex(); i<=a.lastIndex(); ++i) {
                     if (pos>z.lastIndex()) {
                         pos = z.firstIndex();
                     }
@@ -78,16 +78,16 @@ mv(Transpose transA, typename X::ElementType alpha,
             }
             y = z;
         } else {
-            for (int k=0; k<lx; ++k, ++xp) {
-                int mMin = a.firstIndex() + 2*k;
-                int mMax = a.lastIndex() + 2*k;
+            for (FLENS_DEFAULT_INDEXTYPE k=0; k<lx; ++k, ++xp) {
+                FLENS_DEFAULT_INDEXTYPE mMin = a.firstIndex() + 2*k;
+                FLENS_DEFAULT_INDEXTYPE mMax = a.lastIndex() + 2*k;
                 const T *abegin = a.engine().data(), *aend = abegin + a.length();
                 T * ybegin = y.engine().data(), *yend = ybegin + y.length();
                 if (mMin<0) {
                     cxxblas::axpy(-mMin  , *xp, abegin,      1, yend+mMin, 1);
                     cxxblas::axpy(la+mMin, *xp, abegin-mMin, 1, ybegin,    1);
                 } else if (mMax>=ly) {
-                    int p = mMax-ly+1;
+                    FLENS_DEFAULT_INDEXTYPE p = mMax-ly+1;
                     cxxblas::axpy(p,    *xp, aend-p, 1, ybegin,     1);
                     cxxblas::axpy(la-p, *xp, abegin, 1, yend-la+p,   1);
                 } else {
@@ -96,7 +96,7 @@ mv(Transpose transA, typename X::ElementType alpha,
             }
         }
     } else { // (transA==Trans)
-        int la = a.length();
+        FLENS_DEFAULT_INDEXTYPE la = a.length();
         if (beta==0) {
             y.engine().resize(lx/2,x.firstIndex()) || y.engine().fill();
         } else {
@@ -105,11 +105,11 @@ mv(Transpose transA, typename X::ElementType alpha,
         T *iter = y.engine().data();
         if (lx<=2*la-2) {
             const T *xbegin = x.engine().data(), *xend = xbegin + x.length();
-            int shift = lx - (-a.firstIndex() % lx);
-            for (int m=0; m<lx/2; ++m, ++iter) {
+            FLENS_DEFAULT_INDEXTYPE shift = lx - (-a.firstIndex() % lx);
+            for (FLENS_DEFAULT_INDEXTYPE m=0; m<lx/2; ++m, ++iter) {
                 const T *sigIter = xbegin+shift;
                 *iter = 0;
-                for (int i=a.firstIndex(); i<=a.lastIndex(); ++i, ++sigIter) {
+                for (FLENS_DEFAULT_INDEXTYPE i=a.firstIndex(); i<=a.lastIndex(); ++i, ++sigIter) {
                     if (sigIter==xend) {
                         sigIter = xbegin;
                     }
@@ -124,9 +124,9 @@ mv(Transpose transA, typename X::ElementType alpha,
             ends(_(1,la-1)) = x(_(x.firstIndex()+lx-la+1,x.firstIndex()+lx-1));
             ends(_(la,2*la-2)) = x(_(x.firstIndex(),x.firstIndex()+la-2));
             T *iter = y.engine().data();
-            for (int m=0; m<lx/2; ++m, ++iter) {
-                int kMin = a.firstIndex()+2*m;
-                int kMax = a.lastIndex()+2*m;
+            for (FLENS_DEFAULT_INDEXTYPE m=0; m<lx/2; ++m, ++iter) {
+                FLENS_DEFAULT_INDEXTYPE kMin = a.firstIndex()+2*m;
+                FLENS_DEFAULT_INDEXTYPE kMax = a.lastIndex()+2*m;
                 const T *abegin = a.engine().data();
                 T dotValue;
                 if ((kMin<0)) {

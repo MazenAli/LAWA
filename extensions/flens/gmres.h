@@ -31,28 +31,28 @@ struct _gmres
 };
 
 template <typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 gmres(const MA &A, VX &x, const VB &b,
       typename _gmres<MA>::T tol = std::numeric_limits<typename _gmres<MA>::T>::epsilon(),
-      long maxIterations = -1);
+      FLENS_DEFAULT_INDEXTYPE maxIterations = -1);
 
 template <typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 gmresm(const MA &A, VX &x, const VB &b,
        typename _gmres<MA>::T tol=std::numeric_limits<typename _gmres<MA>::T>::epsilon(),
-       int restart=20, long maxIterations=-1);
+       FLENS_DEFAULT_INDEXTYPE restart=20, FLENS_DEFAULT_INDEXTYPE maxIterations=-1);
 
 template <typename Prec, typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 pgmres(const Prec &Pr, const MA &A, VX &x, const VB &b,
        typename _gmres<MA>::T tol = std::numeric_limits<typename _gmres<MA>::T>::epsilon(),
-       long maxIterations = -1);
+       FLENS_DEFAULT_INDEXTYPE maxIterations = -1);
 
 template <typename Prec, typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 pgmresm(const Prec &Pr, const MA &A, VX &x, const VB &b,
         typename _gmres<MA>::T tol=std::numeric_limits<typename _gmres<MA>::T>::epsilon(),
-        int restart=20, long maxIterations=-1);
+        FLENS_DEFAULT_INDEXTYPE restart=20, FLENS_DEFAULT_INDEXTYPE maxIterations=-1);
 
 //-- trait specialization for FLENS types ------------------------------------
 

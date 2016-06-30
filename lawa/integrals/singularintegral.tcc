@@ -30,12 +30,12 @@ _integrate(const SingularIntegral<SingularKernel,First,Second> &singularintegral
     SingularPoints_y += singularintegral.left;
 
     std::vector<T> AllSingularPoints_x, AllSingularPoints_y;
-    for (int i=SingularPoints_x.firstIndex(); i<=SingularPoints_x.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=SingularPoints_x.firstIndex(); i<=SingularPoints_x.lastIndex(); ++i) {
         T x_i = SingularPoints_x(i);
         AllSingularPoints_x.push_back(x_i);
         if (supp_y.l1 <= x_i && x_i <= supp_y.l2) AllSingularPoints_y.push_back(x_i);
     }
-    for (int i=SingularPoints_y.firstIndex(); i<=SingularPoints_y.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=SingularPoints_y.firstIndex(); i<=SingularPoints_y.lastIndex(); ++i) {
         T y_i = SingularPoints_y(i);
         AllSingularPoints_y.push_back(y_i);
         if (supp_x.l1 <= y_i && y_i <= supp_x.l2) AllSingularPoints_x.push_back(y_i);
@@ -100,12 +100,12 @@ _integrate(const SingularIntegralPP<SingularKernel,FirstPolynomial,SecondPolynom
         flens::DenseVector<flens::Array<T> > SingularPoints_y(2); SingularPoints_y = a2, b2;
 
         std::vector<T> AllSingularPoints_x, AllSingularPoints_y;
-        for (int i=SingularPoints_x.firstIndex(); i<=SingularPoints_x.lastIndex(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=SingularPoints_x.firstIndex(); i<=SingularPoints_x.lastIndex(); ++i) {
             T x_i = SingularPoints_x(i);
             AllSingularPoints_x.push_back(x_i);
             if (a2 < x_i && x_i < b2) AllSingularPoints_y.push_back(x_i);
         }
-        for (int i=SingularPoints_y.firstIndex(); i<=SingularPoints_y.lastIndex(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=SingularPoints_y.firstIndex(); i<=SingularPoints_y.lastIndex(); ++i) {
             T y_i = SingularPoints_y(i);
             AllSingularPoints_y.push_back(y_i);
             if (a1 <= y_i && y_i <= b1) AllSingularPoints_x.push_back(y_i);
@@ -180,8 +180,8 @@ SingularIntegral<SingularKernel,First,Second>::kernel(T x) const
 template <typename SingularKernel, typename First, typename Second>
 typename First::T
 SingularIntegral<SingularKernel,First,Second>::operator()
-                                               (int _j1, long _k1, XType _e1, int _deriv1,
-                                                int _j2, long _k2, XType _e2, int _deriv2) const
+                                               (FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv1,
+                                                FLENS_DEFAULT_INDEXTYPE _j2, FLENS_DEFAULT_INDEXTYPE _k2, XType _e2, FLENS_DEFAULT_INDEXTYPE _deriv2) const
 {
     j1 = _j1; k1 = _k1; e1 = _e1; deriv1 = _deriv1;
     j2 = _j2; k2 = _k2; e2 = _e2; deriv2 = _deriv2;

@@ -64,7 +64,7 @@ Analogously we get for the right end:
 ==subsection: Constructs MRA (given: d, d_, j)==
 
 ==coderef==
-MRA(int d, int d_, int j0=-1);
+MRA(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_, FLENS_DEFAULT_INDEXTYPE j0=-1);
 ====
 Constructs a primal MRA based on [d] and [d_]. If no level [j0] is given as
 argument the minimal possible level [min_j0] will be chosen otherwise [j0]
@@ -75,16 +75,16 @@ argument the minimal possible level [min_j0] will be chosen otherwise [j0]
 
 ==subsection: number of scaling functions==
 ==coderef==
-int
-cardI(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+cardI(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 Returns the number of scaling functions in the MRA. ([card] stands for
 cardinality, [I] for the index set [$\mathcal{I}_j$]).
 
 ==subsection: number of left scaling functions==
 ==coderef==
-int
-cardIL(int j=0) const;
+FLENS_DEFAULT_INDEXTYPE
+cardIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
 ====
 Returns the number of left boundary scaling functions in the MRA. ([card] stands
  for cardinality, [IL] for the index set [$\mathcal{I}^L_j$]. [Note:] This
@@ -93,16 +93,16 @@ uniformity but due to the default argument it can be omitted.
 
 ==subsection: number of inner scaling functions==
 ==coderef==
-int
-cardII(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+cardII(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 Returns the number of inner scaling functions in the MRA. ([card] stands
  for cardinality, [II] for the index set [$\mathcal{I}^I_j$].
 
 ==subsection: number of right scaling functions==
 ==coderef==
-int
-cardIR(int j=0) const;
+FLENS_DEFAULT_INDEXTYPE
+cardIR(FLENS_DEFAULT_INDEXTYPE j=0) const;
 ====
 Returns the number of right boundary scaling functions in the MRA. ([card]
 stands for cardinality, [IR] for the index set [$\mathcal{I}^R_j$]. [Note:]
@@ -112,16 +112,16 @@ uniformity but due to the default argument it can be omitted.)
 
 ==subsection: The index set of the scaling functions==
 ==coderef==
-Range<int>
-rangeI(int j) const;
+Range<FLENS_DEFAULT_INDEXTYPE>
+rangeI(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 Returns the index set associated to the scaling functions
 i.e.[$\mathcal{I}_j$].
 
 ==subsection: The index set of left boundary scaling functions==
 ==coderef==
-Range<int>
-rangeIL(int j=0) const;
+Range<FLENS_DEFAULT_INDEXTYPE>
+rangeIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
 ====
 Returns the index set associated to the left boundary scaling functions
 i.e.[$\mathcal{I}^L_j$]. [Note:] This range does not depend on the level. The
@@ -130,16 +130,16 @@ be omitted.
 
 ==subsection: The index set of inner scaling functions==
 ==coderef==
-Range<int>
-rangeII(int j) const;
+Range<FLENS_DEFAULT_INDEXTYPE>
+rangeII(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 Returns the index set associated to the inner scaling functions
 i.e.[$\mathcal{I}^I_j$].
 
 ==subsection: The index set of right boundary scaling functions==
 ==coderef==
-Range<int>
-rangeIR(int j) const;
+Range<FLENS_DEFAULT_INDEXTYPE>
+rangeIR(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 Returns the index set associated to the right boundary scaling functions
 i.e.[$\mathcal{I}^R_j$].
@@ -147,7 +147,7 @@ i.e.[$\mathcal{I}^R_j$].
 ==subsection: The support of all left boundary scaling functions==
 ==coderef==
 Support<T>
-suppIL(int j=0) const;
+suppIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
 ====
 Returns the support of all left boudary scaling functions i.e.
 [$\supp\ \Phi^L_j$]. [Note:] This support does not depend on the level. The
@@ -157,14 +157,14 @@ be omitted.
 ==subsection: The support of all inner scaling functions==
 ==coderef==
 Support<T>
-suppII(int j) const;
+suppII(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 Returns the support of all inner scaling functions i.e. [$\supp\ \Phi^I_j$].
 
 ==subsection: The support of all right boundary scaling functions==
 ==coderef==
 Support<T>
-suppIR(int j=0) const;
+suppIR(FLENS_DEFAULT_INDEXTYPE j=0) const;
 ====
 Returns the support of all right boudary scaling functions i.e.
 [$\supp\ \Phi^R_j$]. [Note:] This support does not depend on the level. The
@@ -173,7 +173,7 @@ be omitted.
 
 ==subsection: The current level of the MRA==
 ==coderef==
-int
+FLENS_DEFAULT_INDEXTYPE
 level() const;
 ====
 Returns the current level of the MRA.
@@ -181,7 +181,7 @@ Returns the current level of the MRA.
 ==subsection: Set the level of the MRA==
 ==coderef==
 void
-setLevel(int j);
+setLevel(FLENS_DEFAULT_INDEXTYPE j);
 ====
 Change the current level of the MRA to [j]. (Assumes [j]>=[j0]).
 
@@ -198,7 +198,7 @@ homogenuous Dirichlet boundary conditions ([DirichletBC]) are realized.
 
 ==subsection: Selecting a specific MRA (d, d_)==
 ==coderef==
-const int d, d_;
+const FLENS_DEFAULT_INDEXTYPE d, d_;
 ====
 The parameters [d] and [d] select the sprecific MRA.
 
@@ -211,13 +211,13 @@ The role of [mu] is the same as described
 
 ==subsection: The minimal possible level (min_j0)==
 ==coderef==
-const int min_j0;
+const FLENS_DEFAULT_INDEXTYPE min_j0;
 ====
 The minimal level the constructions can be realized for.
 
 ==subsection: The minimal level to be used (j0)==
 ==coderef==
-const int j0;
+const FLENS_DEFAULT_INDEXTYPE j0;
 ====
 The minimal level to be used during the lifetime of the MRA. May be larger than
 [min_j0].

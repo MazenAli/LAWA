@@ -27,7 +27,7 @@ template <typename T>
 void
 _adapt_k(const Support<T> &supp1,
          const Support<T> &supp2, 
-         int j1, int &k1, int j2, int &k2)
+         FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE &k1, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE &k2)
 {
     if (supp1.l2>1.) {
         if (supp2.l2<supp1.l1) {

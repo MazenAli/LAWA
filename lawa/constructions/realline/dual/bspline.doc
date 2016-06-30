@@ -47,7 +47,7 @@ The least one has to provide when allocating a dual B-spline object is the order
 
 ==subsection: Constructs dual B-spline (given: d, d_)==
 ==coderef==
-BSpline(int _d, int _d_);
+BSpline(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_);
 ====
 Constructs the dual B-spline [$N_{d,\tilde{d}}$] on level 0 (centralized).
 
@@ -56,7 +56,7 @@ Constructs the dual B-spline [$N_{d,\tilde{d}}$] on level 0 (centralized).
 ==subsection: point evaluation (given: x, level, translation)==
 ==coderef==
 T
-operator()(T x, int j, int k) const;
+operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 ====
 Evaluates the dual B-spline on level [j] with translation [k] at [x].
 
@@ -65,26 +65,26 @@ Evaluates the dual B-spline on level [j] with translation [k] at [x].
 ==subsection: The support of the B-spline (given: level, translation)==
 ==coderef==
 Support<T>
-support(int j, int k) const;
+support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 ====
 Returns the support of the B-spline on level [j] with translation [k].
 
 
 ==section: Public Member Variables==
 ==code.cc==
-const int d, d_, mu;
+const FLENS_DEFAULT_INDEXTYPE d, d_, mu;
 const DenseVector<Array<T> > a_;
 ====
 
 ==subsection: the order of the B-spline  (d)==
 ==code.cc==
-const int d, d_;
+const FLENS_DEFAULT_INDEXTYPE d, d_;
 ====
 [d] and [d_] select the dual B-spline. Notice that [d] and [d_] are constant during the lifetime of the object.
 
 ==subsection: the "shift from symmetry"  (mu)==
 ==code.cc==
-const int mu;
+const FLENS_DEFAULT_INDEXTYPE mu;
 ====
 We use [cardinal centralized B-splines] i.e. they are symmetric around [$x=0$] for even [d] and around [$x=\frac{1}{2}$] for odd [d]. Thus we define [$\mu(d) := d\ \text{mod}\ 2$] and yield [${}_{d,\tilde{d}}\tilde\varphi(x+\mu(d)) = {}_{d,\tilde{d}}\tilde\varphi(-x)$]. We will need this variable [mu] in many cases when we deal with this "shifted symmetry". Since [d] is a constant [mu] is as well.
 

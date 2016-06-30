@@ -64,7 +64,7 @@ operator()(const IndexSet<Index> &indexset, Prec& P)
 
 template <typename T, typename Index, typename RHSType>
 void
-FlexibleCompoundRhs<T, Index,RHSType>::set_active_comp(int i)
+FlexibleCompoundRhs<T, Index,RHSType>::set_active_comp(FLENS_DEFAULT_INDEXTYPE i)
 {
 	if(i < 0){
 		active_comp.resize(rhsvec.size());
@@ -82,7 +82,7 @@ FlexibleCompoundRhs<T, Index,RHSType>::set_active_comp(int i)
 
 template <typename T, typename Index, typename RHSType>
 const RHSType&
-FlexibleCompoundRhs<T, Index,RHSType>::get_comp(int i) const
+FlexibleCompoundRhs<T, Index,RHSType>::get_comp(FLENS_DEFAULT_INDEXTYPE i) const
 {
     assert(i>=0 && (size_t)i<rhsvec.size());
     return (*rhsvec[i]);

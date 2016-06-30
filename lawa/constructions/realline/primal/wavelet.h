@@ -39,7 +39,7 @@ struct Wavelet<_T,Primal,R,CDF>
     static const DomainType Domain = R;
     static const Construction Cons = CDF;
 
-    Wavelet(int _d, int _d_);
+    Wavelet(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_);
 
     Wavelet(const BSpline<T,Primal,R,CDF> &_phi,
             const BSpline<T,Dual,R,CDF> &_phi_);
@@ -47,29 +47,29 @@ struct Wavelet<_T,Primal,R,CDF>
     Wavelet(const Basis<T,Primal,R,CDF> &_basis);
 
     T
-    operator()(T x, int j, long k, unsigned short deriv) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
 
     Support<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     flens::DenseVector<flens::Array<T> >
-    singularSupport(int j, long k) const;
+    singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     flens::DenseVector<flens::Array<T> >
-    optim_singularSupport(int j, long k) const;
+    optim_singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     T
-    tic(int j) const;
+    tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
     const flens::DenseVector<flens::Array<T> > &
     mask() const;
 
     static flens::DenseVector<flens::Array<T> >
-    mask(int d, int d_);
+    mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_);
 
-    const int d, d_, mu;
-    const int l1, l2;
-    const int vanishingMoments;
+    const FLENS_DEFAULT_INDEXTYPE d, d_, mu;
+    const FLENS_DEFAULT_INDEXTYPE l1, l2;
+    const FLENS_DEFAULT_INDEXTYPE vanishingMoments;
     const flens::DenseVector<flens::Array<T> > b;
     const BSpline<T,Primal,R,CDF> phi;
     const BSpline<T,Dual,R,CDF> phi_;

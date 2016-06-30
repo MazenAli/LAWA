@@ -29,7 +29,7 @@ template <typename I>
 void
 densify(cxxblas::Transpose trans, const flens::Matrix<I> &A,
         flens::GeMatrix<flens::FullStorage<typename I::ElementType, cxxblas::ColMajor> > &D,
-        int firstRow=1, int firstCol=1);
+        FLENS_DEFAULT_INDEXTYPE firstRow=1, FLENS_DEFAULT_INDEXTYPE firstCol=1);
 
 } // namespace lawa
 

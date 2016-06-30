@@ -39,561 +39,561 @@ namespace flens {
 extern "C" {
 
     void
-    dpotrf_(char *uplo, int *n, double *ab, int *ldab, int *info);
+    dpotrf_(char *uplo, FLENS_DEFAULT_INDEXTYPE *n, double *ab, FLENS_DEFAULT_INDEXTYPE *ldab, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgetrf_(int *m, int *n, float *a, int *lda, int *ipiv, int *info);
+    sgetrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *ipiv, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgetrf_(int *m, int *n, double *a, int *lda, int *ipiv, int *info);
+    dgetrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *ipiv, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgetrf_(int *m, int *n, complex<float> *a, int *lda, int *ipiv, int *info);
+    cgetrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *ipiv, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgetrf_(int *m, int *n, complex<double> *a, int *lda, int *ipiv, int *info);
+    zgetrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *ipiv, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgbtrf_(int *m, int *n, int *kl, int *ku,
-            float *ab, int *ldab, int *ipiv, int *info);
+    sgbtrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku,
+            float *ab, FLENS_DEFAULT_INDEXTYPE *ldab, FLENS_DEFAULT_INDEXTYPE *ipiv, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgbtrf_(int *m, int *n, int *kl, int *ku,
-            double *ab, int *ldab, int *ipiv, int *info);
+    dgbtrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku,
+            double *ab, FLENS_DEFAULT_INDEXTYPE *ldab, FLENS_DEFAULT_INDEXTYPE *ipiv, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgetri_(int *n, float *a, int *lda, const int *ipiv, float *work,
-            int *lwork, int *info);
+    sgetri_(FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda, const FLENS_DEFAULT_INDEXTYPE *ipiv, float *work,
+            FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgetri_(int *n, double *a, int *lda, const int *ipiv, double *work,
-            int *lwork, int *info);
+    dgetri_(FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, const FLENS_DEFAULT_INDEXTYPE *ipiv, double *work,
+            FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgetri_(int *n, complex<float> *a, int *lda, const int *ipiv,
-            complex<float> *work, int *lwork, int *info);
+    cgetri_(FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda, const FLENS_DEFAULT_INDEXTYPE *ipiv,
+            complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgetri_(int *n, complex<double> *a, int *lda, const int *ipiv,
-            complex<double> *work, int *lwork, int *info);
+    zgetri_(FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda, const FLENS_DEFAULT_INDEXTYPE *ipiv,
+            complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgetrs_(char *trans, int *n, int *nrhs, const float *a, int *lda,
-            const int *ipiv, float *b, int *ldb, int *info);
+    sgetrs_(char *trans, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, const float *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            const FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgetrs_(char *trans, int *n, int *nrhs, const double *a, int *lda,
-            const int *ipiv, double *b, int *ldb, int *info);
+    dgetrs_(char *trans, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, const double *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            const FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgbtrs_(char *trans, int *n, int *kl, int *ku, int *nrhs, const float *ab,
-            int *ldab, const int *ipiv, float *b, int *ldb, int *info);
+    sgbtrs_(char *trans, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku, FLENS_DEFAULT_INDEXTYPE *nrhs, const float *ab,
+            FLENS_DEFAULT_INDEXTYPE *ldab, const FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgbtrs_(char *trans, int *n, int *kl, int *ku, int *nrhs, const double *ab,
-            int *ldab, const int *ipiv, double *b, int *ldb, int *info);
+    dgbtrs_(char *trans, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku, FLENS_DEFAULT_INDEXTYPE *nrhs, const double *ab,
+            FLENS_DEFAULT_INDEXTYPE *ldab, const FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgesv_(int *n, int *nrhs, float *a, int *lda,
-           int *ipiv, float *b, int *ldb, int *info);
+    sgesv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, float *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgesv_(int *n, int *nrhs, double *a, int *lda,
-           int *ipiv, double *b, int *ldb, int *info);
+    dgesv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, double *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgesv_(int *n, int *nrhs, complex<float> *a, int *lda,
-           int *ipiv, complex<float> *b, int *ldb, int *info);
+    cgesv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           FLENS_DEFAULT_INDEXTYPE *ipiv, complex<float> *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgesv_(int *n, int *nrhs, complex<double> *a, int *lda,
-           int *ipiv, complex<double> *b, int *ldb, int *info);
+    zgesv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           FLENS_DEFAULT_INDEXTYPE *ipiv, complex<double> *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgbsv_(int *n, int *kl, int *ku, int *nrhs, float *ab, int *ldab, int *ipiv,
-           float *b, int *ldb, int *info);
+    sgbsv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku, FLENS_DEFAULT_INDEXTYPE *nrhs, float *ab, FLENS_DEFAULT_INDEXTYPE *ldab, FLENS_DEFAULT_INDEXTYPE *ipiv,
+           float *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgbsv_(int *n, int *kl, int *ku, int *nrhs, double *ab, int *ldab,
-           int *ipiv, double *b, int *ldb, int *info);
+    dgbsv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku, FLENS_DEFAULT_INDEXTYPE *nrhs, double *ab, FLENS_DEFAULT_INDEXTYPE *ldab,
+           FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgbsv_(int *n, int *kl, int *ku, int *nrhs, complex<float> *ab,
-           int *ldab, int *ipiv, complex<float> *b, int *ldb, int *info);
+    cgbsv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku, FLENS_DEFAULT_INDEXTYPE *nrhs, complex<float> *ab,
+           FLENS_DEFAULT_INDEXTYPE *ldab, FLENS_DEFAULT_INDEXTYPE *ipiv, complex<float> *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgbsv_(int *n, int *kl, int *ku, int *nrhs, complex<double> *ab,
-           int *ldab, int *ipiv, complex<double> *b, int *ldb, int *info);
+    zgbsv_(FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kl, FLENS_DEFAULT_INDEXTYPE *ku, FLENS_DEFAULT_INDEXTYPE *nrhs, complex<double> *ab,
+           FLENS_DEFAULT_INDEXTYPE *ldab, FLENS_DEFAULT_INDEXTYPE *ipiv, complex<double> *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    strtrs_(char *uplo, char *trans, char *diag, int *n, int *nrhs,
-            const float *a, int *lda, float *b, int *ldb, int *info);
+    strtrs_(char *uplo, char *trans, char *diag, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs,
+            const float *a, FLENS_DEFAULT_INDEXTYPE *lda, float *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dtrtrs_(char *uplo, char *trans, char *diag, int *n, int *nrhs,
-            const double *a, int *lda, double *b, int *ldb, int *info);
+    dtrtrs_(char *uplo, char *trans, char *diag, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs,
+            const double *a, FLENS_DEFAULT_INDEXTYPE *lda, double *b, FLENS_DEFAULT_INDEXTYPE *ldb, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgeqrf_(int *m, int *n, float *a, int *lda, float *tau,
-            float *work, int *lwork, int *info);
+    sgeqrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda, float *tau,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgeqrf_(int *m, int *n, double *a, int *lda, double *tau,
-            double *work, int *lwork, int *info);
+    dgeqrf_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, double *tau,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgeqp3_(int *m, int *n, float *a, int *lda, int* jpvt, float *tau,
-            float *work, int *lwork, int *info);
+    sgeqp3_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE* jpvt, float *tau,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgeqp3_(int *m, int *n, double *a, int *lda, int* jpvt, double *tau,
-            double *work, int *lwork, int *info);
+    dgeqp3_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE* jpvt, double *tau,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sorgqr_(int *m, int *n, int *k, float *a, int *lda, const float *tau,
-            float *work, int *lwork, int *info);
+    sorgqr_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *k, float *a, FLENS_DEFAULT_INDEXTYPE *lda, const float *tau,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dorgqr_(int *m, int *n, int *k, double *a, int *lda, const double *tau,
-            double *work, int *lwork, int *info);
+    dorgqr_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *k, double *a, FLENS_DEFAULT_INDEXTYPE *lda, const double *tau,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sormqr_(char *side, char *trans, int *m, int *n, int *k,
-            const float *a, int *lda, const float *tau, float *c, int *ldc,
-            float *work, int *lwork, int *info);
+    sormqr_(char *side, char *trans, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *k,
+            const float *a, FLENS_DEFAULT_INDEXTYPE *lda, const float *tau, float *c, FLENS_DEFAULT_INDEXTYPE *ldc,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dormqr_(char *side, char *trans, int *m, int *n, int *k,
-            const double *a, int *lda, const double *tau, double *c, int *ldc,
-            double *work, int *lwork, int *info);
+    dormqr_(char *side, char *trans, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *k,
+            const double *a, FLENS_DEFAULT_INDEXTYPE *lda, const double *tau, double *c, FLENS_DEFAULT_INDEXTYPE *ldc,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgels_(char *trans, int *m, int *n, int *nrhs, float *a, int *lda,
-           float *b, int *ldb, float *work, int *lwork, int *info);
+    sgels_(char *trans, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, float *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           float *b, FLENS_DEFAULT_INDEXTYPE *ldb, float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgels_(char *trans, int *m, int *n, int *nrhs, double *a, int *lda,
-           double *b, int *ldb, double *work, int *lwork, int *info);
+    dgels_(char *trans, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, double *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           double *b, FLENS_DEFAULT_INDEXTYPE *ldb, double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgels_(char *trans, int *m, int *n, int *nrhs, complex<float> *a,
-           int *lda, complex<float> *b, int *ldb,
-           complex<float> *work, int *lwork, int *info);
+    cgels_(char *trans, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, complex<float> *a,
+           FLENS_DEFAULT_INDEXTYPE *lda, complex<float> *b, FLENS_DEFAULT_INDEXTYPE *ldb,
+           complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgels_(char *trans, int *m, int *n, int *nrhs, complex<double> *a,
-           int *lda, complex<double> *b, int *ldb,
-           complex<double> *work, int *lwork, int *info);
+    zgels_(char *trans, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs, complex<double> *a,
+           FLENS_DEFAULT_INDEXTYPE *lda, complex<double> *b, FLENS_DEFAULT_INDEXTYPE *ldb,
+           complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgelss_(int *m, int *n, int *nrhs,
-            float *a, int *lda, float *b, int *ldb,
-            float *s, float *rcond, int *rank,
-            float *work, int *lwork, int *info);
+    sgelss_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs,
+            float *a, FLENS_DEFAULT_INDEXTYPE *lda, float *b, FLENS_DEFAULT_INDEXTYPE *ldb,
+            float *s, float *rcond, FLENS_DEFAULT_INDEXTYPE *rank,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgelss_(int *m, int *n, int *nrhs,
-            double *a, int *lda, double *b, int *ldb,
-            double *s, double *rcond, int *rank,
-            double *work, int *lwork, int *info);
+    dgelss_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs,
+            double *a, FLENS_DEFAULT_INDEXTYPE *lda, double *b, FLENS_DEFAULT_INDEXTYPE *ldb,
+            double *s, double *rcond, FLENS_DEFAULT_INDEXTYPE *rank,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgelss_(int *m, int *n, int *nrhs,
-            complex<float> *a, int *lda,
-            complex<float> *b, int *ldb,
-            complex<float> *s, complex<float> *rcond, int *rank,
-            complex<float> *work, int *lwork, int *info);
+    cgelss_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs,
+            complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            complex<float> *b, FLENS_DEFAULT_INDEXTYPE *ldb,
+            complex<float> *s, complex<float> *rcond, FLENS_DEFAULT_INDEXTYPE *rank,
+            complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgelss_(int *m, int *n, int *nrhs,
-            complex<double> *a, int *lda,
-            complex<double> *b, int *ldb,
-            complex<double> *s, complex<double> *rcond, int *rank,
-            complex<double> *work, int *lwork, int *info);
+    zgelss_(FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *nrhs,
+            complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            complex<double> *b, FLENS_DEFAULT_INDEXTYPE *ldb,
+            complex<double> *s, complex<double> *rcond, FLENS_DEFAULT_INDEXTYPE *rank,
+            complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     sgees_(char * jobvs, char * sort, sgees_select *select,
-           int *n, float *a, int *lda, int *sdim, float *wr, float *wi,
-           float *vs, int *ldvs, float *work, int *lwork, int *bwork,
-           int *info);
+           FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *sdim, float *wr, float *wi,
+           float *vs, FLENS_DEFAULT_INDEXTYPE *ldvs, float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *bwork,
+           FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     dgees_(char * jobvs, char * sort, dgees_select *select,
-           int *n, double *a, int *lda, int *sdim, double *wr, double *wi,
-           double *vs, int *ldvs, double *work, int *lwork, int *bwork,
-           int *info);
+           FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *sdim, double *wr, double *wi,
+           double *vs, FLENS_DEFAULT_INDEXTYPE *ldvs, double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *bwork,
+           FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     cgees_(char * jobvs, char * sort, cgees_select *select,
-           int *n, complex<float> *a, int *lda, int *sdim, complex<float> *w,
-           complex<float> *vs, int *ldvs,
-           complex<float> *work, int *lwork, float *rwork, int *bwork,
-           int *info);
+           FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *sdim, complex<float> *w,
+           complex<float> *vs, FLENS_DEFAULT_INDEXTYPE *ldvs,
+           complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, float *rwork, FLENS_DEFAULT_INDEXTYPE *bwork,
+           FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     zgees_(char * jobvs, char * sort, zgees_select *select,
-           int *n, complex<double> *a, int *lda, int *sdim, complex<double> *w,
-           complex<double> *vs, int *ldvs,
-           complex<double> *work, int *lwork, double *rwork, int *bwork,
-           int *info);
+           FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda, FLENS_DEFAULT_INDEXTYPE *sdim, complex<double> *w,
+           complex<double> *vs, FLENS_DEFAULT_INDEXTYPE *ldvs,
+           complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, double *rwork, FLENS_DEFAULT_INDEXTYPE *bwork,
+           FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgeev_(char *jobvl, char *jobvr, int *n, float *a, int *lda,
+    sgeev_(char *jobvl, char *jobvr, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda,
            float *wr, float *wi,
-           float *vl, int *ldvl,
-           float *vr, int *ldvr,
-           float *work, int *lwork, int *info);
+           float *vl, FLENS_DEFAULT_INDEXTYPE *ldvl,
+           float *vr, FLENS_DEFAULT_INDEXTYPE *ldvr,
+           float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgeev_(char *jobvl, char *jobvr, int *n, double *a, int *lda,
+    dgeev_(char *jobvl, char *jobvr, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda,
            double *wr, double *wi,
-           double *vl, int *ldvl,
-           double *vr, int *ldvr,
-           double *work, int *lwork, int *info);
+           double *vl, FLENS_DEFAULT_INDEXTYPE *ldvl,
+           double *vr, FLENS_DEFAULT_INDEXTYPE *ldvr,
+           double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cgeev_(char *jobvl, char *jobvr, int *n, complex<float> *a, int *lda,
+    cgeev_(char *jobvl, char *jobvr, FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda,
            complex<float> *w,
-           complex<float> *vl, int *ldvl,
-           complex<float> *vr, int *ldvr,
-           complex<float> *work,int *lwork,float *rwork,int *info);
+           complex<float> *vl, FLENS_DEFAULT_INDEXTYPE *ldvl,
+           complex<float> *vr, FLENS_DEFAULT_INDEXTYPE *ldvr,
+           complex<float> *work,FLENS_DEFAULT_INDEXTYPE *lwork,float *rwork,FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zgeev_(char *jobvl, char *jobvr, int *n, complex<double> *a, int *lda,
+    zgeev_(char *jobvl, char *jobvr, FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda,
            complex<double> *w,
-           complex<double> *vl, int *ldvl,
-           complex<double> *vr, int *ldvr,
-           complex<double> *work,int *lwork,double *rwork,int *info);
+           complex<double> *vl, FLENS_DEFAULT_INDEXTYPE *ldvl,
+           complex<double> *vr, FLENS_DEFAULT_INDEXTYPE *ldvr,
+           complex<double> *work,FLENS_DEFAULT_INDEXTYPE *lwork,double *rwork,FLENS_DEFAULT_INDEXTYPE *info);
            
     void
-    dggev_(char *jobvl, char *jobvr, int *n, double *a, int *lda, 
-           double *b, int *ldb,
+    dggev_(char *jobvl, char *jobvr, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, 
+           double *b, FLENS_DEFAULT_INDEXTYPE *ldb,
            double *wr, double *wi, 
            double *beta, 
-           double *vl, int *ldvl, 
-           double *vr, int *ldvr,
-           double *work, int *lwork, int *info);
+           double *vl, FLENS_DEFAULT_INDEXTYPE *ldvl, 
+           double *vr, FLENS_DEFAULT_INDEXTYPE *ldvr,
+           double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    ssyev_(char *jobz, char *uplo, int *n, float *a, int *lda,
-           float *w, float *work, int *lwork, int *info);
+    ssyev_(char *jobz, char *uplo, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           float *w, float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dsyev_(char *jobz, char *uplo, int *n, double *a, int *lda,
-           double *w, double *work, int *lwork, int *info);
+    dsyev_(char *jobz, char *uplo, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           double *w, double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    ssbev_(char *jobz, char *upLo, int *n, int *kd, float *ab, int *ldab,
-           float *w, float *z, int *ldz, float *work, int *info);
+    ssbev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kd, float *ab, FLENS_DEFAULT_INDEXTYPE *ldab,
+           float *w, float *z, FLENS_DEFAULT_INDEXTYPE *ldz, float *work, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dsbev_(char *jobz, char *upLo, int *n, int *kd, double *ab, int *ldab,
-           double *w, double *z, int *ldz, double *work, int *info);
+    dsbev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kd, double *ab, FLENS_DEFAULT_INDEXTYPE *ldab,
+           double *w, double *z, FLENS_DEFAULT_INDEXTYPE *ldz, double *work, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sspev_(char *jobz, char *upLo, int *n, float *ap, float *w,
-           float *z, int *ldz, float *work, int *info);
+    sspev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, float *ap, float *w,
+           float *z, FLENS_DEFAULT_INDEXTYPE *ldz, float *work, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dspev_(char *jobz, char *upLo, int *n, double *ap, double *w,
-           double *z, int *ldz, double *work, int *info);
+    dspev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, double *ap, double *w,
+           double *z, FLENS_DEFAULT_INDEXTYPE *ldz, double *work, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    cheev_(char *jobz, char *uplo, int *n, complex<float> *a, int *lda,
-           float *w, complex<float> *work, int *lwork, float *rwork,
-           int *info);
+    cheev_(char *jobz, char *uplo, FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           float *w, complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, float *rwork,
+           FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    zheev_(char *jobz, char *uplo, int *n, complex<double> *a, int *lda,
-           double *w, complex<double> *work, int *lwork, double *rwork,
-           int *info);
+    zheev_(char *jobz, char *uplo, FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda,
+           double *w, complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, double *rwork,
+           FLENS_DEFAULT_INDEXTYPE *info);
 
-    int
-    chbev_(char *jobz, char *upLo, int *n, int *kd, complex<float> *ab,
-           int *ldab, float *w, complex<float> *Z, int *ldz,
-           complex<float> *work, float *rwork, int *info);
+    FLENS_DEFAULT_INDEXTYPE
+    chbev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kd, complex<float> *ab,
+           FLENS_DEFAULT_INDEXTYPE *ldab, float *w, complex<float> *Z, FLENS_DEFAULT_INDEXTYPE *ldz,
+           complex<float> *work, float *rwork, FLENS_DEFAULT_INDEXTYPE *info);
 
-    int
-    zhbev_(char *jobz, char *upLo, int *n, int *kd, complex<double> *ab,
-           int *ldab, double *w, complex<double> *Z, int *ldz,
-           complex<double> *work, double *rwork, int *info);
+    FLENS_DEFAULT_INDEXTYPE
+    zhbev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, FLENS_DEFAULT_INDEXTYPE *kd, complex<double> *ab,
+           FLENS_DEFAULT_INDEXTYPE *ldab, double *w, complex<double> *Z, FLENS_DEFAULT_INDEXTYPE *ldz,
+           complex<double> *work, double *rwork, FLENS_DEFAULT_INDEXTYPE *info);
 
-    int
-    chpev_(char *jobz, char *upLo, int *n, complex<float> *ap,
-           float *w, complex<float> *Z, int *ldz,
-           complex<float> *work, float *rwork, int *info);
+    FLENS_DEFAULT_INDEXTYPE
+    chpev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, complex<float> *ap,
+           float *w, complex<float> *Z, FLENS_DEFAULT_INDEXTYPE *ldz,
+           complex<float> *work, float *rwork, FLENS_DEFAULT_INDEXTYPE *info);
 
-    int
-    zhpev_(char *jobz, char *upLo, int *n, complex<double> *ap,
-           double *w, complex<double> *Z, int *ldz,
-           complex<double> *work, double *rwork, int *info);
-
-    void
-    sgesvd_(char *jobu, char *jobvt, int *m, int *n, float *a, int *lda,
-            float *s, float *u, int *ldu, float *vt, int *ldvt,
-            float *work, int *lwork, int *info);
+    FLENS_DEFAULT_INDEXTYPE
+    zhpev_(char *jobz, char *upLo, FLENS_DEFAULT_INDEXTYPE *n, complex<double> *ap,
+           double *w, complex<double> *Z, FLENS_DEFAULT_INDEXTYPE *ldz,
+           complex<double> *work, double *rwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgesvd_(char *jobu, char *jobvt, int *m, int *n, double *a, int *lda,
-            double *s, double *u, int *ldu, double *vt, int *ldvt,
-            double *work, int *lwork, int *info);
+    sgesvd_(char *jobu, char *jobvt, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            float *s, float *u, FLENS_DEFAULT_INDEXTYPE *ldu, float *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
+
+    void
+    dgesvd_(char *jobu, char *jobvt, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            double *s, double *u, FLENS_DEFAULT_INDEXTYPE *ldu, double *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     cgesvd_(char *jobu, char *jobvt,
-            int *m, int *n, complex<float> *a, int *lda, float *s,
-            complex<float> *u, int *ldu,
-            complex<float> *vt, int *ldvt,
-            complex<float> *work, int *lwork, float *rwork, int *info);
+            FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda, float *s,
+            complex<float> *u, FLENS_DEFAULT_INDEXTYPE *ldu,
+            complex<float> *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, float *rwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     zgesvd_(char *jobu, char *jobvt,
-            int *m, int *n, complex<double> *a, int *lda, double *s,
-            complex<double> *u, int *ldu,
-            complex<double> *vt, int *ldvt,
-            complex<double> *work, int *lwork, double *rwork, int *info);
+            FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda, double *s,
+            complex<double> *u, FLENS_DEFAULT_INDEXTYPE *ldu,
+            complex<double> *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, double *rwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    sgesdd_(char *jobz, int *m, int *n, float *a, int *lda,
-            float *s, float *u, int *ldu, float *vt, int *ldvt,
-            float *work, int *lwork, int *iwork, int *info);
+    sgesdd_(char *jobz, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, float *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            float *s, float *u, FLENS_DEFAULT_INDEXTYPE *ldu, float *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            float *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *iwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgesdd_(char *jobz, int *m, int *n, double *a, int *lda,
-            double *s, double *u, int *ldu, double *vt, int *ldvt,
-            double *work, int *lwork, int *iwork, int *info);
+    dgesdd_(char *jobz, FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda,
+            double *s, double *u, FLENS_DEFAULT_INDEXTYPE *ldu, double *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            double *work, FLENS_DEFAULT_INDEXTYPE *lwork, FLENS_DEFAULT_INDEXTYPE *iwork, FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     cgesdd_(char *jobz,
-            int *m, int *n, complex<float> *a, int *lda, float *s,
-            complex<float> *u, int *ldu,
-            complex<float> *vt, int *ldvt,
-            complex<float> *work, int *lwork, float *rwork, int *iwork,
-            int *info);
+            FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE *lda, float *s,
+            complex<float> *u, FLENS_DEFAULT_INDEXTYPE *ldu,
+            complex<float> *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            complex<float> *work, FLENS_DEFAULT_INDEXTYPE *lwork, float *rwork, FLENS_DEFAULT_INDEXTYPE *iwork,
+            FLENS_DEFAULT_INDEXTYPE *info);
 
     void
     zgesdd_(char *jobzu,
-            int *m, int *n, complex<double> *a, int *lda, double *s,
-            complex<double> *u, int *ldu,
-            complex<double> *vt, int *ldvt,
-            complex<double> *work, int *lwork, double *rwork, int *iwork,
-            int *info);
+            FLENS_DEFAULT_INDEXTYPE *m, FLENS_DEFAULT_INDEXTYPE *n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE *lda, double *s,
+            complex<double> *u, FLENS_DEFAULT_INDEXTYPE *ldu,
+            complex<double> *vt, FLENS_DEFAULT_INDEXTYPE *ldvt,
+            complex<double> *work, FLENS_DEFAULT_INDEXTYPE *lwork, double *rwork, FLENS_DEFAULT_INDEXTYPE *iwork,
+            FLENS_DEFAULT_INDEXTYPE *info);
 
     void
-    dgecon_(char *norm, int *n, double *a, int *lda, double *anorm,
-            double *rcond, double *work, int *iwork, int *info);
+    dgecon_(char *norm, FLENS_DEFAULT_INDEXTYPE *n, double *a, FLENS_DEFAULT_INDEXTYPE *lda, double *anorm,
+            double *rcond, double *work, FLENS_DEFAULT_INDEXTYPE *iwork, FLENS_DEFAULT_INDEXTYPE *info);
 }
 
-int
-potrf(cxxblas::StorageUpLo upLo, int n, double *a, int lda)
+FLENS_DEFAULT_INDEXTYPE
+potrf(cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
     dpotrf_(&_upLo,&n,a,&lda,&info);
     return info;
 }
 
-int
-getrf(int m, int n, float *a, int lda, int *ipiv)
+FLENS_DEFAULT_INDEXTYPE
+getrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgetrf_(&m, &n, a, &lda, ipiv, &info);
     return info;
 }
 
-int
-getrf(int m, int n, double *a, int lda, int *ipiv)
+FLENS_DEFAULT_INDEXTYPE
+getrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgetrf_(&m, &n, a, &lda, ipiv, &info);
     return info;
 }
 
-int
-getrf(int m, int n, complex<float> *a, int lda, int *ipiv)
+FLENS_DEFAULT_INDEXTYPE
+getrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgetrf_(&m, &n, a, &lda, ipiv, &info);
     return info;
 }
 
-int
-getrf(int m, int n, complex<double> *a, int lda, int *ipiv)
+FLENS_DEFAULT_INDEXTYPE
+getrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgetrf_(&m, &n, a, &lda, ipiv, &info);
     return info;
 }
 
-int
-gbtrf(int m, int n, int kl, int ku, float *ab, int ldab, int *ipiv)
+FLENS_DEFAULT_INDEXTYPE
+gbtrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, float *ab, FLENS_DEFAULT_INDEXTYPE ldab, FLENS_DEFAULT_INDEXTYPE *ipiv)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgbtrf_(&m, &n, &kl, &ku, ab, &ldab, ipiv, &info);
     return info;
 }
 
-int
-gbtrf(int m, int n, int kl, int ku, double *ab, int ldab, int *ipiv)
+FLENS_DEFAULT_INDEXTYPE
+gbtrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, double *ab, FLENS_DEFAULT_INDEXTYPE ldab, FLENS_DEFAULT_INDEXTYPE *ipiv)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgbtrf_(&m, &n, &kl, &ku, ab, &ldab, ipiv, &info);
     return info;
 }
 
-int
-getri(int n, float *a, int lda, const int *ipiv,
-      float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+getri(FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda, const FLENS_DEFAULT_INDEXTYPE *ipiv,
+      float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgetri_(&n, a, &lda, ipiv, work, &lwork, &info);
     return info;
 }
 
-int
-getri(int n, double *a, int lda, const int *ipiv,
-      double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+getri(FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda, const FLENS_DEFAULT_INDEXTYPE *ipiv,
+      double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgetri_(&n, a, &lda, ipiv, work, &lwork, &info);
     return info;
 }
 
-int
-getri(int n, complex<float> *a, int lda, const int *ipiv,
-      complex<float> *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+getri(FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda, const FLENS_DEFAULT_INDEXTYPE *ipiv,
+      complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgetri_(&n, a, &lda, ipiv, work, &lwork, &info);
     return info;
 }
 
 
-int
-getri(int n, complex<double> *a, int lda, const int *ipiv,
-      complex<double> *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+getri(FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda, const FLENS_DEFAULT_INDEXTYPE *ipiv,
+      complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgetri_(&n, a, &lda, ipiv, work, &lwork, &info);
     return info;
 }
 
-int
-getrs(cxxblas::Transpose trans, int n, int nrhs, const float *a, int lda,
-      const int *ipiv, float *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+getrs(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, const float *a, FLENS_DEFAULT_INDEXTYPE lda,
+      const FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
     sgetrs_(&_trans, &n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-getrs(cxxblas::Transpose trans, int n, int nrhs, const double *a, int lda,
-      const int *ipiv, double *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+getrs(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, const double *a, FLENS_DEFAULT_INDEXTYPE lda,
+      const FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
     dgetrs_(&_trans, &n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gbtrs(cxxblas::Transpose trans, int n, int kl, int ku, int nrhs,
-      const float *ab, int ldab, const int *ipiv, float *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gbtrs(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, FLENS_DEFAULT_INDEXTYPE nrhs,
+      const float *ab, FLENS_DEFAULT_INDEXTYPE ldab, const FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
     sgbtrs_(&_trans, &n, &kl, &ku, &nrhs, ab, &ldab, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gbtrs(cxxblas::Transpose trans, int n, int kl, int ku, int nrhs,
-      const double *ab, int ldab, const int *ipiv, double *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gbtrs(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, FLENS_DEFAULT_INDEXTYPE nrhs,
+      const double *ab, FLENS_DEFAULT_INDEXTYPE ldab, const FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
     dgbtrs_(&_trans, &n, &kl, &ku, &nrhs, ab, &ldab, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gesv(int n, int nrhs, float *a, int lda, int *ipiv, float *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gesv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, float *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gesv(int n, int nrhs, double *a, int lda, int *ipiv, double *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gesv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, double *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gesv(int n, int nrhs, complex<float> *a, int lda, int *ipiv,
-     complex<float> *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gesv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv,
+     complex<float> *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gesv(int n, int nrhs, complex<double> *a, int lda, int *ipiv,
-     complex<double> *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gesv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *ipiv,
+     complex<double> *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gbsv(int n, int kl, int ku, int nrhs, float *ab, int ldab,
-     int *ipiv, float *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gbsv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, FLENS_DEFAULT_INDEXTYPE nrhs, float *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     FLENS_DEFAULT_INDEXTYPE *ipiv, float *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgbsv_(&n, &kl, &ku, &nrhs, ab, &ldab, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gbsv(int n, int kl, int ku, int nrhs, double *ab, int ldab,
-     int *ipiv, double *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gbsv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, FLENS_DEFAULT_INDEXTYPE nrhs, double *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     FLENS_DEFAULT_INDEXTYPE *ipiv, double *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgbsv_(&n, &kl, &ku, &nrhs, ab, &ldab, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gbsv(int n, int kl, int ku, int nrhs, complex<float> *ab, int ldab,
-     int *ipiv, complex<float> *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gbsv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, FLENS_DEFAULT_INDEXTYPE nrhs, complex<float> *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     FLENS_DEFAULT_INDEXTYPE *ipiv, complex<float> *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgbsv_(&n, &kl, &ku, &nrhs, ab, &ldab, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-gbsv(int n, int kl, int ku, int nrhs, complex<double> *ab, int ldab,
-     int *ipiv, complex<double> *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+gbsv(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kl, FLENS_DEFAULT_INDEXTYPE ku, FLENS_DEFAULT_INDEXTYPE nrhs, complex<double> *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     FLENS_DEFAULT_INDEXTYPE *ipiv, complex<double> *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgbsv_(&n, &kl, &ku, &nrhs, ab, &ldab, ipiv, b, &ldb, &info);
     return info;
 }
 
-int
-trtrs(cxxblas::StorageUpLo upLo, cxxblas::Transpose trans, cxxblas::Diag diag, int n, int nrhs,
-      const float *a, int lda, float *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+trtrs(cxxblas::StorageUpLo upLo, cxxblas::Transpose trans, cxxblas::Diag diag, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs,
+      const float *a, FLENS_DEFAULT_INDEXTYPE lda, float *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
     char _diag = (diag==cxxblas::Unit) ? 'U' : 'N';
@@ -602,11 +602,11 @@ trtrs(cxxblas::StorageUpLo upLo, cxxblas::Transpose trans, cxxblas::Diag diag, i
     return info;
 }
 
-int
-trtrs(cxxblas::StorageUpLo upLo, cxxblas::Transpose trans, cxxblas::Diag diag, int n, int nrhs,
-      const double *a, int lda, double *b, int ldb)
+FLENS_DEFAULT_INDEXTYPE
+trtrs(cxxblas::StorageUpLo upLo, cxxblas::Transpose trans, cxxblas::Diag diag, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs,
+      const double *a, FLENS_DEFAULT_INDEXTYPE lda, double *b, FLENS_DEFAULT_INDEXTYPE ldb)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
     char _diag = (diag==cxxblas::Unit) ? 'U' : 'N';
@@ -615,62 +615,62 @@ trtrs(cxxblas::StorageUpLo upLo, cxxblas::Transpose trans, cxxblas::Diag diag, i
     return info;
 }
 
-int
-geqrf(int m, int n, float *a, int lda, float *tau, float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+geqrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda, float *tau, float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgeqrf_(&m, &n, a, &lda, tau, work, &lwork, &info);
     return info;
 }
 
-int
-geqrf(int m, int n, double *a, int lda, double *tau, double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+geqrf(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda, double *tau, double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgeqrf_(&m, &n, a, &lda, tau, work, &lwork, &info);
     return info;
 }
 
-int
-geqp3(int m, int n, float *a, int lda, int *jpvt, float *tau, float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+geqp3(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *jpvt, float *tau, float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgeqp3_(&m, &n, a, &lda, jpvt, tau, work, &lwork, &info);
     return info;
 }
 
-int
-geqp3(int m, int n, double *a, int lda, int *jpvt, double *tau, double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+geqp3(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE *jpvt, double *tau, double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgeqp3_(&m, &n, a, &lda, jpvt, tau, work, &lwork, &info);
     return info;
 }
 
-int
-orgqr(int m, int n, int k, float *a, int lda, const float *tau,
-      float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+orgqr(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, float *a, FLENS_DEFAULT_INDEXTYPE lda, const float *tau,
+      float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sorgqr_(&m, &n, &k, a, &lda, tau, work, &lwork, &info);
     return info;
 }
 
-int
-orgqr(int m, int n, int k, double *a, int lda, const double *tau,
-      double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+orgqr(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, double *a, FLENS_DEFAULT_INDEXTYPE lda, const double *tau,
+      double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dorgqr_(&m, &n, &k, a, &lda, tau, work, &lwork, &info);
     return info;
 }
 
-int
-ormqr(cxxblas::Side side, cxxblas::Transpose trans, int m, int n, int k,
-      const float *a, int lda, const float *tau, float *c, int ldc,
-      float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+ormqr(cxxblas::Side side, cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k,
+      const float *a, FLENS_DEFAULT_INDEXTYPE lda, const float *tau, float *c, FLENS_DEFAULT_INDEXTYPE ldc,
+      float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _side = (side==cxxblas::Left) ? 'L' : 'R';
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
@@ -679,12 +679,12 @@ ormqr(cxxblas::Side side, cxxblas::Transpose trans, int m, int n, int k,
     return info;
 }
 
-int
-ormqr(cxxblas::Side side, cxxblas::Transpose trans, int m, int n, int k,
-      const double *a, int lda, const double *tau, double *c, int ldc,
-      double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+ormqr(cxxblas::Side side, cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k,
+      const double *a, FLENS_DEFAULT_INDEXTYPE lda, const double *tau, double *c, FLENS_DEFAULT_INDEXTYPE ldc,
+      double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _side = (side==cxxblas::Left) ? 'L' : 'R';
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
@@ -693,102 +693,102 @@ ormqr(cxxblas::Side side, cxxblas::Transpose trans, int m, int n, int k,
     return info;
 }
 
-int
-gels(cxxblas::Transpose trans, int m, int n, int nrhs, float *a, int lda,
-     float *b, int ldb, float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gels(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, float *a, FLENS_DEFAULT_INDEXTYPE lda,
+     float *b, FLENS_DEFAULT_INDEXTYPE ldb, float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
     sgels_(&_trans, &m, &n, &nrhs, a, &lda, b, &ldb, work, &lwork, &info);
     return info;
 }
 
-int
-gels(cxxblas::Transpose trans, int m, int n, int nrhs, double *a, int lda,
-     double *b, int ldb, double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gels(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, double *a, FLENS_DEFAULT_INDEXTYPE lda,
+     double *b, FLENS_DEFAULT_INDEXTYPE ldb, double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
     dgels_(&_trans, &m, &n, &nrhs, a, &lda, b, &ldb, work, &lwork, &info);
     return info;
 }
 
-int
-gels(cxxblas::Transpose trans, int m, int n, int nrhs, complex<float> *a, int lda,
-     complex<float> *b, int ldb, complex<float> *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gels(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda,
+     complex<float> *b, FLENS_DEFAULT_INDEXTYPE ldb, complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
     cgels_(&_trans, &m, &n, &nrhs, a, &lda, b, &ldb, work, &lwork, &info);
     return info;
 }
 
-int
-gels(cxxblas::Transpose trans, int m, int n, int nrhs, complex<double> *a, int lda,
-     complex<double> *b, int ldb, complex<double> *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gels(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda,
+     complex<double> *b, FLENS_DEFAULT_INDEXTYPE ldb, complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _trans = (trans==cxxblas::NoTrans) ? 'N' : 'T';
 
     zgels_(&_trans, &m, &n, &nrhs, a, &lda, b, &ldb, work, &lwork, &info);
     return info;
 }
 
-int
-gelss(int m, int n, int nrhs, float *a, int lda, float *b, int ldb,
-     float *s, float rcond, int rank, float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gelss(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, float *a, FLENS_DEFAULT_INDEXTYPE lda, float *b, FLENS_DEFAULT_INDEXTYPE ldb,
+     float *s, float rcond, FLENS_DEFAULT_INDEXTYPE rank, float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgelss_(&m, &n, &nrhs, a, &lda, b, &ldb, s, &rcond, &rank,
             work, &lwork, &info);
     return info;
 }
 
-int
-gelss(int m, int n, int nrhs, double *a, int lda, double *b, int ldb,
-     double *s, double rcond, int rank, double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gelss(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, double *a, FLENS_DEFAULT_INDEXTYPE lda, double *b, FLENS_DEFAULT_INDEXTYPE ldb,
+     double *s, double rcond, FLENS_DEFAULT_INDEXTYPE rank, double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgelss_(&m, &n, &nrhs, a, &lda, b, &ldb, s, &rcond, &rank,
             work, &lwork, &info);
     return info;
 }
 
-int
-gelss(int m, int n, int nrhs, complex<float> *a, int lda,
-      complex<float> *b, int ldb, complex<float> *s,
-      complex<float> rcond, int rank, complex<float> *work,
-      int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gelss(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda,
+      complex<float> *b, FLENS_DEFAULT_INDEXTYPE ldb, complex<float> *s,
+      complex<float> rcond, FLENS_DEFAULT_INDEXTYPE rank, complex<float> *work,
+      FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgelss_(&m, &n, &nrhs, a, &lda, b, &ldb, s, &rcond, &rank,
             work, &lwork, &info);
     return info;
 }
 
-int
-gelss(int m, int n, int nrhs, complex<double> *a, int lda,
-      complex<double> *b, int ldb, complex<double> *s,
-      complex<double> rcond, int rank, complex<double> *work,
-      int lwork)
+FLENS_DEFAULT_INDEXTYPE
+gelss(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE nrhs, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda,
+      complex<double> *b, FLENS_DEFAULT_INDEXTYPE ldb, complex<double> *s,
+      complex<double> rcond, FLENS_DEFAULT_INDEXTYPE rank, complex<double> *work,
+      FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgelss_(&m, &n, &nrhs, a, &lda, b, &ldb, s, &rcond, &rank,
             work, &lwork, &info);
     return info;
 }
 
-int
-geev(bool jobvl, bool jobvr, int n, float *a, int lda,
+FLENS_DEFAULT_INDEXTYPE
+geev(bool jobvl, bool jobvr, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda,
      float *wr, float *wi,
-     float *vl, int ldvl,
-     float *vr, int ldvr,
-     float *work, int lwork)
+     float *vl, FLENS_DEFAULT_INDEXTYPE ldvl,
+     float *vr, FLENS_DEFAULT_INDEXTYPE ldvr,
+     float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvl = (jobvl==true) ? 'V' : 'N';
     char _jobvr = (jobvr==true) ? 'V' : 'N';
 
@@ -798,11 +798,11 @@ geev(bool jobvl, bool jobvr, int n, float *a, int lda,
 }
 
 //- syev
-int
-syev(bool jobz, cxxblas::StorageUpLo upLo, int n, float *a, int lda,
-     float *w, float *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+syev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda,
+     float *w, float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -810,11 +810,11 @@ syev(bool jobz, cxxblas::StorageUpLo upLo, int n, float *a, int lda,
     return info;
 }
 
-int
-syev(bool jobz, cxxblas::StorageUpLo upLo, int n, double *a, int lda,
-     double *w, double *work, int lwork)
+FLENS_DEFAULT_INDEXTYPE
+syev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda,
+     double *w, double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -823,11 +823,11 @@ syev(bool jobz, cxxblas::StorageUpLo upLo, int n, double *a, int lda,
 }
 
 //- sbev
-int
-sbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, float *ab, int ldab,
-     float *w, float *z, int ldz, float *work)
+FLENS_DEFAULT_INDEXTYPE
+sbev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kd, float *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     float *w, float *z, FLENS_DEFAULT_INDEXTYPE ldz, float *work)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -835,11 +835,11 @@ sbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, float *ab, int ldab,
     return info;
 }
 
-int
-sbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, double *ab, int ldab,
-     double *w, double *z, int ldz, double *work)
+FLENS_DEFAULT_INDEXTYPE
+sbev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kd, double *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     double *w, double *z, FLENS_DEFAULT_INDEXTYPE ldz, double *work)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -848,11 +848,11 @@ sbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, double *ab, int ldab,
 }
 
 //- spev
-int
-spev(bool jobz, cxxblas::StorageUpLo upLo, int n, float *ap, float *w,
-     float *z, int ldz, float *work)
+FLENS_DEFAULT_INDEXTYPE
+spev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, float *ap, float *w,
+     float *z, FLENS_DEFAULT_INDEXTYPE ldz, float *work)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -860,11 +860,11 @@ spev(bool jobz, cxxblas::StorageUpLo upLo, int n, float *ap, float *w,
     return info;
 }
 
-int
-spev(bool jobz, cxxblas::StorageUpLo upLo, int n, double *ap, double *w,
-     double *z, int ldz, double *work)
+FLENS_DEFAULT_INDEXTYPE
+spev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, double *ap, double *w,
+     double *z, FLENS_DEFAULT_INDEXTYPE ldz, double *work)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -873,11 +873,11 @@ spev(bool jobz, cxxblas::StorageUpLo upLo, int n, double *ap, double *w,
 }
 
 //- heev
-int
-heev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<float> *a, int lda, float *w,
-     complex<float> *work, int lwork, float *rwork )
+FLENS_DEFAULT_INDEXTYPE
+heev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda, float *w,
+     complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork, float *rwork )
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -886,11 +886,11 @@ heev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<float> *a, int lda, fl
     return info;
 }
 
-int
-heev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<double> *a, int lda, double *w,
-     complex<double> *work, int lwork, double *rwork )
+FLENS_DEFAULT_INDEXTYPE
+heev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda, double *w,
+     complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork, double *rwork )
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -900,12 +900,12 @@ heev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<double> *a, int lda, d
 }
 
 //- hbev
-int
-hbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, complex<float> *ab, int ldab,
-     float *w, complex<float> *Z, int ldz,
+FLENS_DEFAULT_INDEXTYPE
+hbev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kd, complex<float> *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     float *w, complex<float> *Z, FLENS_DEFAULT_INDEXTYPE ldz,
      complex<float> *work, float *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -913,12 +913,12 @@ hbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, complex<float> *ab, in
     return info;
 }
 
-int
-hbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, complex<double> *ab, int ldab,
-     double *w, complex<double> *Z, int ldz,
+FLENS_DEFAULT_INDEXTYPE
+hbev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE kd, complex<double> *ab, FLENS_DEFAULT_INDEXTYPE ldab,
+     double *w, complex<double> *Z, FLENS_DEFAULT_INDEXTYPE ldz,
      complex<double> *work, double *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -927,11 +927,11 @@ hbev(bool jobz, cxxblas::StorageUpLo upLo, int n, int kd, complex<double> *ab, i
 }
 
 //- hpev
-int
-hpev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<float> *ap, float *w,
-     complex<float> *Z, int ldz, complex<float> *work, float *rwork)
+FLENS_DEFAULT_INDEXTYPE
+hpev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, complex<float> *ap, float *w,
+     complex<float> *Z, FLENS_DEFAULT_INDEXTYPE ldz, complex<float> *work, float *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -939,11 +939,11 @@ hpev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<float> *ap, float *w,
     return info;
 }
 
-int
-hpev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<double> *ap, double *w,
-     complex<double> *Z, int ldz, complex<double> *work, double *rwork)
+FLENS_DEFAULT_INDEXTYPE
+hpev(bool jobz, cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE n, complex<double> *ap, double *w,
+     complex<double> *Z, FLENS_DEFAULT_INDEXTYPE ldz, complex<double> *work, double *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobz = (jobz==true) ? 'V' : 'N';
     char _upLo = (upLo==cxxblas::Upper) ? 'U' : 'L';
 
@@ -951,12 +951,12 @@ hpev(bool jobz, cxxblas::StorageUpLo upLo, int n, complex<double> *ap, double *w
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gees(bool jobvs, bool sort, sgees_select *select,
-     int n, float *a, int lda, int &sdim, float *wr, float *wi,
-     float *vs, int ldvs, float *work, int lwork, int *bwork)
+     FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE &sdim, float *wr, float *wi,
+     float *vs, FLENS_DEFAULT_INDEXTYPE ldvs, float *work, FLENS_DEFAULT_INDEXTYPE lwork, FLENS_DEFAULT_INDEXTYPE *bwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvs = (jobvs==true) ? 'V' : 'N';
     char _sort  = (sort==true) ? 'S' : 'N';
 
@@ -966,12 +966,12 @@ gees(bool jobvs, bool sort, sgees_select *select,
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gees(bool jobvs, bool sort, dgees_select *select,
-     int n, double *a, int lda, int &sdim, double *wr, double *wi,
-     double *vs, int ldvs, double *work, int lwork, int *bwork)
+     FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE &sdim, double *wr, double *wi,
+     double *vs, FLENS_DEFAULT_INDEXTYPE ldvs, double *work, FLENS_DEFAULT_INDEXTYPE lwork, FLENS_DEFAULT_INDEXTYPE *bwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvs = (jobvs==true) ? 'V' : 'N';
     char _sort  = (sort==true) ? 'S' : 'N';
 
@@ -981,13 +981,13 @@ gees(bool jobvs, bool sort, dgees_select *select,
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gees(bool jobvs, bool sort, cgees_select *select,
-     int n, complex<float> *a, int lda, int &sdim, complex<float> *w,
-     complex<float> *vs, int ldvs,
-     complex<float> *work, int lwork, float *rwork, int *bwork)
+     FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE &sdim, complex<float> *w,
+     complex<float> *vs, FLENS_DEFAULT_INDEXTYPE ldvs,
+     complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork, float *rwork, FLENS_DEFAULT_INDEXTYPE *bwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvs = (jobvs==true) ? 'V' : 'N';
     char _sort  = (sort==true) ? 'S' : 'N';
 
@@ -997,13 +997,13 @@ gees(bool jobvs, bool sort, cgees_select *select,
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gees(bool jobvs, bool sort, zgees_select *select,
-     int n, complex<double> *a, int lda, int &sdim, complex<double> *w,
-     complex<double> *vs, int ldvs,
-     complex<double> *work, int lwork, double *rwork, int *bwork)
+     FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda, FLENS_DEFAULT_INDEXTYPE &sdim, complex<double> *w,
+     complex<double> *vs, FLENS_DEFAULT_INDEXTYPE ldvs,
+     complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork, double *rwork, FLENS_DEFAULT_INDEXTYPE *bwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvs = (jobvs==true) ? 'V' : 'N';
     char _sort  = (sort==true) ? 'S' : 'N';
 
@@ -1013,14 +1013,14 @@ gees(bool jobvs, bool sort, zgees_select *select,
     return info;
 }
 
-int
-geev(bool jobvl, bool jobvr, int n, double *a, int lda,
+FLENS_DEFAULT_INDEXTYPE
+geev(bool jobvl, bool jobvr, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda,
      double *wr, double *wi,
-     double *vl, int ldvl,
-     double *vr, int ldvr,
-     double *work, int lwork)
+     double *vl, FLENS_DEFAULT_INDEXTYPE ldvl,
+     double *vr, FLENS_DEFAULT_INDEXTYPE ldvr,
+     double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvl = (jobvl==true) ? 'V' : 'N';
     char _jobvr = (jobvr==true) ? 'V' : 'N';
 
@@ -1029,14 +1029,14 @@ geev(bool jobvl, bool jobvr, int n, double *a, int lda,
     return info;
 }
 
-int
-geev(bool jobvl, bool jobvr, int n, complex<float> *a, int lda,
+FLENS_DEFAULT_INDEXTYPE
+geev(bool jobvl, bool jobvr, FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda,
      complex<float> *w,
-     complex<float> *vl, int ldvl,
-     complex<float> *vr, int ldvr,
-     complex<float> *work, int lwork, float *rwork)
+     complex<float> *vl, FLENS_DEFAULT_INDEXTYPE ldvl,
+     complex<float> *vr, FLENS_DEFAULT_INDEXTYPE ldvr,
+     complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork, float *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvl = (jobvl==true) ? 'V' : 'N';
     char _jobvr = (jobvr==true) ? 'V' : 'N';
 
@@ -1045,14 +1045,14 @@ geev(bool jobvl, bool jobvr, int n, complex<float> *a, int lda,
     return info;
 }
 
-int
-geev(bool jobvl, bool jobvr, int n, complex<double> *a, int lda,
+FLENS_DEFAULT_INDEXTYPE
+geev(bool jobvl, bool jobvr, FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda,
      complex<double> *w,
-     complex<double> *vl, int ldvl,
-     complex<double> *vr, int ldvr,
-     complex<double> *work, int lwork, double *rwork)
+     complex<double> *vl, FLENS_DEFAULT_INDEXTYPE ldvl,
+     complex<double> *vr, FLENS_DEFAULT_INDEXTYPE ldvr,
+     complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork, double *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvl = (jobvl==true) ? 'V' : 'N';
     char _jobvr = (jobvr==true) ? 'V' : 'N';
 
@@ -1062,16 +1062,16 @@ geev(bool jobvl, bool jobvr, int n, complex<double> *a, int lda,
 }
 
 //- ggev
-int
-ggev(bool jobvl, bool jobvr, int n, double *a, int lda, 
-     double *b, int ldb,
+FLENS_DEFAULT_INDEXTYPE
+ggev(bool jobvl, bool jobvr, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda, 
+     double *b, FLENS_DEFAULT_INDEXTYPE ldb,
      double *wr, double *wi, 
      double *beta, 
-     double *vl, int ldvl, 
-     double *vr, int ldvr,
-     double *work, int lwork)
+     double *vl, FLENS_DEFAULT_INDEXTYPE ldvl, 
+     double *vr, FLENS_DEFAULT_INDEXTYPE ldvr,
+     double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     char _jobvl = (jobvl==true) ? 'V' : 'N';
     char _jobvr = (jobvr==true) ? 'V' : 'N';
     
@@ -1082,134 +1082,134 @@ ggev(bool jobvl, bool jobvr, int n, double *a, int lda,
 
 static char jobchar[4] = {'A','S','O','N'};
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesvd(SVectorsJob jobu, SVectorsJob jobvt,
-      int m, int n, float *a, int lda,                // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda,                // A
       float *s,                                      // singular values
-      float *u, int ldu,                         // left singular vectors
-      float *vt, int ldvt,                       // right singular vectors
-      float *work, int lwork)
+      float *u, FLENS_DEFAULT_INDEXTYPE ldu,                         // left singular vectors
+      float *vt, FLENS_DEFAULT_INDEXTYPE ldvt,                       // right singular vectors
+      float *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgesvd_(&jobchar[jobu], &jobchar[jobvt],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesvd(SVectorsJob jobu, SVectorsJob jobvt,
-      int m, int n, double *a, int lda,                // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda,                // A
       double *s,                                      // singular values
-      double *u, int ldu,                         // left singular vectors
-      double *vt, int ldvt,                       // right singular vectors
-      double *work, int lwork)
+      double *u, FLENS_DEFAULT_INDEXTYPE ldu,                         // left singular vectors
+      double *vt, FLENS_DEFAULT_INDEXTYPE ldvt,                       // right singular vectors
+      double *work, FLENS_DEFAULT_INDEXTYPE lwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgesvd_(&jobchar[jobu], &jobchar[jobvt],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesvd(SVectorsJob jobu, SVectorsJob jobvt,
-      int m, int n, complex<float> *a, int lda,       // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda,       // A
       float *s,                                      // singular values
-      complex<float> *u, int ldu,                // left singular vectors
-      complex<float> *vt, int ldvt,              // right singular vectors
-      complex<float> *work, int lwork, float *rwork)
+      complex<float> *u, FLENS_DEFAULT_INDEXTYPE ldu,                // left singular vectors
+      complex<float> *vt, FLENS_DEFAULT_INDEXTYPE ldvt,              // right singular vectors
+      complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork, float *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgesvd_(&jobchar[jobu], &jobchar[jobvt],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, rwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesvd(SVectorsJob jobu, SVectorsJob jobvt,
-      int m, int n, complex<double> *a, int lda,       // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda,       // A
       double *s,                                      // singular values
-      complex<double> *u, int ldu,                // left singular vectors
-      complex<double> *vt, int ldvt,              // right singular vectors
-      complex<double> *work, int lwork, double *rwork)
+      complex<double> *u, FLENS_DEFAULT_INDEXTYPE ldu,                // left singular vectors
+      complex<double> *vt, FLENS_DEFAULT_INDEXTYPE ldvt,              // right singular vectors
+      complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork, double *rwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgesvd_(&jobchar[jobu], &jobchar[jobvt],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, rwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesdd(SVectorsJob jobz,
-      int m, int n, float *a, int lda,                // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, float *a, FLENS_DEFAULT_INDEXTYPE lda,                // A
       float *s,                                      // singular values
-      float *u, int ldu,                         // left singular vectors
-      float *vt, int ldvt,                       // right singular vectors
-      float *work, int lwork, int *iwork)
+      float *u, FLENS_DEFAULT_INDEXTYPE ldu,                         // left singular vectors
+      float *vt, FLENS_DEFAULT_INDEXTYPE ldvt,                       // right singular vectors
+      float *work, FLENS_DEFAULT_INDEXTYPE lwork, FLENS_DEFAULT_INDEXTYPE *iwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     sgesdd_(&jobchar[jobz],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, iwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesdd(SVectorsJob jobz,
-      int m, int n, double *a, int lda,                // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda,                // A
       double *s,                                      // singular values
-      double *u, int ldu,                         // left singular vectors
-      double *vt, int ldvt,                       // right singular vectors
-      double *work, int lwork, int *iwork)
+      double *u, FLENS_DEFAULT_INDEXTYPE ldu,                         // left singular vectors
+      double *vt, FLENS_DEFAULT_INDEXTYPE ldvt,                       // right singular vectors
+      double *work, FLENS_DEFAULT_INDEXTYPE lwork, FLENS_DEFAULT_INDEXTYPE *iwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgesdd_(&jobchar[jobz],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, iwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesdd(SVectorsJob jobz,
-      int m, int n, complex<float> *a, int lda,       // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, complex<float> *a, FLENS_DEFAULT_INDEXTYPE lda,       // A
       float *s,                                      // singular values
-      complex<float> *u, int ldu,                // left singular vectors
-      complex<float> *vt, int ldvt,              // right singular vectors
-      complex<float> *work, int lwork, float *rwork, int *iwork)
+      complex<float> *u, FLENS_DEFAULT_INDEXTYPE ldu,                // left singular vectors
+      complex<float> *vt, FLENS_DEFAULT_INDEXTYPE ldvt,              // right singular vectors
+      complex<float> *work, FLENS_DEFAULT_INDEXTYPE lwork, float *rwork, FLENS_DEFAULT_INDEXTYPE *iwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     cgesdd_(&jobchar[jobz],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, rwork, iwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gesdd(SVectorsJob jobz,
-      int m, int n, complex<double> *a, int lda,       // A
+      FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, complex<double> *a, FLENS_DEFAULT_INDEXTYPE lda,       // A
       double *s,                                      // singular values
-      complex<double> *u, int ldu,                // left singular vectors
-      complex<double> *vt, int ldvt,              // right singular vectors
-      complex<double> *work, int lwork, double *rwork, int *iwork)
+      complex<double> *u, FLENS_DEFAULT_INDEXTYPE ldu,                // left singular vectors
+      complex<double> *vt, FLENS_DEFAULT_INDEXTYPE ldvt,              // right singular vectors
+      complex<double> *work, FLENS_DEFAULT_INDEXTYPE lwork, double *rwork, FLENS_DEFAULT_INDEXTYPE *iwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     zgesdd_(&jobchar[jobz],
             &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
             work, &lwork, rwork, iwork, &info);
     return info;
 }
 
-int
+FLENS_DEFAULT_INDEXTYPE
 gecon(char norm,
-      int n, double *a, int lda,                // A
+      FLENS_DEFAULT_INDEXTYPE n, double *a, FLENS_DEFAULT_INDEXTYPE lda,                // A
       double anorm,                             // the norm of A
       double *rcond,                            // reciprocal condition number
-      double *work, int *iwork)
+      double *work, FLENS_DEFAULT_INDEXTYPE *iwork)
 {
-    int info;
+    FLENS_DEFAULT_INDEXTYPE info;
     dgecon_(&norm, &n, a, &lda, &anorm, rcond, work, iwork, &info);
     return info;
 }

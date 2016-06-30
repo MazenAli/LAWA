@@ -37,28 +37,28 @@ struct BSpline<_T,Dual,R,CDF>
     static const DomainType Domain = R;
     static const Construction Cons = CDF;
 
-    BSpline(int _d, int _d_);
+    BSpline(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_);
 
     virtual
     ~BSpline();
 
     T
-    operator()(T x, int j, long k, unsigned short deriv=0) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv=0) const;
 
     Support<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
     
     const flens::DenseVector<flens::Array<T> > &
     mask() const;
 
-    const int d, d_, mu;
-    const int l1_, l2_;
+    const FLENS_DEFAULT_INDEXTYPE d, d_, mu;
+    const FLENS_DEFAULT_INDEXTYPE l1_, l2_;
     const flens::DenseVector<flens::Array<T> > a_;
 };
 
 template <typename T>
 BSpline<T,Dual,R,CDF>
-N_(int d, int d_);
+N_(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_);
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >

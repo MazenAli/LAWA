@@ -10,8 +10,8 @@ PDEOperator1D<T, Basis>::PDEOperator1D(const Basis& _basis, T _reaction,
 
 template <typename T, typename Basis>
 T
-PDEOperator1D<T, Basis>::operator()(XType xtype1, int j1, long k1,
-                                    XType xtype2, int j2, long k2) const
+PDEOperator1D<T, Basis>::operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                                    XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {   
     // diffusion * v_x *  u_x + convection * v * u_x + reaction * v * u
     return diffusion * integral(j1, k1, xtype1, 1, j2, k2, xtype2, 1)

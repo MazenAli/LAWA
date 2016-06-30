@@ -46,7 +46,7 @@ CRS<T, Storage>::CRS()
 }
 
 template <typename T, CRS_Storage Storage>
-CRS<T, Storage>::CRS(int numRows, int numCols, int approxBandwidth)
+CRS<T, Storage>::CRS(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols, FLENS_DEFAULT_INDEXTYPE approxBandwidth)
     : rows(numRows+1), _numRows(numRows), _numCols(numCols), _k(approxBandwidth)
 {
 }
@@ -90,7 +90,7 @@ CRS<T, Storage>::initializer(Initializer *rhs)
 
 template <typename T, CRS_Storage Storage>
 void
-CRS<T, Storage>::allocate(int numNonZeros)
+CRS<T, Storage>::allocate(FLENS_DEFAULT_INDEXTYPE numNonZeros)
 {
     values.engine().resize(numNonZeros);
     columns.engine().resize(numNonZeros);
@@ -100,21 +100,21 @@ CRS<T, Storage>::allocate(int numNonZeros)
 }
 
 template <typename T, CRS_Storage Storage>
-int
+FLENS_DEFAULT_INDEXTYPE
 CRS<T, Storage>::numRows() const
 {
     return _numRows;
 }
 
 template <typename T, CRS_Storage Storage>
-int
+FLENS_DEFAULT_INDEXTYPE
 CRS<T, Storage>::numCols() const
 {
     return _numCols;
 }
 
 template <typename T, CRS_Storage Storage>
-int
+FLENS_DEFAULT_INDEXTYPE
 CRS<T, Storage>::numNonZeros() const
 {
     return rows(_numRows+1)-rows(1);
@@ -155,7 +155,7 @@ CRS<T, Storage>::end()
 //-- CRS_Coordinate ------------------------------------------------------------
 
 template <typename T>
-CRS_Coordinate<T>::CRS_Coordinate(int _row, int _col, T _value)
+CRS_Coordinate<T>::CRS_Coordinate(FLENS_DEFAULT_INDEXTYPE _row, FLENS_DEFAULT_INDEXTYPE _col, T _value)
     : row(_row), col(_col), value(_value)
 {
 }
@@ -179,14 +179,14 @@ CRS_CoordinateCmp::operator()(const CRS_Coordinate<T> &a,
 //-- CRS_Initializer -----------------------------------------------------------
 
 template <typename T, CRS_Storage Storage>
-CRS_Initializer<T, Storage>::CRS_Initializer(CRS<T, Storage> &crs, int k)
+CRS_Initializer<T, Storage>::CRS_Initializer(CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE k)
     : _coordinates(_tmp_coordinates), _lastSortedCoord(0), _isSorted(true), _crs(crs)
 {
     _coordinates.reserve(k*crs.numRows());
 }
 
 template <typename T, CRS_Storage Storage>
-CRS_Initializer<T, Storage>::CRS_Initializer(CRS<T, Storage> &crs, int /*k*/,
+CRS_Initializer<T, Storage>::CRS_Initializer(CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE /*k*/,
                                              std::vector<CRS_Coordinate<T> > &coordinates,
                                              size_t lastSortedCoord)
     : _coordinates(coordinates), _lastSortedCoord(lastSortedCoord), _isSorted(true), _crs(crs)
@@ -201,11 +201,11 @@ CRS_Initializer<T, Storage>::~CRS_Initializer()
     sort();
 
     // check for empty rows and insert 0 on diagonal if needed
-    std::vector<int> fillIn;
-    int row = 0;
+    std::vector<FLENS_DEFAULT_INDEXTYPE> fillIn;
+    FLENS_DEFAULT_INDEXTYPE row = 0;
     for (std::size_t k=0; k<_coordinates.size(); ++k) {
-        int rowDiff = _coordinates[k].row - row;
-        for (int r=1; r<rowDiff; ++r) {
+        FLENS_DEFAULT_INDEXTYPE rowDiff = _coordinates[k].row - row;
+        for (FLENS_DEFAULT_INDEXTYPE r=1; r<rowDiff; ++r) {
             fillIn.push_back(row+r);
         }
         row += rowDiff;
@@ -223,7 +223,7 @@ CRS_Initializer<T, Storage>::~CRS_Initializer()
         }
     }
     if (Storage==CRS_LowerTriangular) {
-        int k = _coordinates.size();
+        FLENS_DEFAULT_INDEXTYPE k = _coordinates.size();
         if (_coordinates[k-1].row!=_coordinates[k-1].col) {
             fillIn.push_back(_coordinates[k-1].row);
         }
@@ -258,14 +258,14 @@ CRS_Initializer<T, Storage>::~CRS_Initializer()
 
 #ifndef NDEBUG
     if (Storage==CRS_UpperTriangular) {
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             if (_crs.columns(_crs.rows(i))!=i) {
                 assert(0);
             }
         }
     }
     if (Storage==CRS_LowerTriangular) {
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             assert(_crs.rows(i+1)-1>0);
             if (_crs.columns(_crs.rows(i+1)-1)!=i) {
                 assert(0);
@@ -317,14 +317,14 @@ CRS_Initializer<T, Storage>::sort()
 
 template <typename T, CRS_Storage Storage>
 T &
-CRS_Initializer<T, Storage>::operator()(int row, int col)
+CRS_Initializer<T, Storage>::operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col)
 {
     assert(row>=1);
     assert(row<=_crs.numRows());
     assert(col>=1);
     assert(col<=_crs.numCols());
 
-    int r = -1,
+    FLENS_DEFAULT_INDEXTYPE r = -1,
         c = -1;
     if (Storage==CRS_General) {
         r = row;
@@ -365,9 +365,9 @@ CRS_ConstIterator<T, Storage>::CRS_ConstIterator(const CRS_ConstIterator &rhs)
     : _crs(rhs._crs), _pos(rhs._pos)
 {
     if (_pos<=_crs.numNonZeros()) {
-        int col = _crs.columns(_pos);
-        int row = _crs.numRows()+1;
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE col = _crs.columns(_pos);
+        FLENS_DEFAULT_INDEXTYPE row = _crs.numRows()+1;
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             if ((_pos>=_crs.rows(i)) && (_pos<_crs.rows(i+1))) {
                 row = i;
                 break;
@@ -384,9 +384,9 @@ CRS_ConstIterator<T, Storage>::CRS_ConstIterator(const
     : _crs(rhs._crs), _pos(rhs._pos)
 {
     if (_pos<=_crs.numNonZeros()) {
-        int col = _crs.columns(_pos);
-        int row = _crs.numRows()+1;
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE col = _crs.columns(_pos);
+        FLENS_DEFAULT_INDEXTYPE row = _crs.numRows()+1;
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             if ((_pos>=_crs.rows(i)) && (_pos<_crs.rows(i+1))) {
                 row = i;
                 break;
@@ -399,13 +399,13 @@ CRS_ConstIterator<T, Storage>::CRS_ConstIterator(const
 
 template <typename T, CRS_Storage Storage>
 CRS_ConstIterator<T, Storage>::CRS_ConstIterator(const CRS<T, Storage> &crs,
-                                                 int pos)
+                                                 FLENS_DEFAULT_INDEXTYPE pos)
     : _crs(crs), _pos(pos)
 {
     if (pos<=_crs.numNonZeros()) {
-        int col = _crs.columns(_pos);
-        int row = _crs.numRows()+1;
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE col = _crs.columns(_pos);
+        FLENS_DEFAULT_INDEXTYPE row = _crs.numRows()+1;
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             if ((pos>=_crs.rows(i)) && (pos<_crs.rows(i+1))) {
                 row = i;
                 break;
@@ -468,9 +468,9 @@ CRS_Iterator<T, Storage>::CRS_Iterator(const CRS_Iterator &rhs)
     : _crs(rhs._crs), _pos(rhs._pos)
 {
     if (_pos<=_crs.numNonZeros()) {
-        int col = _crs.columns(_pos);
-        int row = _crs.numRows()+1;
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE col = _crs.columns(_pos);
+        FLENS_DEFAULT_INDEXTYPE row = _crs.numRows()+1;
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             if ((_pos>=_crs.rows(i)) && (_pos<_crs.rows(i+1))) {
                 row = i;
                 break;
@@ -482,13 +482,13 @@ CRS_Iterator<T, Storage>::CRS_Iterator(const CRS_Iterator &rhs)
 }
 
 template <typename T, CRS_Storage Storage>
-CRS_Iterator<T, Storage>::CRS_Iterator(const CRS<T, Storage> &crs, int pos)
+CRS_Iterator<T, Storage>::CRS_Iterator(const CRS<T, Storage> &crs, FLENS_DEFAULT_INDEXTYPE pos)
     : _crs(crs), _pos(pos)
 {
     if (pos<=_crs.numNonZeros()) {
-        int col = _crs.columns(_pos);
-        int row = _crs.numRows()+1;
-        for (int i=1; i<=_crs.numRows(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE col = _crs.columns(_pos);
+        FLENS_DEFAULT_INDEXTYPE row = _crs.numRows()+1;
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_crs.numRows(); ++i) {
             if ((pos>=_crs.rows(i)) && (pos<_crs.rows(i+1))) {
                 row = i;
                 break;

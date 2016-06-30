@@ -38,7 +38,7 @@ struct BSpline<_T,Primal,R,CDF>
     static const DomainType Domain = R;
     static const Construction Cons = CDF;
 
-    BSpline(int _d);
+    BSpline(FLENS_DEFAULT_INDEXTYPE _d);
 
     BSpline(const MRA<T,Primal,R,CDF> &mra);
 
@@ -46,22 +46,22 @@ struct BSpline<_T,Primal,R,CDF>
     ~BSpline();
 
     T
-    operator()(T x, int j, long k, unsigned short deriv) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
 
     Support<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     flens::DenseVector<flens::Array<T> >
-    singularSupport(int j, long k) const;
+    singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     T
-    tic(int j) const;
+    tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
     const flens::DenseVector<flens::Array<T> > &
     mask() const;
 
-    const int d, mu;
-    const int l1, l2;
+    const FLENS_DEFAULT_INDEXTYPE d, mu;
+    const FLENS_DEFAULT_INDEXTYPE l1, l2;
     const flens::DenseVector<flens::Array<T> > a;
 };
 
@@ -69,7 +69,7 @@ struct BSpline<_T,Primal,R,CDF>
 
 template <typename T>
 BSpline<T,Primal,R,CDF>
-N(int d);
+N(FLENS_DEFAULT_INDEXTYPE d);
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >

@@ -9,7 +9,7 @@ flens::GeMatrix<flens::FullStorage<long double,cxxblas::ColMajor> >
 SingularQuadrature<SingularIntegral>::_legendreknots;
 
 template <typename SingularIntegral>
-flens::DenseVector<flens::Array<int> >
+flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> >
 SingularQuadrature<SingularIntegral>::_hp_legendrenumofpoints;
 
 template <typename SingularIntegral>
@@ -21,11 +21,11 @@ flens::GeMatrix<flens::FullStorage<long double,cxxblas::ColMajor> >
 SingularQuadrature<SingularIntegral>::_hp_legendreknots;
 
 template <typename SingularIntegral>
-int
+FLENS_DEFAULT_INDEXTYPE
 SingularQuadrature<SingularIntegral>::_precalculated_order = 30;
 
 template <typename SingularIntegral>
-int
+FLENS_DEFAULT_INDEXTYPE
 SingularQuadrature<SingularIntegral>::_precalculated_n = 10;
 
 template <typename SingularIntegral>
@@ -49,7 +49,7 @@ SingularQuadrature<SingularIntegral>::SingularQuadrature(const SingularIntegral 
 
 template <typename SingularIntegral>
 void
-SingularQuadrature<SingularIntegral>::setLegendreOrder(int order_eta)
+SingularQuadrature<SingularIntegral>::setLegendreOrder(FLENS_DEFAULT_INDEXTYPE order_eta)
 {
     if (order_eta>=_precalculated_order) {
         _legendre(order_eta);
@@ -60,7 +60,7 @@ SingularQuadrature<SingularIntegral>::setLegendreOrder(int order_eta)
 
 template <typename SingularIntegral>
 void
-SingularQuadrature<SingularIntegral>::setParameters(int order, int n, double sigma,
+SingularQuadrature<SingularIntegral>::setParameters(FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE n, double sigma,
                                                     double mu, double omega)
 {
     if (order>=_precalculated_order) {
@@ -137,13 +137,13 @@ SingularQuadrature<SingularIntegral>::_integrate_singular_diagonal(long double a
                                                                    long double eps)
 {
     long double ret = 0.L;
-    int hp_legendre_N = _hp_legendrenumofpoints(_n);
+    FLENS_DEFAULT_INDEXTYPE hp_legendre_N = _hp_legendrenumofpoints(_n);
     long double h = (b1-a1);
-    for (int i=2; i<=hp_legendre_N; ++i) {      // skipping the first point = skip the first interval
+    for (FLENS_DEFAULT_INDEXTYPE i=2; i<=hp_legendre_N; ++i) {      // skipping the first point = skip the first interval
         long double xi = _hp_legendreknots(_n,i);
         long double kernel_val_xi_Times_One_M_xi = singularintegral.kernel(h*xi) * (1-xi);
         long double kernel_val_Minus_xi_Times_One_M_xi = singularintegral.kernel(-h*xi)  * (1-xi);
-        for (int j=1; j<=_order_eta; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_order_eta; ++j) {
             long double eta = _legendreknots(_order_eta,j);
             long double productweight = _hp_legendreweights(_n,i) * _legendreweights(_order_eta,j);
 
@@ -175,12 +175,12 @@ SingularQuadrature<SingularIntegral>::_integrate_singular_corner(long double a1,
     else {
         _a1 = b1, _b1 = a1, _a2 = a2, _b2 = b2; _h1 = -h, _h2 = h;  factor = -1.L;
     }
-    int hp_legendre_N = _hp_legendrenumofpoints(_n);
-    for (int i=1; i<=hp_legendre_N; ++i) {
+    FLENS_DEFAULT_INDEXTYPE hp_legendre_N = _hp_legendrenumofpoints(_n);
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=hp_legendre_N; ++i) {
         long double xi = _hp_legendreknots(_n,i);
         long double kernel_val_xi_Times_xi = singularintegral.kernel(factor*h*xi) * xi;
         long double kernel_val_One_Plus_xi_Times_One_Minus_xi = singularintegral.kernel(factor*h*(1+xi)) * (1-xi);
-        for (int j=1; j<=_order_eta; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_order_eta; ++j) {
             long double eta = _legendreknots(_order_eta,j);
             long double productweight = _hp_legendreweights(_n,i) * _legendreweights(_order_eta,j);
 
@@ -220,12 +220,12 @@ SingularQuadrature<SingularIntegral>::_integrate_nonsingular(long double a1, lon
                       << "unknown configuration." << std::endl;
             exit(1);
         }
-        for (int i=1; i<=_order; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_order; ++i) {
             long double xi = _legendreknots(_order,i);
             long double kernel_val_xi_Times_xi = singularintegral.kernel(_h*(xi+c)) * xi;
             if (xi<1e-14) kernel_val_xi_Times_xi = 0.L;
             long double kernel_val_One_Plus_xi_Times_One_Minus_xi = singularintegral.kernel(_h*(1+xi+c)) * (1-xi);
-            for (int j=1; j<=_order_eta; ++j) {
+            for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_order_eta; ++j) {
                 long double eta = _legendreknots(_order_eta,j);
                 long double productweight = _legendreweights(_order,i) * _legendreweights(_order_eta,j);
 
@@ -243,9 +243,9 @@ SingularQuadrature<SingularIntegral>::_integrate_nonsingular(long double a1, lon
     else {
         long double h1 = (b1-a1), h2 = (b2-a2);
         //std::cerr << "      non-quadratic domain." << std::endl;
-        for (int i=1; i<=_order; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_order; ++i) {
             long double xi = _legendreknots(_order,i);
-            for (int j=1; j<=_order; ++j) {
+            for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_order; ++j) {
                 long double eta = _legendreknots(_order,j);
                 long double productweight = _legendreweights(_order,i) * _legendreweights(_order,j);
                 long double val =   singularintegral.p1(h1*xi+a1) * singularintegral.p2(h2*eta+a2)
@@ -259,7 +259,7 @@ SingularQuadrature<SingularIntegral>::_integrate_nonsingular(long double a1, lon
 
 template <typename SingularIntegral>
 void
-SingularQuadrature<SingularIntegral>::_legendre(int order)
+SingularQuadrature<SingularIntegral>::_legendre(FLENS_DEFAULT_INDEXTYPE order)
 {
     //std::cerr << "_legendre called for order = " << order << std::endl;
     long double eps = Const<long double>::EQUALITY_EPS;
@@ -271,14 +271,14 @@ SingularQuadrature<SingularIntegral>::_legendre(int order)
     _legendreweights.engine().resize(order, order);
 
     long double x1 = -1.L, x2 =  1.L;
-    for (int k=1; k<=order; ++k) {
-        int     m = (k+1)/2;
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=order; ++k) {
+        FLENS_DEFAULT_INDEXTYPE     m = (k+1)/2;
         long double xm = 0.5L * (x2+x1), xl = 0.5L * (x2-x1);
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             long double z = cos(M_PI*(i-0.25L)/(k+0.5L)), z1, pp;
             do {
                 long double p1 = 1.0L, p2 = 2.0L;
-                for (int j=1; j<=k; ++j) {
+                for (FLENS_DEFAULT_INDEXTYPE j=1; j<=k; ++j) {
                     long double p3 = p2;
                     p2 = p1;
                     p1 = ((2.0L*j-1.0L)*z*p2-(j-1.0L)*p3)/j;
@@ -294,8 +294,8 @@ SingularQuadrature<SingularIntegral>::_legendre(int order)
         }
     }
 
-    for (int k=1; k<=order; ++k) {
-        for (int l=1; l<=order; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=order; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE l=1; l<=order; ++l) {
             _legendreknots(k,l)   = 0.5L*initiallegendreknots(k,l)+0.5L;
             _legendreweights(k,l) = 0.5L*initiallegendreweights(k,l);
         }
@@ -304,44 +304,44 @@ SingularQuadrature<SingularIntegral>::_legendre(int order)
 
 template <typename SingularIntegral>
 void
-SingularQuadrature<SingularIntegral>::_hp_composite_legendre(int max_n, double sigma, double mu)
+SingularQuadrature<SingularIntegral>::_hp_composite_legendre(FLENS_DEFAULT_INDEXTYPE max_n, double sigma, double mu)
 {
     using flens::_;
 
-    int N=0;
-    for (int j=0; j<=max_n; ++j) {
-        N += std::max((int)(mu*j)+1,1);
+    FLENS_DEFAULT_INDEXTYPE N=0;
+    for (FLENS_DEFAULT_INDEXTYPE j=0; j<=max_n; ++j) {
+        N += std::max((FLENS_DEFAULT_INDEXTYPE)(mu*j)+1,(FLENS_DEFAULT_INDEXTYPE) 1);
     }
     _hp_legendrenumofpoints.engine().resize(max_n);
     _hp_legendreknots.engine().resize(max_n,N);
     _hp_legendreweights.engine().resize(max_n,N);
 
-    int max_q = std::max((int)(mu*max_n)+1,1);
+    FLENS_DEFAULT_INDEXTYPE max_q = std::max((FLENS_DEFAULT_INDEXTYPE)(mu*max_n)+1,(FLENS_DEFAULT_INDEXTYPE) 1);
     if (max_q>=_precalculated_order) {
         _legendre(max_q);
         _precalculated_order = max_q;
     }
 
-    for (int n=1; n<=max_n; ++n) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=max_n; ++n) {
         N = 0;
         DenseVector q(_(0,n));
-        for (int j=0; j<=n; ++j) {
-            int qj = std::max((int)(mu*j)+1,1);
+        for (FLENS_DEFAULT_INDEXTYPE j=0; j<=n; ++j) {
+            FLENS_DEFAULT_INDEXTYPE qj = std::max((FLENS_DEFAULT_INDEXTYPE)(mu*j)+1,(FLENS_DEFAULT_INDEXTYPE) 1);
             q(j) = qj;
             N += qj;
         }
         _hp_legendrenumofpoints(n) = N;
         //std::cerr << "q = " << q << std::endl;
         //std::cerr << "_hp_N = " << _hp_legendrenumofpoints(n) << std::endl;
-        int i=1;
-        for (int j=0; j<=n; ++j) {
-            int qj = q(j);
+        FLENS_DEFAULT_INDEXTYPE i=1;
+        for (FLENS_DEFAULT_INDEXTYPE j=0; j<=n; ++j) {
+            FLENS_DEFAULT_INDEXTYPE qj = q(j);
             long double a = std::pow((long double)sigma,n+1-j), b = std::pow((long double)sigma,n-j);
             if (j==0) {
                 a = 0.L; b = std::pow((long double)sigma,n);
             }
             long double h = b-a;
-            for (int l=1; l<=qj; ++l) {
+            for (FLENS_DEFAULT_INDEXTYPE l=1; l<=qj; ++l) {
                 _hp_legendreknots(n,i)  =  h*_legendreknots(qj,l) + a;
                 _hp_legendreweights(n,i) = h*_legendreweights(qj,l);
                 ++i;
@@ -356,12 +356,12 @@ SingularQuadrature<SingularIntegral>::_hp_composite_legendre(int max_n, double s
 
 /*
  *
- *     for (int i=1; i<=_order; ++i) {
+ *     for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_order; ++i) {
         long double xi = _legendreknots(_order,i);
         long double kernel_val_xi_Times_xi = singularintegral.kernel(h*xi) * xi;
         if (xi<1e-14) kernel_val_xi_Times_xi = 0.L;
         long double kernel_val_One_Plus_xi_Times_One_Minus_xi = singularintegral.kernel(h*(1+xi)) * (1-xi);
-        for (int j=1; j<=_order_eta; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_order_eta; ++j) {
             long double eta = _legendreknots(_order_eta,j);
             long double productweight = _legendreweights(_order,i) * _legendreweights(_order_eta,j);
 

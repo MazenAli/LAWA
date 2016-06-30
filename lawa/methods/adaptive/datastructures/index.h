@@ -29,11 +29,11 @@
 
 namespace lawa {
 
-//static boost::hash<long int> hash_long;
+//static boost::hash<FLENS_DEFAULT_INDEXTYPE> hash_long;
 
 //#define JMINOFFSET                 10
 #define JMINOFFSET                  0
-#define JMAX                       40
+#define JMAX                       70
 #define SIZEHASHINDEX1D         12869//196613
 #define SIZELARGEHASHINDEX1D    72869//1572869
 #define SIZEHASHINDEX2D       6291469
@@ -44,13 +44,13 @@ namespace lawa {
 struct Index1D
 {
     short j;
-    //long k;
-    int k;
+    //FLENS_DEFAULT_INDEXTYPE k;
+    FLENS_DEFAULT_INDEXTYPE k;
     XType xtype;
 
     Index1D(void);
-    //Index1D(int j, long k, XType _xtype);
-    Index1D(int _j, int _k, XType _xtype);
+    //Index1D(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, XType _xtype);
+    Index1D(FLENS_DEFAULT_INDEXTYPE _j, FLENS_DEFAULT_INDEXTYPE _k, XType _xtype);
     Index1D(const Index1D &index);
     short levelSum() const;
 };
@@ -60,7 +60,7 @@ struct Index1DC : public Index1D
     unsigned d;
 
     Index1DC(void);
-    Index1DC(int _j, int _k, XType _xtype, unsigned _d=0);
+    Index1DC(FLENS_DEFAULT_INDEXTYPE _j, FLENS_DEFAULT_INDEXTYPE _k, XType _xtype, unsigned _d=0);
     Index1DC(const Index1DC &index);
 };
 
@@ -107,7 +107,7 @@ public:
 
     IndexD(const std::vector<Index1D>& _index);
 
-    int
+    FLENS_DEFAULT_INDEXTYPE
     levelSum() const;
 
     size_type
@@ -240,9 +240,9 @@ struct index_eqfunction<Index1D>
     {
         if (leftindex.k != rightindex.k) return false;
         else {
-            int leftval = leftindex.xtype;
+            FLENS_DEFAULT_INDEXTYPE leftval = leftindex.xtype;
             leftval = (((leftval << 16) | (unsigned short) leftindex.j));
-            int rightval = rightindex.xtype;
+            FLENS_DEFAULT_INDEXTYPE rightval = rightindex.xtype;
             rightval = (((rightval << 16) | (unsigned short) rightindex.j));
             return (leftval==rightval);
         }
@@ -265,9 +265,9 @@ struct index_eqfunction<Index1DC>
         if (leftindex.k != rightindex.k
             || leftindex.d != rightindex.d) return false;
         else {
-            int leftval = leftindex.xtype;
+            FLENS_DEFAULT_INDEXTYPE leftval = leftindex.xtype;
             leftval = (((leftval << 16) | (unsigned short) leftindex.j));
-            int rightval = rightindex.xtype;
+            FLENS_DEFAULT_INDEXTYPE rightval = rightindex.xtype;
             rightval = (((rightval << 16) | (unsigned short) rightindex.j));
             return (leftval==rightval);
         }
@@ -285,15 +285,15 @@ struct index_eqfunction<Index2D>
         else {
             if (leftindex.index2.k != rightindex.index2.k) return false;
             else {
-                int leftval1 = leftindex.index1.xtype;
+                FLENS_DEFAULT_INDEXTYPE leftval1 = leftindex.index1.xtype;
                 leftval1 = (((leftval1 << 16) | (unsigned short) leftindex.index1.j));
-                int rightval1 = rightindex.index1.xtype;
+                FLENS_DEFAULT_INDEXTYPE rightval1 = rightindex.index1.xtype;
                 rightval1 = (((rightval1 << 16) | (unsigned short) rightindex.index1.j));
                 if (leftval1 != rightval1) return false;
                 else {
-                    int leftval2 = leftindex.index2.xtype;
+                    FLENS_DEFAULT_INDEXTYPE leftval2 = leftindex.index2.xtype;
                     leftval2 = (((leftval2 << 16) | (unsigned short) leftindex.index2.j));
-                    int rightval2 = rightindex.index2.xtype;
+                    FLENS_DEFAULT_INDEXTYPE rightval2 = rightindex.index2.xtype;
                     rightval2 = (((rightval2 << 16) | (unsigned short) rightindex.index2.j));
                     return (leftval2==rightval2);
                 }
@@ -316,21 +316,21 @@ struct index_eqfunction<Index3D>
         if (leftindex.index2.k != rightindex.index2.k) return false;
         if (leftindex.index3.k != rightindex.index3.k) return false;
 
-        int leftval1 = leftindex.index1.xtype;
+        FLENS_DEFAULT_INDEXTYPE leftval1 = leftindex.index1.xtype;
         leftval1 = (((leftval1 << 16) | (unsigned short) leftindex.index1.j));
-        int rightval1 = rightindex.index1.xtype;
+        FLENS_DEFAULT_INDEXTYPE rightval1 = rightindex.index1.xtype;
         rightval1 = (((rightval1 << 16) | (unsigned short) rightindex.index1.j));
         if (leftval1 != rightval1) return false;
 
-        int leftval2 = leftindex.index2.xtype;
+        FLENS_DEFAULT_INDEXTYPE leftval2 = leftindex.index2.xtype;
         leftval2 = (((leftval2 << 16) | (unsigned short) leftindex.index2.j));
-        int rightval2 = rightindex.index2.xtype;
+        FLENS_DEFAULT_INDEXTYPE rightval2 = rightindex.index2.xtype;
         rightval2 = (((rightval2 << 16) | (unsigned short) rightindex.index2.j));
         if (leftval2 != rightval2) return false;
 
-        int leftval3 = leftindex.index3.xtype;
+        FLENS_DEFAULT_INDEXTYPE leftval3 = leftindex.index3.xtype;
         leftval3 = (((leftval3 << 16) | (unsigned short) leftindex.index3.j));
-        int rightval3 = rightindex.index3.xtype;
+        FLENS_DEFAULT_INDEXTYPE rightval3 = rightindex.index3.xtype;
         rightval3 = (((rightval3 << 16) | (unsigned short) rightindex.index3.j));
         return (leftval3==rightval3);
     }
@@ -392,13 +392,13 @@ struct index_hashfunction<Index1D>
     {
         // Note: hash_values is taken mod "length of hashtable" automatically!!
         /*
-        long pow2ij = (1L << (index.j+JMINOFFSET+index.xtype));
+        FLENS_DEFAULT_INDEXTYPE pow2ij = ((FLENS_DEFAULT_INDEXTYPE) 1 << (index.j+JMINOFFSET+index.xtype));
         std::size_t hash_value = (pow2ij + index.k);
 
         return hash_value;
         */
 
-        int val = index.xtype;
+        FLENS_DEFAULT_INDEXTYPE val = index.xtype;
         val = (((val << 16) | (unsigned short) index.j));
 
         std::size_t hash_value = 0;
@@ -418,13 +418,13 @@ struct index_hashfunction<Index1DC>
     {
         // Note: hash_values is taken mod "length of hashtable" automatically!!
         /*
-        long pow2ij = (1L << (index.j+JMINOFFSET+index.xtype));
+        FLENS_DEFAULT_INDEXTYPE pow2ij = ((FLENS_DEFAULT_INDEXTYPE) 1 << (index.j+JMINOFFSET+index.xtype));
         std::size_t hash_value = (pow2ij + index.k);
 
         return hash_value;
         */
 
-        int val = index.xtype;
+        FLENS_DEFAULT_INDEXTYPE val = index.xtype;
         val = (((val << 16) | (unsigned short) index.j));
 
         std::size_t hash_value = 0;
@@ -444,8 +444,8 @@ struct index_hashfunction<Index2D>
     // performs better without storing 2^l values... why??
     index_hashfunction(void)
     {
-        for (int i=0; i<JMAX+JMINOFFSET+2; ++i) {
-            power2i[i] = 1L << i;
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<JMAX+JMINOFFSET+2; ++i) {
+            power2i[i] = (FLENS_DEFAULT_INDEXTYPE) 1 << i;
         }
     }
     std::size_t power2i[JMAX+JMINOFFSET+2];
@@ -454,8 +454,8 @@ struct index_hashfunction<Index2D>
     inline
     std::size_t operator()(const Index2D& index) const
     {
-        //std::size_t l1 = (1L << (index.index1.j+index.index1.xtype+JMINOFFSET) ) + index.index1.k;
-        //std::size_t l2 = (1L << (index.index2.j+index.index2.xtype+JMINOFFSET) ) + index.index2.k;
+        //std::size_t l1 = ((FLENS_DEFAULT_INDEXTYPE) 1 << (index.index1.j+index.index1.xtype+JMINOFFSET) ) + index.index1.k;
+        //std::size_t l2 = ((FLENS_DEFAULT_INDEXTYPE) 1 << (index.index2.j+index.index2.xtype+JMINOFFSET) ) + index.index2.k;
         std::size_t l1 = power2i[index.index1.j+index.index1.xtype+JMINOFFSET] + index.index1.k;
         std::size_t l2 = power2i[index.index2.j+index.index2.xtype+JMINOFFSET] + index.index2.k;
         std::size_t s1 = l1;
@@ -468,8 +468,8 @@ struct index_hashfunction<Index2D>
     inline
     std::size_t operator()(const Index2D& index) const
     {
-        int val1 = index.index1.xtype;
-        int val2 = index.index2.xtype;
+        FLENS_DEFAULT_INDEXTYPE val1 = index.index1.xtype;
+        FLENS_DEFAULT_INDEXTYPE val2 = index.index2.xtype;
         val1 = (((val1 << 16) | (unsigned short) index.index1.j));
         val2 = (((val2 << 16) | (unsigned short) index.index2.j));
 
@@ -491,8 +491,8 @@ struct index_hashfunction<Index3D>
     // performs better without storing 2^l values... why??
     index_hashfunction(void)
     {
-        for (int i=0; i<JMAX+JMINOFFSET+2; ++i) {
-            power2i[i] = 1L << i;
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<JMAX+JMINOFFSET+2; ++i) {
+            power2i[i] = (FLENS_DEFAULT_INDEXTYPE) 1 << i;
         }
     }
     std::size_t power2i[JMAX+JMINOFFSET+2];
@@ -501,8 +501,8 @@ struct index_hashfunction<Index3D>
     inline
     std::size_t operator()(const Index3D& index) const
     {
-        //std::size_t l1 = (1L << (index.index1.j+index.index1.xtype+JMINOFFSET) ) + index.index1.k;
-        //std::size_t l2 = (1L << (index.index2.j+index.index2.xtype+JMINOFFSET) ) + index.index2.k;
+        //std::size_t l1 = ((FLENS_DEFAULT_INDEXTYPE) 1 << (index.index1.j+index.index1.xtype+JMINOFFSET) ) + index.index1.k;
+        //std::size_t l2 = ((FLENS_DEFAULT_INDEXTYPE) 1 << (index.index2.j+index.index2.xtype+JMINOFFSET) ) + index.index2.k;
         std::size_t l1 = power2i[index.index1.j+index.index1.xtype] + index.index1.k;
         std::size_t l2 = power2i[index.index2.j+index.index2.xtype] + index.index2.k;
         std::size_t l3 = power2i[index.index3.j+index.index3.xtype] + index.index3.k;
@@ -525,8 +525,8 @@ struct entry_hashfunction<Index1D>
 {
     entry_hashfunction(void)
     {
-        for (int i=0; i<JMAX+JMINOFFSET+2; ++i) {
-            power2i[i] = 1L << i;
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<JMAX+JMINOFFSET+2; ++i) {
+            power2i[i] = (FLENS_DEFAULT_INDEXTYPE) 1 << i;
         }
     }
     std::size_t power2i[JMAX+JMINOFFSET+2];
@@ -545,8 +545,8 @@ struct entry_hashfunction<Index1D>
     inline
     std::size_t operator()(const Entry<Index1D>& entry) const
     {
-        int val1 = entry.col_index.xtype;
-        int val2 = entry.row_index.xtype;
+        FLENS_DEFAULT_INDEXTYPE val1 = entry.col_index.xtype;
+        FLENS_DEFAULT_INDEXTYPE val2 = entry.row_index.xtype;
         val1 = (((val1 << 16) | (unsigned short) entry.col_index.j));
         val2 = (((val2 << 16) | (unsigned short) entry.row_index.j));
 

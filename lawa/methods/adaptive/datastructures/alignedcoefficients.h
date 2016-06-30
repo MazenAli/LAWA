@@ -107,7 +107,7 @@ struct AlignedCoefficients
 template <typename T, typename Index, typename PrincipalIndex, typename AlignedIndex>
 struct AlignedCoefficients2
 {
-    typedef Coefficients<Lexicographical,int,PrincipalIndex>    PrincipalIndexMap;
+    typedef Coefficients<Lexicographical,FLENS_DEFAULT_INDEXTYPE,PrincipalIndex>    PrincipalIndexMap;
     typedef typename std::list<const AlignedIndex* >            AlignedIndices;
     typedef typename std::vector<AlignedIndices>                PrincipalIndexToAlignedIndices;
 

@@ -11,10 +11,10 @@ WeightedHelmholtzOperator2D<T, Basis>::WeightedHelmholtzOperator2D(const Basis& 
 
 template <typename T, typename Basis>
 T
-WeightedHelmholtzOperator2D<T, Basis>::operator()(XType row_xtype_x, int j1_x, long k1_x,
-                                                  XType row_xtype_y, int j1_y, long k1_y,
-                                                  XType col_xtype_x, int j2_x, long k2_x,
-                                                  XType col_xtype_y, int j2_y, long k2_y) const
+WeightedHelmholtzOperator2D<T, Basis>::operator()(XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                                                  XType row_xtype_y, FLENS_DEFAULT_INDEXTYPE j1_y, FLENS_DEFAULT_INDEXTYPE k1_y,
+                                                  XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x,
+                                                  XType col_xtype_y, FLENS_DEFAULT_INDEXTYPE j2_y, FLENS_DEFAULT_INDEXTYPE k2_y) const
 {
     return 	integral_x(j1_x, k1_x, row_xtype_x, 1, j2_x, k2_x, col_xtype_x, 1) 
           * integral_y(j1_y, k1_y, row_xtype_y, 0, j2_y, k2_y, col_xtype_y, 0)

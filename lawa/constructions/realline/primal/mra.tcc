@@ -20,13 +20,13 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Primal,R,CDF>::MRA(int _d, int j)
+MRA<T,Primal,R,CDF>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), j0(j), phi(d), M0(phi)
 {
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Primal,R,CDF>::level() const
 {
     return _j;
@@ -34,7 +34,7 @@ MRA<T,Primal,R,CDF>::level() const
 
 template <typename T>
 void
-MRA<T,Primal,R,CDF>::setLevel(int j) const
+MRA<T,Primal,R,CDF>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     _j = j;
 }

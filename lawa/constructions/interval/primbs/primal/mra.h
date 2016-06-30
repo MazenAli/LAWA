@@ -41,67 +41,67 @@ class MRA<_T,Primal,Interval,Primbs>
         typedef BasisFunction<T,Primal,Interval,Primbs> BasisFunctionType;
         typedef BSpline<T,Primal,Interval,Primbs> BSplineType;
 
-        MRA(int d, int j=-1);
+        MRA(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE j=-1);
 
         ~MRA();
 
         T
-        operator()(const T x, const int j, const int k) const;
+        operator()(const T x, const FLENS_DEFAULT_INDEXTYPE j, const FLENS_DEFAULT_INDEXTYPE k) const;
 
         // cardinalities of whole, left, inner, right index sets.
-        int
-        cardI(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardIL(int j=0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
-        int
-        cardII(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardII(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardIR(int j=0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardIR(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
         // ranges of whole left, inner, right index sets.
-        flens::Range<int>
-        rangeI(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        flens::Range<int>
-        rangeIL(int j=0) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
-        flens::Range<int>
-        rangeII(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeII(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        flens::Range<int>
-        rangeIR(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeIR(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         template <BoundaryCondition BC>
             void
             enforceBoundaryCondition();
 
-        const int d, mu;       // mu = mu(d) = d&1.
-        const int min_j0;      // minimal allowed(!) level;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE d, mu;       // mu = mu(d) = d&1.
+        const FLENS_DEFAULT_INDEXTYPE min_j0;      // minimal allowed(!) level;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
 
         BSpline<T,Primal,R,CDF> phiR;
         flens::RefinementMatrix<T,Interval,Primbs> M0;
 
-        const int l1, l2;      // support of phi  = [ l1, l2 ] (real line).
+        const FLENS_DEFAULT_INDEXTYPE l1, l2;      // support of phi  = [ l1, l2 ] (real line).
         
     private:
         void
         _calcM0();
 
-        flens::DenseVector<flens::Array<int> > _bc;    // the boundary conditions
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > _bc;    // the boundary conditions
                                            // bc(0) = 1 -> Dirichlet BC left.
                                            // bc(1) = 1 -> Dirichlet BC right.
 
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
 
         friend class BSpline<T,Primal,Interval,Dijkema>;
 
@@ -113,7 +113,7 @@ class MRA<_T,Primal,Interval,Primbs>
                     *_innerL2Norms, *_innerH1SemiNorms,
                     *_rightL2Norms, *_rightH1SemiNorms;
 
-        long *_leftOffsets,
+        FLENS_DEFAULT_INDEXTYPE *_leftOffsets,
              *_innerOffsets,
              *_rightOffsets;
 

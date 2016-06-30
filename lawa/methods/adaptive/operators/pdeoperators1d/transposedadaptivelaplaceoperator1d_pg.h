@@ -54,7 +54,7 @@ struct TransposedAdaptiveLaplaceOperator1D_PG
     operator()(const Index1D &row_index, const Index1D &col_index);
 
     T
-    operator()(XType xtype_row, int j_row, long k_row, XType xtype_col, int j_col, long k_col);
+    operator()(XType xtype_row, FLENS_DEFAULT_INDEXTYPE j_row, FLENS_DEFAULT_INDEXTYPE k_row, XType xtype_col, FLENS_DEFAULT_INDEXTYPE j_col, FLENS_DEFAULT_INDEXTYPE k_col);
 
     void
     clear();

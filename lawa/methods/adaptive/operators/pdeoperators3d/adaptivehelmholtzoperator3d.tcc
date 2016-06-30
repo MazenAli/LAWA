@@ -25,7 +25,7 @@ namespace lawa {
 template <typename T, typename Basis, typename Compression, typename Preconditioner>
 AdaptiveHelmholtzOperator3D<T, Basis, HelmholtzOperator3D<T, Basis>, Compression, Preconditioner>::
 AdaptiveHelmholtzOperator3D(const Basis3D &_basis, T _c, const Preconditioner &_Prec, 
-                            T entrybound=0., int NumOfRows=4096, int NumOfCols=2048)
+                            T entrybound=0., FLENS_DEFAULT_INDEXTYPE NumOfRows=4096, FLENS_DEFAULT_INDEXTYPE NumOfCols=2048)
     : basis(_basis), c(_c), Prec(_Prec),
       compression_1d_x(_basis.first), compression_1d_y(_basis.second), compression_1d_z(_basis.third),
       op_identity_x(_basis.first), op_identity_y(_basis.second), op_identity_z(_basis.third),

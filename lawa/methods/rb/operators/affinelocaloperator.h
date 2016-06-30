@@ -55,6 +55,9 @@ public:
 	void
 	set_param(ParamType& mu);
 
+    T
+    operator()(const Index& row, const Index& col) const;
+
 private:
 
 	ThetaStructure<ParamType>& thetas;

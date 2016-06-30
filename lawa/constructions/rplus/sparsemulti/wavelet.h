@@ -45,24 +45,24 @@ class Wavelet<_T,Primal,RPlus,SparseMulti>
         ~Wavelet();
         
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
         
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
         
         Support<T>
         max_support() const;
 
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
     
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
         
         const Basis<T,Primal,RPlus,SparseMulti> &basis;
-        const int d;
-        const int vanishingMoments;
-        int _numSplines;
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE vanishingMoments;
+        FLENS_DEFAULT_INDEXTYPE _numSplines;
         Support<T> _max_support;
 };
     

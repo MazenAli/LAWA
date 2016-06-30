@@ -1,4 +1,4 @@
-SUBDIRS := J11
+SUBDIRS := 1 2 3 4
 
 
 all:

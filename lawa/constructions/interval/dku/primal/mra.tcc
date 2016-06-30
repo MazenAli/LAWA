@@ -25,12 +25,12 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Primal,Interval,DKU>::MRA(int _d, int _d_, int j)
+MRA<T,Primal,Interval,DKU>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), d_(_d_), mu(d&1),
       l1((mu-d)/2), l2((mu+d)/2),
       l1_(l1-d_+1), l2_(l2+d_-1),
       l(l2_-(d_-d)), q(l+mu-1),
-      min_j0(iceil<int>(log2(l2_+l2_-1)+1)),
+      min_j0(iceil<FLENS_DEFAULT_INDEXTYPE>(log2(l2_+l2_-1)+1)),
       j0(std::max(j,min_j0)),
       _bc(2,0), _j(j0)
 {
@@ -52,31 +52,31 @@ MRA<T,Primal,Interval,DKU>::~MRA()
 //--- cardinalities of whole, left, inner, right index sets (primal). ----------
 
 template <typename T>
-int
-MRA<T,Primal,Interval,DKU>::cardI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,DKU>::cardI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return d + pow2i<T>(j)-q-l + d - (_bc(0)+_bc(1));
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,DKU>::cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,DKU>::cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return d-_bc(0);
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,DKU>::cardII(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,DKU>::cardII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j)-q-l;
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,DKU>::cardIR(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,DKU>::cardIR(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return d-_bc(1);
 }
@@ -84,38 +84,38 @@ MRA<T,Primal,Interval,DKU>::cardIR(int /*j*/) const
 //--- ranges of whole, left, inner, right index sets (primal). -----------------
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,DKU>::rangeI(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,DKU>::rangeI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
-    return flens::Range<int>(l-d+_bc(0), pow2i<T>(j)-l+d-mu-_bc(1));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(l-d+_bc(0), pow2i<T>(j)-l+d-mu-_bc(1));
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,DKU>::rangeIL(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,DKU>::rangeIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<int>(l-d+_bc(0), l-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(l-d+_bc(0), l-1);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,DKU>::rangeII(int j) const
-{
-    assert(j>=min_j0);
-    return flens::Range<int>(l, pow2i<T>(j)-q-1);
-}
-
-template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,DKU>::rangeIR(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,DKU>::rangeII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
-    return flens::Range<int>(pow2i<T>(j)-q, pow2i<T>(j)-q+d-1-_bc(1));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(l, pow2i<T>(j)-q-1);
 }
 
 template <typename T>
-int
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,DKU>::rangeIR(FLENS_DEFAULT_INDEXTYPE j) const
+{
+    assert(j>=min_j0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(pow2i<T>(j)-q, pow2i<T>(j)-q+d-1-_bc(1));
+}
+
+template <typename T>
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Primal,Interval,DKU>::level() const
 {
     return _j;
@@ -123,7 +123,7 @@ MRA<T,Primal,Interval,DKU>::level() const
 
 template <typename T>
 void
-MRA<T,Primal,Interval,DKU>::setLevel(int j)
+MRA<T,Primal,Interval,DKU>::setLevel(FLENS_DEFAULT_INDEXTYPE j)
 {
     if (j!=_j) {
         assert(j>=min_j0);
@@ -156,11 +156,11 @@ MRA<T,Primal,Interval,DKU>::_alpha_()
 
     // 5.1.3
     BSpline<T,Dual,R,CDF> phi_(d,d_);
-    for (int r=1; r<d; ++r) {
+    for (FLENS_DEFAULT_INDEXTYPE r=1; r<d; ++r) {
         T tmp1 = 0.;
-        for (int k=l1_; k<=l2_; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE k=l1_; k<=l2_; ++k) {
             T tmp2 = 0.;
-            for (int s=0; s<r; ++s) {
+            for (FLENS_DEFAULT_INDEXTYPE s=0; s<r; ++s) {
                 tmp2 += binomial(r,s)*powii(k,r-s)*_Alpha_(0,s);
             }
             tmp1 += phi_.a_(k)*tmp2;
@@ -169,19 +169,19 @@ MRA<T,Primal,Interval,DKU>::_alpha_()
     }
 
     // (5.1.2)
-    for (int r=1; r<d; ++r) {
+    for (FLENS_DEFAULT_INDEXTYPE r=1; r<d; ++r) {
         // m<0
-        for (int m=_Alpha_.firstRow(); m<0; ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE m=_Alpha_.firstRow(); m<0; ++m) {
             T tmp = 0.;
-            for (int i=0; i<=r; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0; i<=r; ++i) {
                 tmp += binomial(r,i)*powii(m,i)*_Alpha_(0,r-i);
             }
             _Alpha_(m,r) = tmp;
         }
         // m>0
-        for (int m=1; m<=_Alpha_.lastRow(); ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE m=1; m<=_Alpha_.lastRow(); ++m) {
             T tmp = 0.;
-            for (int i=0; i<=r; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0; i<=r; ++i) {
                 tmp += binomial(r,i)*powii(m,i)*_Alpha_(0,r-i);
             }
             _Alpha_(m,r) = tmp;
@@ -204,10 +204,10 @@ MRA<T,Primal,Interval,DKU>::_beta_()
     // 3.2.31
     BSpline<T,Primal,R,CDF> phi(d);
     T factor = Const<T>::R_SQRT2;
-    for (int r=0; r<d; ++r) {
-        for (int m=_Beta_.firstRow(); m<=_Beta_.lastRow(); ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE r=0; r<d; ++r) {
+        for (FLENS_DEFAULT_INDEXTYPE m=_Beta_.firstRow(); m<=_Beta_.lastRow(); ++m) {
             T tmp = 0.;
-            for (int q=iceil<int>((m-l2)/2.); q<l; ++q) {
+            for (FLENS_DEFAULT_INDEXTYPE q=iceil<FLENS_DEFAULT_INDEXTYPE>((m-l2)/2.); q<l; ++q) {
                 tmp += _Alpha_(q,r) * phi.a(m-2*q);
             }
             _Beta_(m,r) = factor * tmp;
@@ -224,18 +224,18 @@ MRA<T,Primal,Interval,DKU>::_calcM0()
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > Mj0(rangeI(min_j0+1), rangeI(min_j0)),
                                        Left(_(l-d,2*l+l2-2),_(l-d,l-1)), Right;
 
-    for (int r=0; r<d; ++r) {
+    for (FLENS_DEFAULT_INDEXTYPE r=0; r<d; ++r) {
         Left(l-d+r, l-d+r) = Const<T>::R_SQRT2 * pow2i<T>(-r);
     }
 
-    for (int m=l; m<=2*l+l1-1; ++m) {
-        for (int k=0; k<d; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE m=l; m<=2*l+l1-1; ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE k=0; k<d; ++k) {
             Left(m,l-d+k) = Const<T>::R_SQRT2 * pow2i<T>(-k) * _Alpha_(m,k);
         }
     }
 
-    for (int m=2*l+l1; m<=2*l+l2-2; ++m) {
-        for (int k=0; k<d; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE m=2*l+l1; m<=2*l+l2-2; ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE k=0; k<d; ++k) {
             Left(m,l-d+k) = _Beta_(m,k);
         }
     }
@@ -248,11 +248,11 @@ MRA<T,Primal,Interval,DKU>::_calcM0()
     Mj0.engine().changeIndexBase(1,1);
 
     BSpline<T,Primal,R,CDF> phi(d);
-    for (int c=l, r=2*l+l1; c<=pow2i<T>(min_j0)-q-1; ++c, r+=2) {
+    for (FLENS_DEFAULT_INDEXTYPE c=l, r=2*l+l1; c<=pow2i<T>(min_j0)-q-1; ++c, r+=2) {
         Mj0(_(r,r+phi.a.length()-1),c) = Const<T>::R_SQRT2 * phi.a; 
     }
 
-    for (int c=l, r=2*l+l1; c<=pow2i<T>(min_j0)-q-1; ++c, r+=2) {
+    for (FLENS_DEFAULT_INDEXTYPE c=l, r=2*l+l1; c<=pow2i<T>(min_j0)-q-1; ++c, r+=2) {
         Mj0(_(r,r+phi.a.length()-1),c) = Const<T>::R_SQRT2 * phi.a; 
     }
     

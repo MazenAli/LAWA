@@ -36,7 +36,7 @@ spy(const flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > &
     stringstream content;
 
     //const flens::extensions::CRS<T> crs=A.engine();
-    int n=A.engine().numCols(), m=A.engine().numRows();
+    FLENS_DEFAULT_INDEXTYPE n=A.engine().numCols(), m=A.engine().numRows();
     // get first entry
     T min, max;
     if (absoluteValues==true) {
@@ -45,10 +45,10 @@ spy(const flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > &
         min = A.engine().values(1); max = A.engine().values(1);
     }
 
-    int nnz = 0;
+    FLENS_DEFAULT_INDEXTYPE nnz = 0;
     T value = 0;
-    for (int i=1; i<=m; ++i) {
-        for (int j=A.engine().rows(i); j<A.engine().rows(i+1); ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE j=A.engine().rows(i); j<A.engine().rows(i+1); ++j) {
             if (absoluteValues==true) {
                 value = fabs(A.engine().values(j));
             } else {
@@ -115,7 +115,7 @@ spy(const flens::Matrix<I> &A, const char* filename, bool absoluteValues,
     ofstream gps(spy_filename.str().c_str());
     stringstream content;
 
-    int n = numRows(A.impl()), m = numCols(A.impl());
+    FLENS_DEFAULT_INDEXTYPE n = numRows(A.impl()), m = numCols(A.impl());
     DenseVector<Array<T> > e(m), y(m);
 
     // get first entry
@@ -129,13 +129,13 @@ spy(const flens::Matrix<I> &A, const char* filename, bool absoluteValues,
     }
     e(1) = 0.;
 
-    int nnz = 0;
+    FLENS_DEFAULT_INDEXTYPE nnz = 0;
     T value = 0.0;
-    for (int j=1; j<=m; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m; ++j) {
         e(j) = 1.;
         y = A.impl()*e;
 
-        for (int i = 1; i<=n; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i = 1; i<=n; ++i) {
             if (absoluteValues==true) {
                 value = absolute(y(i));
             } else {

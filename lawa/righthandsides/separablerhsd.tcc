@@ -10,7 +10,7 @@ namespace lawa
 template <typename T, typename Basis>
 SeparableRHSD<T, Basis>::SeparableRHSD(const Basis&     _basis,
                                        const FuncType&  _F,
-                                       const int        order):
+                                       const FLENS_DEFAULT_INDEXTYPE        order):
     rank_(_F.rank()),
     dim_(_F.dim()),
     basis(&_basis),
@@ -32,7 +32,7 @@ SeparableRHSD<T, Basis>::SeparableRHSD(const Basis&    _basis,
                                        const FuncType& _F,
                                        const Matvec&   _deltas,
                                        const IntMat&   _derivs,
-                                       const int       order):
+                                       const FLENS_DEFAULT_INDEXTYPE       order):
     rank_(_F.rank()),
     dim_(_F.dim()),
     basis(&_basis),

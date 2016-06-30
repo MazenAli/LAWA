@@ -4,8 +4,8 @@ template <typename T, typename Basis2D, typename Preconditioner>
 AdaptiveHelmholtzOperator2D<T, Basis2D, Preconditioner>::AdaptiveHelmholtzOperator2D
                                                          (const Basis2D &_basis, T _c,
                                                           const Preconditioner &_Prec,
-                                                          T /*thresh*/, int /*NumOfCols*/,
-                                                          int /*NumOfRows*/)
+                                                          T /*thresh*/, FLENS_DEFAULT_INDEXTYPE /*NumOfCols*/,
+                                                          FLENS_DEFAULT_INDEXTYPE /*NumOfRows*/)
 : basis(_basis), c(_c), Prec(_Prec),
   compression_1d_x(basis.first), compression_1d_y(basis.second), compression(basis),
   op_identity_x(basis.first), op_identity_y(basis.second),
@@ -128,7 +128,7 @@ void
 AdaptiveHelmholtzOperator2D<T, Basis2D, Preconditioner>::toFlensSparseMatrix
                                                          (const IndexSet<Index2D>& LambdaRow,
                                                           const IndexSet<Index2D>& LambdaCol,
-                                                          SparseMatrixT &A_flens, int /*J*/,
+                                                          SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE /*J*/,
                                                           bool useLinearIndex)
 {
     if (!useLinearIndex) {
@@ -158,7 +158,7 @@ template <typename T, typename Basis2D, typename Preconditioner>
 Coefficients<Lexicographical,T,Index2D>
 AdaptiveHelmholtzOperator2D<T, Basis2D, Preconditioner>::apply
                                                   (const Coefficients<Lexicographical,T,Index2D> &/*v*/,
-                                                   int /*k*/, int /*J*/,
+                                                   FLENS_DEFAULT_INDEXTYPE /*k*/, FLENS_DEFAULT_INDEXTYPE /*J*/,
                                                    cxxblas::Transpose /*trans*/)
 {
     std::cerr << "Apply not yet implemented for this operator." << std::endl;

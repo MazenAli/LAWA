@@ -36,10 +36,10 @@ class SingularQuadrature
         SingularQuadrature(const SingularIntegral &_singularintegral);
 
         void
-        setLegendreOrder(int order_eta);
+        setLegendreOrder(FLENS_DEFAULT_INDEXTYPE order_eta);
 
         void
-        setParameters(int order, int n, double sigma, double mu, double omega);
+        setParameters(FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE n, double sigma, double mu, double omega);
 
         long double
         operator()(long double a1, long double b1, long double a2, long double b2,
@@ -61,24 +61,24 @@ class SingularQuadrature
                                long double eps);
 
         static void
-        _legendre(int order);
+        _legendre(FLENS_DEFAULT_INDEXTYPE order);
 
         static void
-        _hp_composite_legendre(int n, double sigma, double mu);
+        _hp_composite_legendre(FLENS_DEFAULT_INDEXTYPE n, double sigma, double mu);
 
-        int _order_eta;      //Legendre order for tensor product rule
-        int _order;
-        int _n;              //parameters for composite variable order Gauss-Legendre quadrature
+        FLENS_DEFAULT_INDEXTYPE _order_eta;      //Legendre order for tensor product rule
+        FLENS_DEFAULT_INDEXTYPE _order;
+        FLENS_DEFAULT_INDEXTYPE _n;              //parameters for composite variable order Gauss-Legendre quadrature
         double _sigma;
         double _mu;
         double _omega;
-        static int _precalculated_order;
-        static int _precalculated_n;
+        static FLENS_DEFAULT_INDEXTYPE _precalculated_order;
+        static FLENS_DEFAULT_INDEXTYPE _precalculated_n;
         static double   _precalculated_sigma;
         static double   _precalculated_mu;
         static flens::GeMatrix<flens::FullStorage<long double,cxxblas::ColMajor> > _legendreknots;
         static flens::GeMatrix<flens::FullStorage<long double,cxxblas::ColMajor> > _legendreweights;
-        static flens::DenseVector<flens::Array<int> >                              _hp_legendrenumofpoints;
+        static flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> >                              _hp_legendrenumofpoints;
         static flens::GeMatrix<flens::FullStorage<long double,cxxblas::ColMajor> > _hp_legendreknots;
         static flens::GeMatrix<flens::FullStorage<long double,cxxblas::ColMajor> > _hp_legendreweights;
 };

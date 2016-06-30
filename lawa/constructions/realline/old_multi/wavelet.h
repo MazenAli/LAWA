@@ -36,7 +36,7 @@ class Wavelet<_T,Orthogonal,R,Multi>
         static const DomainType Domain = R;
         static const Construction Cons = Multi;
     
-        Wavelet(int _d);
+        Wavelet(FLENS_DEFAULT_INDEXTYPE _d);
         
         Wavelet(const Basis<T,Orthogonal,R,Multi> &basis);
         
@@ -44,34 +44,34 @@ class Wavelet<_T,Orthogonal,R,Multi>
         ~Wavelet();
         
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
         
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
         
         Support<T>
         max_support() const;
 
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
         
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
-//TODO        int polynomialOrder;
-        const int d;
-        const int vanishingMoments;
-        unsigned int _numSplines;
+//TODO        FLENS_DEFAULT_INDEXTYPE polynomialOrder;
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE vanishingMoments;
+        unsigned FLENS_DEFAULT_INDEXTYPE _numSplines;
 
     private:
 
         typedef T (*Evaluator)(T x, unsigned short deriv);
         
-        long
-        _shift(long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        _shift(FLENS_DEFAULT_INDEXTYPE k) const;
         
-        int
-        _type(long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        _type(FLENS_DEFAULT_INDEXTYPE k) const;
     
         Evaluator *_evaluator;
         Support<T> *_support;

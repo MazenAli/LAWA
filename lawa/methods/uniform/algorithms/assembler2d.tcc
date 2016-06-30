@@ -31,7 +31,7 @@ template<typename T, typename Basis>
 template<typename BilinearForm>
 flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> >
 Assembler2D<T, Basis>::
-assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
+assembleStiffnessMatrix(BilinearForm& a, FLENS_DEFAULT_INDEXTYPE J_x, FLENS_DEFAULT_INDEXTYPE J_y, T tol)
 {   
     typedef typename Basis::FirstBasisType FirstBasis;
     typedef typename Basis::SecondBasisType SecondBasis;
@@ -44,18 +44,18 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
                                                  
      /* ============  v = Scaling Fct x Scaling Fct ==========================*/
      //std::cout << "===== v = SF * SF =======" << std::endl;
-     flens::Range<int> Rvx = b1.mra.rangeI(b1.j0);
-     flens::Range<int> Rvy = b2.mra.rangeI(b2.j0);
-     flens::Range<int> Rux = b1.mra.rangeI(b1.j0);
-     flens::Range<int> Ruy = b2.mra.rangeI(b2.j0);
-     for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-       for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+     flens::Range<FLENS_DEFAULT_INDEXTYPE> Rvx = b1.mra.rangeI(b1.j0);
+     flens::Range<FLENS_DEFAULT_INDEXTYPE> Rvy = b2.mra.rangeI(b2.j0);
+     flens::Range<FLENS_DEFAULT_INDEXTYPE> Rux = b1.mra.rangeI(b1.j0);
+     flens::Range<FLENS_DEFAULT_INDEXTYPE> Ruy = b2.mra.rangeI(b2.j0);
+     for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+       for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
 
          /* u = Scaling Fct x Scaling Fct */ 
          Rux = b1.mra.rangeI(b1.j0);
          Ruy = b2.mra.rangeI(b2.j0);    
-         for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-           for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){    
+         for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+           for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){    
                          
              T val = a(XBSpline, b1.j0, kvx, XBSpline, b2.j0, kvy,
                        XBSpline, b1.j0, kux, XBSpline, b2.j0, kuy);
@@ -69,10 +69,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
          /* u = Scaling Fct x Wavelet */ 
          Rux = b1.mra.rangeI(b1.j0);
-         for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
+         for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
            Ruy = b2.rangeJ(juy); 
-           for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-             for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+           for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+             for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                  
                T val = a(XBSpline, b1.j0, kvx, XBSpline,  b2.j0, kvy,
                          XBSpline, b1.j0, kux, XWavelet, juy, kuy);
@@ -87,10 +87,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
          /* u = Wavelet x Scaling Function */ 
          Ruy = b2.mra.rangeI(b2.j0);
-         for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
+         for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
            Rux = b1.rangeJ(jux); 
-           for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-             for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+           for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+             for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                
                T val = a(XBSpline, b1.j0, kvx, XBSpline, b2.j0, kvy,
                          XWavelet,  jux, kux, XBSpline, b2.j0, kuy);
@@ -104,12 +104,12 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
          }
 
          /* u = Wavelet x Wavelet */ 
-         for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) - 1; ++jux){
+         for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) - 1; ++jux){
            Rux = b1.rangeJ(jux); 
-           for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) - 1; ++juy){    
+           for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) - 1; ++juy){    
              Ruy = b2.rangeJ(juy); 
-             for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-               for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+             for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+               for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                  
                  T val = a(XBSpline,  b1.j0, kvx, XBSpline, b2.j0, kvy,
                            XWavelet, jux, kux,  XWavelet, juy, kuy);
@@ -129,16 +129,16 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
     //std::cout << "===== v = SF * W =======" << std::endl;
 
      Rvx = b1.mra.rangeI(b1.j0);
-     for(int jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; jvy++){
+     for(FLENS_DEFAULT_INDEXTYPE jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; jvy++){
        Rvy = b2.rangeJ(jvy);
-       for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-         for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+       for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+         for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
 
            /* u = Scaling Fct x Scaling Fct */ 
            Rux = b1.mra.rangeI(b1.j0);
            Ruy = b2.mra.rangeI(b2.j0);    
-           for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-             for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+           for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+             for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                
                T val = a(XBSpline, b1.j0, kvx, XWavelet, jvy, kvy,
                          XBSpline, b1.j0, kux, XBSpline,  b2.j0, kuy);
@@ -152,10 +152,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
            /* u = Scaling Fct x Wavelet */ 
            Rux = b1.mra.rangeI(b1.j0);
-           for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
+           for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
              Ruy = b2.rangeJ(juy); 
-             for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-               for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+             for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+               for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                 
                  T val = a(XBSpline, b1.j0, kvx, XWavelet, jvy, kvy,
                            XBSpline, b1.j0, kux, XWavelet, juy, kuy);
@@ -170,10 +170,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
            /* u = Wavelet x Scaling Function */ 
            Ruy = b2.mra.rangeI(b2.j0);
-           for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
+           for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
              Rux = b1.rangeJ(jux); 
-             for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-               for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+             for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+               for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                    
                  T val = a(XBSpline,  b1.j0, kvx, XWavelet, jvy, kvy,
                            XWavelet, jux, kux,   XBSpline, b2.j0, kuy);
@@ -187,12 +187,12 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
            }
 
            /* u = Wavelet x Wavelet */ 
-           for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jux){
+           for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jux){
              Rux = b1.rangeJ(jux);
-             for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) -1; ++juy){
+             for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) -1; ++juy){
                Ruy = b2.rangeJ(juy);
-               for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-                 for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+               for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+                 for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
 
                    T val = a(XBSpline,  b1.j0, kvx, XWavelet, jvy, kvy,
                              XWavelet, jux, kux,   XWavelet, juy, kuy);
@@ -213,16 +213,16 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
      //cout << "===== v = W * SF =======" << endl;
 
      Rvy = b2.mra.rangeI(b2.j0);
-     for(int jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; jvx++){
+     for(FLENS_DEFAULT_INDEXTYPE jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; jvx++){
        Rvx = b1.rangeJ(jvx);
-       for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-         for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+       for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+         for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
 
            /* u = Scaling Fct x Scaling Fct */ 
            Rux = b1.mra.rangeI(b1.j0);
            Ruy = b2.mra.rangeI(b2.j0);  
-           for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-             for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+           for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+             for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                
                T val = a(XWavelet, jvx, kvx,   XBSpline, b2.j0, kvy,
                          XBSpline,  b1.j0, kux, XBSpline, b2.j0, kuy);
@@ -236,10 +236,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
            /* u = Scaling Fct x Wavelet */ 
            Rux = b1.mra.rangeI(b1.j0);
-           for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
+           for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
              Ruy = b2.rangeJ(juy); 
-             for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-               for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+             for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+               for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                  
                  T val = a(XWavelet, jvx, kvx,   XBSpline, b2.j0, kvy,
                            XBSpline,  b1.j0, kux, XWavelet, juy, kuy);
@@ -254,10 +254,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
            /* u = Wavelet x Scaling Function */ 
            Ruy = b2.mra.rangeI(b2.j0);
-           for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
+           for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
              Rux = b1.rangeJ(jux); 
-             for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-               for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+             for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+               for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                  
                  T val = a(XWavelet, jvx, kvx, XBSpline, b2.j0, kvy,
                            XWavelet, jux, kux, XBSpline, b2.j0, kuy);
@@ -271,12 +271,12 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
            }
 
            /* u = Wavelet x Wavelet */ 
-           for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jux){
+           for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jux){
              Rux = b1.rangeJ(jux);
-             for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) -1; ++juy){
+             for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) -1; ++juy){
                Ruy = b2.rangeJ(juy);
-               for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-                 for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+               for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+                 for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                    
                    T val = a(XWavelet, jvx, kvx, XBSpline,  b2.j0, kvy,
                              XWavelet, jux, kux, XWavelet, juy, kuy);
@@ -295,18 +295,18 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
      /* ============  v = Wavelet x Wavelet ==========================*/
      //cout << "===== v = W * W =======" << endl;  
-     for(int jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jvx){
+     for(FLENS_DEFAULT_INDEXTYPE jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jvx){
        Rvx = b1.rangeJ(jvx);
-       for(int jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, jvx) -1; ++jvy){
+       for(FLENS_DEFAULT_INDEXTYPE jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, jvx) -1; ++jvy){
          Rvy = b2.rangeJ(jvy);
-         for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-           for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+         for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+           for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
 
              /* u = Scaling Fct x Scaling Fct */  
              Rux = b1.mra.rangeI(b1.j0);
              Ruy = b2.mra.rangeI(b2.j0);
-             for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-               for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+             for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+               for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
 
                  T val = a(XWavelet, jvx, kvx,   XWavelet, jvy, kvy,
                            XBSpline,  b1.j0, kux, XBSpline,  b2.j0, kuy);
@@ -320,10 +320,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
              /* u = Scaling Fct x Wavelet */ 
              Rux = b1.mra.rangeI(b1.j0);
-             for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
+             for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++juy){
                Ruy = b2.rangeJ(juy); 
-               for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-                 for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+               for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+                 for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                    
                    T val = a(XWavelet, jvx, kvx,  XWavelet, jvy, kvy,
                              XBSpline, b1.j0, kux, XWavelet, juy, kuy);
@@ -338,10 +338,10 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 
              /* u = Wavelet x Scaling Function */ 
              Ruy = b2.mra.rangeI(b2.j0);
-             for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
+             for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jux){
                Rux = b1.rangeJ(jux); 
-               for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-                 for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+               for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+                 for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
                  
                    T val = a(XWavelet, jvx, kvx, XWavelet, jvy, kvy,
                              XWavelet, jux, kux, XBSpline,  b2.j0, kuy);
@@ -355,12 +355,12 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
              }
 
              /* u = Wavelet x Wavelet */ 
-             for(int jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jux){
+             for(FLENS_DEFAULT_INDEXTYPE jux = b1.j0; jux <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jux){
                Rux = b1.rangeJ(jux);
-               for(int juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) -1; ++juy){
+               for(FLENS_DEFAULT_INDEXTYPE juy = b2.j0; juy <= basis.J2_max(J_x, J_y, jux) -1; ++juy){
                  Ruy = b2.rangeJ(juy);
-                 for(int kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
-                   for(int kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
+                 for(FLENS_DEFAULT_INDEXTYPE kux = Rux.firstIndex(); kux <= Rux.lastIndex(); ++kux){
+                   for(FLENS_DEFAULT_INDEXTYPE kuy = Ruy.firstIndex(); kuy <= Ruy.lastIndex(); ++kuy){
 
                      T val = a(XWavelet, jvx, kvx, XWavelet, jvy, kvy,
                                XWavelet, jux, kux, XWavelet, juy, kuy);
@@ -387,7 +387,7 @@ assembleStiffnessMatrix(BilinearForm& a, int J_x, int J_y, T tol)
 template<typename T, typename Basis>
 template<typename RHSIntegral>
 flens::DenseVector<flens::Array<T> >
-Assembler2D<T, Basis>::assembleRHS(RHSIntegral& rhs, int J_x, int J_y)
+Assembler2D<T, Basis>::assembleRHS(RHSIntegral& rhs, FLENS_DEFAULT_INDEXTYPE J_x, FLENS_DEFAULT_INDEXTYPE J_y)
 {
     typedef typename Basis::FirstBasisType FirstBasis;
     typedef typename Basis::SecondBasisType SecondBasis;
@@ -400,10 +400,10 @@ Assembler2D<T, Basis>::assembleRHS(RHSIntegral& rhs, int J_x, int J_y)
 
     /*  ============  v = Scaling Fct x Scaling Fct ==========================*/
     //std::cout << "SF x SF : " << std::endl;
-    flens::Range<int> Rvx = b1.mra.rangeI(b1.j0);
-    flens::Range<int> Rvy = b2.mra.rangeI(b2.j0);
-    for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-      for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+    flens::Range<FLENS_DEFAULT_INDEXTYPE> Rvx = b1.mra.rangeI(b1.j0);
+    flens::Range<FLENS_DEFAULT_INDEXTYPE> Rvy = b2.mra.rangeI(b2.j0);
+    for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+      for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
           
           f(I(XBSpline, b1.j0, kvx, XBSpline, b2.j0, kvy)) 
               = rhs(XBSpline, b1.j0, kvx, XBSpline, b2.j0, kvy);
@@ -414,10 +414,10 @@ Assembler2D<T, Basis>::assembleRHS(RHSIntegral& rhs, int J_x, int J_y)
     /* ============  v = Scaling Fct x Wavelet ==========================*/
     //std::cout << "SF x W : " << std::endl;
     Rvx = b1.mra.rangeI(b1.j0);
-    for(int jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++jvy){
+    for(FLENS_DEFAULT_INDEXTYPE jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, b1.j0-1) - 1; ++jvy){
       Rvy = b2.rangeJ(jvy);
-      for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-        for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+      for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+        for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
         
           f(I(XBSpline, b1.j0, kvx, XWavelet, jvy, kvy)) 
               = rhs(XBSpline, b1.j0, kvx, XWavelet, jvy, kvy);
@@ -429,10 +429,10 @@ Assembler2D<T, Basis>::assembleRHS(RHSIntegral& rhs, int J_x, int J_y)
     /* ============  v = Wavelet x Scaling Fct ==========================*/
     //std::cout << "W x SF : " << std::endl;
     Rvy = b2.mra.rangeI(b2.j0);
-    for(int jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jvx){
+    for(FLENS_DEFAULT_INDEXTYPE jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0-1) - 1; ++jvx){
       Rvx = b1.rangeJ(jvx);
-      for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-        for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+      for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+        for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
             
           f(I(XWavelet, jvx, kvx, XBSpline, b2.j0, kvy)) 
               = rhs(XWavelet, jvx, kvx, XBSpline, b2.j0, kvy);
@@ -443,12 +443,12 @@ Assembler2D<T, Basis>::assembleRHS(RHSIntegral& rhs, int J_x, int J_y)
 
     /*  ============  v = Wavelet x Wavelet ==========================*/
     //std::cout << "W x W : " << std::endl;
-    for(int jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jvx){
+    for(FLENS_DEFAULT_INDEXTYPE jvx = b1.j0; jvx <= basis.J1_max(J_x, J_y, b2.j0) -1; ++jvx){
       Rvx = b1.rangeJ(jvx);
-      for(int jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, jvx) - 1; ++jvy){
+      for(FLENS_DEFAULT_INDEXTYPE jvy = b2.j0; jvy <= basis.J2_max(J_x, J_y, jvx) - 1; ++jvy){
         Rvy = b2.rangeJ(jvy);
-        for(int kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
-          for(int kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
+        for(FLENS_DEFAULT_INDEXTYPE kvx = Rvx.firstIndex(); kvx <= Rvx.lastIndex(); ++kvx){
+          for(FLENS_DEFAULT_INDEXTYPE kvy = Rvy.firstIndex(); kvy <= Rvy.lastIndex(); ++kvy){
             
             f(I(XWavelet, jvx, kvx, XWavelet, jvy, kvy)) 
                 = rhs(XWavelet, jvx, kvx, XWavelet, jvy, kvy);
@@ -466,7 +466,7 @@ template<typename T, typename Basis>
 template<typename Preconditioner>
 flens::DiagonalMatrix<T>    
 Assembler2D<T, Basis>::
-assemblePreconditioner(Preconditioner& P, int J_x, int J_y)
+assemblePreconditioner(Preconditioner& P, FLENS_DEFAULT_INDEXTYPE J_x, FLENS_DEFAULT_INDEXTYPE J_y)
 {
     typedef typename Basis::FirstBasisType FirstBasis;
     typedef typename Basis::SecondBasisType SecondBasis;
@@ -478,10 +478,10 @@ assemblePreconditioner(Preconditioner& P, int J_x, int J_y)
     flens::DenseVector<flens::Array<T> > D(basis.dim(J_x, J_y));
 
     /* SF x SF */
-    flens::Range<int> Rx = b1.mra.rangeI(b1.j0);
-    flens::Range<int> Ry = b2.mra.rangeI(b2.j0);   
-    for(int kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
-        for(int ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
+    flens::Range<FLENS_DEFAULT_INDEXTYPE> Rx = b1.mra.rangeI(b1.j0);
+    flens::Range<FLENS_DEFAULT_INDEXTYPE> Ry = b2.mra.rangeI(b2.j0);   
+    for(FLENS_DEFAULT_INDEXTYPE kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
+        for(FLENS_DEFAULT_INDEXTYPE ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
             D(I(XBSpline, b1.j0, kx, XBSpline, b2.j0, ky)) = P(XBSpline, b1.j0, kx, XBSpline, b2.j0, ky);
             
         }
@@ -489,10 +489,10 @@ assemblePreconditioner(Preconditioner& P, int J_x, int J_y)
     
     /* SF x W */
     Rx = b1.mra.rangeI(b1.j0);
-    for(int jy = b2.j0; jy <= basis.J2_max(J_x, J_y, b1.j0-1)-1; ++jy){
+    for(FLENS_DEFAULT_INDEXTYPE jy = b2.j0; jy <= basis.J2_max(J_x, J_y, b1.j0-1)-1; ++jy){
         Ry = b2.rangeJ(jy);
-        for(int kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
-            for(int ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
+        for(FLENS_DEFAULT_INDEXTYPE kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
+            for(FLENS_DEFAULT_INDEXTYPE ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
                 D(I(XBSpline, b1.j0, kx, XWavelet, jy, ky)) = P(XBSpline, b1.j0, kx, XWavelet, jy, ky);                
             }
         }
@@ -500,22 +500,22 @@ assemblePreconditioner(Preconditioner& P, int J_x, int J_y)
     
     /* W x SF */
     Ry = b2.mra.rangeI(b2.j0);
-    for(int jx = b1.j0; jx <= basis.J1_max(J_x, J_y, b2.j0-1) -1; ++jx){
+    for(FLENS_DEFAULT_INDEXTYPE jx = b1.j0; jx <= basis.J1_max(J_x, J_y, b2.j0-1) -1; ++jx){
         Rx = b1.rangeJ(jx);
-        for(int kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
-            for(int ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
+        for(FLENS_DEFAULT_INDEXTYPE kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
+            for(FLENS_DEFAULT_INDEXTYPE ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
                 D(I(XWavelet, jx, kx, XBSpline, b2.j0, ky)) = P(XWavelet, jx, kx, XBSpline, b2.j0, ky);            
             }
         }      
     }
     
     /* W x W */
-    for(int jx = b1.j0; jx <= basis.J1_max(J_x, J_y, b2.j0) - 1; ++jx){
+    for(FLENS_DEFAULT_INDEXTYPE jx = b1.j0; jx <= basis.J1_max(J_x, J_y, b2.j0) - 1; ++jx){
         Rx = b1.rangeJ(jx);
-        for(int jy = b2.j0; jy <= basis.J2_max(J_x, J_y, jx) - 1; ++jy){
+        for(FLENS_DEFAULT_INDEXTYPE jy = b2.j0; jy <= basis.J2_max(J_x, J_y, jx) - 1; ++jy){
             Ry = b2.rangeJ(jy);
-            for(int kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
-                for(int ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
+            for(FLENS_DEFAULT_INDEXTYPE kx = Rx.firstIndex(); kx <= Rx.lastIndex(); ++kx){
+                for(FLENS_DEFAULT_INDEXTYPE ky = Ry.firstIndex(); ky <= Ry.lastIndex(); ++ky){
                     D(I(XWavelet, jx, kx, XWavelet, jy, ky)) = P(XWavelet, jx, kx, XWavelet, jy, ky);                
                 }
             } 

@@ -3,7 +3,7 @@ namespace lawa {
 template<typename T, typename Basis1D>
 TimedepSeparableRHS1D<T, Basis1D>::TimedepSeparableRHS1D(const Basis1D& _basis,
                                                          const SeparableFunction2D<T>& _F,
-                                                         int order)
+                                                         FLENS_DEFAULT_INDEXTYPE order)
     : basis(_basis), F(_F), integralf(_F.F_y, basis)
 {
     integralf.quadrature.setOrder(order);
@@ -11,7 +11,7 @@ TimedepSeparableRHS1D<T, Basis1D>::TimedepSeparableRHS1D(const Basis1D& _basis,
     
 template<typename T, typename Basis1D>
 T
-TimedepSeparableRHS1D<T, Basis1D>::operator()(T t, XType xtype, int j, long k) const
+TimedepSeparableRHS1D<T, Basis1D>::operator()(T t, XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return F.F_x(t) * integralf(j,k,xtype,0);
 }   
@@ -36,7 +36,7 @@ SumOfTimedepRHS1D<T, TimedepRHS>::SumOfTimedepRHS1D(const TimedepRHS &_rhs1,
 
 template<typename T, typename TimedepRHS>
 T
-SumOfTimedepRHS1D<T, TimedepRHS>::operator()(T t, XType xtype, int j, long k) const
+SumOfTimedepRHS1D<T, TimedepRHS>::operator()(T t, XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
        return rhs1(t, xtype, j, k)
           +rhs2(t, xtype, j, k); 

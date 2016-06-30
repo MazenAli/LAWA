@@ -42,11 +42,11 @@ class SeparableRHS2D : public Rhs2D<T>
         SeparableRHS2D(const Basis2D& _basis, const SeparableFunction2D<T>& _F,
                        const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_x,
                        const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_y,
-                       int order, int _deriv1 = 0, int _deriv2 = 0);
+                       FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE _deriv1 = 0, FLENS_DEFAULT_INDEXTYPE _deriv2 = 0);
 
         T
-        operator()(XType xtype_x, int j_x, long k_x,
-                   XType xtype_y, int j_y, long k_y) const;
+        operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+                   XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y) const;
 
         T
         operator()(const Index2D &index) const;
@@ -67,8 +67,8 @@ class SeparableRHS2D : public Rhs2D<T>
         IntegralF<Gauss, Basis_x, Basis_x>  integralf_x;
         IntegralF<Gauss, Basis_y, Basis_y>  integralf_y;
 
-        int     deriv1 = 0;
-        int     deriv2 = 0;
+        FLENS_DEFAULT_INDEXTYPE     deriv1 = 0;
+        FLENS_DEFAULT_INDEXTYPE     deriv2 = 0;
 
 };
 

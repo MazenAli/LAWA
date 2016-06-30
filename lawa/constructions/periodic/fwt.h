@@ -30,25 +30,25 @@ namespace lawa {
 template <typename X, typename Y>
     void
     decompose(const flens::DenseVector<X> &x, 
-              const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, int j,
+              const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, FLENS_DEFAULT_INDEXTYPE j,
               flens::DenseVector<Y> &y);
 
 template <typename X, typename Y>
     void
     reconstruct(const flens::DenseVector<X> &x, 
-                const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, int j,
+                const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, FLENS_DEFAULT_INDEXTYPE j,
                 flens::DenseVector<Y> &y);
 
 template <typename X, typename Y>
     void
     fwt(const flens::DenseVector<X> &x, 
-        const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, int j,
+        const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, FLENS_DEFAULT_INDEXTYPE j,
         flens::DenseVector<Y> &y);
 
 template <typename X, typename Y>
     void
     ifwt(const flens::DenseVector<X> &x, 
-         const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, int j,
+         const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, FLENS_DEFAULT_INDEXTYPE j,
          flens::DenseVector<Y> &y);
 
 } // namespace lawa

@@ -42,14 +42,14 @@ SparseGeMatrix<E>::SparseGeMatrix()
 }
 
 template <typename E>
-SparseGeMatrix<E>::SparseGeMatrix(int numRows, int numCols, int k)
+SparseGeMatrix<E>::SparseGeMatrix(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols, FLENS_DEFAULT_INDEXTYPE k)
     : _engine(numRows, numCols, k)
 {
     _initializer = engine().initializer();
 }
 
 template <typename E>
-SparseGeMatrix<E>::SparseGeMatrix(int numRows, int numCols, Initializer *initializer, int k)
+SparseGeMatrix<E>::SparseGeMatrix(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols, Initializer *initializer, FLENS_DEFAULT_INDEXTYPE k)
     : _engine(numRows, numCols, k)
 {
     _initializer = engine().initializer(initializer);   //only copies coordinates and last coord!
@@ -85,7 +85,7 @@ SparseGeMatrix<E>::operator/=(T alpha)
 
 template <typename E>
 typename SparseGeMatrix<E>::T &
-SparseGeMatrix<E>::operator()(int row, int col)
+SparseGeMatrix<E>::operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col)
 {
     return _initializer->operator()(row,col);
 }
@@ -100,21 +100,21 @@ SparseGeMatrix<E>::finalize()
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseGeMatrix<E>::numRows() const
 {
     return _engine.numRows();
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseGeMatrix<E>::numCols() const
 {
     return _engine.numCols();
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseGeMatrix<E>::numNonZeros() const
 {
     assert(!_initializer);
@@ -160,7 +160,7 @@ SparseGeMatrix<E>::end()
 
 template <typename E>
 void
-SparseGeMatrix<E>::resize(int m, int n, int k)
+SparseGeMatrix<E>::resize(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k)
 {
     delete _initializer;
     _engine = E(m, n, k);
@@ -201,7 +201,7 @@ SparseSyMatrix<E>::SparseSyMatrix()
 }
 
 template <typename E>
-SparseSyMatrix<E>::SparseSyMatrix(int dim, int k)
+SparseSyMatrix<E>::SparseSyMatrix(FLENS_DEFAULT_INDEXTYPE dim, FLENS_DEFAULT_INDEXTYPE k)
     : _engine(dim, dim, k)
 {
     _initializer = engine().initializer();
@@ -230,7 +230,7 @@ SparseSyMatrix<E>::operator/=(T alpha)
 
 template <typename E>
 typename SparseSyMatrix<E>::T &
-SparseSyMatrix<E>::operator()(int row, int col)
+SparseSyMatrix<E>::operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col)
 {
     return _initializer->operator()(row,col);
 }
@@ -245,7 +245,7 @@ SparseSyMatrix<E>::finalize()
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseSyMatrix<E>::dim() const
 {
     assert(_engine.numRows()==_engine.numCols());
@@ -253,7 +253,7 @@ SparseSyMatrix<E>::dim() const
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseSyMatrix<E>::numNonZeros() const
 {
     assert(!_initializer);
@@ -299,7 +299,7 @@ SparseSyMatrix<E>::end()
 
 template <typename E>
 void
-SparseSyMatrix<E>::resize(int m, int k)
+SparseSyMatrix<E>::resize(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE k)
 {
     delete _initializer;
     _engine = E(m, m, k);
@@ -325,7 +325,7 @@ SparseSyMatrix<E>::engine()
 
 // -- constructors -------------------------------------------------------------
 template <typename E>
-SparseSymmetricMatrix<E>::SparseSymmetricMatrix(int numRows, int numCols)
+SparseSymmetricMatrix<E>::SparseSymmetricMatrix(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols)
     : _engine(numRows, numCols)
 {
     _initializer = engine().initializer();
@@ -334,7 +334,7 @@ SparseSymmetricMatrix<E>::SparseSymmetricMatrix(int numRows, int numCols)
 // -- operators ----------------------------------------------------------------
 template <typename E>
 typename E::ElementType &
-SparseSymmetricMatrix<E>::operator()(int row, int col)
+SparseSymmetricMatrix<E>::operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col)
 {
     return _initializer->operator()(std::min(row,col), std::max(row,col));
 }
@@ -349,21 +349,21 @@ SparseSymmetricMatrix<E>::finalize()
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseSymmetricMatrix<E>::numRows() const
 {
     return _engine.numRows();
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseSymmetricMatrix<E>::numCols() const
 {
     return _engine.numCols();
 }
 
 template <typename E>
-int
+FLENS_DEFAULT_INDEXTYPE
 SparseSymmetricMatrix<E>::numNonZeros() const
 {
     assert(!_initializer);

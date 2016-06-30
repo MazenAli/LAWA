@@ -22,29 +22,29 @@
 namespace lawa {
 
 template <typename T>
-Wavelet<T,Primal,R,CDF>::Wavelet(int _d, int _d_)
+Wavelet<T,Primal,R,CDF>::Wavelet(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_)
     : d(_d), d_(_d_), mu(d&1), l1((2-d-d_)/2), l2((d+d_)/2),
       vanishingMoments(_d_), b(mask(d,d_)),
       phi(d), phi_(d,d_)
 {
     if (d==2 && d_==2) {
-        singularPts.engine().resize(5);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)5);
         singularPts = -1., 0., 0.5, 1., 2.;
     }
     else if (d==2 && d_==4) {
-        singularPts.engine().resize(7);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
         singularPts = -2., -1., 0., 0.5, 1., 2., 3.;
     }
     else if (d==3 && d_==3) {
-        singularPts.engine().resize(7);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
         singularPts = -2., -1., 0., 0.5, 1., 2., 3.;
     }
     else if (d==3 && d_==5) {
-        singularPts.engine().resize(9);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)9);
         singularPts = -3., -2., -1., 0., 0.5, 1., 2., 3., 4.;
     }
     else if (d==3 && d_==7) {
-        singularPts.engine().resize(11);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)11);
         singularPts = -4.,-3., -2., -1., 0., 0.5, 1., 2., 3., 4., 5.;
     }
     else {
@@ -64,23 +64,23 @@ Wavelet<T,Primal,R,CDF>::Wavelet(const BSpline<T,Primal,R,CDF> &_phi,
       
 {
     if (d==2 && d_==2) {
-        singularPts.engine().resize(5);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)5);
         singularPts = -1., 0., 0.5, 1., 2.;
     }
     else if (d==2 && d_==4) {
-        singularPts.engine().resize(7);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
         singularPts = -2., -1., 0., 0.5, 1., 2., 3.;
     }
     else if (d==3 && d_==3) {
-        singularPts.engine().resize(7);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
         singularPts = -2., -1., 0., 0.5, 1., 2., 3.;
     }
     else if (d==3 && d_==5) {
-        singularPts.engine().resize(9);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)9);
         singularPts = -3., -2., -1., 0., 0.5, 1., 2., 3., 4.;
     }
     else if (d==3 && d_==7) {
-        singularPts.engine().resize(11);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)11);
         singularPts = -4.,-3., -2., -1., 0., 0.5, 1., 2., 3., 4., 5.;
     }
     else {
@@ -101,23 +101,23 @@ Wavelet<T,Primal,R,CDF>::Wavelet(const Basis<T,Primal,R,CDF> &basis)
     assert(d<=d_);
     assert(((d+d_)&1)==0);
     if (d==2 && d_==2) {
-        singularPts.engine().resize(5);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)5);
         singularPts = -1., 0., 0.5, 1., 2.;
     }
     else if (d==2 && d_==4) {
-        singularPts.engine().resize(7);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
         singularPts = -2., -1., 0., 0.5, 1., 2., 3.;
     }
     else if (d==3 && d_==3) {
-        singularPts.engine().resize(7);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
         singularPts = -2., -1., 0., 0.5, 1., 2., 3.;
     }
     else if (d==3 && d_==5) {
-        singularPts.engine().resize(9);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)9);
         singularPts = -3., -2., -1., 0., 0.5, 1., 2., 3., 4.;
     }
     else if (d==3 && d_==7) {
-        singularPts.engine().resize(11);
+        singularPts.engine().resize((FLENS_DEFAULT_INDEXTYPE)11);
         singularPts = -4.,-3., -2., -1., 0., 0.5, 1., 2., 3., 4., 5.;
     }
     else {
@@ -130,11 +130,11 @@ Wavelet<T,Primal,R,CDF>::Wavelet(const Basis<T,Primal,R,CDF> &basis)
 
 template <typename T>
 T
-Wavelet<T,Primal,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Primal,R,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     T ret = T(0);
     x = pow2i<T>(j)*x-k;
-    for (int i=b.firstIndex(); i<=b.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=b.firstIndex(); i<=b.lastIndex(); ++i) {
         ret += b(i)*phi(2*x-i, 0, 0, deriv);
     }
     return pow2i<T>(deriv*(j+1)) * pow2ih<T>(j) * ret;
@@ -142,7 +142,7 @@ Wavelet<T,Primal,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) co
 
 template <typename T>
 Support<T>
-Wavelet<T,Primal,R,CDF>::support(int j, long k) const
+Wavelet<T,Primal,R,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     //required for large negative levels!!
     T scale = pow2i<T>(-j);
@@ -151,18 +151,18 @@ Wavelet<T,Primal,R,CDF>::support(int j, long k) const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,R,CDF>::singularSupport(int j, long k) const
+Wavelet<T,Primal,R,CDF>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return linspace(support(j,k).l1, support(j,k).l2, 2*(d+d_)-1);
 }
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,R,CDF>::optim_singularSupport(int j, long k) const
+Wavelet<T,Primal,R,CDF>::optim_singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     //return linspace(support(j,k).l1, support(j,k).l2, 2*(d+d_)-1);
     flens::DenseVector<flens::Array<T> > x(singularPts.length());
-    for (int i=1; i<=x.length(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=x.length(); ++i) {
         x(i) = pow2i<T>(-j)*(singularPts(i)+T(k));
     }
     return x;
@@ -170,7 +170,7 @@ Wavelet<T,Primal,R,CDF>::optim_singularSupport(int j, long k) const
 
 template <typename T>
 T
-Wavelet<T,Primal,R,CDF>::tic(int j) const
+Wavelet<T,Primal,R,CDF>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+1));
 }
@@ -184,16 +184,16 @@ Wavelet<T,Primal,R,CDF>::mask() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,R,CDF>::mask(int d, int d_)
+Wavelet<T,Primal,R,CDF>::mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     assert(d<=d_);
     assert(((d+d_)&1)==0);
 
-    int mu = d & 1;
+    FLENS_DEFAULT_INDEXTYPE mu = d & 1;
     BSpline<T,Dual,R,CDF> phi_(d,d_);
     flens::DenseVector<flens::Array<T> > b(flens::_(2-(d+mu)/2-d_, (d-mu)/2+d_));
-    for (int k=b.firstIndex(); k<=b.lastIndex(); ++k) {
-        int sign = (k&1) ? -1 : 1;
+    for (FLENS_DEFAULT_INDEXTYPE k=b.firstIndex(); k<=b.lastIndex(); ++k) {
+        FLENS_DEFAULT_INDEXTYPE sign = (k&1) ? -1 : 1;
         b(k) = sign * phi_.a_(1-k);
     }
     return b;

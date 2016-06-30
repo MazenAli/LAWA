@@ -11,8 +11,8 @@ using namespace std;
 
 //****************************************************************************80
 
-int *abscissa_level_open_nd ( int level_max, int dim_num, int test_num, 
-  int test_val[] )
+FLENS_DEFAULT_INDEXTYPE *abscissa_level_open_nd ( FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE test_num, 
+  FLENS_DEFAULT_INDEXTYPE test_val[] )
 
 //****************************************************************************80
 //
@@ -80,25 +80,25 @@ int *abscissa_level_open_nd ( int level_max, int dim_num, int test_num,
 //
 //  Parameters:
 //
-//    Input, int LEVEL_MAX, controls the size of the final sparse grid.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, controls the size of the final sparse grid.
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int TEST_NUM, the number of points to be tested.
+//    Input, FLENS_DEFAULT_INDEXTYPE TEST_NUM, the number of points to be tested.
 //
-//    Input, int TEST_VAL[DIM_NUM*TEST_NUM], the indices of the points 
+//    Input, FLENS_DEFAULT_INDEXTYPE TEST_VAL[DIM_NUM*TEST_NUM], the indices of the points 
 //    to be tested.  Normally, each index would be between 0 and 2**LEVEL_MAX.
 //
-//    Output, int ABSCISSA_OPEN_LEVEL_ND[TEST_NUM], the value of LEVEL at which the
+//    Output, FLENS_DEFAULT_INDEXTYPE ABSCISSA_OPEN_LEVEL_ND[TEST_NUM], the value of LEVEL at which the
 //    point would first be generated, assuming that a standard sequence of
 //    nested grids is used.
 //
 {
-  int j;
-  int order;
-  int *test_level;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE order;
+  FLENS_DEFAULT_INDEXTYPE *test_level;
 
-  test_level = new int[test_num];
+  test_level = new FLENS_DEFAULT_INDEXTYPE[test_num];
 
   if ( level_max == 0 )
   {
@@ -121,7 +121,7 @@ int *abscissa_level_open_nd ( int level_max, int dim_num, int test_num,
 }
 //****************************************************************************80
 
-void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
+void comp_next ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE a[], bool *more, FLENS_DEFAULT_INDEXTYPE *h, FLENS_DEFAULT_INDEXTYPE *t )
 
 //****************************************************************************80
 //
@@ -214,11 +214,11 @@ void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
 //
 //  Parameters:
 //
-//    Input, int N, the integer whose compositions are desired.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the integer whose compositions are desired.
 //
-//    Input, int K, the number of parts in the composition.
+//    Input, FLENS_DEFAULT_INDEXTYPE K, the number of parts in the composition.
 //
-//    Input/output, int A[K], the parts of the composition.
+//    Input/output, FLENS_DEFAULT_INDEXTYPE A[K], the parts of the composition.
 //
 //    Input/output, bool *MORE.
 //    Set MORE = FALSE on first call.  It will be reset to TRUE on return
@@ -226,12 +226,12 @@ void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
 //    MORE is set to FALSE when the last composition has been computed
 //    and returned.
 //
-//    Input/output, int *H, *T, two internal parameters needed for the
+//    Input/output, FLENS_DEFAULT_INDEXTYPE *H, *T, two internal parameters needed for the
 //    computation.  The user should allocate space for these in the calling
 //    program, include them in the calling sequence, but never alter them!
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   if ( !( *more ) )
   {
@@ -262,7 +262,7 @@ void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
 }
 //****************************************************************************80
 
-double f2_abscissa ( int order, int i )
+double f2_abscissa ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE i )
 
 //****************************************************************************80
 //
@@ -291,10 +291,10 @@ double f2_abscissa ( int order, int i )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order of the Fejer type 2 rule.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the Fejer type 2 rule.
 //    1 <= ORDER.
 //
-//    Input, int I, the index of the desired abscissa.  1 <= I <= ORDER.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, the index of the desired abscissa.  1 <= I <= ORDER.
 //
 //    Output, double F2_ABSCISSA, the value of the I-th 
 //    abscissa in the Fejer type 2 rule of order ORDER.
@@ -330,8 +330,8 @@ double f2_abscissa ( int order, int i )
 }
 //****************************************************************************80
 
-void gl_abscissa ( int dim_num, int point_num, int grid_index[], 
-  int grid_base[], double grid_point[] )
+void gl_abscissa ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE point_num, FLENS_DEFAULT_INDEXTYPE grid_index[], 
+  FLENS_DEFAULT_INDEXTYPE grid_base[], double grid_point[] )
 
 //****************************************************************************80
 //
@@ -362,25 +362,25 @@ void gl_abscissa ( int dim_num, int point_num, int grid_index[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int POINT_NUM, the number of points.
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of points.
 //
-//    Input, int GRID_INDEX[DIM_NUM*POINT_NUM], the index of the abscissa
+//    Input, FLENS_DEFAULT_INDEXTYPE GRID_INDEX[DIM_NUM*POINT_NUM], the index of the abscissa
 //    from the Gauss-Legendre rule, for each dimension and point.
 //
-//    Input, int GRID_BASE[DIM_NUM], the number of points used in the 
+//    Input, FLENS_DEFAULT_INDEXTYPE GRID_BASE[DIM_NUM], the number of points used in the 
 //    Gauss-Legendre rule for a given dimension.
 //
 //    Output, double GRID_POINT[DIM_NUM], the grid points of
 //    Gauss-Legendre abscissas.
 //
 {
-  int dim;
-  int level;
-  int point;
-  int pointer;
-  int skip[8] = { 0, 1, 4, 11, 26, 57, 120, 247 };
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE point;
+  FLENS_DEFAULT_INDEXTYPE pointer;
+  FLENS_DEFAULT_INDEXTYPE skip[8] = { 0, 1, 4, 11, 26, 57, 120, 247 };
   double x[247] = {
        0.0E+00, 
      - 0.774596669241483377035853079956E+00, 
@@ -669,7 +669,7 @@ void gl_abscissa ( int dim_num, int point_num, int grid_index[],
 }
 //****************************************************************************80
 
-double gp_abscissa ( int order, int index )
+double gp_abscissa ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE index )
 
 //****************************************************************************80
 //
@@ -715,9 +715,9 @@ double gp_abscissa ( int order, int index )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order of the rule.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the rule.
 //
-//    Input, int INDEX, the index of the point in the rule.
+//    Input, FLENS_DEFAULT_INDEXTYPE INDEX, the index of the point in the rule.
 //
 //    Output, double GP_ABSCISSA, the value of the INDEX-th 
 //    abscissa in the rule of order ORDER.
@@ -1283,7 +1283,7 @@ double gp_abscissa ( int order, int index )
 }
 //****************************************************************************80
 
-int i4_choose ( int n, int k )
+FLENS_DEFAULT_INDEXTYPE i4_choose ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k )
 
 //****************************************************************************80
 //
@@ -1322,16 +1322,16 @@ int i4_choose ( int n, int k )
 //
 //  Parameters:
 //
-//    Input, int N, K, are the values of N and K.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, K, are the values of N and K.
 //
-//    Output, int I4_CHOOSE, the number of combinations of N
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_CHOOSE, the number of combinations of N
 //    things taken K at a time.
 //
 {
-  int i;
-  int mn;
-  int mx;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE mn;
+  FLENS_DEFAULT_INDEXTYPE mx;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   mn = i4_min ( k, n - k );
 
@@ -1357,7 +1357,7 @@ int i4_choose ( int n, int k )
 }
 //****************************************************************************80
 
-int i4_log_2 ( int i )
+FLENS_DEFAULT_INDEXTYPE i4_log_2 ( FLENS_DEFAULT_INDEXTYPE i )
 
 //****************************************************************************80
 //
@@ -1399,15 +1399,15 @@ int i4_log_2 ( int i )
 //
 //  Parameters:
 //
-//    Input, int I, the number whose logarithm base 2 is desired.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, the number whose logarithm base 2 is desired.
 //
-//    Output, int I4_LOG_2, the integer part of the logarithm base 2 of
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_LOG_2, the integer part of the logarithm base 2 of
 //    the absolute value of X.
 //
 {
-  int i_abs;
-  int two_pow;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE i_abs;
+  FLENS_DEFAULT_INDEXTYPE two_pow;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( i == 0 )
   {
@@ -1431,7 +1431,7 @@ int i4_log_2 ( int i )
 }
 //****************************************************************************80
 
-int i4_max ( int i1, int i2 )
+FLENS_DEFAULT_INDEXTYPE i4_max ( FLENS_DEFAULT_INDEXTYPE i1, FLENS_DEFAULT_INDEXTYPE i2 )
 
 //****************************************************************************80
 //
@@ -1453,12 +1453,12 @@ int i4_max ( int i1, int i2 )
 //
 //  Parameters:
 //
-//    Input, int I1, I2, are two integers to be compared.
+//    Input, FLENS_DEFAULT_INDEXTYPE I1, I2, are two integers to be compared.
 //
-//    Output, int I4_MAX, the larger of I1 and I2.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_MAX, the larger of I1 and I2.
 //
 {
-  int value;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( i2 < i1 )
   {
@@ -1472,7 +1472,7 @@ int i4_max ( int i1, int i2 )
 }
 //****************************************************************************80
 
-int i4_min ( int i1, int i2 )
+FLENS_DEFAULT_INDEXTYPE i4_min ( FLENS_DEFAULT_INDEXTYPE i1, FLENS_DEFAULT_INDEXTYPE i2 )
 
 //****************************************************************************80
 //
@@ -1494,12 +1494,12 @@ int i4_min ( int i1, int i2 )
 //
 //  Parameters:
 //
-//    Input, int I1, I2, two integers to be compared.
+//    Input, FLENS_DEFAULT_INDEXTYPE I1, I2, two integers to be compared.
 //
-//    Output, int I4_MIN, the smaller of I1 and I2.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_MIN, the smaller of I1 and I2.
 //
 {
-  int value;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( i1 < i2 )
   {
@@ -1513,7 +1513,7 @@ int i4_min ( int i1, int i2 )
 }
 //****************************************************************************80
 
-int i4_modp ( int i, int j )
+FLENS_DEFAULT_INDEXTYPE i4_modp ( FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE j )
 
 //****************************************************************************80
 //
@@ -1561,15 +1561,15 @@ int i4_modp ( int i, int j )
 //
 //  Parameters:
 //
-//    Input, int I, the number to be divided.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, the number to be divided.
 //
-//    Input, int J, the number that divides I.
+//    Input, FLENS_DEFAULT_INDEXTYPE J, the number that divides I.
 //
-//    Output, int I4_MODP, the nonnegative remainder when I is 
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_MODP, the nonnegative remainder when I is 
 //    divided by J.
 //
 {
-  int value;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( j == 0 )
   {
@@ -1590,7 +1590,7 @@ int i4_modp ( int i, int j )
 }
 //****************************************************************************80
 
-int i4_power ( int i, int j )
+FLENS_DEFAULT_INDEXTYPE i4_power ( FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE j )
 
 //****************************************************************************80
 //
@@ -1612,13 +1612,13 @@ int i4_power ( int i, int j )
 //
 //  Parameters:
 //
-//    Input, int I, J, the base and the power.  J should be nonnegative.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, J, the base and the power.  J should be nonnegative.
 //
-//    Output, int I4_POWER, the value of I^J.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_POWER, the value of I^J.
 //
 {
-  int k;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE k;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( j < 0 )
   {
@@ -1668,7 +1668,7 @@ int i4_power ( int i, int j )
 }
 //****************************************************************************80
 /*
-string i4_to_string ( int i4, string format )
+string i4_to_string ( FLENS_DEFAULT_INDEXTYPE i4, string format )
 
 // ***************************************************************************80
 //
@@ -1690,7 +1690,7 @@ string i4_to_string ( int i4, string format )
 //
 //  Parameters:
 //
-//    Input, int I4, an integer.
+//    Input, FLENS_DEFAULT_INDEXTYPE I4, an integer.
 //
 //    Input, string FORMAT, the format string.
 //
@@ -1709,7 +1709,7 @@ string i4_to_string ( int i4, string format )
 // ***************************************************************************80
 */
 
-int i4vec_product ( int n, int a[] )
+FLENS_DEFAULT_INDEXTYPE i4vec_product ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[] )
 
 //****************************************************************************80
 //
@@ -1741,15 +1741,15 @@ int i4vec_product ( int n, int a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Input, int A[N], the vector
+//    Input, FLENS_DEFAULT_INDEXTYPE A[N], the vector
 //
-//    Output, int I4VEC_PRODUCT, the product of the entries of A.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4VEC_PRODUCT, the product of the entries of A.
 //
 {
-  int i;
-  int product;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE product;
 
   product = 1;
   for ( i = 0; i < n; i++ )
@@ -1761,7 +1761,7 @@ int i4vec_product ( int n, int a[] )
 }
 //****************************************************************************80
 
-int index_to_level_open ( int dim_num, int t[], int order, int level_max )
+FLENS_DEFAULT_INDEXTYPE index_to_level_open ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE t[], FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -1791,23 +1791,23 @@ int index_to_level_open ( int dim_num, int t[], int order, int level_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int T[DIM_NUM], the grid index of a point.
+//    Input, FLENS_DEFAULT_INDEXTYPE T[DIM_NUM], the grid index of a point.
 //
-//    Input, int ORDER, the order of the rule.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the rule.
 //
-//    Input, int LEVEL_MAX, the level with respect to which the
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the level with respect to which the
 //    index applies.
 //
-//    Output, int INDEX_TO_LEVEL_OPEN, the first level on which
+//    Output, FLENS_DEFAULT_INDEXTYPE INDEX_TO_LEVEL_OPEN, the first level on which
 //    the point associated with the given index will appear.
 //
 {
-  int dim;
-  int level;
-  int s;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE s;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   value = 0;
 
@@ -1848,7 +1848,7 @@ int index_to_level_open ( int dim_num, int t[], int order, int level_max )
 }
 //****************************************************************************80
 
-void level_to_order_open ( int dim_num, int level[], int order[] )
+void level_to_order_open ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level[], FLENS_DEFAULT_INDEXTYPE order[] )
 
 //****************************************************************************80
 //
@@ -1942,15 +1942,15 @@ void level_to_order_open ( int dim_num, int level[], int order[] )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL[DIM_NUM], the nesting level.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL[DIM_NUM], the nesting level.
 //
-//    Output, int ORDER[DIM_NUM], the order (number of points) 
+//    Output, FLENS_DEFAULT_INDEXTYPE ORDER[DIM_NUM], the order (number of points) 
 //    of the rule.
 //
 {
-  int dim;
+  FLENS_DEFAULT_INDEXTYPE dim;
 
   for ( dim = 0; dim < dim_num; dim++ )
   {
@@ -1971,7 +1971,7 @@ void level_to_order_open ( int dim_num, int level[], int order[] )
 }
 //****************************************************************************80
 
-int *levels_open_index ( int dim_num, int level_max, int point_num )
+FLENS_DEFAULT_INDEXTYPE *levels_open_index ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE point_num )
 
 //****************************************************************************80
 //
@@ -2006,37 +2006,37 @@ int *levels_open_index ( int dim_num, int level_max, int point_num )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int POINT_NUM, the total number of points in the grids.
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the total number of points in the grids.
 //
-//    Output, int LEVELS_MAX_INDEX[DIM_NUM*POINT_NUM], a list of point indices,
+//    Output, FLENS_DEFAULT_INDEXTYPE LEVELS_MAX_INDEX[DIM_NUM*POINT_NUM], a list of point indices,
 //    representing a subset of the product grid of level LEVEL_MAX,
 //    representing (exactly once) each point that will show up in a
 //    sparse grid of level LEVEL_MAX.
 //
 {
-  int dim;
-  int *grid_index;
-  int *grid_index2;
-  int h;
-  int level;
-  int *level_1d;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE *grid_index;
+  FLENS_DEFAULT_INDEXTYPE *grid_index2;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
   bool more;
-  int *order_1d;
-  int order_nd;
-  int point;
-  int point_num2;
-  int t;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE order_nd;
+  FLENS_DEFAULT_INDEXTYPE point;
+  FLENS_DEFAULT_INDEXTYPE point_num2;
+  FLENS_DEFAULT_INDEXTYPE t;
   bool test;
 //
 //  The outer loop generates LEVELs from 0 to LEVEL_MAX.
 //
-  grid_index = new int[dim_num*point_num];
-  level_1d = new int[dim_num];
-  order_1d = new int[dim_num];
+  grid_index = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   point_num2 = 0;
 
@@ -2107,7 +2107,7 @@ int *levels_open_index ( int dim_num, int level_max, int point_num )
 }
 //****************************************************************************80
 
-int *multigrid_index1 ( int dim_num, int order_1d[], int order_nd )
+FLENS_DEFAULT_INDEXTYPE *multigrid_index1 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE order_1d[], FLENS_DEFAULT_INDEXTYPE order_nd )
 
 //****************************************************************************80
 //
@@ -2142,26 +2142,26 @@ int *multigrid_index1 ( int dim_num, int order_1d[], int order_nd )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension of the points.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension of the points.
 //
-//    Input, int ORDER_1D[DIM_NUM], the order of the
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER_1D[DIM_NUM], the order of the
 //    rule in each dimension.
 //
-//    Input, int ORDER_ND, the product of the entries of ORDER_1D.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER_ND, the product of the entries of ORDER_1D.
 //
-//    Output, int INDX[DIM_NUM*ORDER_ND], the indices of the points in
+//    Output, FLENS_DEFAULT_INDEXTYPE INDX[DIM_NUM*ORDER_ND], the indices of the points in
 //    the grid.  The second dimension of this array is equal to the
 //    product of the entries of ORDER_1D.
 //
 {
-  int *a;
-  int dim;
+  FLENS_DEFAULT_INDEXTYPE *a;
+  FLENS_DEFAULT_INDEXTYPE dim;
   bool more;
-  int p;
-  int *indx;
+  FLENS_DEFAULT_INDEXTYPE p;
+  FLENS_DEFAULT_INDEXTYPE *indx;
 
-  indx = new int[dim_num*order_nd];
-  a = new int[dim_num];
+  indx = new FLENS_DEFAULT_INDEXTYPE[dim_num*order_nd];
+  a = new FLENS_DEFAULT_INDEXTYPE[dim_num];
   more = false;
   p = 0;
 
@@ -2187,8 +2187,8 @@ int *multigrid_index1 ( int dim_num, int order_1d[], int order_nd )
 }
 //****************************************************************************80
 
-void multigrid_scale_open ( int dim_num, int order_nd, int level_max, 
-  int level_1d[], int grid_index[] )
+void multigrid_scale_open ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE order_nd, FLENS_DEFAULT_INDEXTYPE level_max, 
+  FLENS_DEFAULT_INDEXTYPE level_1d[], FLENS_DEFAULT_INDEXTYPE grid_index[] )
 
 //****************************************************************************80
 //
@@ -2228,24 +2228,24 @@ void multigrid_scale_open ( int dim_num, int order_nd, int level_max,
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int ORDER_ND, the number of points in the grid.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER_ND, the number of points in the grid.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int LEVEL_1D[DIM_NUM], the level in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_1D[DIM_NUM], the level in each dimension.
 //
-//    Input/output, int GRID_INDEX[DIM_NUM*POINT_NUM], the index
+//    Input/output, FLENS_DEFAULT_INDEXTYPE GRID_INDEX[DIM_NUM*POINT_NUM], the index
 //    values for each grid point.  On input, these indices are based in
 //    the level for which the grid was generated; on output, the
 //    indices are appropriate for the grid as a subgrid of a grid
 //    of level LEVEL_MAX.
 //
 {
-  int dim;
-  int factor;
-  int order;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE factor;
+  FLENS_DEFAULT_INDEXTYPE order;
 
   for ( dim = 0; dim < dim_num; dim++ )
   {
@@ -2261,7 +2261,7 @@ void multigrid_scale_open ( int dim_num, int order_nd, int level_max,
 }
 //****************************************************************************80
 
-double nco_abscissa ( int order, int i )
+double nco_abscissa ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE i )
 
 //****************************************************************************80
 //
@@ -2288,10 +2288,10 @@ double nco_abscissa ( int order, int i )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order of the rule.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the rule.
 //    1 <= ORDER.
 //
-//    Input, int I, the index of the desired abscissa.  
+//    Input, FLENS_DEFAULT_INDEXTYPE I, the index of the desired abscissa.  
 //    1 <= I <= ORDER.
 //
 //    Output, double NCO_ABSCISSA, the value of the I-th 
@@ -2419,7 +2419,7 @@ double r8_huge ( )
 //****************************************************************************80
 
 /*
-void r8mat_write ( string output_filename, int m, int n, double table[] )
+void r8mat_write ( string output_filename, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double table[] )
 
 // ***************************************************************************80
 //
@@ -2443,15 +2443,15 @@ void r8mat_write ( string output_filename, int m, int n, double table[] )
 //
 //    Input, string OUTPUT_FILENAME, the output filename.
 //
-//    Input, int M, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the spatial dimension.
 //
-//    Input, int N, the number of points.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of points.
 //
 //    Input, double TABLE[M*N], the table data.
 //
 {
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   ofstream output;
 //
 //  Open the file.
@@ -2486,7 +2486,7 @@ void r8mat_write ( string output_filename, int m, int n, double table[] )
 // ***************************************************************************80
 */
 
-int sparse_grid_f2s_size ( int dim_num, int level_max )
+FLENS_DEFAULT_INDEXTYPE sparse_grid_f2s_size ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -2531,25 +2531,25 @@ int sparse_grid_f2s_size ( int dim_num, int level_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Output, int SPARSE_GRID_F2S_SIZE, the number of points in the grid.
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_F2S_SIZE, the number of points in the grid.
 //
 {
-  int dim;
-  int h;
-  int l;
-  int level;
-  int *level_1d;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE l;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
   bool more;
-  int *new_1d;
-  int o;
-  int p;
-  int point_num;
-  int t;
-  int v;
+  FLENS_DEFAULT_INDEXTYPE *new_1d;
+  FLENS_DEFAULT_INDEXTYPE o;
+  FLENS_DEFAULT_INDEXTYPE p;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE t;
+  FLENS_DEFAULT_INDEXTYPE v;
 //
 //  Special case.
 //
@@ -2567,7 +2567,7 @@ int sparse_grid_f2s_size ( int dim_num, int level_max )
 //
 //  Construct the vector that counts the new points in the 1D rule.
 //
-  new_1d = new int[level_max+1];
+  new_1d = new FLENS_DEFAULT_INDEXTYPE[level_max+1];
 
   new_1d[0] = 1;
 
@@ -2591,7 +2591,7 @@ int sparse_grid_f2s_size ( int dim_num, int level_max )
 //  Count the number of points by counting the number of new points 
 //  associated with each level vector.
 //
-  level_1d = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   point_num = 0;
 
@@ -2626,7 +2626,7 @@ int sparse_grid_f2s_size ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-int sparse_grid_gps_size ( int dim_num, int level_max )
+FLENS_DEFAULT_INDEXTYPE sparse_grid_gps_size ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -2677,25 +2677,25 @@ int sparse_grid_gps_size ( int dim_num, int level_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Output, int SPARSE_GRID_CC_SIZE, the number of points in the grid.
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_CC_SIZE, the number of points in the grid.
 //
 {
-  int dim;
-  int h;
-  int level;
-  int *level_1d;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
   bool more;
-  int *new_1d;
-  int o;
-  int *order_1d;
-  int p;
-  int point_num;
-  int t;
-  int v;
+  FLENS_DEFAULT_INDEXTYPE *new_1d;
+  FLENS_DEFAULT_INDEXTYPE o;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE p;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE t;
+  FLENS_DEFAULT_INDEXTYPE v;
 //
 //  Special case.
 //
@@ -2713,7 +2713,7 @@ int sparse_grid_gps_size ( int dim_num, int level_max )
 //
 //  Count the points in the 1D rule.
 //
-  order_1d = new int[level_max+1];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[level_max+1];
   order_1d[0] = 1;
   for ( level = 1; level <= level_max; level++ )
   {
@@ -2729,7 +2729,7 @@ int sparse_grid_gps_size ( int dim_num, int level_max )
 //
 //  Count the new points in the 1D rule.
 //
-  new_1d = new int[level_max+1];
+  new_1d = new FLENS_DEFAULT_INDEXTYPE[level_max+1];
 
   new_1d[0] = 1;
   for ( level = 1; level <= level_max; level++ )
@@ -2740,7 +2740,7 @@ int sparse_grid_gps_size ( int dim_num, int level_max )
 //  Count the number of points by counting the number of new points 
 //  associated with each level vector.
 //
-  level_1d = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   point_num = 0;
 
@@ -2776,7 +2776,7 @@ int sparse_grid_gps_size ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-int sparse_grid_ofn_size ( int dim_num, int level_max )
+FLENS_DEFAULT_INDEXTYPE sparse_grid_ofn_size ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -2821,23 +2821,23 @@ int sparse_grid_ofn_size ( int dim_num, int level_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Output, int SPARSE_GRID_OFN_SIZE, the number of points in the grid.
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_OFN_SIZE, the number of points in the grid.
 //
 {
-  int dim;
-  int h;
-  int l;
-  int level;
-  int *level_1d;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE l;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
   bool more;
-  int *new_1d;
-  int point_num;
-  int t;
-  int v;
+  FLENS_DEFAULT_INDEXTYPE *new_1d;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE t;
+  FLENS_DEFAULT_INDEXTYPE v;
 //
 //  Special case.
 //
@@ -2855,7 +2855,7 @@ int sparse_grid_ofn_size ( int dim_num, int level_max )
 //
 //  Construct the vector that counts the new points in the 1D rule.
 //
-  new_1d = new int[level_max+1];
+  new_1d = new FLENS_DEFAULT_INDEXTYPE[level_max+1];
 
   new_1d[0] = 1;
   for ( l = 1; l <= level_max; l++ )
@@ -2866,7 +2866,7 @@ int sparse_grid_ofn_size ( int dim_num, int level_max )
 //  Count the number of points by counting the number of new points 
 //  associated with each level vector.
 //
-  level_1d = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   point_num = 0;
 
@@ -2901,7 +2901,7 @@ int sparse_grid_ofn_size ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-int sparse_grid_onn_size ( int dim_num, int level_max )
+FLENS_DEFAULT_INDEXTYPE sparse_grid_onn_size ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -2946,24 +2946,24 @@ int sparse_grid_onn_size ( int dim_num, int level_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Output, int SPARSE_GRID_ONN_SIZE, the number of points in the grid.
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_ONN_SIZE, the number of points in the grid.
 //
 {
-  int dim;
-  int h;
-  int l;
-  int level;
-  int *level_1d;
-  int level_min;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE l;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
+  FLENS_DEFAULT_INDEXTYPE level_min;
   bool more;
-  int *order_1d;
-  int point_num;
-  int t;
-  int v;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE t;
+  FLENS_DEFAULT_INDEXTYPE v;
 //
 //  Special case.
 //
@@ -2981,14 +2981,14 @@ int sparse_grid_onn_size ( int dim_num, int level_max )
 //
 //  Construct the 1D order vector.
 //
-  order_1d = new int[level_max+1];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[level_max+1];
 
   for ( l = 0; l <= level_max; l++ )
   {
     order_1d[l] = 2 * l + 1;
   }
 
-  level_1d = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   level_min = i4_max ( 0, level_max + 1 - dim_num );
 
@@ -3025,7 +3025,7 @@ int sparse_grid_onn_size ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-int sparse_grid_own_size ( int dim_num, int level_max )
+FLENS_DEFAULT_INDEXTYPE sparse_grid_own_size ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -3088,26 +3088,26 @@ int sparse_grid_own_size ( int dim_num, int level_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Output, int SPARSE_GRID_OWN_SIZE, the number of points in the grid.
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_OWN_SIZE, the number of points in the grid.
 //
 {
-  int dim;
-  int dim_num2;
-  int h;
-  int l;
-  int level;
-  int level_min;
-  int *level_1d;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE dim_num2;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE l;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE level_min;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
   bool more;
-  int *new_1d;
-  int point_num;
-  int point_num2;
-  int t;
-  int v;
+  FLENS_DEFAULT_INDEXTYPE *new_1d;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE point_num2;
+  FLENS_DEFAULT_INDEXTYPE t;
+  FLENS_DEFAULT_INDEXTYPE v;
 //
 //  Special case.
 //
@@ -3125,7 +3125,7 @@ int sparse_grid_own_size ( int dim_num, int level_max )
 //
 //  Construct the vector that counts the new points in the 1D rule.
 //
-  new_1d = new int[level_max+1];
+  new_1d = new FLENS_DEFAULT_INDEXTYPE[level_max+1];
 
   new_1d[0] = 0;
   for ( l = 1; l <= level_max; l++ )
@@ -3159,7 +3159,7 @@ int sparse_grid_own_size ( int dim_num, int level_max )
     }
     else
     {
-      level_1d = new int[dim_num2];
+      level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num2];
 
       point_num2 = 0;
 
@@ -3237,7 +3237,7 @@ void timestamp ( )
 }
 //****************************************************************************80
 
-void vec_colex_next2 ( int dim_num, int base[], int a[], bool *more )
+void vec_colex_next2 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE base[], FLENS_DEFAULT_INDEXTYPE a[], bool *more )
 
 //****************************************************************************80
 //
@@ -3293,12 +3293,12 @@ void vec_colex_next2 ( int dim_num, int base[], int a[], bool *more )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int BASE[DIM_NUM], the bases to be used in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE BASE[DIM_NUM], the bases to be used in each dimension.
 //    In dimension I, entries will range from 0 to BASE[I]-1.
 //
-//    Output, int A[DIM_NUM], the next vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE A[DIM_NUM], the next vector.
 //
 //    Input/output, bool *MORE.  Set this variable false before
 //    the first call.  On return, MORE is TRUE if another vector has
@@ -3306,7 +3306,7 @@ void vec_colex_next2 ( int dim_num, int base[], int a[], bool *more )
 //    vector and stop calling the routine.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   if ( !( *more ) )
   {

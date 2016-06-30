@@ -40,79 +40,79 @@ Wavelet<T,Orthogonal,Interval,Multi>::~Wavelet()
 
 template <typename T>
 T
-Wavelet<T,Orthogonal,Interval,Multi>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Orthogonal,Interval,Multi>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     k -= 1;
     // left boundary
-    if (k<basis._numLeftParts) {
+    if (k<(FLENS_DEFAULT_INDEXTYPE)basis._numLeftParts) {
         //std::cerr << " Left boundary: k = " << k << std::endl;
         return pow2ih<T>(2*j*deriv+j) * basis._leftEvaluator[k](pow2i<T>(j)*x, deriv);
     }
     
     // inner part
     if (k<basis.cardJL(j)+basis.cardJI(j)) {
-        int type  = (int)((k-basis._numLeftParts) % basis._numInnerParts);
-        long shift = lawa::iceil<T>((k+1.-basis._numLeftParts)/(double)basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)((k-basis._numLeftParts) % basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = lawa::iceil<T>((k+1.-basis._numLeftParts)/(double)basis._numInnerParts);
         //std::cerr << "  k = " << k << " : type = " << type << ", shift = " << shift << std::endl;
         return pow2ih<T>(2*j*deriv+j) * 
         basis._innerEvaluator[type](pow2i<T>(j)*x-shift,deriv);
     }
     
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis._numRightParts + 1));
-    long shift = pow2i<long>(j)-1;
-    //long shift = iceil<T>((k+1.-basis._numLeftParts)/(double)basis._numInnerParts);
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis._numRightParts + 1));
+    FLENS_DEFAULT_INDEXTYPE shift = pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
+    //FLENS_DEFAULT_INDEXTYPE shift = iceil<T>((k+1.-basis._numLeftParts)/(double)basis._numInnerParts);
     return pow2ih<T>(2*j*deriv+j) * basis._rightEvaluator[type](pow2i<T>(j)*x-shift, deriv);
 }
     
 template <typename T>
 Support<T>
-Wavelet<T,Orthogonal,Interval,Multi>::support(int j, long k) const
+Wavelet<T,Orthogonal,Interval,Multi>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     k -= 1;
     
     // left boundary
-    if (k<basis._numLeftParts) {
+    if (k<(FLENS_DEFAULT_INDEXTYPE) basis._numLeftParts) {
         return pow2i<T>(-j) * basis._leftSupport[k];
     }
     
     // inner part
     if (k<basis.cardJL()+basis.cardJI(j)) {
-        int type = (int)((k-basis._numLeftParts) % basis._numInnerParts);
-        long shift = iceil<T>((k+1.-basis._numLeftParts)/basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE type = (FLENS_DEFAULT_INDEXTYPE)((k-basis._numLeftParts) % basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = iceil<T>((k+1.-basis._numLeftParts)/basis._numInnerParts);
         return pow2i<T>(-j) * (basis._innerSupport[type]+shift);
     }
     
     // right part
-    int type  = (int)(k - (basis.cardJ(j) -1 - basis._numRightParts + 1));
-    long shift = pow2i<long>(j)-1;
-    //long shift = iceil<T>((k+1.-basis._numLeftParts)/basis._numInnerParts);
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k - (basis.cardJ(j) -1 - basis._numRightParts + 1));
+    FLENS_DEFAULT_INDEXTYPE shift = pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
+    //FLENS_DEFAULT_INDEXTYPE shift = iceil<T>((k+1.-basis._numLeftParts)/basis._numInnerParts);
     return pow2i<T>(-j) * (basis._rightSupport[type]+shift);
 }
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Orthogonal,Interval,Multi>::singularSupport(int j, long k) const
+Wavelet<T,Orthogonal,Interval,Multi>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     k -= 1;    
     // left boundary
-    if (k<basis._numLeftParts) {
+    if (k<(FLENS_DEFAULT_INDEXTYPE)basis._numLeftParts) {
         return pow2i<T>(-j) * basis._leftSingularSupport[k];
     }
     
     // inner part
     if (k<basis.cardJL()+basis.cardJI(j)) {
-        int type  = (int)((k-basis._numLeftParts) % basis._numInnerParts);
-        long shift = iceil<T>((k+1.-basis._numLeftParts)/basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)((k-basis._numLeftParts) % basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = iceil<T>((k+1.-basis._numLeftParts)/basis._numInnerParts);
         flens::DenseVector<flens::Array<T> > result = basis._innerSingularSupport[type];
         result += shift;
         return pow2i<T>(-j) * result;
     }
     
     // right part
-    int type  = (int)(k - (basis.cardJ(j)-1 - basis._numRightParts + 1));
-    long shift = pow2i<long>(j)-1;
-    //long shift = iceil<T>((k+1. - basis._numLeftParts)/basis._numInnerParts);
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k - (basis.cardJ(j)-1 - basis._numRightParts + 1));
+    FLENS_DEFAULT_INDEXTYPE shift = pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
+    //FLENS_DEFAULT_INDEXTYPE shift = iceil<T>((k+1. - basis._numLeftParts)/basis._numInnerParts);
     flens::DenseVector<flens::Array<T> > result = basis._rightSingularSupport[type];
     result += shift;
     return pow2i<T>(-j) * result;
@@ -120,7 +120,7 @@ Wavelet<T,Orthogonal,Interval,Multi>::singularSupport(int j, long k) const
     
 template <typename T>
 T
-Wavelet<T,Orthogonal,Interval,Multi>::tic(int j) const
+Wavelet<T,Orthogonal,Interval,Multi>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     //todo: Critical! Yields totally wrong results if too small, increases run-time when too large!
     //return pow2i<T>(-(j+4));
@@ -129,9 +129,9 @@ Wavelet<T,Orthogonal,Interval,Multi>::tic(int j) const
 
 template <typename T>
 flens::DenseVector<flens::Array<long double> > *
-Wavelet<T,Orthogonal,Interval,Multi>::getRefinement(int j, long k,
-                                                    int &refinement_j, long &refinement_k_first,
-                                                    long &split, long &refinement_k_restart) const
+Wavelet<T,Orthogonal,Interval,Multi>::getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k,
+                                                    FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+                                                    FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const
 {
 	// No split necessary, so set default values
 	refinement_k_restart = 1;
@@ -139,62 +139,62 @@ Wavelet<T,Orthogonal,Interval,Multi>::getRefinement(int j, long k,
     k -= 1;
     refinement_j = j + basis._addRefinementLevel;
     // left boundary
-    if (k<basis._numLeftParts) {
+    if (k<(FLENS_DEFAULT_INDEXTYPE)basis._numLeftParts) {
         refinement_k_first = basis._leftOffsets[k];
     	split = basis._leftRefCoeffs[k].length() + 1;
         return &(basis._leftRefCoeffs[k]);
     }
     // inner part
     if (k<basis.cardJL(j)+basis.cardJI(j)) {
-        int type  = (int)((k-basis._numLeftParts) % basis._numInnerParts);
-        long shift = (long)lawa::iceil<T>((k+1.-basis._numLeftParts)/(double)basis._numInnerParts);
-        //refinement_k_first = pow2i<long>(basis._addRefinementLevel)*shift+basis._innerOffsets[type];
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)((k-basis._numLeftParts) % basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = (FLENS_DEFAULT_INDEXTYPE)lawa::iceil<T>((k+1.-basis._numLeftParts)/(double)basis._numInnerParts);
+        //refinement_k_first = pow2i<FLENS_DEFAULT_INDEXTYPE>(basis._addRefinementLevel)*shift+basis._innerOffsets[type];
         refinement_k_first = basis._shiftFactor*shift+basis._innerOffsets[type];
     	split = basis._innerRefCoeffs[type].length() + 1;
         return &(basis._innerRefCoeffs[type]);
     }
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis._numRightParts + 1));
-    long shift = (long)pow2i<long>(j)-1;
-    //refinement_k_first = pow2i<long>(basis._addRefinementLevel)*shift+basis._rightOffsets[type];
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis._numRightParts + 1));
+    FLENS_DEFAULT_INDEXTYPE shift = (FLENS_DEFAULT_INDEXTYPE)pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
+    //refinement_k_first = pow2i<FLENS_DEFAULT_INDEXTYPE>(basis._addRefinementLevel)*shift+basis._rightOffsets[type];
     refinement_k_first = basis._shiftFactor*shift+basis._rightOffsets[type];
 	split = basis._rightRefCoeffs[type].length() + 1;
     return &(basis._rightRefCoeffs[type]);
 }
 
 template <typename T>
-int
-Wavelet<T,Orthogonal,Interval,Multi>::getRefinementLevel(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Orthogonal,Interval,Multi>::getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return j + basis._addRefinementLevel;
 }
 
 template <typename T>
 T
-Wavelet<T,Orthogonal,Interval,Multi>::getL2Norm(int /*j*/, long /*k*/) const
+Wavelet<T,Orthogonal,Interval,Multi>::getL2Norm(FLENS_DEFAULT_INDEXTYPE /*j*/, FLENS_DEFAULT_INDEXTYPE /*k*/) const
 {
     return 1.;
 }
 
 template <typename T>
 T
-Wavelet<T,Orthogonal,Interval,Multi>::getH1SemiNorm(int j, long k) const
+Wavelet<T,Orthogonal,Interval,Multi>::getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    long double pow2ij = (long double)(1L << j);
+    long double pow2ij = (long double)((FLENS_DEFAULT_INDEXTYPE) 1 << j);
     k -= 1;
     // left boundary
-    if (k<basis._numLeftParts) {
+    if (k<(FLENS_DEFAULT_INDEXTYPE)basis._numLeftParts) {
         return pow2ij * basis._leftH1SemiNorms[k];
     }
 
     // inner part
     if (k<basis.cardJL(j)+basis.cardJI(j)) {
-        int type  = (int)((k-basis._numLeftParts) % basis._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)((k-basis._numLeftParts) % basis._numInnerParts);
         return pow2ij * basis._innerH1SemiNorms[type];
     }
 
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis._numRightParts + 1));
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis._numRightParts + 1));
     return pow2ij * basis._rightH1SemiNorms[type];
 }
 

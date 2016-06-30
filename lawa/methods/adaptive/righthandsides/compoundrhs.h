@@ -42,7 +42,7 @@ class CompoundRhs {
     void
     clear();
 
-    int               numOfRhs;
+    FLENS_DEFAULT_INDEXTYPE               numOfRhs;
     FirstRhs          &firstRhs;
     SecondRhs         &secondRhs;
     ThirdRhs          &thirdRhs;

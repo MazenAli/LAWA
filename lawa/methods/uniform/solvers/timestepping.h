@@ -35,7 +35,7 @@ class TimeStepping
         
         typedef typename Solver::RHSType RHSType;
         
-        TimeStepping(Solver& _solver, T _deltaT, int _timesteps, int _levelX);
+        TimeStepping(Solver& _solver, T _deltaT, FLENS_DEFAULT_INDEXTYPE _timesteps, FLENS_DEFAULT_INDEXTYPE _levelX);
 
         flens::DenseVector<flens::Array<T> > 
         solve(flens::DenseVector<flens::Array<T> >& u_0, bool saveSols = false);
@@ -58,16 +58,16 @@ class TimeStepping
         getSolutions(flens::DenseVector<flens::Array<T> >& u);
            
         void setDeltaT(T delta){ deltaT = delta;}
-        void setSteps(int steps){ timesteps = steps;}
-        void setLevel(int J){ levelX = J;}
+        void setSteps(FLENS_DEFAULT_INDEXTYPE steps){ timesteps = steps;}
+        void setLevel(FLENS_DEFAULT_INDEXTYPE J){ levelX = J;}
         
         void setRHS(RHSType& rhs){ solver.setRHS(rhs);}
         
     private:
         Solver& solver;
         T deltaT;
-        int timesteps;
-        int levelX;
+        FLENS_DEFAULT_INDEXTYPE timesteps;
+        FLENS_DEFAULT_INDEXTYPE levelX;
         
         flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > U;
 

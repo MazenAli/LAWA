@@ -40,7 +40,7 @@ class BSpline<_T,Orthogonal,R,Multi>
         static const DomainType Domain = R;
         static const Construction Cons = Multi;
         
-        BSpline(const int _d);
+        BSpline(const FLENS_DEFAULT_INDEXTYPE _d);
 
         //TODO    BSpline(MRA<T,Orthogonal,R,Multi> &mra); 
         
@@ -48,44 +48,44 @@ class BSpline<_T,Orthogonal,R,Multi>
         ~BSpline();
         
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
         
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
         
         Support<T>
         max_support() const;
 
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
         flens::DenseVector<flens::Array<long double> > *
-        getRefinement(int j, long k, int &refinement_j, long &refinement_k_first) const;
+        getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first) const;
 
-        int
-        getRefinementLevel(int j) const;
-
-        //T
-        //getL2Norm(int j, long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         //T
-        //getH1SemiNorm(int j, long k) const;
+        //getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
-        const unsigned int d;
-        unsigned int _numSplines;
+        //T
+        //getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
+
+        const unsigned FLENS_DEFAULT_INDEXTYPE d;
+        unsigned FLENS_DEFAULT_INDEXTYPE _numSplines;
 
 //    private:      // should be private one fine day
 
         typedef T (*Evaluator)(T x, unsigned short deriv);
 
-        long
-        _shift(long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        _shift(FLENS_DEFAULT_INDEXTYPE k) const;
 
-        int
-        _type(long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        _type(FLENS_DEFAULT_INDEXTYPE k) const;
 
         Evaluator                        *_evaluator;
         Support<T>                       *_support;
@@ -93,11 +93,11 @@ class BSpline<_T,Orthogonal,R,Multi>
         Support<T>                       _max_support;
 
         flens::DenseVector<flens::Array<long double> > *_refCoeffs;
-        long                             *_offsets;
+        FLENS_DEFAULT_INDEXTYPE                             *_offsets;
         long double                      *_H1SemiNorms;
         T                                _initialticsize;
-        int                              _addRefinementLevel;    //B-splines for refinement are needed on higher levels
-        int                              _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
+        FLENS_DEFAULT_INDEXTYPE                              _addRefinementLevel;    //B-splines for refinement are needed on higher levels
+        FLENS_DEFAULT_INDEXTYPE                              _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
 };
 
 } // namespace lawa

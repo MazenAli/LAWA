@@ -43,16 +43,16 @@ class Basis<_T,Primal,Interval,SparseMulti>
         typedef BSpline<T,Primal,Interval,SparseMulti> BSplineType;
         typedef Wavelet<T,Primal,Interval,SparseMulti> WaveletType;
 
-        Basis(const int d, const int j=-1);
+        Basis(const FLENS_DEFAULT_INDEXTYPE d, const FLENS_DEFAULT_INDEXTYPE j=-1);
     
         virtual
         ~Basis();
     
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
     
         void
-        setLevel(const int j) const;
+        setLevel(const FLENS_DEFAULT_INDEXTYPE j) const;
     
         template <BoundaryCondition BC>
             void
@@ -64,75 +64,75 @@ class Basis<_T,Primal,Interval,SparseMulti>
         Support<T>
         max_support() const;
 
-        int
-        cardJ(const int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJ(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJL(const int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        int
-        cardJI(const int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJI(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJR(const int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
         //--- ranges of whole, left, inner, right index set.
-        const flens::Range<int>
-        rangeJ(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJ(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJL(const int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        const flens::Range<int>
-        rangeJI(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJI(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJR(const int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
 
-        //For adaptive schemes, we require "long" as index type::
-        long
-        long_cardJ(const int j) const;
+        //For adaptive schemes, we require "FLENS_DEFAULT_INDEXTYPE" as index type::
+        FLENS_DEFAULT_INDEXTYPE
+        long_cardJ(const FLENS_DEFAULT_INDEXTYPE j) const;
         
-        long
-        long_cardJL(const int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        long_cardJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        long
-        long_cardJI(const int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        long_cardJI(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        long
-        long_cardJR(const int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        long_cardJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
     
-        const flens::Range<long>
-        long_rangeJ(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        long_rangeJ(const FLENS_DEFAULT_INDEXTYPE j) const;
     
-        const flens::Range<long>
-        long_rangeJL(const int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        long_rangeJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        const flens::Range<long>
-        long_rangeJI(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        long_rangeJI(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<long>
-        long_rangeJR(const int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        long_rangeJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
     
         MRA<T,Primal,Interval,SparseMulti> mra;
     
-        const int d;
-        const int j0;          // minimal used(!) level.
-        unsigned int _numSplines;
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
+        unsigned FLENS_DEFAULT_INDEXTYPE _numSplines;
     
     private:
-        flens::DenseVector<flens::Array<int> > _bc;  // the boundary conditions
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > _bc;  // the boundary conditions
                                        // bc(0) = 1 -> Dirichlet BC left.
                                        // bc(1) = 1 -> Dirichlet BC right.
         
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
     
         typedef T (*Evaluator)(T x, unsigned short deriv);
         
         friend class Wavelet<T,Primal,Interval,SparseMulti>;
 
-        unsigned int _numLeftParts, 
+        unsigned FLENS_DEFAULT_INDEXTYPE _numLeftParts, 
                      _numInnerParts, 
                      _numRightParts;
         Evaluator *_leftEvaluator, 

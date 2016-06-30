@@ -8,28 +8,28 @@ namespace lawa
 {
 
 template <typename Index, typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maptoint(const Index&, const Basis&);
 
 
 template <typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maptoint(const Index1D& index, const Basis& basis);
 
 
 template <typename Index, typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maxintind(const IndexSet<Index>& indexset, const Basis& basis);
 
 
 template <typename Index, typename Basis>
 Index
-maptowav(const unsigned long, const Basis&);
+maptowav(const unsigned FLENS_DEFAULT_INDEXTYPE, const Basis&);
 
 
 template <typename Basis>
 Index1D
-maptowav(const unsigned long i, const Basis& basis);
+maptowav(const unsigned FLENS_DEFAULT_INDEXTYPE i, const Basis& basis);
 
 } // namespace lawa
 

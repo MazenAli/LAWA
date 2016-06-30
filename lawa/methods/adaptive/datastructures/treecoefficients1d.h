@@ -45,14 +45,14 @@ template <typename T>
 struct CoefficientsByLevel
 {
     #ifdef TRONE
-        typedef typename std::tr1::unordered_map<long, T> TranslationIndexToValueMap;
-        //typedef typename std::map<long, T> TranslationIndexToValueMap;
+        typedef typename std::tr1::unordered_map<FLENS_DEFAULT_INDEXTYPE, T> TranslationIndexToValueMap;
+        //typedef typename std::map<FLENS_DEFAULT_INDEXTYPE, T> TranslationIndexToValueMap;
     #elif BOOST
-        typedef typename boost::unordered_map<long, T> TranslationIndexToValueMap;
+        typedef typename boost::unordered_map<FLENS_DEFAULT_INDEXTYPE, T> TranslationIndexToValueMap;
 	#elif CONEONE
-        typedef typename std::unordered_map<long, T> TranslationIndexToValueMap;
+        typedef typename std::unordered_map<FLENS_DEFAULT_INDEXTYPE, T> TranslationIndexToValueMap;
     #else
-        typedef typename __gnu_cxx::hash_map<long, T> TranslationIndexToValueMap;
+        typedef typename __gnu_cxx::hash_map<FLENS_DEFAULT_INDEXTYPE, T> TranslationIndexToValueMap;
     #endif
 
     typedef typename TranslationIndexToValueMap::const_iterator const_it;
@@ -92,7 +92,7 @@ struct TreeCoefficients1D
     typedef typename Coefficients<Lexicographical,T,Index1D>::const_iterator    const_coeff1d_it;
     typedef typename std::list<const Index1D*>::const_iterator                  const_indexlist_it;
 
-    TreeCoefficients1D(size_t n, int basis_j0);
+    TreeCoefficients1D(size_t n, FLENS_DEFAULT_INDEXTYPE basis_j0);
 
     TreeCoefficients1D<T>&
     operator=(const TreeCoefficients1D<T> &_coeff);
@@ -128,21 +128,21 @@ struct TreeCoefficients1D
     void
     setToZero();
 
-    int
+    FLENS_DEFAULT_INDEXTYPE
     size();
 
-    int
+    FLENS_DEFAULT_INDEXTYPE
     getMaxTreeLevel();
 
     void
-    setMaxTreeLevel(int j);
+    setMaxTreeLevel(FLENS_DEFAULT_INDEXTYPE j);
 
     T
     norm(T factor);
 
-    int offset;     // is supposed to be j0-1!!
+    FLENS_DEFAULT_INDEXTYPE offset;     // is supposed to be j0-1!!
     CoefficientsByLevel<T> bylevel[JMAX+1];
-    int maxTreeLevel;
+    FLENS_DEFAULT_INDEXTYPE maxTreeLevel;
 
 };
 

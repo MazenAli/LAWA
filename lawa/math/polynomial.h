@@ -29,20 +29,20 @@ template <typename T>
 class Polynomial
 {
     public:
-        Polynomial(int n=0);
+        Polynomial(FLENS_DEFAULT_INDEXTYPE n=0);
 
         Polynomial(const flens::DenseVector<flens::Array<T> > &coefficients);
 
         const T &
-        operator()(int n) const;
+        operator()(FLENS_DEFAULT_INDEXTYPE n) const;
 
         T &
-        operator()(int n);
+        operator()(FLENS_DEFAULT_INDEXTYPE n);
 
         Polynomial<T> &
         operator+=(const Polynomial<T> &rhs);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         degree() const;
 
     private:
@@ -59,7 +59,7 @@ operator*(const S &lhs, const Polynomial<T> &rhs);
 
 template <typename T>
 Polynomial<T>
-pow(const Polynomial<T> &p, int n);
+pow(const Polynomial<T> &p, FLENS_DEFAULT_INDEXTYPE n);
 
 } // namespace lawa
 

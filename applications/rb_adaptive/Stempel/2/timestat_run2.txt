@@ -1,0 +1,23 @@
+	Command being timed: "/home/mazenali/Research/LAWA/applications/rb_adaptive/Stempel/2/elliptic_thermalblock_rb_training"
+	User time (seconds): 25918.04
+	System time (seconds): 245.67
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 7:21:59
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 10566248
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 2
+	Minor (reclaiming a frame) page faults: 4336602
+	Voluntary context switches: 2077214
+	Involuntary context switches: 3768780
+	Swaps: 0
+	File system inputs: 2608
+	File system outputs: 70908616
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

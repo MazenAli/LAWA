@@ -28,13 +28,13 @@
 
 
 /*
-  std::vector<int*> sg_blocks:
+  std::vector<FLENS_DEFAULT_INDEXTYPE*> sg_blocks:
      stores an array of "blocks" (see below). Each block consists of a level combination w.r.t
      to the sparse grid structure.
 
 
 
-  int* pair:
+  FLENS_DEFAULT_INDEXTYPE* pair:
      (pair[0], pair[1]) combination of levels in x and y direction w.r.t. to sparse grid
      structure,
      (pair[2], pair[3]) give the first and last index for the the current block
@@ -49,7 +49,7 @@ namespace lawa {
 struct lt_int_vs_int
 {
     inline
-    bool operator()(const std::pair<int,int> &left, const std::pair<int,int> &right) const
+    bool operator()(const std::pair<FLENS_DEFAULT_INDEXTYPE,FLENS_DEFAULT_INDEXTYPE> &left, const std::pair<FLENS_DEFAULT_INDEXTYPE,FLENS_DEFAULT_INDEXTYPE> &right) const
     {
         if (left.first != right.first) return left.first < right.first;
         else                           return left.second < right.second;
@@ -65,18 +65,18 @@ class TensorSparseGrid2D {
         typedef flens::DiagonalMatrix<T>                                    DiagonalMatrixT;
         typedef flens::DenseVector<flens::Array<T> >                        DenseVectorT;
 
-        typedef std::map<std::pair<int,int>, int ,lt_int_vs_int >           LevelPairMap;
+        typedef std::map<std::pair<FLENS_DEFAULT_INDEXTYPE,FLENS_DEFAULT_INDEXTYPE>, FLENS_DEFAULT_INDEXTYPE ,lt_int_vs_int >           LevelPairMap;
 
         TensorSparseGrid2D(const Basis2D &basis, const S1_x &s1_x, const S1_y &s1_y,
-                           const S2_x &s2_x, const S2_y &s2_y, int I, T gamma);
+                           const S2_x &s2_x, const S2_y &s2_y, FLENS_DEFAULT_INDEXTYPE I, T gamma);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         getDimension() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
 
         IndexSet<Index2D>
@@ -87,7 +87,7 @@ class TensorSparseGrid2D {
                        Coefficients<Lexicographical,T,Index2D> &sparsegridcoefficients);
 
         T
-        evaluate(const DenseVectorT &u, T x, T y, int deriv_x, int deriv_y) const;
+        evaluate(const DenseVectorT &u, T x, T y, FLENS_DEFAULT_INDEXTYPE deriv_x, FLENS_DEFAULT_INDEXTYPE deriv_y) const;
 
         DiagonalMatrixT
         assembleDiagonalMatrixPreconditioner();
@@ -101,7 +101,7 @@ class TensorSparseGrid2D {
 
     private:
         DenseMatrixT
-        block_multiplication(int row_block, int col_block, const DenseMatrixT &Xj) const;
+        block_multiplication(FLENS_DEFAULT_INDEXTYPE row_block, FLENS_DEFAULT_INDEXTYPE col_block, const DenseMatrixT &Xj) const;
 
         void
         assembleMatrices();
@@ -111,13 +111,13 @@ class TensorSparseGrid2D {
         const S1_y          &_s1_y;
         const S2_x          &_s2_x;
         const S2_y          &_s2_y;
-        int                 _j0_x, _j0_y;
-        int                 _I;
+        FLENS_DEFAULT_INDEXTYPE                 _j0_x, _j0_y;
+        FLENS_DEFAULT_INDEXTYPE                 _I;
         T                   _gamma;
 
         BlockAssembler1D<T,typename Basis2D::FirstBasisType> _blockassembler1d;
-        int                                                  _dim;
-        std::vector<int*>                                    _sg_blocks;
+        FLENS_DEFAULT_INDEXTYPE                                                  _dim;
+        std::vector<FLENS_DEFAULT_INDEXTYPE*>                                    _sg_blocks;
         LevelPairMap                                         _levelpair_map;
         std::vector<SparseMatrixT>                           _matrixblocks_s1_x, _matrixblocks_s1_y,
                                                              _matrixblocks_s2_x, _matrixblocks_s2_y;

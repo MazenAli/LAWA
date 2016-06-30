@@ -37,12 +37,16 @@ template <typename RB_Model, typename TruthModel, typename DataType, typename Pa
           typename _IndexSet>
 class RB_Base{
 
+public: /*used to be private */
 	typedef typename DataType::ValueType 						T;
 	typedef typename RB_Greedy_Parameters<ParamType>::intArray 	intArrayType;
 
+    RB_Model& 		rb_system;
+	TruthModel& 	rb_truth;
     const _IndexSet&    Lambda;
     double              tol     = 1e-8;
-    long                total   = 0;
+    bool                IsMW    = false;
+    FLENS_DEFAULT_INDEXTYPE                total   = 0;
 
 public:
 	RB_Base(RB_Model& _rb_system, TruthModel& _rb_truth,
@@ -50,6 +54,12 @@ public:
 
 	std::size_t
 	n_bf();
+
+    void
+    set_tol(double tol_);
+
+    void
+    set_mw(bool _IsMW);
 
 	void
 	train_Greedy(std::size_t N = 0);
@@ -67,28 +77,28 @@ public:
     reconstruct_res_repr_N(typename RB_Model::DenseVectorT u, std::size_t N, ParamType& mu);
 
 	void
-	write_basisfunctions(const std::string& directory_name = "offline_data/bf", int nb = -1);
+	write_basisfunctions(const std::string& directory_name = "offline_data/bf", FLENS_DEFAULT_INDEXTYPE nb = -1);
 
     void
-	write_snapshot(DataType& u, const std::string& directory_name = "offline_data/snap",  int nb = -1);
+	write_snapshot(DataType& u, const std::string& directory_name = "offline_data/snap",  FLENS_DEFAULT_INDEXTYPE nb = -1);
 
 	void
-	read_basisfunctions(const std::string& directory_name = "offline_data/bf", int nb = -1);
+	read_basisfunctions(const std::string& directory_name = "offline_data/bf", FLENS_DEFAULT_INDEXTYPE nb = -1);
 
 	void
-	write_rieszrepresentors(const std::string& directory_name = "offline_data/representors", int nb = -1);
+	write_rieszrepresentors(const std::string& directory_name = "offline_data/representors", FLENS_DEFAULT_INDEXTYPE nb = -1);
 
 	void
-	read_rieszrepresentors(const std::string& directory_name = "offline_data/representors", int nb = -1);
+	read_rieszrepresentors(const std::string& directory_name = "offline_data/representors", FLENS_DEFAULT_INDEXTYPE nb = -1);
 
 	DataType&
 	get_bf(std::size_t i);
 
 	void
-	read_greedy_info(const char* filename, int nb = -1);
+	read_greedy_info(const char* filename, FLENS_DEFAULT_INDEXTYPE nb = -1);
 	
 	void
-    read_repr_accuracies(const char* filename, int Nmax);
+    read_repr_accuracies(const char* filename, FLENS_DEFAULT_INDEXTYPE Nmax);
 
 	virtual T
 	get_direct_errorbound(const typename RB_Model::DenseVectorT& u_N, ParamType& mu, DataType& res_repr);
@@ -112,7 +122,7 @@ public:
     void
     calc_rb_data();
 
-private:
+public: /*used to be private */
 
 	void
 	add_to_basis(const DataType& u);
@@ -140,8 +150,7 @@ private:
 	T
 	find_max_errest(std::size_t N, std::vector<ParamType>& Xi_train, ParamType& current_param, std::map<ParamType, DataType>& truth_sols);
 
-	RB_Model& 		rb_system;
-	TruthModel& 	rb_truth;
+
 
 	std::vector<DataType>				F_representors;  // Dim: 1 x Q_f
 	std::vector<std::vector<DataType> > A_representors;  // Dim: n x Q_a

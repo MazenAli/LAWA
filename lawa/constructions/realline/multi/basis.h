@@ -44,38 +44,38 @@ class Basis<_T,Orthogonal,R,Multi>
         typedef BSpline<T,Orthogonal,R,Multi>           BSplineType;
         typedef Wavelet<T,Orthogonal,R,Multi>           WaveletType;
 
-        Basis(const int d, const int j);
+        Basis(const FLENS_DEFAULT_INDEXTYPE d, const FLENS_DEFAULT_INDEXTYPE j);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         const BasisFunctionType &
         generator(XType xtype) const;
 
-        const flens::Range<int>
-        rangeJL(const int j=-1) const
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const
         {
             std::cerr << "Basis<_T,Orthogonal,R,Multi>: rangeJL is dummy routine!" << std::endl;
             exit(1);
         }
 
-        const flens::Range<int>
-        rangeJR(const int j=-1) const
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const
         {
             std::cerr << "Basis<_T,Orthogonal,R,Multi>: rangeJR is dummy routine!" << std::endl;
             exit(1);
         }
 
         //void
-        //getLowerEnclosingScaling(int j_wavelet, long k_wavelet,
-        //                         int &j_scaling, long &k_scaling) const;
+        //getLowerEnclosingScaling(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
+        //                         FLENS_DEFAULT_INDEXTYPE &j_scaling, FLENS_DEFAULT_INDEXTYPE &k_scaling) const;
 
         //void
-        //getLowerEnclosingWavelet(int j_wavelet1, long k_wavelet1,
-        //                         int &j_wavelet2, long &k_wavelet2) const;
+        //getLowerEnclosingWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
+        //                         FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet2) const;
 
         /// Returns the range of indicated functions from SecondBasis whose supports
         /// intersect the support of a given (multi-)scaling with level j_scaling and translation index
@@ -84,17 +84,17 @@ class Basis<_T,Orthogonal,R,Multi>
         /// on the same scale.
         template <typename SecondBasis>
             void
-            getScalingNeighborsForScaling(int j_scaling1, long k_scaling1,
+            getScalingNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling1, FLENS_DEFAULT_INDEXTYPE k_scaling1,
                                           const SecondBasis &secondbasis,
-                                          int &j_scaling2, long &k_scaling_first,
-                                          long &k_scaling_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_scaling2, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         template <typename SecondBasis>
             void
-            getWaveletNeighborsForScaling(int j_scaling, long k_scaling,
+            getWaveletNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling, FLENS_DEFAULT_INDEXTYPE k_scaling,
                                           const SecondBasis &secondbasis,
-                                          int &j_wavelet, long &k_wavelet_first,
-                                          long &k_wavelet_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         /// Returns the range of indicated functions from SecondBasis and SecondRefinementBasis
         /// whose supports intersect the support of a given wavelet with level j_wavelet and
@@ -103,54 +103,54 @@ class Basis<_T,Orthogonal,R,Multi>
         /// the corresponding refinements should live on the same scale.
         template <typename SecondRefinementBasis>
             void
-            getBSplineNeighborsForWavelet(int j_wavelet, long k_wavelet,
+            getBSplineNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
                                           const SecondRefinementBasis &secondrefinementbasis,
-                                          int &j_bspline, long &k_bspline_first,
-                                          long &k_bspline_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_bspline, FLENS_DEFAULT_INDEXTYPE &k_bspline_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_bspline_last) const;
 
         template <typename SecondBasis>
             void
-            getScalingNeighborsForWavelet(int j_wavelet, long k_wavelet,
+            getScalingNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
                                           const SecondBasis &secondbasis,
-                                          int &j_scaling, long &k_scaling_first,
-                                          long &k_scaling_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_scaling, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         template <typename SecondBasis>
             void
-            getWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+            getWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                           const SecondBasis &secondbasis,
-                                          int &j_wavelet2, long &k_wavelet_first,
-                                          long &k_wavelet_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         template <typename SecondBasis>
             void
-            getLowerWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+            getLowerWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                                const SecondBasis &secondbasis,
-                                               int &j_wavelet2, long &k_wavelet_first,
-                                               long &k_wavelet_last) const;
+                                               FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                               FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         template <typename SecondBasis>
             void
-            getHigherWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+            getHigherWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                                const SecondBasis &secondbasis,
-                                               int &j_wavelet2, long &k_wavelet_first,
-                                               long &k_wavelet_last) const;
+                                               FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                               FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         MRA<T,Orthogonal,R,Multi> mra;
 
-        const int d, d_, j0;
+        const FLENS_DEFAULT_INDEXTYPE d, d_, j0;
 
         Wavelet<T,Orthogonal,R,Multi> psi;
 
         Basis<T,Orthogonal,R,MultiRefinement> refinementbasis;
 
-        unsigned int _numSplines;
-        //int _addRefinementLevel;    //B-splines for refinement are needed on higher levels
-        //int _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
+        unsigned FLENS_DEFAULT_INDEXTYPE _numSplines;
+        //FLENS_DEFAULT_INDEXTYPE _addRefinementLevel;    //B-splines for refinement are needed on higher levels
+        //FLENS_DEFAULT_INDEXTYPE _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
 
 
     private:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 };
 
 } // namespace lawa

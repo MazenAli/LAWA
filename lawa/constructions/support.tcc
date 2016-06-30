@@ -102,7 +102,7 @@ distance(const flens::DenseVector<flens::Array<T> > &singsupp1, const Support<T>
         return distance(Support<T>(first,last),supp2);
     }
 
-    for (int i=singsupp1.firstIndex(); i<=singsupp1.lastIndex()-1; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=singsupp1.firstIndex(); i<=singsupp1.lastIndex()-1; ++i) {
         if (singsupp1(i)<supp2.l1 && supp2.l2<singsupp1(i+1)) {
             return std::min(supp2.l1-singsupp1(i), singsupp1(i+1)-supp2.l2);
         }

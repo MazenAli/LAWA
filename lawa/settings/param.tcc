@@ -20,7 +20,7 @@
 namespace lawa {
 
 template <typename X>
-int
+FLENS_DEFAULT_INDEXTYPE
 Param<X>::resolution = 10;
 
 } // namespace lawa

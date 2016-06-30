@@ -62,44 +62,44 @@ mv_sparse(t, const IndexSet<Index2D> &LambdaRow, MA &A, const Coefficients<Lexic
 
 /*
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u,
          const Coefficients<Lexicographical,T,Index > &f, T &res, T tol = 1e-6,
-         bool useOptimizedAssembling=false, int maxIterations = 1000);
+         bool useOptimizedAssembling=false, FLENS_DEFAULT_INDEXTYPE maxIterations = 1000);
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u, 
             const Coefficients<Lexicographical,T,Index > &f, T &res, T tol = 10e-6,
-            bool useOptimizedAssembling=false, int maxIterations = 1000);
+            bool useOptimizedAssembling=false, FLENS_DEFAULT_INDEXTYPE maxIterations = 1000);
             
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRESM_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u,
              const Coefficients<Lexicographical,T,Index > &f, T &residual, T tol=10e-6,
-             bool useOptimizedAssembling=false, int maxIterations=1000, int m=20);
+             bool useOptimizedAssembling=false, FLENS_DEFAULT_INDEXTYPE maxIterations=1000, FLENS_DEFAULT_INDEXTYPE m=20);
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRES_Solve_PG(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u, 
-            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol = 10e-6, int maxIterations = 1000);
+            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol = 10e-6, FLENS_DEFAULT_INDEXTYPE maxIterations = 1000);
 
 template <typename T, typename Index, typename SpaceIndex, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CGLS_Solve(const IndexSet<Index> &LambdaRowOp,
            const IndexSet<SpaceIndex> &LambdaRowInitCond, MA &A,
            const IndexSet<Index> &LambdaCol,
            Coefficients<Lexicographical,T,Index > &u,
            const Coefficients<Lexicographical,T,Index > &f,
            const Coefficients<Lexicographical,T,SpaceIndex > &u0,
-           T &res, T tol = 1e-6, int maxIterations = 1000);
+           T &res, T tol = 1e-6, FLENS_DEFAULT_INDEXTYPE maxIterations = 1000);
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,
            MA &A, Coefficients<Lexicographical,T,Index > &u,
            const Coefficients<Lexicographical,T,Index > &f,
-           T &res, T tol = 1e-6, int maxIterations = 1000);
+           T &res, T tol = 1e-6, FLENS_DEFAULT_INDEXTYPE maxIterations = 1000);
 */
 } // namespace lawa
 

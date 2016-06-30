@@ -30,19 +30,19 @@ class UniformIndex2D
 {
     private:
         const Basis& basis;
-        const int J_x, J_y;
+        const FLENS_DEFAULT_INDEXTYPE J_x, J_y;
         
-        const int offsetIx;
-        const int offsetIy;
-        const int offsetJx;
-        const int offsetJy;
+        const FLENS_DEFAULT_INDEXTYPE offsetIx;
+        const FLENS_DEFAULT_INDEXTYPE offsetIy;
+        const FLENS_DEFAULT_INDEXTYPE offsetJx;
+        const FLENS_DEFAULT_INDEXTYPE offsetJy;
     
     public:
-        UniformIndex2D(const Basis& _basis, const int _J_x, const int _J_y);
+        UniformIndex2D(const Basis& _basis, const FLENS_DEFAULT_INDEXTYPE _J_x, const FLENS_DEFAULT_INDEXTYPE _J_y);
         
-        int
-        operator()(XType xtype_x, int jx, int kx,
-                   XType xtype_y, int jy, int ky) const;
+        FLENS_DEFAULT_INDEXTYPE
+        operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE jx, FLENS_DEFAULT_INDEXTYPE kx,
+                   XType xtype_y, FLENS_DEFAULT_INDEXTYPE jy, FLENS_DEFAULT_INDEXTYPE ky) const;
 };
     
     

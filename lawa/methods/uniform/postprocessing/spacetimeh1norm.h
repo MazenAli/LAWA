@@ -43,8 +43,8 @@ class SpaceTimeH1Norm
          *  ||u|| =  sqrt( ||u1||_L2 * ||u2||_H1 + |u1|_H1 * ||u2||_(H1)' )
          */
         T
-        operator()(XType xtype_t, int j_t, int k_t, 
-                   XType xtype_x, int j_x, int k_x) const;
+        operator()(XType xtype_t, FLENS_DEFAULT_INDEXTYPE j_t, FLENS_DEFAULT_INDEXTYPE k_t, 
+                   XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x) const;
 };
 
 } // namespace lawa

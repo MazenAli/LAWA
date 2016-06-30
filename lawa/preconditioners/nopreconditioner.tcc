@@ -2,7 +2,7 @@ namespace lawa {
 
 template <typename T, typename Index>
 T
-NoPreconditioner<T, Index>::operator()(XType /*xtype*/, int /*j*/, int /*k*/) const
+NoPreconditioner<T, Index>::operator()(XType /*xtype*/, FLENS_DEFAULT_INDEXTYPE /*j*/, FLENS_DEFAULT_INDEXTYPE /*k*/) const
 {
     return 1.;
 }

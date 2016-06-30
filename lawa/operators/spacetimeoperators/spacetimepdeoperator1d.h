@@ -51,13 +51,13 @@ class SpaceTimePDEOperator1D{
                                const T _timederivfactor = 1.);
     
         T                                                           // returns a(v,u)
-        operator()(XType row_xtype_t, int j1_t, long k1_t,
-                   XType row_xtype_x, int j1_x, long k1_x,
-                   XType col_xtype_t, int j2_t, long k2_t,
-                   XType col_xtype_x, int j2_x, long k2_x) const;
+        operator()(XType row_xtype_t, FLENS_DEFAULT_INDEXTYPE j1_t, FLENS_DEFAULT_INDEXTYPE k1_t,
+                   XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                   XType col_xtype_t, FLENS_DEFAULT_INDEXTYPE j2_t, FLENS_DEFAULT_INDEXTYPE k2_t,
+                   XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x) const;
         T
-        operator()(XType xtype_t, int j_t, long k_t,                 // returns a(u,u)
-                   XType xtype_x, int j_x, long k_x) const;
+        operator()(XType xtype_t, FLENS_DEFAULT_INDEXTYPE j_t, FLENS_DEFAULT_INDEXTYPE k_t,                 // returns a(u,u)
+                   XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x) const;
         
         T
         operator()(const Index2D &row_index, const Index2D &col_index) const;

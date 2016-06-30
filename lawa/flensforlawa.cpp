@@ -20,8 +20,6 @@
 #include <lawa/flensforlawa.h>
 
 namespace flens {
-
-    Underscore<int> _;
-
+    Underscore<FLENS_DEFAULT_INDEXTYPE> _;
 } // namespace flens
 

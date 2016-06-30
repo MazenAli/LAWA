@@ -40,7 +40,7 @@ struct Wavelet<_T,Primal,Periodic,CDF>
     static const DomainType Domain = Periodic;
     static const Construction Cons = CDF;
 
-   // Wavelet(int _d, int _d_);
+   // Wavelet(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_);
 
    // Wavelet(const BSpline<T,Primal,Periodic,CDF> &_phi,
    //         const BSpline<T,Dual,Periodic,CDF> &_phi_);
@@ -48,38 +48,38 @@ struct Wavelet<_T,Primal,Periodic,CDF>
     Wavelet(const Basis<T,Primal,Periodic,CDF> &_basis);
 
     T
-    operator()(T x, int j, long k, unsigned short deriv) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
 
     PeriodicSupport<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     flens::DenseVector<flens::Array<T> >
-    singularSupport(int j, long k) const;
+    singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     T
-    tic(int j) const;
+    tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
     flens::DenseVector<flens::Array<long double> > *
-    getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-    				long &split, long &refinement_k_restart) const;
+    getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+    				FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const;
 
-    int
-    getRefinementLevel(int j) const;
-
-    T
-    getL2Norm(int j, long k) const;
+    FLENS_DEFAULT_INDEXTYPE
+    getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
     T
-    getH1SemiNorm(int j, long k) const;
+    getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
+
+    T
+    getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     const flens::DenseVector<flens::Array<T> > &
     mask() const;
 
     static flens::DenseVector<flens::Array<T> >
-    mask(int d, int d_);
+    mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_);
 
-    const int d, d_, mu;
-    const int vanishingMoments;
+    const FLENS_DEFAULT_INDEXTYPE d, d_, mu;
+    const FLENS_DEFAULT_INDEXTYPE vanishingMoments;
     const Wavelet<T, Primal, R, CDF> psiR;
 
     const Basis<T,Primal,Periodic,CDF> &basis;

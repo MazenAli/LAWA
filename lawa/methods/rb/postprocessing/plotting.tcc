@@ -22,7 +22,7 @@ saveCoeffVector2D(const Coefficients<Lexicographical,T,Index2D> &coeff, const Ba
   const typename Basis::SecondBasisType& basis_y = basis2d.second;
   
   for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-      int j1=(*it).first.index1.j, k1=(*it).first.index1.k, j2=(*it).first.index2.j, k2=(*it).first.index2.k;
+      FLENS_DEFAULT_INDEXTYPE j1=(*it).first.index1.j, k1=(*it).first.index1.k, j2=(*it).first.index2.j, k2=(*it).first.index2.k;
       XType type1=(*it).first.index1.xtype, type2=(*it).first.index2.xtype;
 
       //center of the support
@@ -56,7 +56,7 @@ saveCoeffVector2D(const Coefficients<Lexicographical,T,Index2D> &coeff, const Ba
   const typename Basis::SecondBasisType& basis_y = basis2d.second;
 
   for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-      int j1=(*it).first.index1.j, k1=(*it).first.index1.k, j2=(*it).first.index2.j, k2=(*it).first.index2.k;
+      FLENS_DEFAULT_INDEXTYPE j1=(*it).first.index1.j, k1=(*it).first.index1.k, j2=(*it).first.index2.j, k2=(*it).first.index2.k;
       XType type1=(*it).first.index1.xtype, type2=(*it).first.index2.xtype;
 
       //center of the support
@@ -93,8 +93,8 @@ readCoeffVector2D(Coefficients<Lexicographical,T,Index2D>&coeff, const char* fil
   typedef typename Coefficients<Lexicographical,T,Index2D>::value_type val_type;
   
   T x,y, coeff_value;
-  int type1, type2;
-  int j1, k1, j2, k2;
+  FLENS_DEFAULT_INDEXTYPE type1, type2;
+  FLENS_DEFAULT_INDEXTYPE j1, k1, j2, k2;
   std::ifstream data(filename);
   if(data.is_open() == false){
     std::cerr << "File " << filename << " could not be opened for reading" << std::endl;
@@ -126,7 +126,7 @@ saveIndexSet2D(const IndexSet<Index2D> &indexset, const Basis &basis2d, const ch
   const typename Basis::SecondBasisType& basis_y = basis2d.second;
   
   for (const_ind_it it = indexset.begin(); it != indexset.end(); ++it) {
-      int j1=(*it).index1.j, k1=(*it).index1.k, j2=(*it).index2.j, k2=(*it).index2.k;
+      FLENS_DEFAULT_INDEXTYPE j1=(*it).index1.j, k1=(*it).index1.k, j2=(*it).index2.j, k2=(*it).index2.k;
       XType type1=(*it).index1.xtype, type2=(*it).index2.xtype;
 
       //center of the support
@@ -151,8 +151,8 @@ readIndexSet2D(IndexSet<Index2D>& indexset, const char* filename, bool append)
   }
     
   T x,y;
-  int type1, type2;
-  int j1, k1, j2, k2;
+  FLENS_DEFAULT_INDEXTYPE type1, type2;
+  FLENS_DEFAULT_INDEXTYPE j1, k1, j2, k2;
   std::ifstream data(filename);
   if(data.is_open() == false){
     std::cerr << "File " << filename << " could not be opened for reading" << std::endl;

@@ -24,7 +24,7 @@ namespace lawa {
 template <typename X, typename Y>
 void
 decompose(const flens::DenseVector<X> &x, 
-          const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, int j,
+          const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, FLENS_DEFAULT_INDEXTYPE j,
           flens::DenseVector<Y> &y)
 {
     assert(j>=basis_.j0);
@@ -39,13 +39,13 @@ decompose(const flens::DenseVector<X> &x,
 template <typename X, typename Y>
 void
 reconstruct(const flens::DenseVector<X> &x, 
-            const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, int j,
+            const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, FLENS_DEFAULT_INDEXTYPE j,
             flens::DenseVector<Y> &y)
 {
     assert(j>=basis.j0);
     assert(x.length()%2==0);
 
-    int middle = x.firstIndex() + x.length()/2 - 1;
+    FLENS_DEFAULT_INDEXTYPE middle = x.firstIndex() + x.length()/2 - 1;
     y.engine().resize(x.range()) || y.engine().fill();
     y  = basis.mra.M0*x(_(x.firstIndex(),middle));
     y += basis.M1*x(_(middle+1,x.lastIndex()));
@@ -54,7 +54,7 @@ reconstruct(const flens::DenseVector<X> &x,
 template <typename X, typename Y>
 void
 fwt(const flens::DenseVector<X> &x, 
-    const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, int j,
+    const Basis<typename X::ElementType,Dual,Periodic,CDF> &basis_, FLENS_DEFAULT_INDEXTYPE j,
     flens::DenseVector<Y> &y)
 {
     using flens::_;
@@ -62,13 +62,13 @@ fwt(const flens::DenseVector<X> &x,
     assert(j>=basis_.j0);
 
     typedef typename flens::DenseVector<X>::ElementType T;
-    int n = x.length();
+    FLENS_DEFAULT_INDEXTYPE n = x.length();
     y.engine().resize(n,x.firstIndex()) || y.engine().fill();
     
     flens::DenseVector<flens::Array<T> > tmp = x;
     n /= 2;
-    int from = x.firstIndex(), middle = from+n-1, to = x.lastIndex();
-    for (int l=j; l>=basis_.j0; --l) {
+    FLENS_DEFAULT_INDEXTYPE from = x.firstIndex(), middle = from+n-1, to = x.lastIndex();
+    for (FLENS_DEFAULT_INDEXTYPE l=j; l>=basis_.j0; --l) {
         n /=2;
         typename flens::DenseVector<Y>::View yview = y(_(from,to));
         decompose(tmp, basis_, l, yview);
@@ -81,7 +81,7 @@ fwt(const flens::DenseVector<X> &x,
 template <typename X, typename Y>
 void
 ifwt(const flens::DenseVector<X> &x, 
-     const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, int j,
+     const Basis<typename X::ElementType,Primal,Periodic,CDF> &basis, FLENS_DEFAULT_INDEXTYPE j,
      flens::DenseVector<Y> &y)
 {
     using flens::_;
@@ -89,10 +89,10 @@ ifwt(const flens::DenseVector<X> &x,
     assert(j>=basis.j0);
     typedef typename X::ElementType T;
     
-    int n = x.length() / pow2i<T>(j-basis.j0);
+    FLENS_DEFAULT_INDEXTYPE n = x.length() / pow2i<T>(j-basis.j0);
     y = x;
-    for (int l=basis.j0; l<=j; ++l) {
-        flens::Range<int> r = _(y.firstIndex(),y.firstIndex()+n-1);
+    for (FLENS_DEFAULT_INDEXTYPE l=basis.j0; l<=j; ++l) {
+        flens::Range<FLENS_DEFAULT_INDEXTYPE> r = _(y.firstIndex(),y.firstIndex()+n-1);
         typename flens::DenseVector<Y>::View yview = y(r);
         flens::DenseVector<flens::Array<T> > z = y(r);
         reconstruct(z, basis, l, yview);

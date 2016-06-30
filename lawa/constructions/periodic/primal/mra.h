@@ -39,49 +39,49 @@ class MRA<_T,Primal,Periodic,CDF>
         typedef BasisFunction<T,Primal,Periodic,CDF> BasisFunctionType;
         typedef BSpline<T,Primal,Periodic,CDF> BSplineType;
 
-        MRA(int _d, int _d_, int j=0);
+        MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j=0);
 
         ~MRA();
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardI(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardIL(int j=0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
-        int
-        cardII(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardII(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardIR(int j=0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardIR(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
-        flens::Range<int>
-        rangeI(int j) const;
-
-
-        flens::Range<int>
-        rangeIL(int j=0) const;
-
-        flens::Range<int>
-        rangeII(int j) const;
-
-        flens::Range<int>
-        rangeIR(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI(FLENS_DEFAULT_INDEXTYPE j) const;
 
 
-        const int d, d_, j0, mu; // mu = mu(d) = d&1
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeIL(FLENS_DEFAULT_INDEXTYPE j=0) const;
+
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeII(FLENS_DEFAULT_INDEXTYPE j) const;
+
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeIR(FLENS_DEFAULT_INDEXTYPE j) const;
+
+
+        const FLENS_DEFAULT_INDEXTYPE d, d_, j0, mu; // mu = mu(d) = d&1
         
         // do I need this?
-        // const int l1, l2;
+        // const FLENS_DEFAULT_INDEXTYPE l1, l2;
 
     protected:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 
     private:
 
@@ -91,7 +91,7 @@ class MRA<_T,Primal,Periodic,CDF>
 
         long double *_periodicL2Norms,  *_periodicH1SemiNorms;
 
-        long *_leftOffsets,
+        FLENS_DEFAULT_INDEXTYPE *_leftOffsets,
              *_periodicOffsets,
              *_rightOffsets,
              *_split;

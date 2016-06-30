@@ -1,0 +1,4 @@
+Reading snapshot from file training_data_stage8/snap/snap_1.txt
+Printing plot to file plot_1
+Reading snapshot from file training_data_stage8/snap/snap_2.txt
+Printing plot to file plot_2

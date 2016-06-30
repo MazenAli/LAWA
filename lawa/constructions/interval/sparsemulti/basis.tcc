@@ -23,7 +23,7 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Primal,Interval,SparseMulti>::Basis(int _d, int j)
+Basis<T,Primal,Interval,SparseMulti>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : mra(_d, j), d(_d), j0(mra.j0), _bc(2,0), _j(j0), _numSplines(4), psi(*this)
 {
     if (d!=4) {
@@ -54,7 +54,7 @@ Basis<T,Primal,Interval,SparseMulti>::~Basis()
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Primal,Interval,SparseMulti>::level() const
 {
     return _j;
@@ -62,7 +62,7 @@ Basis<T,Primal,Interval,SparseMulti>::level() const
 
 template <typename T>
 void
-Basis<T,Primal,Interval,SparseMulti>::setLevel(int j) const
+Basis<T,Primal,Interval,SparseMulti>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;
@@ -173,32 +173,32 @@ Basis<T,Primal,Interval,SparseMulti>::max_support() const
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,SparseMulti>::cardJ(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::cardJ(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<int>(j);
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j);
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,SparseMulti>::cardJL(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::cardJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0 or j==-1);
     return _numLeftParts;
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,SparseMulti>::cardJI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::cardJI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<int>(j)-_numLeftParts-_numRightParts;
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-_numLeftParts-_numRightParts;
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,SparseMulti>::cardJR(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::cardJR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     return _numRightParts;
@@ -206,67 +206,67 @@ Basis<T,Primal,Interval,SparseMulti>::cardJR(int j) const
 
 // ranges of whole, left, inner, right index sets (primal).
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,SparseMulti>::rangeJ(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::rangeJ(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(1,cardJ(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,cardJ(j));
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,SparseMulti>::rangeJL(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::rangeJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0 or j==-1);
-    return flens::Range<int>(1,cardJL(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,cardJL(j));
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,SparseMulti>::rangeJI(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::rangeJI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(cardJL(j)+1,cardJL(j)+cardJI(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardJL(j)+1,cardJL(j)+cardJI(j));
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,SparseMulti>::rangeJR(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::rangeJR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(cardJL(j)+cardJI(j)+1,cardJ(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardJL(j)+cardJI(j)+1,cardJ(j));
 }
 
 
 
 
 template <typename T>
-long
-Basis<T,Primal,Interval,SparseMulti>::long_cardJ(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::long_cardJ(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<long>(j);
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j);
 }
 
 template <typename T>
-long
-Basis<T,Primal,Interval,SparseMulti>::long_cardJL(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::long_cardJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0 or j==-1);
     return _numLeftParts;
 }
 
 template <typename T>
-long
-Basis<T,Primal,Interval,SparseMulti>::long_cardJI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::long_cardJI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<long>(j)-_numLeftParts-_numRightParts;
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-_numLeftParts-_numRightParts;
 }
 
 template <typename T>
-long
-Basis<T,Primal,Interval,SparseMulti>::long_cardJR(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,SparseMulti>::long_cardJR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     return _numRightParts;
@@ -274,35 +274,35 @@ Basis<T,Primal,Interval,SparseMulti>::long_cardJR(int j) const
 
 // ranges of whole, left, inner, right index sets (primal).
 template <typename T>
-const flens::Range<long>
-Basis<T,Primal,Interval,SparseMulti>::long_rangeJ(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::long_rangeJ(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<long>(1,long_cardJ(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,long_cardJ(j));
 }
 
 template <typename T>
-const flens::Range<long>
-Basis<T,Primal,Interval,SparseMulti>::long_rangeJL(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::long_rangeJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0 or j==-1);
-    return flens::Range<long>(1,long_cardJL(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,long_cardJL(j));
 }
 
 template <typename T>
-const flens::Range<long>
-Basis<T,Primal,Interval,SparseMulti>::long_rangeJI(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::long_rangeJI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<long>(long_cardJL(j)+1,long_cardJL(j)+long_cardJI(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(long_cardJL(j)+1,long_cardJL(j)+long_cardJI(j));
 }
 
 template <typename T>
-const flens::Range<long>
-Basis<T,Primal,Interval,SparseMulti>::long_rangeJR(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,SparseMulti>::long_rangeJR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<long>(long_cardJL(j)+long_cardJI(j)+1,long_cardJ(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(long_cardJL(j)+long_cardJI(j)+1,long_cardJ(j));
 }
 
 } // namespace lawa

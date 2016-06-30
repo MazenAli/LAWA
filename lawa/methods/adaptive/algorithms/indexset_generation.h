@@ -28,21 +28,21 @@ namespace lawa {
 
 template <typename T, typename Basis2D>
 void
-getSparseGridIndexSet(const Basis2D &basis, IndexSet<Index2D> &Lambda, int j, int deltaL, T gamma = 0.);
+getSparseGridIndexSet(const Basis2D &basis, IndexSet<Index2D> &Lambda, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE deltaL, T gamma = 0.);
 
 
 template <typename Basis1D>
 void
-getFullIndexSet(const Basis1D &basis, IndexSet<Index1D> &Lambda, int J);
+getFullIndexSet(const Basis1D &basis, IndexSet<Index1D> &Lambda, FLENS_DEFAULT_INDEXTYPE J);
 
 
 template <typename Basis2D>
 void
-getFullIndexSet(const Basis2D &basis, IndexSet<Index2D> &Lambda, int J1, int J2, int deltaL);
+getFullIndexSet(const Basis2D &basis, IndexSet<Index2D> &Lambda, FLENS_DEFAULT_INDEXTYPE J1, FLENS_DEFAULT_INDEXTYPE J2, FLENS_DEFAULT_INDEXTYPE deltaL);
 
 template <typename Basis2D>
 void
-getScalingFctIndexSet(const Basis2D &basis, IndexSet<Index2D> &Lambda, int J1, int J2);
+getScalingFctIndexSet(const Basis2D &basis, IndexSet<Index2D> &Lambda, FLENS_DEFAULT_INDEXTYPE J1, FLENS_DEFAULT_INDEXTYPE J2);
 
 } // namespace lawa
 

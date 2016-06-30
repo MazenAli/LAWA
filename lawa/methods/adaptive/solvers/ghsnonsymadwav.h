@@ -43,11 +43,11 @@ struct GHS_NONSYM_ADWAV {
         setParameters(T _alpha, T _omega, T _gamma, T _theta);
 
         Coefficients<Lexicographical,T,Index>
-        SOLVE(T nuM1, T _eps, const char *filename, int NumOfIterations=100, T H1norm=0.);
+        SOLVE(T nuM1, T _eps, const char *filename, FLENS_DEFAULT_INDEXTYPE NumOfIterations=100, T H1norm=0.);
 
         IndexSet<Index>
         GROW(const Coefficients<Lexicographical,T,Index> &w, T nu_bar, T &nu,
-             int &lengthOfResidual, T &timeApply);
+             FLENS_DEFAULT_INDEXTYPE &lengthOfResidual, T &timeApply);
 
         void
         GALSOLVE(const IndexSet<Index> &Lambda, const IndexSet<Index> &Extension,

@@ -37,18 +37,18 @@ assemble_matrices_for_alpha_computation(IndexSetType& indexset)
 	A_u_u_matrices.clear();
 	A_u_u_matrices.resize(thetas.size());
 	for(auto& matrix : A_u_u_matrices){
-		matrix.resize((int)indexset.size(), (int)indexset.size());
+		matrix.resize((FLENS_DEFAULT_INDEXTYPE)indexset.size(), (FLENS_DEFAULT_INDEXTYPE)indexset.size());
 	}
-	I_Y_u_u_matrix.resize((int)indexset.size(), (int)indexset.size());
+	I_Y_u_u_matrix.resize((FLENS_DEFAULT_INDEXTYPE)indexset.size(), (FLENS_DEFAULT_INDEXTYPE)indexset.size());
 
-    int col_count = 1;
+    FLENS_DEFAULT_INDEXTYPE col_count = 1;
     T tmp;
 
 	if(!preconditioned_truth){
 		typename Truth::TruthSolverType::TrialPrecType& trialprec = truth.get_trialprec();
 		typename Truth::TruthSolverType::TestPrecType& testprec = truth.get_testprec();
 	    for (auto& ind_col : indexset) {
-	    	int row_count = 1;
+	    	FLENS_DEFAULT_INDEXTYPE row_count = 1;
 	        for (auto& ind_row : indexset) {
 	        	// Get entry in A_u_u_matrices
 	        	for(std::size_t i = 0; i < thetas.size(); ++i){
@@ -69,7 +69,7 @@ assemble_matrices_for_alpha_computation(IndexSetType& indexset)
 	}
 	else{
 	    for (auto& ind_col : indexset) {
-	    	int row_count = 1;
+	    	FLENS_DEFAULT_INDEXTYPE row_count = 1;
 	        for (auto& ind_row : indexset) {
 	        	// Get entry in A_u_u_matrices
 	        	for(std::size_t i = 0; i < thetas.size(); ++i){
@@ -121,7 +121,7 @@ calculate_alpha(ParamType& mu)
 			// Test all elements in row c
 			T val = 0;
 			bool is_break = false;
-			for(int k = it._crs.rows((*it).first.second); k < it._crs.rows((*it).first.second+1); ++k){
+			for(FLENS_DEFAULT_INDEXTYPE k = it._crs.rows((*it).first.second); k < it._crs.rows((*it).first.second+1); ++k){
 				if(it._crs.columns(k) == (*it).first.first){
 					val = it._crs.values(k);
 					is_break = true;
@@ -174,12 +174,12 @@ calculate_alpha(ParamType& mu)
 	std::cout << "      Solving EVP .... " << std::endl;
     DenseVectorT    wr(N), wi(N), beta(N);
     FullColMatrixT  vl, vr;
-    int info = gv(false, false, A_dense, I_dense, wr, wi, beta, vl, vr);
+    FLENS_DEFAULT_INDEXTYPE info = gv(false, false, A_dense, I_dense, wr, wi, beta, vl, vr);
     std::cout << "GV Info: " << info << std::endl;
     T eps = 10e-8;
     std::vector<T> evals;
     for(std::size_t n = 1; n <= N; n++){
-    	//std::cout << "WR = " << wr(n) << ", WI = " << wi(n) << ", beta = " << beta(n) << std::endl;
+        //std::cout << "WR = " << wr(n) << ", WI = " << wi(n) << ", beta = " << beta(n) << std::endl;
         if(wi(n) < eps && beta(n)>eps){
             evals.push_back(wr(n)/beta(n));
         }

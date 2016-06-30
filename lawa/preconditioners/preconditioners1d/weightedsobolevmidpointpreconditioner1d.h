@@ -27,8 +27,8 @@
 #include <lawa/aux/compiletime_assert.h>
 
 /*
- * Preconditioner for the space H^1_w := \{ v \in L_{1,loc}: \int v^2 w dx,
- *                                                           \int v_x^2 w dx < \infty \}
+ * Preconditioner for the space H^1_w := \{ v \in L_{1,loc}: \FLENS_DEFAULT_INDEXTYPE v^2 w dx,
+ *                                                           \FLENS_DEFAULT_INDEXTYPE v_x^2 w dx < \infty \}
  */
 
 namespace lawa {
@@ -40,10 +40,10 @@ class WeightedSobolevMidPointPreconditioner1D
 
     public:
         WeightedSobolevMidPointPreconditioner1D(const Basis &basis, const Function<T> &weight,
-                                                const int sobolev_order);
+                                                const FLENS_DEFAULT_INDEXTYPE sobolev_order);
 
         T
-        operator()(XType xtype1, int j1, long k1) const;
+        operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1) const;
 
         T
         operator()(const Index1D &index) const;
@@ -51,7 +51,7 @@ class WeightedSobolevMidPointPreconditioner1D
     private:
         const Basis &_basis;
         const Function<T> &_weight;
-        const int _sobolev_order;
+        const FLENS_DEFAULT_INDEXTYPE _sobolev_order;
         Integral<Gauss,Basis,Basis> _integral;
 };
 

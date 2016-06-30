@@ -40,10 +40,10 @@ class RHSWithPeaks1D
     public:
         RHSWithPeaks1D(const Basis &basis, Function<T> _f,
                        const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &_deltas,
-                       int order, bool _with_singular_part=true, bool _with_smooth_part=true);
+                       FLENS_DEFAULT_INDEXTYPE order, bool _with_singular_part=true, bool _with_smooth_part=true);
 
         T
-        operator()(XType xtype, int j, long k) const;
+        operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         T
         operator()(const Index1D &lambda) const;
@@ -66,7 +66,7 @@ class RHSWithPeaks1D_WO_XBSpline
         RHSWithPeaks1D_WO_XBSpline(const Wavelet<T,Primal,R,CDF> &_psi,
                                    T (*_f)(T), const flens::DenseVector<flens::Array<T> > &_f_singularPoints,
                                    flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > &_deltas,
-                                   T _left_bound, T _right_bound, T _h, int _order,
+                                   T _left_bound, T _right_bound, T _h, FLENS_DEFAULT_INDEXTYPE _order,
                                    bool _with_singular_part=true, bool _with_smooth_part=true);
         T
         truncated_f(T x) const;
@@ -75,7 +75,7 @@ class RHSWithPeaks1D_WO_XBSpline
         operator()(const Index1D &lambda) const;
 
         T
-        operator()(int j, long k, T a, T b) const;
+        operator()(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, T a, T b) const;
 
     private:
 
@@ -85,7 +85,7 @@ class RHSWithPeaks1D_WO_XBSpline
         flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > &deltas;
         T left_bound, right_bound;
         T h;    //interval length for quadrature
-        int order;
+        FLENS_DEFAULT_INDEXTYPE order;
         bool with_singular_part;
         bool with_smooth_part;
 

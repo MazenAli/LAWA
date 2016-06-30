@@ -26,7 +26,7 @@
 
 namespace lawa {
 
-template <typename T, typename Basis2D, typename BilinearForm>
+template <typename T, typename BilinearForm>
 class DiagonalMatrixPreconditioner2D
 {
 
@@ -34,8 +34,8 @@ class DiagonalMatrixPreconditioner2D
         DiagonalMatrixPreconditioner2D(BilinearForm &a);
 
         T
-        operator()(XType xtype1, int j1, long k1,
-                   XType xtype2, int j2, long k2) const;
+        operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                   XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
 
         T
         operator()(const Index2D &index) const;

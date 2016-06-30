@@ -14,7 +14,7 @@ ThetaScheme1D_LTV(const T _theta, const Basis& _basis, const BilinearForm& _a, R
 template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral>
 flens::DenseVector<flens::Array<T> > 
 ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>::
-solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, int level)
+solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, FLENS_DEFAULT_INDEXTYPE level)
 {   
     op_LHSMatrix.setTimes(time_old, time_new);
     op_RHSMatrix.setTimes(time_old, time_new);
@@ -38,7 +38,7 @@ template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral
 flens::DenseVector<flens::Array<T> > 
 ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>::
 solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, 
-      flens::DenseVector<flens::Array<T> > f, int level)
+      flens::DenseVector<flens::Array<T> > f, FLENS_DEFAULT_INDEXTYPE level)
 {
      op_LHSMatrix.setTimes(time_old, time_new);
      op_RHSMatrix.setTimes(time_old, time_new);
@@ -68,7 +68,7 @@ setRHS(RHSIntegral& _rhs)
 template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral>
 flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > 
 ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>::
-getLHSMatrix(T time_old, T time_new, int level)
+getLHSMatrix(T time_old, T time_new, FLENS_DEFAULT_INDEXTYPE level)
 {
     op_LHSMatrix.setTimes(time_old, time_new);
     flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > lhsmatrix = assembler.assembleStiffnessMatrix(op_LHSMatrix, level);
@@ -91,8 +91,8 @@ Operator_LHSMatrix(ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>* _sche
 template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral>
 T 
 ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>::Operator_LHSMatrix::
-operator()(XType xtype1, int j1, int k1,
-           XType xtype2, int j2, int k2) const
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {
     // (M + deltaT * theta * A_k+1)    
     return scheme->integral(j1, k1, xtype1, 0, j2, k2, xtype2, 0) 
@@ -114,8 +114,8 @@ Operator_RHSMatrix(const ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>*
 template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral>
 T 
 ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>::Operator_RHSMatrix::
-operator()(XType xtype1, int j1, int k1,
-           XType xtype2, int j2, int k2) const
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {
     // (M - deltaT * (1-theta) * A_k)
     return scheme->integral(j1, k1, xtype1, 0, j2, k2, xtype2, 0) 
@@ -135,7 +135,7 @@ Operator_RHSVector(const ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>*
 template<typename T, typename Basis, typename BilinearForm, typename RHSIntegral>
 T 
 ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>::Operator_RHSVector::
-operator()(XType xtype, int j, int k) const
+operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {   
     // deltaT * (theta*f_k+1 - (1-theta)*f_k)
     return (time_new - time_old)*(scheme->theta * rhs(time_new, xtype, j, k) 

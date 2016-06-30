@@ -37,16 +37,16 @@ struct BasisFunction<_T, _Side, Periodic, _Cons>
     static const Construction Cons = _Cons;
 
     virtual T
-    operator()(T x, int j, long k, unsigned short deriv) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
 
     virtual PeriodicSupport<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     virtual flens::DenseVector<flens::Array<T> >
-    singularSupport(int j, long k) const;
+    singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     virtual T
-    tic(int j) const;
+    tic(FLENS_DEFAULT_INDEXTYPE j) const;
 };
 
 } // namespace lawa

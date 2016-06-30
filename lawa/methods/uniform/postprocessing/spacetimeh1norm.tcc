@@ -10,8 +10,8 @@ SpaceTimeH1Norm<T,Basis2D>::SpaceTimeH1Norm(const Basis2D& _basis)
 
 template<typename T, typename Basis2D>
 T
-SpaceTimeH1Norm<T,Basis2D>::operator()(XType xtype_t, int j_t, int k_t, 
-                                       XType xtype_x, int j_x, int k_x) const
+SpaceTimeH1Norm<T,Basis2D>::operator()(XType xtype_t, FLENS_DEFAULT_INDEXTYPE j_t, FLENS_DEFAULT_INDEXTYPE k_t, 
+                                       XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x) const
 {
     T norm_t_L2 = integral_t(j_t, k_t, xtype_t, 0, j_t, k_t, xtype_t, 0);
     T norm_x_H1 = integral_x(j_x, k_x, xtype_x, 0, j_x, k_x, xtype_x, 0) + integral_x(j_x, k_x, xtype_x, 1, j_x, k_x, xtype_x, 1);

@@ -36,12 +36,12 @@ class UniformTensorMatrix2D
 
     public:
         UniformTensorMatrix2D(const UniformBasis2D& basis, const S1_x &s1_x, const S1_y &s1_y,
-                        const S2_x &s2_x, const S2_y &s2_y, const int _Jx, const int _Jy);
+                        const S2_x &s2_x, const S2_y &s2_y, const FLENS_DEFAULT_INDEXTYPE _Jx, const FLENS_DEFAULT_INDEXTYPE _Jy);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
 
         IndexSet<Index2D>
@@ -62,7 +62,7 @@ class UniformTensorMatrix2D
         const S1_y  &_s1_y;
         const S2_x  &_s2_x;
         const S2_y  &_s2_y;
-        const int   _Jx, _Jy;
+        const FLENS_DEFAULT_INDEXTYPE   _Jx, _Jy;
 
         Assembler1D<T,typename UniformBasis2D::FirstBasisType>  assembler_x;
         Assembler1D<T,typename UniformBasis2D::SecondBasisType> assembler_y;

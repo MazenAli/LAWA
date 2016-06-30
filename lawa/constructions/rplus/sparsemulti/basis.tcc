@@ -20,7 +20,7 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Primal,RPlus,SparseMulti>::Basis(int _d, int j)
+Basis<T,Primal,RPlus,SparseMulti>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : mra(_d, j), d(_d), j0(mra.j0), _bc(1,0), _j(j0), psi(*this)
 {
     assert(d>=2);
@@ -40,7 +40,7 @@ Basis<T,Primal,RPlus,SparseMulti>::~Basis()
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Primal,RPlus,SparseMulti>::level() const
 {
     return _j;
@@ -48,7 +48,7 @@ Basis<T,Primal,RPlus,SparseMulti>::level() const
 
 template <typename T>
 void
-Basis<T,Primal,RPlus,SparseMulti>::setLevel(int j) const
+Basis<T,Primal,RPlus,SparseMulti>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;
@@ -134,8 +134,8 @@ Basis<T,Primal,RPlus,SparseMulti>::generator(XType xtype) const
 
 // cardinalities of left index sets (primal).
 template <typename T>
-long
-Basis<T,Primal,RPlus,SparseMulti>::cardJL(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,RPlus,SparseMulti>::cardJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     return _numLeftParts;
@@ -143,11 +143,11 @@ Basis<T,Primal,RPlus,SparseMulti>::cardJL(int j) const
 
 // ranges of whole, left index sets (primal).
 template <typename T>
-const flens::Range<long>
-Basis<T,Primal,RPlus,SparseMulti>::rangeJL(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,RPlus,SparseMulti>::rangeJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<long>(1,cardJL(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,cardJL(j));
 }
 
 } // namespace lawa

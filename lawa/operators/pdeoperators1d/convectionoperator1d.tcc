@@ -28,8 +28,8 @@ ConvectionOperator1D<T, Basis>::ConvectionOperator1D(const Basis& _basis)
 
 template <typename T, typename Basis>
 T
-ConvectionOperator1D<T, Basis>::operator()(XType xtype1, int j1, long k1,
-                                           XType xtype2, int j2, long k2) const
+ConvectionOperator1D<T, Basis>::operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                                           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {   
     // v * u_x
     return integral(j1, k1, xtype1, 0, j2, k2, xtype2, 1);

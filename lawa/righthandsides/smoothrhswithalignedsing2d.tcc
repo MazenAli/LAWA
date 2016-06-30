@@ -23,7 +23,7 @@ namespace lawa {
 template<typename T, typename Basis2D, QuadratureType Quad>
 SmoothRHSWithAlignedSing2D<T,Basis2D,Quad>::SmoothRHSWithAlignedSing2D
                                             (const Basis2D &_basis, const Function2D<T> &_F,
-                                             int order, unsigned short _derivx,
+                                             FLENS_DEFAULT_INDEXTYPE order, unsigned short _derivx,
                                              unsigned short _derivy)
    : basis(_basis), integral2d(_F, basis.first, basis.second), derivx(_derivx), derivy(_derivy)
 {
@@ -32,8 +32,8 @@ SmoothRHSWithAlignedSing2D<T,Basis2D,Quad>::SmoothRHSWithAlignedSing2D
 
 template<typename T, typename Basis2D, QuadratureType Quad>
 T
-SmoothRHSWithAlignedSing2D<T,Basis2D,Quad>::operator()(XType ex, int jx, long kx,
-                                                       XType ey, int jy, long ky) const
+SmoothRHSWithAlignedSing2D<T,Basis2D,Quad>::operator()(XType ex, FLENS_DEFAULT_INDEXTYPE jx, FLENS_DEFAULT_INDEXTYPE kx,
+                                                       XType ey, FLENS_DEFAULT_INDEXTYPE jy, FLENS_DEFAULT_INDEXTYPE ky) const
 {
     return integral2d(jx, kx, ex, derivx, jy, ky, ey, derivy);
 }

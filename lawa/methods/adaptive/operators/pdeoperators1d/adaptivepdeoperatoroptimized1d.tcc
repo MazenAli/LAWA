@@ -6,7 +6,7 @@ template <typename T>
 AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::AdaptivePDEOperatorOptimized1D
                                              (const ReallineCDFBasis1D &_basis, T _reaction,
                                               T _convection, T _diffusion, T /*thresh*/,
-                                              int /*NumOfCols*/, int /*NumOfRows*/)
+                                              FLENS_DEFAULT_INDEXTYPE /*NumOfCols*/, FLENS_DEFAULT_INDEXTYPE /*NumOfRows*/)
 : basis(_basis), reaction(_reaction), convection(_convection),
   diffusion(_diffusion), cA(0.), CA(0.), kappa(0.),
   compression(basis), pde_op1d(basis,reaction,convection,diffusion), prec1d(),
@@ -72,13 +72,13 @@ template <typename T>
 void
 AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow,
                                                                  const IndexSet<Index1D>& LambdaCol,
-                                                                 SparseMatrixT &A_flens, int J)
+                                                                 SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J)
 {
     //lawa::toFlensSparseMatrix(*this,LambdaRow,LambdaCol,A_flens);
 
 
-        std::map<Index1D,int,lt<Lexicographical,Index1D> > row_indices;
-        int row_count = 1, col_count = 1;
+        std::map<Index1D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index1D> > row_indices;
+        FLENS_DEFAULT_INDEXTYPE row_count = 1, col_count = 1;
         for (const_set1d_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
             row_indices[(*row)] = row_count;
         }
@@ -102,10 +102,10 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::toFlensSparseMatrix
                                                        const IndexSet<Index1D>& LambdaCol,
                                                        SparseMatrixT &A_flens, T eps)
 {
-    int J=0;        //compression
+    FLENS_DEFAULT_INDEXTYPE J=0;        //compression
     T CA_temp = 5;
-    J = std::min((int)std::ceil(-1./(basis.d-1.5)*log(eps/CA_temp)/log(2.)), 25);
-    //J = std::min((int)std::ceil(-1./(basis.d-1.5)*log(eps/CA)/log(2.)), 25);
+    J = std::min((FLENS_DEFAULT_INDEXTYPE)std::ceil(-1./(basis.d-1.5)*log(eps/CA_temp)/log(2.)), (FLENS_DEFAULT_INDEXTYPE) 60);
+    //J = std::min((FLENS_DEFAULT_INDEXTYPE)std::ceil(-1./(basis.d-1.5)*log(eps/CA)/log(2.)), 25);
     std::cerr << "AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>: Estimated compression level for "
               << "tol = " << eps << " : " << J << std::endl;
     this->toFlensSparseMatrix(LambdaRow,LambdaCol,A_flens,J);
@@ -114,31 +114,31 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::toFlensSparseMatrix
 template <typename T>
 Coefficients<Lexicographical,T,Index1D>
 AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::apply(const Coefficients<Lexicographical,T,Index1D> &v,
-                                                   int k, int J)
+                                                   FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE J)
 {
     std::cerr << "AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>: Constants cA and CA need to be "
               << "estimated first. Exit." << std::endl;
 
-    int d=basis.d;
+    FLENS_DEFAULT_INDEXTYPE d=basis.d;
     Coefficients<Lexicographical,T,Index1D> ret;
     if (v.size() == 0) return ret;
 
     Coefficients<AbsoluteValue,T,Index1D> temp;
     temp = v;
 
-    int s = 0, count = 0;
+    FLENS_DEFAULT_INDEXTYPE s = 0, count = 0;
     for (const_abs_coeff1d_it it = temp.begin(); (it != temp.end()) && (s<=k); ++it) {
         Index1D colindex = (*it).second;
         T prec_colindex = this->prec(colindex);
         IndexSet<Index1D> Lambda_v;
-        int maxlevel;
+        FLENS_DEFAULT_INDEXTYPE maxlevel;
         J==-1000 ? maxlevel=colindex.j+(k-s)+1 : maxlevel=J;
-        Lambda_v=lambdaTilde1d_PDE(colindex, basis,(k-s), basis.j0, std::min(maxlevel,36), false);
+        Lambda_v=lambdaTilde1d_PDE(colindex, basis,(k-s), basis.j0, std::min(maxlevel,(FLENS_DEFAULT_INDEXTYPE) 60), false);
         for (const_set1d_it mu = Lambda_v.begin(); mu != Lambda_v.end(); ++mu) {
             ret[*mu] += this->pde_data1d(*mu, (*it).second) * prec_colindex * (*it).first;
         }
         ++count;
-        s = int(log(T(count))/log(T(2))) + 1;
+        s = (FLENS_DEFAULT_INDEXTYPE)(log(T(count))/log(T(2))) + 1;
     }
     for (coeff1d_it it=ret.begin(); it!=ret.end(); ++it) {
         (*it).second *= this->prec((*it).first);
@@ -163,7 +163,7 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::apply(const Coefficients<Lexicog
 /*
     Coefficients<AbsoluteValue,T,Index1D> v_abs;
     v_abs = v;
-    int k = this->findK(v_abs, eps);
+    FLENS_DEFAULT_INDEXTYPE k = this->findK(v_abs, eps);
     ret = this->apply(v, k);
     return;// ret;
 */
@@ -177,10 +177,10 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::apply(const Coefficients<Lexicog
     long double squared_v_norm = (long double)std::pow(v.norm(2.),2.);
     long double squared_v_bucket_norm = 0.;
     T delta=0.;
-    int l=0;
-    int support_size_all_buckets=0;
+    FLENS_DEFAULT_INDEXTYPE l=0;
+    FLENS_DEFAULT_INDEXTYPE support_size_all_buckets=0;
 
-    for (int i=0; i<(int)v_bucket.buckets.size(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)v_bucket.buckets.size(); ++i) {
         squared_v_bucket_norm += v_bucket.bucket_ell2norms[i]*v_bucket.bucket_ell2norms[i];
         T squared_delta = fabs(squared_v_norm - squared_v_bucket_norm);
         support_size_all_buckets += v_bucket.buckets[i].size();
@@ -196,7 +196,7 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::apply(const Coefficients<Lexicog
     // Coarsening does not suffer form this effect so that we have delta < eps/2.
     if (delta>tol) delta = eps/2.;
 
-    for (int i=0; i<l; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<l; ++i) {
         Coefficients<Lexicographical,T,Index1D> w_p;
         v_bucket.addBucketToCoefficients(w_p,i);
         if (w_p.size()==0) continue;
@@ -207,15 +207,15 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::apply(const Coefficients<Lexicog
         if (denominator < 0) {
             //std::cout << "Bucket " << i << ": eps=" << eps << ", delta=" << delta << std::endl;
         }
-        int jp = (int)std::max(std::log(numerator/denominator) / std::log(2.) / (basis.d-1.5), 0.);
+        FLENS_DEFAULT_INDEXTYPE jp = (FLENS_DEFAULT_INDEXTYPE)std::max(std::log(numerator/denominator) / std::log(2.) / (basis.d-1.5), 0.);
         //std::cout << "Bucket " << i << ": #wp= " << w_p.size() << ", jp=" << jp << std::endl;
-        jp = std::min(jp,36);
+        jp = std::min(jp,(FLENS_DEFAULT_INDEXTYPE) 60);
         for (const_coeff1d_it it=w_p.begin(); it!=w_p.end(); ++it) {
             Index1D colindex = (*it).first;
             T prec_colindex = this->prec(colindex);
             IndexSet<Index1D> Lambda_v;
 
-            Lambda_v=lambdaTilde1d_PDE(colindex, basis,jp, basis.j0, std::min(colindex.j+jp,36), false);
+            Lambda_v=lambdaTilde1d_PDE(colindex, basis,jp, basis.j0, std::min(colindex.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60), false);
             for (const_set1d_it mu = Lambda_v.begin(); mu != Lambda_v.end(); ++mu) {
                 ret[*mu] += this->pde_data1d(*mu, colindex) * prec_colindex * (*it).second;
             }
@@ -243,26 +243,26 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::apply(const Coefficients<Lexicog
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::findK(const Coefficients<AbsoluteValue,T,Index1D> &v,
                                                    T eps)
 {
-    int d=basis.d;
+    FLENS_DEFAULT_INDEXTYPE d=basis.d;
     if (v.size() == 0) return 1;
     T s=d-1.5;    //s = gamma-1, gamma the smoothness index of the wavelet basis
 
     T tau = 1.0 / (s + 0.5);
     // here the constant in (7.27) (KU-Wavelet) is estimated with 10
-    int k_eps = static_cast<int>(10*log(std::pow(eps, -1.0/s)*std::pow(v.wtauNorm(tau), 1.0/s)) / log(2.0));
+    FLENS_DEFAULT_INDEXTYPE k_eps = static_cast<FLENS_DEFAULT_INDEXTYPE>(10*log(std::pow(eps, -1.0/s)*std::pow(v.wtauNorm(tau), 1.0/s)) / log(2.0));
     flens::DenseVector<flens::Array<T> > normsec = v.norm_sections();
     T ErrorEstimateFactor = 1.;
     //std::cout << "eps = " << eps << ", k_eps = " << k_eps << std::endl;
 
-    for (int k=1; k<=k_eps; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=k_eps; ++k) {
         //std::cout << "At k = " << setw(3) << k;
 
         T R_k = 0.0;
-        for (int i=k; i<=normsec.lastIndex()-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=k; i<=normsec.lastIndex()-1; ++i) {
             R_k += normsec(i+1);
         }
         R_k *= this->CA;
@@ -270,7 +270,7 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::findK(const Coefficients<Absolut
         R_k += std::pow(2.,-k*s) * normsec(1);
         //std::cout << ", R_k = " << setw(10) << R_k;
 
-        for (int l=0; l<=k-1; ++l) {
+        for (FLENS_DEFAULT_INDEXTYPE l=0; l<=k-1; ++l) {
             if (k-l<=normsec.lastIndex()-1) {
                 //R_k += std::pow(l,-1.01)*std::pow(2.,-l*s) * normsec(k-l+1);
                 R_k += std::pow(2.,-l*s) * normsec(k-l+1);
@@ -282,14 +282,14 @@ AdaptivePDEOperatorOptimized1D<T,Primal,R,CDF>::findK(const Coefficients<Absolut
 
         if (R_k<=eps) {
             std::cout << "   findK ==> k = " << k << ", k_eps = " << k_eps << std::endl;
-            int maxlevel=22;
-            if (d==2)         {    maxlevel=28; }
-            else if (d==3)    {   maxlevel=21; }    //for non-singular examples, also lower values are possible
+            FLENS_DEFAULT_INDEXTYPE maxlevel=100;
+            if (d==2)         {    maxlevel=100; }
+            else if (d==3)    {   maxlevel=100; }    //for non-singular examples, also lower values are possible
                                                     //high level for ex. 3, j0=-inf required.
             return std::min(k,maxlevel);
         }
     }
-    return std::min(k_eps,25);    //higher level differences result in translation indices that cannot be stored in int.
+    return std::min(k_eps,(FLENS_DEFAULT_INDEXTYPE) 60);    //higher level differences result in translation indices that cannot be stored in FLENS_DEFAULT_INDEXTYPE.
 }
 
 
@@ -300,8 +300,8 @@ template<typename T, DomainType Domain>
 AdaptivePDEOperatorOptimized1D<T, Primal,Domain,SparseMulti>::AdaptivePDEOperatorOptimized1D
                                                            (const SparseMultiBasis1D &_basis,
                                                             T _reaction, T _convection, T _diffusion,
-                                                            T /*thresh*/, int /*NumOfCols*/,
-                                                            int /*NumOfRows*/)
+                                                            T /*thresh*/, FLENS_DEFAULT_INDEXTYPE /*NumOfCols*/,
+                                                            FLENS_DEFAULT_INDEXTYPE /*NumOfRows*/)
 : basis(_basis), reaction(_reaction), convection(_convection), diffusion(_diffusion),
   cA(0.), CA(0.), kappa(0.),
   compression(basis), pde_op1d(basis,reaction,convection,diffusion), prec1d(),
@@ -382,10 +382,10 @@ void
 AdaptivePDEOperatorOptimized1D<T, Primal,Domain,SparseMulti>::toFlensSparseMatrix
                                                            (const IndexSet<Index1D>& LambdaRow,
                                                             const IndexSet<Index1D>& LambdaCol,
-                                                            SparseMatrixT &A_flens, int /*J*/)
+                                                            SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE /*J*/)
 {
-    std::map<Index1D,int,lt<Lexicographical,Index1D> > row_indices;
-    int row_count = 1, col_count = 1;
+    std::map<Index1D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index1D> > row_indices;
+    FLENS_DEFAULT_INDEXTYPE row_count = 1, col_count = 1;
     for (const_set1d_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
         row_indices[(*row)] = row_count;
     }
@@ -416,7 +416,7 @@ template<typename T, DomainType Domain>
 Coefficients<Lexicographical,T,Index1D>
 AdaptivePDEOperatorOptimized1D<T, Primal,Domain,SparseMulti>::apply
                                                  (const Coefficients<Lexicographical,T,Index1D> &v,
-                                                  int/* k */, int /* J */, cxxblas::Transpose trans)
+                                                  FLENS_DEFAULT_INDEXTYPE/* k */, FLENS_DEFAULT_INDEXTYPE /* J */, cxxblas::Transpose trans)
 {
     Coefficients<Lexicographical,T,Index1D> ret;
     if (v.size() == 0) return ret;

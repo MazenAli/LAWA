@@ -38,8 +38,8 @@ namespace mpfr {
 
 mp_rnd_t   mpreal::default_rnd  = mpfr_get_default_rounding_mode(); 
 mp_prec_t  mpreal::default_prec = mpfr_get_default_prec();  
-int        mpreal::default_base = 10;
-int        mpreal::double_bits = -1;
+FLENS_DEFAULT_INDEXTYPE        mpreal::default_base = 10;
+FLENS_DEFAULT_INDEXTYPE        mpreal::double_bits = -1;
 
 // Default constructor: creates mp number and initializes it to 0.
 mpreal::mpreal() 
@@ -89,37 +89,37 @@ mpreal::mpreal(const double u, mp_prec_t prec, mp_rnd_t mode)
         throw conversion_overflow();
 }
 
-mpreal::mpreal(const long double u, mp_prec_t prec, mp_rnd_t mode)
+mpreal::mpreal(const FLENS_DEFAULT_INDEXTYPE double u, mp_prec_t prec, mp_rnd_t mode)
 { 
     mpfr_init2(mp,prec);
     mpfr_set_ld(mp,u,mode);
 }
 
-mpreal::mpreal(const unsigned long int u, mp_prec_t prec, mp_rnd_t mode)
+mpreal::mpreal(const unsigned FLENS_DEFAULT_INDEXTYPE long u, mp_prec_t prec, mp_rnd_t mode)
 { 
     mpfr_init2(mp,prec);
     mpfr_set_ui(mp,u,mode);
 }
 
-mpreal::mpreal(const unsigned int u, mp_prec_t prec, mp_rnd_t mode)
+mpreal::mpreal(const unsigned FLENS_DEFAULT_INDEXTYPE u, mp_prec_t prec, mp_rnd_t mode)
 { 
     mpfr_init2(mp,prec);
     mpfr_set_ui(mp,u,mode);
 }
 
-mpreal::mpreal(const long int u, mp_prec_t prec, mp_rnd_t mode)
+mpreal::mpreal(const FLENS_DEFAULT_INDEXTYPE long u, mp_prec_t prec, mp_rnd_t mode)
 { 
     mpfr_init2(mp,prec);
     mpfr_set_si(mp,u,mode);
 }
 
-mpreal::mpreal(const int u, mp_prec_t prec, mp_rnd_t mode)
+mpreal::mpreal(const FLENS_DEFAULT_INDEXTYPE u, mp_prec_t prec, mp_rnd_t mode)
 { 
     mpfr_init2(mp,prec);
     mpfr_set_si(mp,u,mode);
 }
 
-mpreal::mpreal(const char* s, mp_prec_t prec, int base, mp_rnd_t mode)
+mpreal::mpreal(const char* s, mp_prec_t prec, FLENS_DEFAULT_INDEXTYPE base, mp_rnd_t mode)
 {
     mpfr_init2(mp,prec);
     mpfr_set_str(mp, s, base, mode); 
@@ -206,11 +206,11 @@ const mpreal hypot (const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode)
     return a;
 }
 
-const mpreal sum (const mpreal tab[], unsigned long int n, mp_rnd_t rnd_mode)
+const mpreal sum (const mpreal tab[], unsigned FLENS_DEFAULT_INDEXTYPE long n, mp_rnd_t rnd_mode)
 {
     mpreal x;
     mpfr_ptr* t;
-    unsigned long int i;
+    unsigned FLENS_DEFAULT_INDEXTYPE long i;
 
     t = new mpfr_ptr[n];
     for (i=0;i<n;i++) t[i] = (mpfr_ptr)tab[i].mp;
@@ -234,7 +234,7 @@ const mpreal remainder (const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode)
     return a;
 }
 
-const mpreal remquo (long* q, const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode)
+const mpreal remquo (FLENS_DEFAULT_INDEXTYPE* q, const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode)
 {
     mpreal a;
     mp_prec_t yp, xp;
@@ -257,7 +257,7 @@ std::string to_string(T t, std::ios_base & (*f)(std::ios_base&))
     return oss.str();
 }
 
-string mpreal::to_string(size_t n, int b, mp_rnd_t mode) const
+string mpreal::to_string(size_t n, FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t mode) const
 {
     char *s, *ns = NULL;    
     size_t slen, nslen;

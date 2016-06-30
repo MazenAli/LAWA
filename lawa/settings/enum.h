@@ -65,7 +65,7 @@ enum BoundaryCondition {
 enum QuadratureType { 
     Gauss, 
     Trapezoidal,
-    ExpWeighted,     //Exact evaluation of \int p(x) e^{\eta |x|} dx, p a polynomial
+    ExpWeighted,     //Exact evaluation of \FLENS_DEFAULT_INDEXTYPE p(x) e^{\eta |x|} dx, p a polynomial
     SparseGridGP,    //Gauss-Patterson quadrature on a sparse grid
     FullGridGL,        //Gauss-Legendre  quadrature on a full grid
     FullGridGL_localOrder        //Gauss-Legendre  quadrature on a full grid, possibility to change order locally

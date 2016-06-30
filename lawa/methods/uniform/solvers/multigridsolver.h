@@ -38,20 +38,20 @@ class MultigridSolver{
       DualBasis& dualbasis;
       Smoother& smoother;
       Solver& solver; 
-      int nu1, nu2;                 
-      int minLevel;
+      FLENS_DEFAULT_INDEXTYPE nu1, nu2;                 
+      FLENS_DEFAULT_INDEXTYPE minLevel;
     
   public:
       MultigridSolver(PrimalBasis& _primalbasis, DualBasis& _dualbasis, Smoother& _smoother, 
-                      Solver& _solver, int _nu1, int _nu2, int _minLevel = 0);
+                      Solver& _solver, FLENS_DEFAULT_INDEXTYPE _nu1, FLENS_DEFAULT_INDEXTYPE _nu2, FLENS_DEFAULT_INDEXTYPE _minLevel = 0);
       
       DenseVectorT
-      vCycle(int i, int level, DenseVectorT& u, DenseVectorT& f);
+      vCycle(FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE level, DenseVectorT& u, DenseVectorT& f);
                   
       DenseVectorT
-      wCycle(int i, int level, DenseVectorT& u, DenseVectorT& f);      
+      wCycle(FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE level, DenseVectorT& u, DenseVectorT& f);      
       
-      int getMinLevel(){ return minLevel;}
+      FLENS_DEFAULT_INDEXTYPE getMinLevel(){ return minLevel;}
 };
 
 } //  namespace lawa

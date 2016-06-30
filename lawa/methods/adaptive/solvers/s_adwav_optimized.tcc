@@ -6,7 +6,7 @@ template <typename T, typename Index, typename AdaptiveOperator, typename RHS,
 S_ADWAV_Optimized<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>::S_ADWAV_Optimized
 (AdaptiveOperator &_A, RHS &_F, PP_AdaptiveOperator &_PP_A, PP_RHS &_PP_F,
  T _contraction, T start_threshTol, T start_linTol,
- T start_resTol, int _NumOfIterations, int _MaxItsPerThreshTol, T _eps)
+ T start_resTol, FLENS_DEFAULT_INDEXTYPE _NumOfIterations, FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol, T _eps)
 : A(_A), F(_F), PP_A(_PP_A), PP_F(_PP_F),
   contraction(_contraction), threshTol(start_threshTol),
   linTol(start_linTol), resTol(start_resTol), NumOfIterations(_NumOfIterations),
@@ -23,7 +23,7 @@ template <typename T, typename Index, typename AdaptiveOperator, typename RHS,
 void
 S_ADWAV_Optimized<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>::
 solve(const IndexSet<Index> &InitialLambda, Coefficients<Lexicographical,T,Index> &u,
-      const char *linsolvertype, const char *filename, int assemble_matrix, T H1norm)
+      const char *linsolvertype, const char *filename, FLENS_DEFAULT_INDEXTYPE assemble_matrix, T H1norm)
 {
     Timer timer;
 
@@ -32,13 +32,13 @@ solve(const IndexSet<Index> &InitialLambda, Coefficients<Lexicographical,T,Index
 
     Lambda = InitialLambda;
     T old_res = linTol;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     T timeMatrixVector=0.;
     std::cout << "Simple adaptive solver started." << std::endl;
 
     std::ofstream file(filename);
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         std::cout << "*** " << its+1 << ".iteration" << std::endl;
 
         timer.start();
@@ -51,7 +51,7 @@ solve(const IndexSet<Index> &InitialLambda, Coefficients<Lexicographical,T,Index
         //Galerkin step
         T r_norm_Lambda = 0.0;
         std::cout << "   Solver " << linsolvertype << " started with N = " << Lambda.size() << std::endl;
-        int iterations=0;
+        FLENS_DEFAULT_INDEXTYPE iterations=0;
 
         if (strcmp(linsolvertype,"cg")==0) {
             iterations = CG_Solve(Lambda, A, u, f, r_norm_Lambda, linTol, 100, timeMatrixVector, assemble_matrix);
@@ -81,7 +81,7 @@ solve(const IndexSet<Index> &InitialLambda, Coefficients<Lexicographical,T,Index
         }
         thresh_off_quot *= T(u.size());
 
-        int N = Lambda.size();
+        FLENS_DEFAULT_INDEXTYPE N = Lambda.size();
 
         timer.stop();
         T time1 = timer.elapsed();
@@ -89,7 +89,7 @@ solve(const IndexSet<Index> &InitialLambda, Coefficients<Lexicographical,T,Index
         std::cout << "Computing error..." << std::endl;
         IndexSet<Index1D> Lambda_x, Lambda_y;
         split(Lambda, Lambda_x, Lambda_y);
-        int jmin_x, jmax_x, jmin_y, jmax_y;
+        FLENS_DEFAULT_INDEXTYPE jmin_x, jmax_x, jmin_y, jmax_y;
         getMinAndMaxLevel(Lambda_x, jmin_x, jmax_x);
         getMinAndMaxLevel(Lambda_y, jmin_y, jmax_y);
         std::cerr << "   Current jmax  = (" << jmax_x << ", " << jmax_y << ")" << std::endl;

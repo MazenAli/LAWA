@@ -72,12 +72,12 @@ struct AWGM_PG_Parameters{
 
     AWGM_PG_Parameters(double _tol = 5e-03,
                     double _tol_primal = 0.,
-                    double _alpha = 0.7,
+                    double _alpha = 0.95,
                     std::size_t _max_its = 100,
                     std::size_t _max_basissize = 400000,
                     bool _reset_res = false,
-                    StableExpansionVersion _stable_exp_u = FullExpansion,
-                    StableExpansionVersion _stable_exp_res = FullExpansion,
+                    StableExpansionVersion _stable_exp_u = OnlyTemporalHWExpansion,
+                    StableExpansionVersion _stable_exp_res = OnlyTemporalHWExpansion,
                     ResidualConstruction _res_construction = SimpleStableExpansion,
                     bool _print_info = true,
                     bool _verbose = true,
@@ -118,7 +118,7 @@ struct AWGM_Parameters{
 
     AWGM_Parameters(double _tol = 5e-03,
                     double _tol_primal = 0.,
-                    double _alpha = 0.7,
+                    double _alpha = 0.95,
                     std::size_t _max_its = 100,
                     std::size_t _max_basissize = 400000,
                     bool _print_info = true,
@@ -245,7 +245,7 @@ struct HTAWGM_Params
     unsigned maxit_pcg  = 5e+01; /* Maxit for galerkin_pcg */
     double   delta_pcg  = 1e-01; /* Adaptive trunc tolerance galerkin_pcg */
     double   trunc_pres = 1e-08; /* Truncation accuracy presidual */
-    double   alpha      = 0.8;   /* Bulk chasing parameter */
+    double   alpha      = 0.95;   /* Bulk chasing parameter */
     unsigned maxit_bulk = 1e+01; /* Maxit bulk chasing */
 };
 

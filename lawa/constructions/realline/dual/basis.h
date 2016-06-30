@@ -42,25 +42,25 @@ class Basis<_T,Dual,R,CDF>
         typedef BSpline<T,Dual,R,CDF> BSplineType;
         typedef Wavelet<T,Dual,R,CDF> WaveletType;
 
-        Basis(int _d, int _d_, int j=0);
+        Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j=0);
 
-        int 
+        FLENS_DEFAULT_INDEXTYPE 
         level() const;
 
         void
-        setLevel(int level) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE level) const;
 
         const BasisFunctionType &
         generator(XType xtype) const;
 
-        const int d, d_, j0;
+        const FLENS_DEFAULT_INDEXTYPE d, d_, j0;
         MRA<T,Primal,R,CDF> mra;
         MRA<T,Dual,R,CDF> mra_;
         Wavelet<T,Dual,R,CDF> psi_;
         flens::RefinementMatrix<T,R,CDF> M1_;
         
     private:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 };
 
 } // namespace lawa

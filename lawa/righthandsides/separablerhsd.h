@@ -45,11 +45,11 @@ public:
     SeparableRHSD(SeparableRHSD&&)      = default;
 
     SeparableRHSD(const Basis& _basis, const FuncType& _F,
-                  const int order = 4);
+                  const FLENS_DEFAULT_INDEXTYPE order = 4);
 
     SeparableRHSD(const Basis& _basis,   const FuncType& _F,
                   const Matvec& _deltas, const IntMat& _derivs,
-                  const int order = 4);
+                  const FLENS_DEFAULT_INDEXTYPE order = 4);
 
     size_type
     rank() const;

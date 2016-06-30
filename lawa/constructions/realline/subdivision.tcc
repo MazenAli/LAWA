@@ -32,16 +32,16 @@ _evalAtIntegersByEVP(const flens::DenseVector<flens::Array<T> > &a,
 {
     using flens::_;
 
-    int l1 = a.firstIndex(),
+    FLENS_DEFAULT_INDEXTYPE l1 = a.firstIndex(),
         l2 = a.lastIndex();
 
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > A(a.length(), a.length(), l1, l1);
     
     // fill matrix A of eigenvalue problem.
-    for (int m=l1; m<=l2; ++m) {
-        int from = std::max(l1, 2*m-l2),
+    for (FLENS_DEFAULT_INDEXTYPE m=l1; m<=l2; ++m) {
+        FLENS_DEFAULT_INDEXTYPE from = std::max(l1, 2*m-l2),
               to = std::min(l2, 2*m-l1);
-        for (int k=from; k<=to; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE k=from; k<=to; ++k) {
             A(m,k) = a(2*m-k);
         }
     }
@@ -52,7 +52,7 @@ _evalAtIntegersByEVP(const flens::DenseVector<flens::Array<T> > &a,
                                                 VR(A.numRows(),A.numRows()); // left and right eigenvectors
     ev(false, true, A, wr, wi, VL, VR); //only calculate right eigenvectors.
     // TODO: as soon as iamax is in FLENS, take next line one level higher!!!!
-    int pos = wr.firstIndex() + cxxblas::iamax(wr.length(), wr.engine().data(), 1);
+    FLENS_DEFAULT_INDEXTYPE pos = wr.firstIndex() + cxxblas::iamax((int)wr.length(), wr.engine().data(), 1);
     valuesAtIntegers = VR(_,pos); // choosing the corresponding eigenvector.
     
     // the elements of the eigenvector have to sum up to 1.
@@ -79,15 +79,15 @@ _evalAtIntegers(const BSpline<T,Dual,R,CDF> phi_,
 {
     if (phi_.d==phi_.d_) {
         switch (phi_.d) {
-            case 2: valuesAtIntegers.engine().resize(5,-2);
+            case 2: valuesAtIntegers.engine().resize((FLENS_DEFAULT_INDEXTYPE)5,(FLENS_DEFAULT_INDEXTYPE)-2);
                     valuesAtIntegers = 0., -2., 5., -2., 0.;
                     
                     return;
-            case 3: valuesAtIntegers.engine().resize(8,-3);
+            case 3: valuesAtIntegers.engine().resize((FLENS_DEFAULT_INDEXTYPE)8,(FLENS_DEFAULT_INDEXTYPE)-3);
                     valuesAtIntegers = 0., -0.0075, -0.1025, 0.61,
                                        0.61, -0.1025, -0.0075, 0.;
                     return;
-            case 4: valuesAtIntegers.engine().resize(11,-5);
+            case 4: valuesAtIntegers.engine().resize((FLENS_DEFAULT_INDEXTYPE)11,(FLENS_DEFAULT_INDEXTYPE)-5);
                     valuesAtIntegers = 0.,
                                        0.00584608843537426023373448913389,
                                       -0.12627551020408175896925229153567,
@@ -110,7 +110,7 @@ _evalAtIntegers(const BSpline<T,Dual,R,CDF> phi_,
 
 template <typename T>
 void
-subdivide(const BSpline<T,Primal,R,CDF> &phi, int j,
+subdivide(const BSpline<T,Primal,R,CDF> &phi, FLENS_DEFAULT_INDEXTYPE j,
           flens::DenseVector<flens::Array<T> > &dyadicValues)
 {
     using flens::_;
@@ -119,18 +119,18 @@ subdivide(const BSpline<T,Primal,R,CDF> &phi, int j,
     _evalAtIntegers(phi, valuesAtIntegers);
     
     // set values at integer positions of result.
-    int twoJ = pow2i<T>(j);
-    int from = twoJ*phi.l1,
+    FLENS_DEFAULT_INDEXTYPE twoJ = pow2i<T>(j);
+    FLENS_DEFAULT_INDEXTYPE from = twoJ*phi.l1,
           to = twoJ*phi.l2;
-    dyadicValues.engine().resize(to-from+1,from);
+    dyadicValues.engine().resize((int)(to-from+1), (int)from);
     dyadicValues(_(from,twoJ,to)) = valuesAtIntegers;
     
     // calculate values inbetween on dyadic grid.
-    for (int l=1; l<=j; ++l) {
-        for (int k=from+pow2i<T>(j-l); k<=to; k+=pow2i<T>(j-l+1)) {
-            int mFrom = std::max(phi.l1, ((2*k-to)>>j)+1);
-            int   mTo = std::min(phi.l2,  (2*k-from)>>j);
-            for (int m=mFrom; m<=mTo; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE l=1; l<=j; ++l) {
+        for (FLENS_DEFAULT_INDEXTYPE k=from+pow2i<T>(j-l); k<=to; k+=pow2i<T>(j-l+1)) {
+            FLENS_DEFAULT_INDEXTYPE mFrom = std::max(phi.l1, ((2*k-to)>>j)+1);
+            FLENS_DEFAULT_INDEXTYPE   mTo = std::min(phi.l2,  (2*k-from)>>j);
+            for (FLENS_DEFAULT_INDEXTYPE m=mFrom; m<=mTo; ++m) {
                 dyadicValues(k) += phi.a(m)*dyadicValues(2*k-twoJ*m);
             }
         }
@@ -139,7 +139,7 @@ subdivide(const BSpline<T,Primal,R,CDF> &phi, int j,
 
 template <typename T>
 void
-subdivide(const BSpline<T,Dual,R,CDF> &phi_, int j,
+subdivide(const BSpline<T,Dual,R,CDF> &phi_, FLENS_DEFAULT_INDEXTYPE j,
           flens::DenseVector<flens::Array<T> > &dyadicValues)
 {
     using flens::_;
@@ -148,18 +148,18 @@ subdivide(const BSpline<T,Dual,R,CDF> &phi_, int j,
     _evalAtIntegers(phi_, valuesAtIntegers);
     
     // set values at integer positions of result.
-    int twoJ = pow2i<T>(j);
-    int from = twoJ*phi_.l1_,
+    FLENS_DEFAULT_INDEXTYPE twoJ = pow2i<T>(j);
+    FLENS_DEFAULT_INDEXTYPE from = twoJ*phi_.l1_,
           to = twoJ*phi_.l2_;
-    dyadicValues.engine().resize(to-from+1,from);
+    dyadicValues.engine().resize(to-from+1, from);
     dyadicValues(_(from,twoJ,to)) = valuesAtIntegers;
     
     // calculate values inbetween on dyadic grid.
-    for (int l=1; l<=j; ++l) {
-        for (int k=from+pow2i<T>(j-l); k<=to; k+=pow2i<T>(j-l+1)) {
-            int mFrom = std::max(phi_.l1_, ((2*k-to)>>j)+1);
-            int   mTo = std::min(phi_.l2_,  (2*k-from)>>j);
-            for (int m=mFrom; m<=mTo; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE l=1; l<=j; ++l) {
+        for (FLENS_DEFAULT_INDEXTYPE k=from+pow2i<T>(j-l); k<=to; k+=pow2i<T>(j-l+1)) {
+            FLENS_DEFAULT_INDEXTYPE mFrom = std::max(phi_.l1_, ((2*k-to)>>j)+1);
+            FLENS_DEFAULT_INDEXTYPE   mTo = std::min(phi_.l2_,  (2*k-from)>>j);
+            for (FLENS_DEFAULT_INDEXTYPE m=mFrom; m<=mTo; ++m) {
                 dyadicValues(k) += phi_.a_(m)*dyadicValues(2*k-twoJ*m);
             }
         }

@@ -16,20 +16,20 @@ HTCoefficients<T, Basis>::HTCoefficients():
 
 
 template <typename T, typename Basis>
-HTCoefficients<T, Basis>::HTCoefficients(const int d, const Basis& _basis):
+HTCoefficients<T, Basis>::HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const Basis& _basis):
     httree(d),
     basis_(&_basis){}
 
 
 template <typename T, typename Basis>
-HTCoefficients<T, Basis>::HTCoefficients(const int d, const double split,
+HTCoefficients<T, Basis>::HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const double split,
                                          const Basis& _basis):
     httree(d, split),
     basis_(&_basis){}
 
 
 template <typename T, typename Basis>
-int
+FLENS_DEFAULT_INDEXTYPE
 HTCoefficients<T, Basis>::dim() const
 {
     return httree.dim();
@@ -90,7 +90,7 @@ HTCoefficients<T, Basis>::orthogonalize_svd(std::vector<
 
 template <typename T, typename Basis>
 void
-HTCoefficients<T, Basis>::truncate(const int rank, bool isorth)
+HTCoefficients<T, Basis>::truncate(const FLENS_DEFAULT_INDEXTYPE rank, bool isorth)
 {
     tree().truncate(rank, isorth);
 }
@@ -113,7 +113,7 @@ HTCoefficients<T, Basis>::eval(const IndexD& index) const
     typedef htucker::DimensionIndex                          IDX;
 
     IDX idx(dim());
-    for (int i=1; i<=dim(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=dim(); ++i) {
         idx[i-1] = maptoint(index(i), basis());
     }
 
@@ -123,13 +123,13 @@ HTCoefficients<T, Basis>::eval(const IndexD& index) const
 
 template <typename T, typename Basis>
 T
-HTCoefficients<T, Basis>::eval(const IndexD& index, const int vardim) const
+HTCoefficients<T, Basis>::eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim) const
 {
     assert(index.dim()==(unsigned) dim());
 
     htucker::DimensionIndex                 idx(dim());
-    flens::DenseVector<flens::Array<int> >  intindex(dim());
-    for (int i=1; i<=dim(); ++i) {
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> >  intindex(dim());
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=dim(); ++i) {
         intindex(i) = maptoint(index(i), basis());
     }
     idx.setValue(intindex);
@@ -150,7 +150,7 @@ HTCoefficients<T, Basis>::operator()(const IndexD& index) const
 template <typename T, typename Basis>
 T
 HTCoefficients<T, Basis>::operator()(const IndexD& index,
-                                     const int vardim) const
+                                     const FLENS_DEFAULT_INDEXTYPE vardim) const
 {
     assert(index.dim()==(unsigned) dim());
     return eval(index, vardim);

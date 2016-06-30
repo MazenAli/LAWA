@@ -37,8 +37,8 @@ struct TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>
     const FirstBasis &first;
     const SecondBasis &second;
     
-    int
-    dim(const int J_x, const  int J_y) const;
+    FLENS_DEFAULT_INDEXTYPE
+    dim(const FLENS_DEFAULT_INDEXTYPE J_x, const  FLENS_DEFAULT_INDEXTYPE J_y) const;
     
     /* J1_max and J2_max return the maximal level in dimension 1 (2) 
      * if the level in the other dimension is jy (jx).
@@ -48,11 +48,11 @@ struct TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>
      *  For anisotropic bases, we fill the diagonals "as much as possible", i.e.
      *  C = max(C_x, C_y).
      */
-    int 
-    J1_max(const int J_x, const int J_y, const int jy) const;
+    FLENS_DEFAULT_INDEXTYPE 
+    J1_max(const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE J_y, const FLENS_DEFAULT_INDEXTYPE jy) const;
     
-    int 
-    J2_max(const int J_x, const int J_y, const int jx) const;
+    FLENS_DEFAULT_INDEXTYPE 
+    J2_max(const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE J_y, const FLENS_DEFAULT_INDEXTYPE jx) const;
 };
     
     

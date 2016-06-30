@@ -24,7 +24,7 @@
 
 template <typename T, typename U>
     typename __gmp_resolve_expr<T,U>::value_type
-    pow(const __gmp_expr<T,U> &x, int);
+    pow(const __gmp_expr<T,U> &x, FLENS_DEFAULT_INDEXTYPE);
 
 #include <extensions/gmpmath/pow.tcc>
 

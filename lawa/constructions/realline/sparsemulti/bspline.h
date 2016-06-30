@@ -38,7 +38,7 @@ class BSpline<_T,Primal,R,SparseMulti>
         static const DomainType Domain = R;
         static const Construction Cons = SparseMulti;
         
-        BSpline(const int _d);
+        BSpline(const FLENS_DEFAULT_INDEXTYPE _d);
 
         //TODO    BSpline(MRA<T,Primal,R,SparseMulti> &mra);
         
@@ -46,31 +46,31 @@ class BSpline<_T,Primal,R,SparseMulti>
         ~BSpline();
         
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
         
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
         
         Support<T>
         max_support() const;
 
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const unsigned int d;
-        unsigned int _numSplines;
+        const unsigned FLENS_DEFAULT_INDEXTYPE d;
+        unsigned FLENS_DEFAULT_INDEXTYPE _numSplines;
 
     private:
         typedef T (*Evaluator)(T x, unsigned short deriv);
 
-        long
-        _shift(long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        _shift(FLENS_DEFAULT_INDEXTYPE k) const;
 
-        int
-        _type(long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        _type(FLENS_DEFAULT_INDEXTYPE k) const;
 
         Evaluator *_evaluator;
         Support<T> *_support;
@@ -79,8 +79,8 @@ class BSpline<_T,Primal,R,SparseMulti>
 
         Support<T> _max_support;
     //        T
-    //TODO    tic(int j) const;
-    //    int polynomialOrder;
+    //TODO    tic(FLENS_DEFAULT_INDEXTYPE j) const;
+    //    FLENS_DEFAULT_INDEXTYPE polynomialOrder;
 };
 
 } // namespace lawa

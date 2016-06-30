@@ -7,23 +7,23 @@ using namespace std;
 
 # include "sparse_grid_open.h"
 
-int main ( );
+FLENS_DEFAULT_INDEXTYPE main ( );
 
-void test01 ( int dim_min, int dim_max, int level_max_min, int level_max_max );
-void test011 ( int dim_min, int dim_max, int level_max_min, int level_max_max );
-void test012 ( int dim_min, int dim_max, int level_max_min, int level_max_max );
-void test013 ( int dim_min, int dim_max, int level_max_min, int level_max_max );
-void test015 ( int dim_min, int dim_max, int level_max_min, int level_max_max );
-void test02 ( int dim_num, int level_max );
-void test03 ( int dim_num, int level_max );
-void test04 ( int dim_num, int level_max );
-void test05 ( int dim_num, int level_max );
-void test06 ( int dim_num, int level_max );
-void test08 ( int dim_num, int level_max );
+void test01 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max );
+void test011 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max );
+void test012 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max );
+void test013 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max );
+void test015 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max );
+void test02 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max );
+void test03 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max );
+void test04 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max );
+void test05 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max );
+void test06 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max );
+void test08 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max );
 
 //****************************************************************************80
 
-int main ( )
+FLENS_DEFAULT_INDEXTYPE main ( )
 
 //****************************************************************************80
 //
@@ -56,10 +56,10 @@ int main ( )
 //    Volume 46, Number 5, 2008, pages 2309-2345.
 //
 {
-  int dim_max;
-  int dim_min;
-  int level_max_max;
-  int level_max_min;
+  FLENS_DEFAULT_INDEXTYPE dim_max;
+  FLENS_DEFAULT_INDEXTYPE dim_min;
+  FLENS_DEFAULT_INDEXTYPE level_max_max;
+  FLENS_DEFAULT_INDEXTYPE level_max_min;
 
   timestamp ( );
   cout << "\n";
@@ -172,7 +172,7 @@ int main ( )
 }
 //****************************************************************************80
 
-void test01 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
+void test01 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max )
 
 //****************************************************************************80
 //
@@ -194,18 +194,18 @@ void test01 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_MIN, the minimum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MIN, the minimum spatial dimension to consider.
 //
-//    Input, int DIM_MAX, the maximum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MAX, the maximum spatial dimension to consider.
 //
-//    Input, int LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
 //
-//    Input, int LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
 //
 {
-  int dim_num;
-  int level_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE dim_num;
+  FLENS_DEFAULT_INDEXTYPE level_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST01\n";
@@ -251,7 +251,7 @@ void test01 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 }
 //****************************************************************************80
 
-void test011 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
+void test011 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max )
 
 //****************************************************************************80
 //
@@ -273,18 +273,18 @@ void test011 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_MIN, the minimum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MIN, the minimum spatial dimension to consider.
 //
-//    Input, int DIM_MAX, the maximum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MAX, the maximum spatial dimension to consider.
 //
-//    Input, int LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
 //
-//    Input, int LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
 //
 {
-  int dim_num;
-  int level_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE dim_num;
+  FLENS_DEFAULT_INDEXTYPE level_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST011\n";
@@ -328,7 +328,7 @@ void test011 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 }
 //****************************************************************************80
 
-void test012 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
+void test012 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max )
 
 //****************************************************************************80
 //
@@ -350,18 +350,18 @@ void test012 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_MIN, the minimum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MIN, the minimum spatial dimension to consider.
 //
-//    Input, int DIM_MAX, the maximum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MAX, the maximum spatial dimension to consider.
 //
-//    Input, int LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
 //
-//    Input, int LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
 //
 {
-  int dim_num;
-  int level_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE dim_num;
+  FLENS_DEFAULT_INDEXTYPE level_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST012\n";
@@ -406,7 +406,7 @@ void test012 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 }
 //****************************************************************************80
 
-void test013 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
+void test013 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max )
 
 //****************************************************************************80
 //
@@ -428,18 +428,18 @@ void test013 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_MIN, the minimum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MIN, the minimum spatial dimension to consider.
 //
-//    Input, int DIM_MAX, the maximum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MAX, the maximum spatial dimension to consider.
 //
-//    Input, int LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
 //
-//    Input, int LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
 //
 {
-  int dim_num;
-  int level_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE dim_num;
+  FLENS_DEFAULT_INDEXTYPE level_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST013\n";
@@ -485,7 +485,7 @@ void test013 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 }
 //****************************************************************************80
 
-void test015 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
+void test015 ( FLENS_DEFAULT_INDEXTYPE dim_min, FLENS_DEFAULT_INDEXTYPE dim_max, FLENS_DEFAULT_INDEXTYPE level_max_min, FLENS_DEFAULT_INDEXTYPE level_max_max )
 
 //****************************************************************************80
 //
@@ -507,18 +507,18 @@ void test015 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 //
 //  Parameters:
 //
-//    Input, int DIM_MIN, the minimum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MIN, the minimum spatial dimension to consider.
 //
-//    Input, int DIM_MAX, the maximum spatial dimension to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_MAX, the maximum spatial dimension to consider.
 //
-//    Input, int LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MIN, the minimum value of LEVEL_MAX to consider.
 //
-//    Input, int LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX_MAX, the maximum value of LEVEL_MAX to consider.
 //
 {
-  int dim_num;
-  int level_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE dim_num;
+  FLENS_DEFAULT_INDEXTYPE level_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST015\n";
@@ -564,7 +564,7 @@ void test015 ( int dim_min, int dim_max, int level_max_min, int level_max_max )
 }
 //****************************************************************************80
 
-void test02 ( int dim_num, int level_max )
+void test02 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -596,12 +596,12 @@ void test02 ( int dim_num, int level_max )
 //    John Burkardt
 //
 {
-  int dim;
-  int *grid_index;
-  int grid_num;
-  int j;
-  int level;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE *grid_index;
+  FLENS_DEFAULT_INDEXTYPE grid_num;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST02:\n";
@@ -645,7 +645,7 @@ void test02 ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-void test04 ( int dim_num, int level_max )
+void test04 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -671,14 +671,14 @@ void test04 ( int dim_num, int level_max )
 //    John Burkardt
 //
 {
-  int dim;
-  int *grid_index;
-  int grid_num;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE *grid_index;
+  FLENS_DEFAULT_INDEXTYPE grid_num;
   double *grid_point;
-  int j;
-  int level;
-  int order_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE order_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST04:\n";
@@ -756,7 +756,7 @@ void test04 ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-void test05 ( int dim_num, int level_max )
+void test05 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -782,14 +782,14 @@ void test05 ( int dim_num, int level_max )
 //    John Burkardt
 //
 {
-  int dim;
-  int *grid_index;
-  int grid_num;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE *grid_index;
+  FLENS_DEFAULT_INDEXTYPE grid_num;
   double *grid_point;
-  int j;
-  int level;
-  int order_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE order_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST05:\n";
@@ -868,7 +868,7 @@ void test05 ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-void test06 ( int dim_num, int level_max )
+void test06 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -894,14 +894,14 @@ void test06 ( int dim_num, int level_max )
 //    John Burkardt
 //
 {
-  int dim;
-  int *grid_index;
-  int grid_num;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE *grid_index;
+  FLENS_DEFAULT_INDEXTYPE grid_num;
   double *grid_point;
-  int j;
-  int level;
-  int order_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE order_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST06:\n";
@@ -979,7 +979,7 @@ void test06 ( int dim_num, int level_max )
 }
 //****************************************************************************80
 
-//void test08 ( int dim_num, int level_max )
+//void test08 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max )
 
 //****************************************************************************80
 //
@@ -1000,15 +1000,15 @@ void test06 ( int dim_num, int level_max )
 //    John Burkardt
 //
 /*{
-  int dim;
+  FLENS_DEFAULT_INDEXTYPE dim;
   string file_name;
-  int *grid_index;
-  int grid_num;
+  FLENS_DEFAULT_INDEXTYPE *grid_index;
+  FLENS_DEFAULT_INDEXTYPE grid_num;
   double *grid_point;
-  int j;
-  int level;
-  int order_max;
-  int point_num;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE order_max;
+  FLENS_DEFAULT_INDEXTYPE point_num;
 
   cout << "\n";
   cout << "TEST08:\n";

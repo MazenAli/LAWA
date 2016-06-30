@@ -10,7 +10,7 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Orthogonal,Interval,MultiRefinement>::MRA(int _d, int j)
+MRA<T,Orthogonal,Interval,MultiRefinement>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), j0((j<=0) ? 1 : j), phi(*this), _bc(2,0), _j(j0)
 {
     assert(d>=1);
@@ -35,7 +35,7 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::MRA(int _d, int j)
         //_leftSupport = new Support<T>[0];
         //_leftSingularSupport = new flens::DenseVector<flens::Array<T> >[0];
         //_leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[0];
-        //_leftOffsets = new long[0];
+        //_leftOffsets = new FLENS_DEFAULT_INDEXTYPE[0];
 
         //inner part
         _numInnerParts = 1;
@@ -46,15 +46,15 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::MRA(int _d, int j)
         _innerSupport[0] = Support<T>(0.,1.);
 
         _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-        _innerSingularSupport[0].engine().resize(2,0);
+        _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
         _innerSingularSupport[0] = 0., 1.;
 
         _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-        _innerRefCoeffs[0].engine().resize(2,0);
+        _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
         _innerRefCoeffs[0] = 1.L, 1.L;
         _innerRefCoeffs[0] *= std::pow(2.L,-0.5L);
 
-        _innerOffsets = new long[1];
+        _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
         _innerOffsets[0] =  0;
 
         //right part
@@ -63,7 +63,7 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::MRA(int _d, int j)
         //_rightSupport = new Support<T>[0];
         //_rightSingularSupport = new flens::DenseVector<flens::Array<T> >[0];
         //_rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[0];
-        //_rightOffsets   = new long[0];
+        //_rightOffsets   = new FLENS_DEFAULT_INDEXTYPE[0];
     }
     else {
         this->enforceBoundaryCondition<DirichletBC>();
@@ -102,35 +102,35 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::~MRA()
 //--- cardinalities of whole, left, inner, right index sets. -------------------
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,MultiRefinement>::cardI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,MultiRefinement>::cardI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(d==1 || j>=j0);
     // This is different to the corresponding multiscaling functions!!!
     // Case differentiation needed since piecewise linear cannot be smooth at the dyadic grid points
-    if (d==1) return pow2i<int>(j);
-    else if (d==2) return pow2i<int>(j)-1;
-    else      return pow2i<int>(j)*(d-2);
+    if (d==1) return pow2i<FLENS_DEFAULT_INDEXTYPE>(j);
+    else if (d==2) return pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
+    else      return pow2i<FLENS_DEFAULT_INDEXTYPE>(j)*(d-2);
 }
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,MultiRefinement>::cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,MultiRefinement>::cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numLeftParts;
 }
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,MultiRefinement>::cardII(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,MultiRefinement>::cardII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(d==1 || j>=j0);
     return cardI(j) - _numLeftParts - _numRightParts;
 }
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,MultiRefinement>::cardIR(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,MultiRefinement>::cardIR(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numRightParts;
 }
@@ -138,38 +138,38 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::cardIR(int /*j*/) const
 //--- ranges of whole, left, inner, right index sets. --------------------------
 
 template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,MultiRefinement>::rangeI(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,MultiRefinement>::rangeI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(d==1 || j>=j0);
-    return flens::Range<int>(0,cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,cardI(j)-1);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,MultiRefinement>::rangeIL(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,MultiRefinement>::rangeIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<int>(0,cardIL() - 1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,cardIL() - 1);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,MultiRefinement>::rangeII(int j) const
-{
-    assert(d==1 || j>=j0);
-    return flens::Range<int>(cardIL(), cardIL()+cardII(j)-1);
-}
-
-template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,MultiRefinement>::rangeIR(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,MultiRefinement>::rangeII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(d==1 || j>=j0);
-    return flens::Range<int>(cardIL()+cardII(j),cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardIL(), cardIL()+cardII(j)-1);
 }
 
 template <typename T>
-int
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,MultiRefinement>::rangeIR(FLENS_DEFAULT_INDEXTYPE j) const
+{
+    assert(d==1 || j>=j0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardIL()+cardII(j),cardI(j)-1);
+}
+
+template <typename T>
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Orthogonal,Interval,MultiRefinement>::level() const
 {
     return _j;
@@ -177,7 +177,7 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::level() const
 
 template <typename T>
 void
-MRA<T,Orthogonal,Interval,MultiRefinement>::setLevel(int j) const
+MRA<T,Orthogonal,Interval,MultiRefinement>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(d==1 || j>=j0);
     _j = j;
@@ -204,7 +204,7 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             //_leftSupport = new Support<T>[0];
             //_leftSingularSupport = new flens::DenseVector<flens::Array<T> >[0];
             //_leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[0];
-            //_leftOffsets = new long[0];
+            //_leftOffsets = new FLENS_DEFAULT_INDEXTYPE[0];
 
             //inner part
             _numInnerParts = 1;
@@ -213,13 +213,13 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _innerSupport = new Support<T>[1];
             _innerSupport[0] = Support<T>(0.,2.);
             _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _innerSingularSupport[0].engine().resize(3,0);
+            _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerSingularSupport[0] = 0., 1., 2.;
             _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _innerRefCoeffs[0].engine().resize(3,0);
+            _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerRefCoeffs[0] = 0.5L, 1.L, 0.5L;
             _innerRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _innerOffsets = new long[1];
+            _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _innerOffsets[0] =  0;
 
             //right part
@@ -228,7 +228,7 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             //_rightSupport = new Support<T>[0];
             //_rightSingularSupport = new flens::DenseVector<flens::Array<T> >[0];
             //_rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[0];
-            //_rightOffsets = new long[0];
+            //_rightOffsets = new FLENS_DEFAULT_INDEXTYPE[0];
 
             break;
 
@@ -241,14 +241,14 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _leftSupport = new Support<T>[1];
             _leftSupport[0] = Support<T>(0.,2.);
             _leftSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _leftSingularSupport[0].engine().resize(3,0);
+            _leftSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftSingularSupport[0] = 0., 1., 2.;
 
             _leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _leftRefCoeffs[0].engine().resize(3,0);
+            _leftRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftRefCoeffs[0] = 0.5L, 0.75L, 0.25L;
             _leftRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _leftOffsets = new long[1];
+            _leftOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _leftOffsets[0] =  0;
 
             //inner part
@@ -258,14 +258,14 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _innerSupport = new Support<T>[1];
             _innerSupport[0] = Support<T>(0.,3.);
             _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _innerSingularSupport[0].engine().resize(4,0);
+            _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)4,0);
             _innerSingularSupport[0] = 0., 1., 2., 3.;
 
             _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _innerRefCoeffs[0].engine().resize(4,0);
+            _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)4,0);
             _innerRefCoeffs[0] = 0.25L, 0.75L, 0.75L, 0.25L;
             _innerRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _innerOffsets = new long[1];
+            _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _innerOffsets[0] =  1;
 
             //right part
@@ -275,14 +275,14 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _rightSupport = new Support<T>[1];
             _rightSupport[0] = Support<T>(0.,2.);
             _rightSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _rightSingularSupport[0].engine().resize(3,0);
+            _rightSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _rightSingularSupport[0] = 0., 1., 2.;
 
             _rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _rightRefCoeffs[0].engine().resize(3,0);
+            _rightRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _rightRefCoeffs[0] = 0.25L, 0.75L, 0.5L;
             _rightRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _rightOffsets = new long[1];
+            _rightOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _rightOffsets[0] =  1;
 
             break;
@@ -296,13 +296,13 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _leftSupport = new Support<T>[1];
             _leftSupport[0] = Support<T>(0.,1.);
             _leftSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _leftSingularSupport[0].engine().resize(2,0);
+            _leftSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
             _leftSingularSupport[0] = 0., 1.;
             _leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _leftRefCoeffs[0].engine().resize(3,0);
+            _leftRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftRefCoeffs[0] = 0.5L, 0.5L, 0.25L;
             _leftRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _leftOffsets = new long[1];
+            _leftOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _leftOffsets[0] =  0;
 
             //inner part
@@ -314,18 +314,18 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _innerSupport[0] = Support<T>(0.,2.);
             _innerSupport[1] = Support<T>(0.,2.);
             _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[2];
-            _innerSingularSupport[0].engine().resize(3,0);
+            _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerSingularSupport[0] = 0., 1., 2.;
-            _innerSingularSupport[1].engine().resize(3,0);
+            _innerSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerSingularSupport[1] = 0., 1., 2.;
             _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[2];
-            _innerRefCoeffs[0].engine().resize(5,0);
+            _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerRefCoeffs[0] = 0.25L, 0.625L, 0.75L, 0.25L, 0.125L;
             _innerRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _innerRefCoeffs[1].engine().resize(5,0);
+            _innerRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerRefCoeffs[1] = 0.125L, 0.25L, 0.75L, 0.625L, 0.25L;
             _innerRefCoeffs[1] *= std::pow(2.L,-0.5L);
-            _innerOffsets = new long[2];
+            _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[2];
             _innerOffsets[0] =  1;
             _innerOffsets[1] =  2;
 
@@ -336,13 +336,13 @@ MRA<T,Orthogonal,Interval,MultiRefinement>::enforceBoundaryCondition()
             _rightSupport = new Support<T>[1];
             _rightSupport[0] = Support<T>(1.,2.);
             _rightSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _rightSingularSupport[0].engine().resize(2,0);
+            _rightSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
             _rightSingularSupport[0] = 1., 2.;
             _rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _rightRefCoeffs[0].engine().resize(3,0);
+            _rightRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _rightRefCoeffs[0] = 0.25L, 0.5L, 0.5L;
             _rightRefCoeffs[0] *= std::pow(2.L,-0.5L);
-            _rightOffsets = new long[1];
+            _rightOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _rightOffsets[0] =  5;
 
             break;

@@ -41,8 +41,8 @@ SumOfTwoRHSIntegrals<T, Index, RHSIntegral1, RHSIntegral2>::operator()(const Ind
 template<typename T, typename Index, typename RHSIntegral1, typename RHSIntegral2>
 T
 SumOfTwoRHSIntegrals<T, Index, RHSIntegral1, RHSIntegral2>::operator()
-                                                            (XType xtype_x, int j_x, long k_x,
-                                                             XType xtype_y, int j_y, long k_y) const
+                                                            (XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+                                                             XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y) const
 {
     return rhs1(xtype_x, j_x, k_x, xtype_y, j_y, k_y)
          + rhs2(xtype_x, j_x, k_x, xtype_y, j_y, k_y);

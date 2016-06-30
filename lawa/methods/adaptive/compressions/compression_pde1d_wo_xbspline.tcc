@@ -24,7 +24,7 @@ CompressionPDE1D_WO_XBSpline<T,Basis>::setParameters(const IndexSet<Index1D> &La
 template <typename T, typename Basis>
 IndexSet<Index1D>
 CompressionPDE1D_WO_XBSpline<T,Basis>::SparsityPattern(const Index1D &lambda,
-                                                       const IndexSet<Index1D> &Lambda, int J)
+                                                       const IndexSet<Index1D> &Lambda, FLENS_DEFAULT_INDEXTYPE J)
 {
     typedef typename IndexSet<Index1D>::const_iterator set1d_const_it;
 
@@ -33,7 +33,7 @@ CompressionPDE1D_WO_XBSpline<T,Basis>::SparsityPattern(const Index1D &lambda,
         Lambda_x = lambdaTilde1d_PDE_WO_XBSpline(lambda, basis, s_tilde, jmin, jmax);
     }
     else {
-        Lambda_x = lambdaTilde1d_PDE_WO_XBSpline(lambda, basis, std::min(int(s_tilde),J), jmin, jmax);
+        Lambda_x = lambdaTilde1d_PDE_WO_XBSpline(lambda, basis, std::min((FLENS_DEFAULT_INDEXTYPE)(s_tilde),J), jmin, jmax);
     }
 
     for (set1d_const_it lambda_x = Lambda_x.begin(); lambda_x != Lambda_x.end(); ++lambda_x) {

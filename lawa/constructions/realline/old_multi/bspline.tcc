@@ -18,7 +18,7 @@ template <typename T>
 //------------------------------------------------------------------------------
 
 template <typename T>
-BSpline<T,Orthogonal,R,Multi>::BSpline(const int _d)
+BSpline<T,Orthogonal,R,Multi>::BSpline(const FLENS_DEFAULT_INDEXTYPE _d)
     : d(_d)
 {
     assert(d>=2);
@@ -61,10 +61,10 @@ BSpline<T,Orthogonal,R,Multi>::~BSpline()
 
 template <typename T>
 T
-BSpline<T,Orthogonal,R,Multi>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Orthogonal,R,Multi>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
-    const int type = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE type = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
 
     return pow2ih<T>(2*j*deriv+j) *
            _evaluator[type](pow2i<T>(j)*x - shift, deriv);
@@ -73,10 +73,10 @@ BSpline<T,Orthogonal,R,Multi>::operator()(T x, int j, long k, unsigned short der
     
 template <typename T>
 Support<T>
-BSpline<T,Orthogonal,R,Multi>::support(int j, long k) const
+BSpline<T,Orthogonal,R,Multi>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int type = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE type = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     
     return pow2i<T>(-j) * (_support[type] + shift);    
 }
@@ -90,10 +90,10 @@ BSpline<T,Orthogonal,R,Multi>::max_support() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-BSpline<T,Orthogonal,R,Multi>::singularSupport(int j, long k) const
+BSpline<T,Orthogonal,R,Multi>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int typ = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE typ = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     
     flens::DenseVector<flens::Array<T> > result = _singularSupport[typ];
     result += shift;
@@ -103,23 +103,23 @@ BSpline<T,Orthogonal,R,Multi>::singularSupport(int j, long k) const
     
 template <typename T>
 T
-BSpline<T,Orthogonal,R,Multi>::tic(int j) const
+BSpline<T,Orthogonal,R,Multi>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+3));
 }
 
 template <typename T>
-long
-BSpline<T,Orthogonal,R,Multi>::_shift(long k) const
+FLENS_DEFAULT_INDEXTYPE
+BSpline<T,Orthogonal,R,Multi>::_shift(FLENS_DEFAULT_INDEXTYPE k) const
 {
     return k>=0 ? k/_numSplines : -((-k-1)/_numSplines+1);
 }
 
 template <typename T>
-int
-BSpline<T,Orthogonal,R,Multi>::_type(long k) const
+FLENS_DEFAULT_INDEXTYPE
+BSpline<T,Orthogonal,R,Multi>::_type(FLENS_DEFAULT_INDEXTYPE k) const
 {
-    return k>=0 ? (int) k%3 : (int) _numSplines - (int)(-k+2)%((int)_numSplines) - 1;
+    return k>=0 ? (FLENS_DEFAULT_INDEXTYPE) k%3 : (FLENS_DEFAULT_INDEXTYPE) _numSplines - (FLENS_DEFAULT_INDEXTYPE)(-k+2)%((FLENS_DEFAULT_INDEXTYPE)_numSplines) - 1;
 }
 
 //------------------------------------------------------------------------------

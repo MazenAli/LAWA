@@ -4,7 +4,7 @@ template <typename T, typename TrialBasis, typename TestBasis>
 AdaptiveWeightedPDEOperator1D_PG<T,TrialBasis,TestBasis>::
 AdaptiveWeightedPDEOperator1D_PG(const TrialBasis& _trialbasis1d, const TestBasis& _testbasis1d,
  								Function<T> &_reaction_f,Function<T> &_convection_f, Function<T>& _diffusion_f,
- 								int order, bool reactionIsZero, bool convectionIsZero, bool diffusionIsZero)
+ 								FLENS_DEFAULT_INDEXTYPE order, bool reactionIsZero, bool convectionIsZero, bool diffusionIsZero)
 : trialbasis1d(_trialbasis1d), testbasis1d(_testbasis1d), compression1d(trialbasis1d),
   weightedpdeop1d(trialbasis1d, testbasis1d,_reaction_f,_convection_f,_diffusion_f,order,reactionIsZero,convectionIsZero,diffusionIsZero),
   prec1d()//,data(weightedpdeop1d, prec1d, compression1d)
@@ -42,7 +42,7 @@ AdaptiveWeightedPDEOperator1D_PG<T,TrialBasis,TestBasis>::operator()(const Index
 template <typename T, typename TrialBasis, typename TestBasis>
 T
 AdaptiveWeightedPDEOperator1D_PG<T,TrialBasis,TestBasis>::
-operator()(XType xtype_row, int j_row, long k_row, XType xtype_col, int j_col, long k_col)
+operator()(XType xtype_row, FLENS_DEFAULT_INDEXTYPE j_row, FLENS_DEFAULT_INDEXTYPE k_row, XType xtype_col, FLENS_DEFAULT_INDEXTYPE j_col, FLENS_DEFAULT_INDEXTYPE k_col)
 {
     Index1D row_index(j_row,k_row,xtype_row);
     Index1D col_index(j_col,k_col,xtype_col);

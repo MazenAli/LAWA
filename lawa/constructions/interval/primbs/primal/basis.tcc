@@ -22,7 +22,7 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Primal,Interval,Primbs>::Basis(int _d, int _d_, int j)
+Basis<T,Primal,Interval,Primbs>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : mra(_d, j), mra_(_d, _d_, j),
       d(_d), d_(_d_), mu(d&1),
       min_j0(mra_.min_j0), j0(mra_.j0), _bc(2,0), _j(j0), psi(*this)
@@ -31,7 +31,7 @@ Basis<T,Primal,Interval,Primbs>::Basis(int _d, int _d_, int j)
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Primal,Interval,Primbs>::level() const
 {
     return _j;
@@ -39,7 +39,7 @@ Basis<T,Primal,Interval,Primbs>::level() const
 
 template <typename T>
 void
-Basis<T,Primal,Interval,Primbs>::setLevel(int j) const
+Basis<T,Primal,Interval,Primbs>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     if (j!=_j) {
         assert(j>=min_j0);
@@ -64,23 +64,23 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
         mra.template enforceBoundaryCondition<BC>();
         mra_.template enforceBoundaryCondition<BC>();
 
-        int j = min_j0;
+        FLENS_DEFAULT_INDEXTYPE j = min_j0;
         FullColMatrix H(pow2i<T>(j+1)-d+1,
                         pow2i<T>(j+1)-d+1), 
                       Tmp, Tmp2, Tmp3, Tmp4, Mj1, Mjj1;
         H.diag(0) = 1.;
 
         flens::DenseVector<flens::Array<T> > x(pow2i<T>(j+1)-d+1), tmp;
-        for (int i=1; i<=d+1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=d+1; ++i) {
             x(i) = phiR.a(phiR.a.firstIndex()-1+i);
         }
 
-        for (int i=1; i<=d; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=d; ++i) {
             FullColMatrix A(pow2i<T>(j+1)-d+1,
                              pow2i<T>(j+1)-d+1);
             A.diag(0) = 1.;
             if (i-2*ifloor(i/2.)==1) {
-                for (int k=iceil<int>(1/2.-(i+1)/4.); k<=ifloor(pow2i<T>(j)-d/2.-(i+1)/4.); ++k) {
+                for (FLENS_DEFAULT_INDEXTYPE k=iceil<FLENS_DEFAULT_INDEXTYPE>(1/2.-(i+1)/4.); k<=ifloor(pow2i<T>(j)-d/2.-(i+1)/4.); ++k) {
                     A((i+1)/2.+2*k,(i+1)/2.+2*k+1) = -x(ifloor(i/2.)+1) / x(ifloor(i/2.)+2);
                 }
                 tmp = x;
@@ -88,7 +88,7 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
                 flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,1.,A,H,0.,Tmp);
                 H = Tmp;
             } else if (i-2*ifloor(i/2.)==0) {
-                for (int k=iceil<int>(1/2.-i/4.); k<=ifloor(pow2i<T>(j)-d/2.-i/4.); ++k) {
+                for (FLENS_DEFAULT_INDEXTYPE k=iceil<FLENS_DEFAULT_INDEXTYPE>(1/2.-i/4.); k<=ifloor(pow2i<T>(j)-d/2.-i/4.); ++k) {
                     A(pow2i<T>(j+1)-d+2-i/2.-2*k,pow2i<T>(j+1)-d+1-i/2.-2*k) = -x(d-i/2.+2)/x(d-i/2.+1);
                 }
                 tmp = x;
@@ -99,33 +99,33 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
         }
 
         T b = 0;
-        for (int i=1; i<=pow2i<T>(j+1)-d+1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=pow2i<T>(j+1)-d+1; ++i) {
             b += x(i);
         }
 
         FullColMatrix Hj(pow2i<T>(j+1)+d-3,
                           pow2i<T>(j+1)+d-3), InvHj;
         Hj.diag(0) = 1.;
-        for (int n=1; n<=pow2i<T>(j+1)-d+1; ++n) {
-            for (int m=1; m<=pow2i<T>(j+1)-d+1; ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(j+1)-d+1; ++n) {
+            for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(j+1)-d+1; ++m) {
                 Hj(d-2+n,d-2+m) = H(n,m);
             }
         }
         InvHj = inv(Hj);
 
         FullColMatrix F(pow2i<T>(j+1)-d+1,pow2i<T>(j)-d+1);
-        for (int k=1; k<=pow2i<T>(j)-d+1; ++k) {
-            F(iceil<int>(d/2.)+2*k-2,k) = 1;
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=pow2i<T>(j)-d+1; ++k) {
+            F(iceil<FLENS_DEFAULT_INDEXTYPE>(d/2.)+2*k-2,k) = 1;
         }
 
         FullColMatrix Fj(pow2i<T>(j+1)+d-3,pow2i<T>(j));
-        for (int k=1; k<=ifloor(d/2.); ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=ifloor(d/2.); ++k) {
             Fj(d-2+k,k) =1;
             Fj(pow2i<T>(j+1)-k,pow2i<T>(j)+1-k) = 1;
         }
-        for (int n=1; n<=pow2i<T>(j+1)-d+1; ++n) {
-            for (int m=1; m<=pow2i<T>(j)-d+1; ++m) {
-                Fj(d-2+n,iceil<int>(d/2.)-1+m) = F(n,m);
+        for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(j+1)-d+1; ++n) {
+            for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(j)-d+1; ++m) {
+                Fj(d-2+n,iceil<FLENS_DEFAULT_INDEXTYPE>(d/2.)-1+m) = F(n,m);
             }
         }
 
@@ -134,8 +134,8 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
                        Identity(pow2i<T>(j+1)+d-3,
                                 pow2i<T>(j+1)+d-3);
         Pj.diag(0) = 1.;
-        for (int n=1; n<=2*(d-2)+1; ++n) {
-            for (int m=1; m<=d-2; ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE n=1; n<=2*(d-2)+1; ++n) {
+            for (FLENS_DEFAULT_INDEXTYPE m=1; m<=d-2; ++m) {
                 Pj(n,m) = mra_.MP(n+1,m+1);
                 Pj(pow2i<T>(j+1)+d-2-n,pow2i<T>(j+1)+d-2-m) = mra_.MP(n+1,m+1);
             }
@@ -159,8 +159,8 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
         flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,1.,Tmp,inv(Pj),0.,Tmp2);
 
         Mjj1.engine().resize(Tmp2.cols(),Tmp2.rows());
-        for (int row=Mjj1.firstRow(); row<=Mjj1.lastRow(); ++row) {
-            for (int col=Mjj1.firstCol(); col<=Mjj1.lastCol(); ++col) {
+        for (FLENS_DEFAULT_INDEXTYPE row=Mjj1.firstRow(); row<=Mjj1.lastRow(); ++row) {
+            for (FLENS_DEFAULT_INDEXTYPE col=Mjj1.firstCol(); col<=Mjj1.lastCol(); ++col) {
                 Mjj1(row,col) = 2./factor*Tmp2(col,row); 
             }
         }
@@ -170,8 +170,8 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
             Nj1tr(pow2i<T>(j+1)+d-3,pow2i<T>(j-1)),
             Njj1(pow2i<T>(j+1)+d-3,pow2i<T>(j-1)),
             Njj1tr(pow2i<T>(j+1)+d-3,pow2i<T>(j-1));
-            for (int n=1; n<=pow2i<T>(j+1)+d-3; ++n) {
-                for (int m=1; m<=pow2i<T>(j-1); ++m) {
+            for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(j+1)+d-3; ++n) {
+                for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(j-1); ++m) {
                     Nj1(n,m) = Mj1(n,m);
                     Nj1tr(pow2i<T>(j+1)+d-2-n,pow2i<T>(j-1)+1-m) = Nj1(n,m);
                     Njj1(n,m) = Mjj1(n,m);
@@ -181,12 +181,12 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
 
             FullColMatrix Hj1(pow2i<T>(j+1)+d-3,pow2i<T>(j)),
             Hjj1(pow2i<T>(j+1)+d-3,pow2i<T>(j));
-            for (int n=1; n<=pow2i<T>(j+1)+d-3; ++n) {
-                for (int m=1; m<=pow2i<T>(j-1); ++m) {
+            for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(j+1)+d-3; ++n) {
+                for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(j-1); ++m) {
                     Hj1(n,m) = Nj1(n,m);
                     Hjj1(n,m) = Njj1(n,m);
                 }
-                for (int m=pow2i<T>(j-1)+1; m<=pow2i<T>(j); ++m) {
+                for (FLENS_DEFAULT_INDEXTYPE m=pow2i<T>(j-1)+1; m<=pow2i<T>(j); ++m) {
                     Hj1(n,m) = Nj1tr(n,m-pow2i<T>(j-1));
                     Hjj1(n,m) = Njj1tr(n,m-pow2i<T>(j-1));
                 }
@@ -199,7 +199,7 @@ Basis<T,Primal,Interval,Primbs>::enforceBoundaryCondition()
             Mjj1 = Hjj1;
         }
 
-        int numPrimalCols = (d+d_)/2-1,
+        FLENS_DEFAULT_INDEXTYPE numPrimalCols = (d+d_)/2-1,
             numDualCols = (d+1)/2-1;
 
         if (d==2) {
@@ -227,32 +227,32 @@ Basis<T,Primal,Interval,Primbs>::generator(XType xtype) const
 
 // cardinalities of whole, left, inner, right index sets (primal).
 template <typename T>
-int
-Basis<T,Primal,Interval,Primbs>::cardJ(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,Primbs>::cardJ(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j);
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,Primbs>::cardJL(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,Primbs>::cardJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return d + d_ - 2;
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,Primbs>::cardJI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,Primbs>::cardJI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j) - 2*(d + d_ - 2);
 }
 
 template <typename T>
-int
-Basis<T,Primal,Interval,Primbs>::cardJR(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Primal,Interval,Primbs>::cardJR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return d + d_ - 2;
@@ -260,24 +260,24 @@ Basis<T,Primal,Interval,Primbs>::cardJR(int j) const
 
 // ranges of whole, left, inner, right index sets (primal).
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,Primbs>::rangeJ(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,Primbs>::rangeJ(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return flens::_(1,pow2i<T>(j));
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,Primbs>::rangeJL(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,Primbs>::rangeJL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return flens::_(1,d+d_-2);
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,Primbs>::rangeJI(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,Primbs>::rangeJI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return flens::_(d+d_-1,pow2i<T>(j)-(d+d_-3));
@@ -285,8 +285,8 @@ Basis<T,Primal,Interval,Primbs>::rangeJI(int j) const
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Primal,Interval,Primbs>::rangeJR(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Primal,Interval,Primbs>::rangeJR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return flens::_(pow2i<T>(j)-(d+d_-2),pow2i<T>(j));
@@ -307,14 +307,14 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
     H.diag(0) = 1.;
 
     flens::DenseVector<flens::Array<T> > x(pow2i<T>(min_j0+1)-d+1), tmp;
-    for (int i=1; i<=d+1; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=d+1; ++i) {
         x(i) = phiR.a(phiR.a.firstIndex()-1+i);
     }
-    for (int i=1; i<=d; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=d; ++i) {
         FullColMatrix A(pow2i<T>(min_j0+1)-d+1,pow2i<T>(min_j0+1)-d+1);
         A.diag(0) = 1.;
         if (i-2*ifloor(i/2.)==1) {
-            for (int k=iceil<int>(1/2.-(i+1)/4.); k<=ifloor(pow2i<T>(min_j0)-d/2.-(i+1)/4.); ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE k=iceil<FLENS_DEFAULT_INDEXTYPE>(1/2.-(i+1)/4.); k<=ifloor(pow2i<T>(min_j0)-d/2.-(i+1)/4.); ++k) {
                 A((i+1)/2.+2*k,(i+1)/2.+2*k+1) = -x(ifloor(i/2.)+1) / x(ifloor(i/2.)+2);
             }
             tmp = x;
@@ -322,7 +322,7 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
             flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,1.,A,H,0.,Tmp);
             H = Tmp;
         } else if (i-2*ifloor(i/2.)==0) {
-            for (int k=iceil<int>(1/2.-i/4.); k<=ifloor(pow2i<T>(min_j0)-d/2.-i/4.); ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE k=iceil<FLENS_DEFAULT_INDEXTYPE>(1/2.-i/4.); k<=ifloor(pow2i<T>(min_j0)-d/2.-i/4.); ++k) {
                 A(pow2i<T>(min_j0+1)-d+2-i/2.-2*k,pow2i<T>(min_j0+1)-d+1-i/2.-2*k) = -x(d-i/2.+2)/x(d-i/2.+1);
             }
             tmp = x;
@@ -333,31 +333,31 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
     }
 
     T b = 0;
-    for (int i=1; i<=pow2i<T>(min_j0+1)-d+1; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=pow2i<T>(min_j0+1)-d+1; ++i) {
         b += x(i);
     }
 
     FullColMatrix Hj(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0+1)+d-1), InvHj;
     Hj.diag(0) = 1.;
-    for (int n=1; n<=pow2i<T>(min_j0+1)-d+1; ++n) {
-        for (int m=1; m<=pow2i<T>(min_j0+1)-d+1; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(min_j0+1)-d+1; ++n) {
+        for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(min_j0+1)-d+1; ++m) {
             Hj(d-1+n,d-1+m) = H(n,m);
         }
     }
     InvHj = inv(Hj);
 
     FullColMatrix F(pow2i<T>(min_j0+1)-d+1,pow2i<T>(min_j0)-d+1);
-    for (int k=1; k<=pow2i<T>(min_j0)-d+1; ++k) {
-        F(iceil<int>(d/2.)+2*k-2,k) = 1;
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=pow2i<T>(min_j0)-d+1; ++k) {
+        F(iceil<FLENS_DEFAULT_INDEXTYPE>(d/2.)+2*k-2,k) = 1;
     }
 
     FullColMatrix Fj(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0));
-    for (int k=1; k<=iceil<int>((d-1)/2.); ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=iceil<FLENS_DEFAULT_INDEXTYPE>((d-1)/2.); ++k) {
         Fj(d-1+k,k) =1;
         Fj(pow2i<T>(min_j0+1)+1-k,pow2i<T>(min_j0)+1-k) = 1;
     }
-    for (int n=1; n<=pow2i<T>(min_j0+1)-d+1; ++n) {
-        for (int m=1; m<=pow2i<T>(min_j0)-d+1; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(min_j0+1)-d+1; ++n) {
+        for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(min_j0)-d+1; ++m) {
             Fj(d-1+n,ifloor((d-1)/2.+m)) = F(n,m);
         }
     }
@@ -365,8 +365,8 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
     FullColMatrix Pj(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0+1)+d-1),
                    Identity(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0+1)+d-1);
     Pj.diag(0) = 1.;
-    for (int n=1; n<=2*(d-1); ++n) {
-        for (int m=1; m<=d-1; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=2*(d-1); ++n) {
+        for (FLENS_DEFAULT_INDEXTYPE m=1; m<=d-1; ++m) {
             Pj(n,m) = mra_.MP(n,m);
             Pj(pow2i<T>(min_j0+1)+d-n,pow2i<T>(min_j0+1)+d-m) = mra_.MP(n,m);
         }
@@ -391,8 +391,8 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
 
 //    flens::blas::axpy(cxxblas::Trans,2./factor,Tmp2,Mjj1);
     Mjj1.engine().resize(Tmp2.cols(),Tmp2.rows());
-    for (int row=Mjj1.firstRow(); row<=Mjj1.lastRow(); ++row) {
-        for (int col=Mjj1.firstCol(); col<=Mjj1.lastCol(); ++col) {
+    for (FLENS_DEFAULT_INDEXTYPE row=Mjj1.firstRow(); row<=Mjj1.lastRow(); ++row) {
+        for (FLENS_DEFAULT_INDEXTYPE col=Mjj1.firstCol(); col<=Mjj1.lastCol(); ++col) {
             Mjj1(row,col) = 2./factor*Tmp2(col,row); 
         }
     }
@@ -402,8 +402,8 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
                       Nj1tr(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0-1)),
                       Njj1(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0-1)),
                       Njj1tr(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0-1));
-        for (int n=1; n<=pow2i<T>(min_j0+1)+d-1; ++n) {
-            for (int m=1; m<=pow2i<T>(min_j0-1); ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(min_j0+1)+d-1; ++n) {
+            for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(min_j0-1); ++m) {
                 Nj1(n,m) = Mj1(n,m);
                 Nj1tr(pow2i<T>(min_j0+1)+d-n,pow2i<T>(min_j0-1)+1-m) = Nj1(n,m);
                 Njj1(n,m) = Mjj1(n,m);
@@ -413,12 +413,12 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
 
         FullColMatrix Hj1(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0)),
                       Hjj1(pow2i<T>(min_j0+1)+d-1,pow2i<T>(min_j0));
-        for (int n=1; n<=pow2i<T>(min_j0+1)+d-1; ++n) {
-            for (int m=1; m<=pow2i<T>(min_j0-1); ++m) {
+        for (FLENS_DEFAULT_INDEXTYPE n=1; n<=pow2i<T>(min_j0+1)+d-1; ++n) {
+            for (FLENS_DEFAULT_INDEXTYPE m=1; m<=pow2i<T>(min_j0-1); ++m) {
                 Hj1(n,m) = Nj1(n,m);
                 Hjj1(n,m) = Njj1(n,m);
             }
-            for (int m=pow2i<T>(min_j0-1)+1; m<=pow2i<T>(min_j0); ++m) {
+            for (FLENS_DEFAULT_INDEXTYPE m=pow2i<T>(min_j0-1)+1; m<=pow2i<T>(min_j0); ++m) {
                 Hj1(n,m) = Nj1tr(n,m-pow2i<T>(min_j0-1));
                 Hjj1(n,m) = Njj1tr(n,m-pow2i<T>(min_j0-1));
             }
@@ -431,7 +431,7 @@ Basis<T,Primal,Interval,Primbs>::_calcM1()
         Mjj1 = Hjj1;
     }
 
-    int numPrimalCols = d-1 + (d_-d)/2,
+    FLENS_DEFAULT_INDEXTYPE numPrimalCols = d-1 + (d_-d)/2,
         numDualCols = (d+1)/2-1;
 
     if (d==2) {

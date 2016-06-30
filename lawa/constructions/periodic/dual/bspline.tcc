@@ -26,7 +26,7 @@
 namespace lawa {
 
 template <typename T>
-BSpline<T,Dual,Periodic,CDF>::BSpline(int _d, int _d_)
+BSpline<T,Dual,Periodic,CDF>::BSpline(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_)
     : d(_d), d_(_d_), mu(d&1), phiR_(_d, _d_)
 {
     assert(d>0);
@@ -50,7 +50,7 @@ BSpline<T,Dual,Periodic,CDF>::~BSpline()
 
 template <typename T>
 T
-BSpline<T,Dual,Periodic,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Dual,Periodic,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(deriv==0);
 
@@ -59,7 +59,7 @@ BSpline<T,Dual,Periodic,CDF>::operator()(T x, int j, long k, unsigned short deri
     }
 
     T val = 0;
-    for(int l = ifloor(phiR_.support(j,k).l1); l < iceil<int>(phiR_.support(j,k).l2); ++l){
+    for(FLENS_DEFAULT_INDEXTYPE l = ifloor(phiR_.support(j,k).l1); l < iceil<FLENS_DEFAULT_INDEXTYPE>(phiR_.support(j,k).l2); ++l){
         val += phiR_(l+x, j, k);
     }
     return val;
@@ -68,7 +68,7 @@ BSpline<T,Dual,Periodic,CDF>::operator()(T x, int j, long k, unsigned short deri
 
 template <typename T>
 PeriodicSupport<T>
-BSpline<T,Dual,Periodic,CDF>::support(int j, long k) const
+BSpline<T,Dual,Periodic,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {    
     Support<T> suppR = phiR_.support(j,k);
     if(suppR.length() >= 1){

@@ -11,7 +11,7 @@ namespace lawa
 {
 
 template <typename Index, typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maptoint(const Index&, const Basis&)
 {
     std::cerr << "error: maptoint not implemented for given Index type\n";
@@ -20,14 +20,14 @@ maptoint(const Index&, const Basis&)
 
 
 template <typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maptoint(const Index1D& index, const Basis& basis)
 {
-    long j       = index.j;
-    long k       = index.k;
+    FLENS_DEFAULT_INDEXTYPE j       = index.j;
+    FLENS_DEFAULT_INDEXTYPE k       = index.k;
     XType type   = index.xtype;
-    long j0      = basis.j0;
-    long offset  = 0;
+    FLENS_DEFAULT_INDEXTYPE j0      = basis.j0;
+    FLENS_DEFAULT_INDEXTYPE offset  = 0;
 
     assert(type==XBSpline || type==XWavelet);
     if (type == XBSpline) {
@@ -50,12 +50,12 @@ maptoint(const Index1D& index, const Basis& basis)
 
 
 template <typename Index, typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maxintind(const IndexSet<Index>& indexset, const Basis& basis)
 {
-    unsigned long max = 0;
+    unsigned FLENS_DEFAULT_INDEXTYPE max = 0;
     for (const auto& it : indexset) {
-        unsigned long idx = maptoint(it, basis);
+        unsigned FLENS_DEFAULT_INDEXTYPE idx = maptoint(it, basis);
         max = (idx>max) ? idx : max;
     }
 
@@ -65,7 +65,7 @@ maxintind(const IndexSet<Index>& indexset, const Basis& basis)
 
 template <typename Index, typename Basis>
 Index
-maptowav(const unsigned long, const Basis&)
+maptowav(const unsigned FLENS_DEFAULT_INDEXTYPE, const Basis&)
 {
     std::cerr << "error: maptowav not implemented for given Index type\n";
     exit(EXIT_FAILURE);
@@ -74,14 +74,14 @@ maptowav(const unsigned long, const Basis&)
 
 template <typename Basis>
 Index1D
-maptowav(const unsigned long i, const Basis& basis)
+maptowav(const unsigned FLENS_DEFAULT_INDEXTYPE i, const Basis& basis)
 {
     assert(i>0);
 
-    long j0 = basis.j0;
-    long j, k;
+    FLENS_DEFAULT_INDEXTYPE j0 = basis.j0;
+    FLENS_DEFAULT_INDEXTYPE j, k;
     XType type;
-    unsigned long bound;
+    unsigned FLENS_DEFAULT_INDEXTYPE bound;
 
     bound = basis.mra.rangeI(j0).lastIndex()-
             basis.mra.rangeI(j0).firstIndex()+1;
@@ -93,7 +93,7 @@ maptowav(const unsigned long i, const Basis& basis)
     }
 
     type = XWavelet;
-    for (long _j=j0; _j<=std::numeric_limits<long>::max(); ++_j) {
+    for (FLENS_DEFAULT_INDEXTYPE _j=j0; _j<=std::numeric_limits<FLENS_DEFAULT_INDEXTYPE>::max(); ++_j) {
         assert(bound==(unsigned) basis.mra.cardI(_j));
         bound += basis.rangeJ(_j).lastIndex()-
                  basis.rangeJ(_j).firstIndex()+1;

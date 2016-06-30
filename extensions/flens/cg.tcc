@@ -27,9 +27,9 @@
 namespace lawa {
 
 template <typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 cg(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
-   int maxIterations)
+   FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typename _cg<VB>::T alpha, beta, rNormSquare, rNormSquarePrev;
     typename _cg<VB>::AuxVector Ap, r, p;
@@ -41,7 +41,7 @@ cg(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
     r = A*x - b;
     p = -1*r;
     rNormSquare = r*r;
-    for (int k=1; k<=maxIterations; k++) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=maxIterations; k++) {
         #ifdef SOLVER_DEBUG
             std::cerr << "k = " << k << ", rho = " << sqrt(rNormSquare)
                 << std::endl;
@@ -69,9 +69,9 @@ cg(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
 }
 
 template <typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 cgls(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
-     int maxIterations)
+     FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     using namespace flens;
     using namespace flens::blas;
@@ -85,14 +85,14 @@ cgls(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
         x.engine().resize(A.numCols());
     }
     /*
-    for (int i=x.firstIndex(); i<=x.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=x.firstIndex(); i<=x.lastIndex(); ++i) {
         x(i) = 0;
     }
     */
 
     b_norm = b*b;
     if (std::sqrt(b_norm) < 1e-15) {
-        for (int i=x.firstIndex(); i<=x.lastIndex(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=x.firstIndex(); i<=x.lastIndex(); ++i) {
             x(i) = 0;
         }
         return 0;
@@ -108,7 +108,7 @@ cgls(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
     std::ofstream gammafile("CGLS_Convergence.txt");
     gammafile << "# Norm(A'*r)^2  Norm(b-Ax)^2" << std::endl; 
 #endif
-    for (int k=1; k<=maxIterations; k++) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=maxIterations; k++) {
         #ifdef SOLVER_DEBUG
             typename _cg<VB>::T res = r*r;
             gammafile << sqrt(gammaPrev) << " " << sqrt(res) << std::endl;
@@ -143,9 +143,9 @@ cgls(const MA &A, VX &x, const VB &b, typename _cg<VB>::T tol,
 // (6.2), K. Urban: Wavelet Methods for Elliptic PDEs
 // Also non-symmetric preconditioning is possible as mentioned in remark 6.2
 template <typename Prec, typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 pcg(const Prec &P, const MA &A, VX &x, const VB &b,
-    typename _cg<VB>::T tol, int maxIterations)
+    typename _cg<VB>::T tol, FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typename _cg<VB>::T pNormSquare, alpha, beta, rHatq, rHatqPrev;
     typename _cg<VB>::AuxVector r, rHat, p, Ap;
@@ -160,7 +160,7 @@ pcg(const Prec &P, const MA &A, VX &x, const VB &b,
     rHat = transpose(P)*r;
     p = P*rHat;
     rHatq = rHat*rHat;
-    for (int k=1; k<=maxIterations; k++) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=maxIterations; k++) {
         Ap = A*p;
         alpha = rHatq/(Ap*p);
         x += alpha*p;
@@ -184,9 +184,9 @@ pcg(const Prec &P, const MA &A, VX &x, const VB &b,
 
 /*
 template <typename Prec, typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 pcg(const Prec &B, const MA &A, VX &x, const VB &b,
-    typename _cg<VB>::T tol, int maxIterations)
+    typename _cg<VB>::T tol, FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typename _cg<VB>::T pNormSquare, alpha, beta, rq, rqPrev;
     typename _cg<VB>::AuxVector r, q, p, Ap;
@@ -195,12 +195,12 @@ pcg(const Prec &B, const MA &A, VX &x, const VB &b,
     q = B*r;
 
     p = q;
-    // TODO: next line results in an error with T = long double. WHY???
+    // TODO: next line results in an error with T = FLENS_DEFAULT_INDEXTYPE double. WHY???
     // p = -q;
     p *= -1;
     rq = r*q;
 
-    for (int k=1; k<=maxIterations; k++) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=maxIterations; k++) {
         pNormSquare = p*p;
         if (sqrt(pNormSquare)<tol) {
             return k-1;

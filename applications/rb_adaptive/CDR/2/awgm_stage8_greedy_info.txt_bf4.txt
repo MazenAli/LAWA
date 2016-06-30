@@ -1,0 +1,2 @@
+# It Res Res_NE SizeTrial SizeTest SizeTestResNE SizeTestRes CGLS_Its
+0 0.00482244 0.0031044 320 591 928 2287 88

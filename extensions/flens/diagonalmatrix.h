@@ -47,10 +47,10 @@ class DiagonalMatrix :
         const DenseVector<Array<T> > &
         diag() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
     
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
     
 //    private:

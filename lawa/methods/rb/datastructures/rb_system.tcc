@@ -41,8 +41,8 @@ get_rb_solution(std::size_t N, ParamType& mu)
 	}
 
 	assert(RB_F_vectors.size() > 0);
-	assert(RB_F_vectors[0].length() >= (int)N);
-	assert(RB_A_matrices[0].numRows() >= (int)N);
+	assert(RB_F_vectors[0].length() >= (FLENS_DEFAULT_INDEXTYPE)N);
+	assert(RB_A_matrices[0].numRows() >= (FLENS_DEFAULT_INDEXTYPE)N);
 
 	FullColMatrixT A(N, N);
 
@@ -52,17 +52,17 @@ get_rb_solution(std::size_t N, ParamType& mu)
 	}
 
 	DenseVectorT F(N);
-	for (unsigned int i = 0; i < thetas_f.size(); ++i) {
+	for (unsigned FLENS_DEFAULT_INDEXTYPE i = 0; i < thetas_f.size(); ++i) {
 		//F += thetas_f.eval(i,mu) * RB_F_vectors[i](_(1,N));
 		flens::blas::axpy(thetas_f.eval(i,mu), RB_F_vectors[i](_(1,N)), F);
 	}
 
 	DenseVectorT u(N);
 
-	int its;
+	FLENS_DEFAULT_INDEXTYPE its;
 	switch (rb_params.call) {
 		case call_cg:
-			its = cg(A, u, F, sqrt(std::numeric_limits<double>::epsilon()), 2*u.length());
+			its = cg(A, u, F, sqrt(std::numeric_limits<double>::epsilon()), 100*u.length());
 			if(rb_params.verbose){
 				std::cout << "RB solution: " << its << " cg iterations" << std::endl;
 			}
@@ -70,7 +70,7 @@ get_rb_solution(std::size_t N, ParamType& mu)
 		case call_gmres:
 			std::cout << "A = " << A << std::endl;
 			std::cout << "F = " << F << std::endl;
-			its = gmres(A, u, F);
+			its = gmres(A, u, F, sqrt(std::numeric_limits<double>::epsilon()), 100*u.length());
 			if(rb_params.verbose){
 				std::cout << "RB solution: " << its << " gmres iterations" << std::endl;
                 DenseVectorT Au = A*u;
@@ -119,8 +119,8 @@ get_rb_solution(std::vector<std::size_t> indices, ParamType& mu)
 	std::size_t Nmax = *(std::max_element(indices.begin(), indices.end()))+1;
 
 	assert(RB_F_vectors.size() > 0);
-	assert(RB_F_vectors[0].length() >= (int)Nmax);
-	assert(RB_A_matrices[0].numRows() >= (int)Nmax);
+	assert(RB_F_vectors[0].length() >= (FLENS_DEFAULT_INDEXTYPE)Nmax);
+	assert(RB_A_matrices[0].numRows() >= (FLENS_DEFAULT_INDEXTYPE)Nmax);
 
 	FullColMatrixT Afull(Nmax, Nmax);
 
@@ -154,7 +154,7 @@ get_rb_solution(std::vector<std::size_t> indices, ParamType& mu)
 	// Then use the rest
 	DenseVectorT u(N);
 
-	int its;
+	FLENS_DEFAULT_INDEXTYPE its;
 	switch (rb_params.call) {
 		case call_cg:
 			its = cg(A, u, F);
@@ -213,7 +213,7 @@ get_rb_LGS(std::size_t N, ParamType& mu, FullColMatrixT& A, DenseVectorT& F){
 	}
 
     DenseVectorT F_(N);
-	for (unsigned int i = 0; i < thetas_f.size(); ++i) {
+	for (unsigned FLENS_DEFAULT_INDEXTYPE i = 0; i < thetas_f.size(); ++i) {
 		//F += thetas_f.eval(i,mu) * RB_F_vectors[i](_(1,N));
 		flens::blas::axpy(thetas_f.eval(i,mu), RB_F_vectors[i](_(1,N)), F);
 	}
@@ -251,8 +251,8 @@ get_errorbound_accuracy(const DenseVectorT& u_N, ParamType& mu,  std::vector<T> 
         }
     }
 
-    for(int i = 1; i <= u_N.length(); ++i){
-        for(int j = 1; j <= u_N.length(); ++j){
+    for(FLENS_DEFAULT_INDEXTYPE i = 1; i <= u_N.length(); ++i){
+        for(FLENS_DEFAULT_INDEXTYPE j = 1; j <= u_N.length(); ++j){
             for (std::size_t k = 1; k <= thetas_a.size(); ++k) {
                 for (std::size_t l = 1; l <= thetas_a.size(); ++l) {
 
@@ -265,7 +265,7 @@ get_errorbound_accuracy(const DenseVectorT& u_N, ParamType& mu,  std::vector<T> 
         }
     }
 
-    for(int i = 1; i <= u_N.length(); ++i){
+    for(FLENS_DEFAULT_INDEXTYPE i = 1; i <= u_N.length(); ++i){
         for (std::size_t j = 1; j <= thetas_f.size(); ++j) {
             for (std::size_t k = 1; k <= thetas_a.size(); ++k) {
             	//std::cout << "A_F (n=" << i << ",qf=" << j << ",qa=" << k << ") = "
@@ -288,12 +288,12 @@ residual_dual_norm(const DenseVectorT& u_N, ParamType& mu)
 
     T res_dual_norm = 0;
 
-    int N = u_N.length();
+    FLENS_DEFAULT_INDEXTYPE N = u_N.length();
 
     std::size_t Qf = thetas_f.size();
     std::size_t Qa = thetas_a.size();
 
-	assert(F_F_representor_norms.numRows() >= (int)Qf);
+	assert(F_F_representor_norms.numRows() >= (FLENS_DEFAULT_INDEXTYPE)Qf);
 	assert(A_F_representor_norms.size() >= (std::size_t)N);
 	assert(A_A_representor_norms.size() >= (std::size_t)N);
 
@@ -322,10 +322,10 @@ residual_dual_norm(const DenseVectorT& u_N, ParamType& mu)
 
     DenseVectorT T_AF_T(N);
     FullColMatrixT T_AA_T(N,N);
-    for (int n1 = 1; n1 <= N; ++n1) {
+    for (FLENS_DEFAULT_INDEXTYPE n1 = 1; n1 <= N; ++n1) {
         DenseVectorT AF_T = A_F_representor_norms[n1-1] * ThetaF;
         T_AF_T(n1) = ThetaA * AF_T;
-        for(int n2 = n1; n2 <= N; ++n2) {
+        for(FLENS_DEFAULT_INDEXTYPE n2 = n1; n2 <= N; ++n2) {
             DenseVectorT AA_T = A_A_representor_norms[n1-1][n2-n1] * ThetaA;
             DenseVectorT T_AA = transpose(A_A_representor_norms[n1-1][n2-n1]) * ThetaA;
             T_AA_T(n1, n2) = ThetaA * AA_T;
@@ -364,7 +364,7 @@ residual_dual_norm(std::vector<std::size_t> indices, const DenseVectorT& u_N, Pa
     std::size_t Qf = thetas_f.size();
     std::size_t Qa = thetas_a.size();
 
-	assert(F_F_representor_norms.numRows() >= (int)Qf);
+	assert(F_F_representor_norms.numRows() >= (FLENS_DEFAULT_INDEXTYPE)Qf);
 	assert(A_F_representor_norms.size() >= (std::size_t)Nmax);
 	assert(A_A_representor_norms.size() >= (std::size_t)Nmax);
 
@@ -397,7 +397,7 @@ residual_dual_norm(std::vector<std::size_t> indices, const DenseVectorT& u_N, Pa
     for (auto& n1 : indices_1based) {
         DenseVectorT AF_T = A_F_representor_norms[n1-1] * ThetaF;
         T_AF_T(count_n1) = ThetaA * AF_T;
-        //for(int n2 = n1; n2 <= N; ++n2) {
+        //for(FLENS_DEFAULT_INDEXTYPE n2 = n1; n2 <= N; ++n2) {
         std::size_t count_n2 = 1;
         for(auto& n2 : indices_1based){
         	if(n2 < n1){
@@ -454,7 +454,7 @@ void
 RB_System<T,ParamType>::
 write_rb_data(const std::string& directory_name){
 
-	const unsigned int highprecision = 40;
+	const unsigned FLENS_DEFAULT_INDEXTYPE highprecision = 40;
 
 	// Make a directory to store all the data files
 	if(mkdir(directory_name.c_str(), 0777) == -1)
@@ -534,12 +534,12 @@ write_rb_data(const std::string& directory_name){
 template<typename T, typename ParamType>
 void
 RB_System<T,ParamType>::
-read_rb_data(const std::string& directory_name, int nb)
+read_rb_data(const std::string& directory_name, FLENS_DEFAULT_INDEXTYPE nb)
 {
     using flens::_;
 
 	// Read Nr of BasisFunctions
-	unsigned int n_bf;
+	unsigned FLENS_DEFAULT_INDEXTYPE n_bf;
 	std::string n_bf_filename = directory_name + "/n_bf.txt";
 
 	std::ifstream n_bf_file(n_bf_filename.c_str());
@@ -558,7 +558,7 @@ read_rb_data(const std::string& directory_name, int nb)
 
 	// If N < 0 or > n_bf, set it to n_bf
 	nb = (nb < 0) ? n_bf : nb;
-	nb = (nb > (int)n_bf) ? n_bf : nb;
+	nb = (nb > (FLENS_DEFAULT_INDEXTYPE)n_bf) ? n_bf : nb;
 
 	// Read RB_A_matrices
 	RB_A_matrices.clear();
@@ -568,8 +568,8 @@ read_rb_data(const std::string& directory_name, int nb)
 	    std::ifstream file(filename.str().c_str());
 	    if(file.is_open()){
 	    	FullColMatrixT RB_A(n_bf, n_bf);
-	    	for(unsigned int n1 = 1; n1 <= n_bf; n1++){
-	    		for(unsigned int n2 = 1; n2 <= n_bf; n2++){
+	    	for(unsigned FLENS_DEFAULT_INDEXTYPE n1 = 1; n1 <= n_bf; n1++){
+	    		for(unsigned FLENS_DEFAULT_INDEXTYPE n2 = 1; n2 <= n_bf; n2++){
 	    			file >> RB_A(n1, n2);
 	    		}
 	    	}
@@ -587,13 +587,13 @@ read_rb_data(const std::string& directory_name, int nb)
 
 	// Read RB_F_vectors
 	RB_F_vectors.clear();
-	for(unsigned int i = 0; i < Q_f(); ++i){
+	for(unsigned FLENS_DEFAULT_INDEXTYPE i = 0; i < Q_f(); ++i){
 		std::stringstream filename;
 	    filename << directory_name << "/RB_F_" << i+1 << ".txt";
 	    std::ifstream file(filename.str().c_str());
 	    if(file.is_open()){
 	    	DenseVectorT RB_F(n_bf);
-	    	for(unsigned int n = 1; n <= n_bf; n++){
+	    	for(unsigned FLENS_DEFAULT_INDEXTYPE n = 1; n <= n_bf; n++){
 	    		file >> RB_F(n);
 	    	}
 	    	file.close();
@@ -609,17 +609,17 @@ read_rb_data(const std::string& directory_name, int nb)
 	 }
 
 	 // Read RB_inner_product
-	 RB_inner_product.engine().resize((int)n_bf, (int)n_bf);
+	 RB_inner_product.engine().resize((FLENS_DEFAULT_INDEXTYPE)n_bf, (FLENS_DEFAULT_INDEXTYPE)n_bf);
 	 std::stringstream inner_product_filename;
 	 inner_product_filename << directory_name << "/RB_inner_product.txt";
 	 std::ifstream inner_product_file(inner_product_filename.str().c_str());
 	 if(inner_product_file.is_open()){
-		 for(unsigned int n1 = 1; n1 <= n_bf; n1++){
-			 for(unsigned int n2 = 1; n2 <= n_bf; n2++){
+		 for(unsigned FLENS_DEFAULT_INDEXTYPE n1 = 1; n1 <= n_bf; n1++){
+			 for(unsigned FLENS_DEFAULT_INDEXTYPE n2 = 1; n2 <= n_bf; n2++){
 				 inner_product_file >> RB_inner_product(n1, n2);
 			 }
 		 }
-		 if(nb < (int)n_bf){
+		 if(nb < (FLENS_DEFAULT_INDEXTYPE)n_bf){
 			 FullColMatrixT tmp(RB_inner_product);
 			 RB_inner_product.engine().resize(nb, nb);
 			 RB_inner_product = tmp(_(1,nb), _(1,nb));
@@ -635,13 +635,13 @@ read_rb_data(const std::string& directory_name, int nb)
 	 }
 
 	 // Read F_F_representor norms
-	 F_F_representor_norms.engine().resize((int)Q_f(), (int)Q_f());
+	 F_F_representor_norms.engine().resize((FLENS_DEFAULT_INDEXTYPE)Q_f(), (FLENS_DEFAULT_INDEXTYPE)Q_f());
 	 std::stringstream F_F_filename;
 	 F_F_filename << directory_name << "/F_F_representor_norms.txt";
 	 std::ifstream F_F_file(F_F_filename.str().c_str());
 	 if(F_F_file.is_open()){
-		 for(unsigned int i = 1; i <= Q_f(); ++i){
-			 for(unsigned int j = 1; j <= Q_f(); ++j){
+		 for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= Q_f(); ++i){
+			 for(unsigned FLENS_DEFAULT_INDEXTYPE j = 1; j <= Q_f(); ++j){
 				 F_F_file >> F_F_representor_norms(i,j);
 			 }
 		 }
@@ -656,13 +656,13 @@ read_rb_data(const std::string& directory_name, int nb)
 	 }
 
 	  /*// Read output_output_representor norms
-	  output_output_representor_norms.engine().resize((int)Q_output(), (int)Q_output());
+	  output_output_representor_norms.engine().resize((FLENS_DEFAULT_INDEXTYPE)Q_output(), (FLENS_DEFAULT_INDEXTYPE)Q_output());
 	  std::stringstream output_output_filename;
 	  output_output_filename << directory_name << "/output_output_representor_norms.dat";
 	  std::ifstream output_output_file(output_output_filename.str().c_str());
 	  if(output_output_file.is_open()){
-	    for(unsigned int i = 1; i <= Q_output(); ++i){
-	      for(unsigned int j = 1; j <= Q_output(); ++j){
+	    for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= Q_output(); ++i){
+	      for(unsigned FLENS_DEFAULT_INDEXTYPE j = 1; j <= Q_output(); ++j){
 	        output_output_file >> output_output_representor_norms(i,j);
 	      }
 	    }
@@ -680,10 +680,10 @@ read_rb_data(const std::string& directory_name, int nb)
 	 A_F_filename << directory_name << "/A_F_representor_norms.txt";
 	 std::ifstream A_F_file(A_F_filename.str().c_str());
 	 if(A_F_file.is_open()){
-		 for(int n = 1; n <= nb; ++n){
+		 for(FLENS_DEFAULT_INDEXTYPE n = 1; n <= nb; ++n){
 			 FullColMatrixT A_F_matrix(Q_a(), Q_f());
-			 for(unsigned int i = 1; i <= Q_a(); ++i){
-				 for(unsigned int j = 1; j <= Q_f(); ++j){
+			 for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= Q_a(); ++i){
+				 for(unsigned FLENS_DEFAULT_INDEXTYPE j = 1; j <= Q_f(); ++j){
 					 A_F_file >> A_F_matrix(i,j);
 				 }
 			 }
@@ -705,16 +705,16 @@ read_rb_data(const std::string& directory_name, int nb)
 	 A_A_filename << directory_name << "/A_A_representor_norms.txt";
 	 std::ifstream A_A_file(A_A_filename.str().c_str());
 	 if(A_A_file.is_open()){
-		 for(int n1 = 1; n1 <= nb; ++n1){
+		 for(FLENS_DEFAULT_INDEXTYPE n1 = 1; n1 <= nb; ++n1){
 			 std::vector<FullColMatrixT> A_A_n_vec;
-			 for(unsigned int n2 = n1; n2 <= n_bf; ++n2){	// We have to read every information...
+			 for(unsigned FLENS_DEFAULT_INDEXTYPE n2 = n1; n2 <= n_bf; ++n2){	// We have to read every information...
 				 FullColMatrixT A_A_matrix(Q_a(), Q_a());
-				 for(unsigned int i = 1; i <= Q_a(); ++i){
-					 for(unsigned int j = 1; j <= Q_a(); ++j){
+				 for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= Q_a(); ++i){
+					 for(unsigned FLENS_DEFAULT_INDEXTYPE j = 1; j <= Q_a(); ++j){
 						 A_A_file >> A_A_matrix(i,j);
 					 }
 				 }
-				 if((int)n2 <= nb){				// .. but safe only for n <= nb
+				 if((FLENS_DEFAULT_INDEXTYPE)n2 <= nb){				// .. but safe only for n <= nb
 					 A_A_n_vec.push_back(A_A_matrix);
 				 }
 			 }
@@ -738,7 +738,7 @@ RB_System<T,ParamType>::
 remove_basisfunction(std::size_t nb)
 {
     using flens::_;
-	int n_bf = RB_A_matrices[0].numRows();
+	FLENS_DEFAULT_INDEXTYPE n_bf = RB_A_matrices[0].numRows();
 
 	if(nb == 1){
 		// F_vectors
@@ -756,7 +756,7 @@ remove_basisfunction(std::size_t nb)
 
 	}
 	else{
-		if((int)nb == n_bf){
+		if((FLENS_DEFAULT_INDEXTYPE)nb == n_bf){
 			// F_vectors
 			for(std::size_t qf = 0; qf < Q_f(); ++qf){
 				RB_F_vectors[qf] = RB_F_vectors[qf](_(RB_F_vectors[qf].firstIndex(),RB_F_vectors[qf].lastIndex()-1));

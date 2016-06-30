@@ -48,8 +48,8 @@ namespace flens {
 
 #ifdef MKL_SCS
 void
-csrmv(Transpose Trans, int m, int k, float alpha, char *matdescra,
-      float  *values, int *columns,  int *pointerB, int *pointerE,
+csrmv(Transpose Trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE k, float alpha, char *matdescra,
+      float  *values, FLENS_DEFAULT_INDEXTYPE *columns,  FLENS_DEFAULT_INDEXTYPE *pointerB, FLENS_DEFAULT_INDEXTYPE *pointerE,
       float *x, float beta, float *y)
 {
         char trans = (Trans==NoTrans) ? 'N' : 'T';
@@ -60,8 +60,8 @@ csrmv(Transpose Trans, int m, int k, float alpha, char *matdescra,
 }
 
 void
-csrmv(Transpose Trans, int m, int k, double alpha, char *matdescra,
-      double  *values, int *columns,  int *pointerB, int *pointerE,
+csrmv(Transpose Trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE k, double alpha, char *matdescra,
+      double  *values, FLENS_DEFAULT_INDEXTYPE *columns,  FLENS_DEFAULT_INDEXTYPE *pointerB, FLENS_DEFAULT_INDEXTYPE *pointerE,
       double *x, double beta, double *y)
 {
         char trans = (Trans==NoTrans) ? 'N' : 'T';
@@ -72,37 +72,37 @@ csrmv(Transpose Trans, int m, int k, double alpha, char *matdescra,
 }
 
 void
-csrmm(Transpose transA, int m, int n, int k, float alpha, char *matdescrA,
-      const float *values, const int *columns, const int *pointerB,
-      const int *pointerE, const float *B, int ldb,
-      float beta, float *C, int ldc)
+csrmm(Transpose transA, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, float alpha, char *matdescrA,
+      const float *values, const FLENS_DEFAULT_INDEXTYPE *columns, const FLENS_DEFAULT_INDEXTYPE *pointerB,
+      const FLENS_DEFAULT_INDEXTYPE *pointerE, const float *B, FLENS_DEFAULT_INDEXTYPE ldb,
+      float beta, float *C, FLENS_DEFAULT_INDEXTYPE ldc)
 {
         char trans = (transA==NoTrans) ? 'N' : 'T';
 
         // TODO: what about constness?
         mkl_scsrmm(&trans, &m, &n, &k, &alpha, matdescrA,
                    const_cast<float *>(values),
-                   const_cast<int *>(columns),
-                   const_cast<int *>(pointerB),
-                   const_cast<int *>(pointerE),
+                   const_cast<FLENS_DEFAULT_INDEXTYPE *>(columns),
+                   const_cast<FLENS_DEFAULT_INDEXTYPE *>(pointerB),
+                   const_cast<FLENS_DEFAULT_INDEXTYPE *>(pointerE),
                    const_cast<float *>(B),
                    &ldb, &beta, C, &ldc);
 }
 
 void
-csrmm(Transpose transA, int m, int n, int k, double alpha, char *matdescrA,
-      const double *values, const int *columns, const int *pointerB,
-      const int *pointerE, const double *B, int ldb,
-      double beta, double *C, int ldc)
+csrmm(Transpose transA, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, double alpha, char *matdescrA,
+      const double *values, const FLENS_DEFAULT_INDEXTYPE *columns, const FLENS_DEFAULT_INDEXTYPE *pointerB,
+      const FLENS_DEFAULT_INDEXTYPE *pointerE, const double *B, FLENS_DEFAULT_INDEXTYPE ldb,
+      double beta, double *C, FLENS_DEFAULT_INDEXTYPE ldc)
 {
     char trans = (transA==NoTrans) ? 'N' : 'T';
 
     // TODO: what about constness?
     mkl_dcsrmm(&trans, &m, &n, &k, &alpha, matdescrA,
                const_cast<double *>(values),
-               const_cast<int *>(columns),
-               const_cast<int *>(pointerB),
-               const_cast<int *>(pointerE),
+               const_cast<FLENS_DEFAULT_INDEXTYPE *>(columns),
+               const_cast<FLENS_DEFAULT_INDEXTYPE *>(pointerB),
+               const_cast<FLENS_DEFAULT_INDEXTYPE *>(pointerE),
                const_cast<double *>(B),
                &ldb, &beta, C, &ldc);
 }

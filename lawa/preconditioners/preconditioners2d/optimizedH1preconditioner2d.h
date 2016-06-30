@@ -40,8 +40,8 @@ class OptimizedH1Preconditioner2D
         setThetaTimeStepParameters(T theta, T timestep);
 
         T
-        operator()(XType xtype_x, int j_x, long k_x,
-                   XType xtype_y, int j_y, long k_y) const;
+        operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+                   XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y) const;
 
         T
         operator()(const Index2D &index) const;

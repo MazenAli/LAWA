@@ -25,8 +25,8 @@ arrow(const flens::GeMatrix<flens::FullStorage<T, Order> > &In,
                flens::GeMatrix<flens::FullStorage<T, Order> > &Out)
 {
     Out.engine().resize(In.numRows(), In.numCols(), In.firstRow(), In.firstCol());
-    for (int i=In.firstRow(); i<=In.lastRow(); ++i) {
-        for (int j=In.firstCol(); j<=In.lastCol(); ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE i=In.firstRow(); i<=In.lastRow(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE j=In.firstCol(); j<=In.lastCol(); ++j) {
             Out(i,j) = In(In.lastRow()-i+In.firstRow(),
                           In.lastCol()-j+In.firstCol());
         }

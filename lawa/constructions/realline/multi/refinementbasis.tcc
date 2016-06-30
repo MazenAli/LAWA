@@ -1,7 +1,7 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Orthogonal,R,MultiRefinement>::Basis(int _d, int j)
+Basis<T,Orthogonal,R,MultiRefinement>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : mra(_d, j), d(_d), j0(mra.j0), _j(j0), LaplaceOp1D(_d, *this), IdentityOp1D(_d, *this)
 {
     if (d > 4) {
@@ -18,7 +18,7 @@ Basis<T,Orthogonal,R,MultiRefinement>::~Basis()
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Orthogonal,R,MultiRefinement>::level() const
 {
     return _j;
@@ -26,7 +26,7 @@ Basis<T,Orthogonal,R,MultiRefinement>::level() const
 
 template <typename T>
 void
-Basis<T,Orthogonal,R,MultiRefinement>::setLevel(int j) const
+Basis<T,Orthogonal,R,MultiRefinement>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;
@@ -52,9 +52,9 @@ template <typename T>
 template <typename SecondRefinementBasis>
 void
 Basis<T,Orthogonal,R,MultiRefinement>::
-getBSplineNeighborsForBSpline(int j_bspline1, long k_bspline1,
+getBSplineNeighborsForBSpline(FLENS_DEFAULT_INDEXTYPE j_bspline1, FLENS_DEFAULT_INDEXTYPE k_bspline1,
                               const SecondRefinementBasis &secondrefinementbasis,
-                              int &j_bspline2, long &k_bspline2_first, long &k_bspline2_last) const
+                              FLENS_DEFAULT_INDEXTYPE &j_bspline2, FLENS_DEFAULT_INDEXTYPE &k_bspline2_first, FLENS_DEFAULT_INDEXTYPE &k_bspline2_last) const
 {
     ct_assert(SecondRefinementBasis::Side==Orthogonal and SecondRefinementBasis::Domain==R
               and SecondRefinementBasis::Cons==MultiRefinement);
@@ -70,8 +70,8 @@ template <typename T>
 template <typename SecondBasis>
 void
 Basis<T,Orthogonal,R,MultiRefinement>
-::getWaveletNeighborsForBSpline(int j_bspline, long k_bspline, const SecondBasis &secondbasis,
-                                int &j_wavelet, long &k_wavelet_first, long &k_wavelet_last) const
+::getWaveletNeighborsForBSpline(FLENS_DEFAULT_INDEXTYPE j_bspline, FLENS_DEFAULT_INDEXTYPE k_bspline, const SecondBasis &secondbasis,
+                                FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first, FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const
 {
     ct_assert(SecondBasis::Side==Orthogonal and SecondBasis::Domain==R
               and SecondBasis::Cons==Multi);
@@ -80,7 +80,7 @@ Basis<T,Orthogonal,R,MultiRefinement>
     Support<T> supp = mra.phi.support(j_bspline,k_bspline);
     T a = supp.l1, b = supp.l2;
 
-    long k_tilde = (long)std::floor(pow2i<T>(j_wavelet)*a);
+    FLENS_DEFAULT_INDEXTYPE k_tilde = (FLENS_DEFAULT_INDEXTYPE)std::floor(pow2i<T>(j_wavelet)*a);
     k_tilde += 1;
     k_wavelet_first  = (k_tilde-2)*secondbasis._numSplines;
     k_wavelet_last   = (k_tilde+2)*secondbasis._numSplines;
@@ -90,7 +90,7 @@ Basis<T,Orthogonal,R,MultiRefinement>
 
 template <typename T>
 Basis<T,Orthogonal,R,MultiRefinement>::LaplaceOperator1D::
-LaplaceOperator1D(int _d, const Basis<T,Orthogonal,R,MultiRefinement> &_refinementbasis)
+LaplaceOperator1D(FLENS_DEFAULT_INDEXTYPE _d, const Basis<T,Orthogonal,R,MultiRefinement> &_refinementbasis)
  : d(_d), refinementbasis(_refinementbasis)
 {
     switch (d) {
@@ -122,25 +122,25 @@ LaplaceOperator1D(int _d, const Basis<T,Orthogonal,R,MultiRefinement> &_refineme
 template <typename T>
 T
 Basis<T,Orthogonal,R,MultiRefinement>::LaplaceOperator1D::
-operator()(XType xtype1, int j1, long k1, XType xtype2, int j2, long k2)
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1, XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2)
 {
     assert(j1==j2);
     if (d==2) {
-        long k_diff = std::abs(k1 - k2);
+        FLENS_DEFAULT_INDEXTYPE k_diff = std::abs(k1 - k2);
         if (k_diff>1) return 0.L;
         return  pow2i<T>(2*j1)*values1(k_diff);
     }
     else if (d==3) {
-        long k_diff = std::abs(k1 - k2);
+        FLENS_DEFAULT_INDEXTYPE k_diff = std::abs(k1 - k2);
         if (k_diff>2) return 0.L;
 
         return pow2i<T>(2*j1)*values1(k_diff);
     }
     else if (d==4) {
-        long k_diff = std::abs(k1 - k2);
+        FLENS_DEFAULT_INDEXTYPE k_diff = std::abs(k1 - k2);
         if (k_diff>3) return 0.L;
 
-        int type = k1 > k2 ? refinementbasis.mra.phi._type(k1) : refinementbasis.mra.phi._type(k2);
+        FLENS_DEFAULT_INDEXTYPE type = k1 > k2 ? refinementbasis.mra.phi._type(k1) : refinementbasis.mra.phi._type(k2);
         if   (type==1)  return pow2i<T>(2*j1)*values1(k_diff);   // Attention: different indexing when compared to interval
         else            return pow2i<T>(2*j1)*values2(k_diff);
     }
@@ -154,7 +154,7 @@ operator()(XType xtype1, int j1, long k1, XType xtype2, int j2, long k2)
 
 template <typename T>
 Basis<T,Orthogonal,R,MultiRefinement>::IdentityOperator1D::
-IdentityOperator1D(int _d, const Basis<T,Orthogonal,R,MultiRefinement> &_refinementbasis)
+IdentityOperator1D(FLENS_DEFAULT_INDEXTYPE _d, const Basis<T,Orthogonal,R,MultiRefinement> &_refinementbasis)
  : d(_d), refinementbasis(_refinementbasis)
 {
     switch (d) {
@@ -186,25 +186,25 @@ IdentityOperator1D(int _d, const Basis<T,Orthogonal,R,MultiRefinement> &_refinem
 template <typename T>
 T
 Basis<T,Orthogonal,R,MultiRefinement>::IdentityOperator1D::
-operator()(XType xtype1, int j1, long k1, XType xtype2, int j2, long k2)
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1, XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2)
 {
     assert(j1==j2);
     if (d==2) {
-        long k_diff = std::abs(k1 - k2);
+        FLENS_DEFAULT_INDEXTYPE k_diff = std::abs(k1 - k2);
         if (k_diff>1) return 0.L;
         return  values1(k_diff);
     }
     else if (d==3) {
-        long k_diff = std::abs(k1 - k2);
+        FLENS_DEFAULT_INDEXTYPE k_diff = std::abs(k1 - k2);
         if (k_diff>2) return 0.L;
 
         return values1(k_diff);
     }
     else if (d==4) {
-        long k_diff = std::abs(k1 - k2);
+        FLENS_DEFAULT_INDEXTYPE k_diff = std::abs(k1 - k2);
         if (k_diff>3) return 0.L;
 
-        int type = k1 > k2 ? refinementbasis.mra.phi._type(k1) : refinementbasis.mra.phi._type(k2);
+        FLENS_DEFAULT_INDEXTYPE type = k1 > k2 ? refinementbasis.mra.phi._type(k1) : refinementbasis.mra.phi._type(k2);
         if (type==1)  return values1(k_diff);  // Attention: different indexing when compared to interval
         else          return values2(k_diff);
     }

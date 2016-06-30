@@ -2,7 +2,7 @@ namespace lawa {
 
 template <typename T, typename Index, typename AdaptiveOperator, typename RHS>
 GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GHS_ADWAV(AdaptiveOperator &_A, RHS &_F,
-                                                   bool _optimized_grow, int _assemble_matrix)
+                                                   bool _optimized_grow, FLENS_DEFAULT_INDEXTYPE _assemble_matrix)
     : A(_A), F(_F), optimized_grow(_optimized_grow), assemble_matrix(_assemble_matrix),
       cA(A.cA), CA(A.CA), kappa(A.kappa),
       alpha(0.), omega(0.), gamma(0.), theta(0.), eps(0.),
@@ -49,7 +49,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::setParameters(T _alpha, T _omega, T _ga
 template <typename T, typename Index, typename AdaptiveOperator, typename RHS>
 Coefficients<Lexicographical,T,Index>
 GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::SOLVE(T nuM1, T _eps, const char *filename,
-                                               int NumOfIterations, T H1norm)
+                                               FLENS_DEFAULT_INDEXTYPE NumOfIterations, T H1norm)
 {
     T eps = _eps;
     Coefficients<Lexicographical,T,Index> w_k(hms_galerkin), g_kP1(hms_galerkin);
@@ -57,11 +57,11 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::SOLVE(T nuM1, T _eps, const char *filen
     T nu_kM1 = nuM1;
     T nu_k   = 0.;
     T total_time=0.;
-    int numOfIterations=0;
+    FLENS_DEFAULT_INDEXTYPE numOfIterations=0;
     T timeApply=0.;
     T timeMatrixVector=0.;
-    int maxIterations=100;
-    int lengthOfResidual = 1;
+    FLENS_DEFAULT_INDEXTYPE maxIterations=100;
+    FLENS_DEFAULT_INDEXTYPE lengthOfResidual = 1;
 
     std::cerr << "GHS-ADWAV-SOLVE has started with the following parameters: " << std::endl;
     std::cerr << "  alpha=" << alpha << ", omega=" << omega << ", gamma=" << gamma << ", theta="
@@ -70,7 +70,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::SOLVE(T nuM1, T _eps, const char *filen
 
     std::ofstream file(filename);
 
-    for (int i=1; i<=NumOfIterations; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=NumOfIterations; ++i) {
         Timer time;
         std::cerr << "*** " << i << ".iteration ***" << std::endl;
         time.start();
@@ -133,7 +133,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::SOLVE(T nuM1, T _eps, const char *filen
 template <typename T, typename Index, typename AdaptiveOperator, typename RHS>
 IndexSet<Index>
 GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GROW(const Coefficients<Lexicographical,T,Index> &w,
-                                              T nu_bar, T &nu, int &lengthOfResidual, T &timeApply)
+                                              T nu_bar, T &nu, FLENS_DEFAULT_INDEXTYPE &lengthOfResidual, T &timeApply)
 {
     T zeta = 2.*(omega*nu_bar)/(1-omega);
     T r_norm = 0.;
@@ -179,14 +179,14 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GROW(const Coefficients<Lexicographical
     std::cerr << "      ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_r_norm_square)
               << ", alpha*r_norm = " << alpha*r_norm << std::endl;
     if (nu > eps) {
-        for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
             P_Lambda_r_norm_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
             std::cerr << "      ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_r_norm_square) << std::endl;
-            int addDoF = r_bucket.addBucketToIndexSet(Lambda,i);
+            FLENS_DEFAULT_INDEXTYPE addDoF = r_bucket.addBucketToIndexSet(Lambda,i);
             std::cerr << "      Added " << addDoF << " indices with norm " << std::sqrt(P_Lambda_r_norm_square) << std::endl;
             if (P_Lambda_r_norm_square >= alpha*r_norm*alpha*r_norm) {
                 if (optimized_grow) {
-                    int addDoF = r_bucket.addBucketToIndexSet(Lambda,i+1);
+                    FLENS_DEFAULT_INDEXTYPE addDoF = r_bucket.addBucketToIndexSet(Lambda,i+1);
                     std::cerr << "      Added " << addDoF << " indices with norm " << std::sqrt(P_Lambda_r_norm_square) << std::endl;
                 }
                 break;
@@ -205,12 +205,12 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GALSOLVE(const IndexSet<Index> &Lambda,
                                                   T delta, T tol)
 {
     if (assemble_matrix==1 || assemble_matrix==2) {
-        std::map<Index,int,lt<Lexicographical,Index> >      row_indices;
-        int d=A.basis.d;
+        std::map<Index,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index> >      row_indices;
+        FLENS_DEFAULT_INDEXTYPE d=A.basis.d;
         if (Lambda.size()==0) return;
 
         //Determine compression level
-        int J=0;        //compression
+        FLENS_DEFAULT_INDEXTYPE J=0;        //compression
         if      (d==2) {   J = -std::ceil(2*std::log(tol/((3*tol+3*delta)*kappa))); }
         else if (d==3) {   J = -std::ceil((1./1.5)*std::log(tol/((3*tol+3*delta)*kappa))); }
         else if (d==4) {   J = -std::ceil((1./2.5)*std::log(tol/((3*tol+3*delta)*kappa))); }
@@ -219,7 +219,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GALSOLVE(const IndexSet<Index> &Lambda,
                   << " : " << J << std::endl;
 
         //Assemble sparse matrix B
-        unsigned long N = Lambda.size();
+        unsigned FLENS_DEFAULT_INDEXTYPE N = Lambda.size();
         //std::cerr << "    Assembling of B started with N=" << N << std::endl;
 
 
@@ -241,7 +241,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GALSOLVE(const IndexSet<Index> &Lambda,
         flens::DenseVector<flens::Array<T> > rhs(N), x(N), res(N), Bx(N);
 
         const_coeff_it r0_end = r0.end();
-        int row_count=1;
+        FLENS_DEFAULT_INDEXTYPE row_count=1;
         for (const_set_it row=Lambda.begin(); row!=Lambda.end(); ++row) {
             const_coeff_it it = r0.find(*row);
             if (it != r0_end) rhs(row_count) = (*it).second;
@@ -249,7 +249,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GALSOLVE(const IndexSet<Index> &Lambda,
             ++row_count;
         }
 
-        int iters = lawa::cg(B,x,rhs,tol/3.);
+        FLENS_DEFAULT_INDEXTYPE iters = lawa::cg(B,x,rhs,tol/3.);
         Bx = B*x;
         res= Bx-rhs;
         T lin_res = std::sqrt(res*res);
@@ -275,7 +275,7 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GALSOLVE(const IndexSet<Index> &Lambda,
         r -= g;
         p -= r;
         rNormSquare = r*r;
-        for (int k=1; k<=1000; k++) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=1000; k++) {
             Coefficients<Lexicographical,T,Index> Ap;
             A.apply(p,tol/3.,Lambda, Ap);
             T pAp = p * Ap;
@@ -309,8 +309,8 @@ GHS_ADWAV<T,Index,AdaptiveOperator,RHS>::GALSOLVE(const IndexSet<Index> &Lambda,
 
 
 /*
-int count=0;
-int sizeExtensionOfLambda=1;
+FLENS_DEFAULT_INDEXTYPE count=0;
+FLENS_DEFAULT_INDEXTYPE sizeExtensionOfLambda=1;
 for (const_coeff_abs_it it=r_abs.begin(); it!=r_abs.end(); ++it) {
 
     Lambda.insert((*it).second);
@@ -329,14 +329,14 @@ for (const_coeff_abs_it it=r_abs.begin(); it!=r_abs.end(); ++it) {
         /*
         index_hashfunction<Index2D> hasher2d;
         std::map<size_t,Index2D> hash_values;
-        int collisions = 0;
+        FLENS_DEFAULT_INDEXTYPE collisions = 0;
         T time_hash = 0.;
         for (const_coeff_it it=w_k.begin(); it!=w_k.end(); ++it) {
             time.start();
             size_t hash_value = hasher2d((*it).first);
             time.stop();
             time_hash += time.elapsed();
-            int count = hash_values.count(hash_value);
+            FLENS_DEFAULT_INDEXTYPE count = hash_values.count(hash_value);
             if (count==0) hash_values[hash_value] = (*it).first;
             else {
                std::cerr << "   Collision: " << (*it).first << " " << hash_value << " same as " << hash_values[hash_value] << " -> " << count << std::endl;

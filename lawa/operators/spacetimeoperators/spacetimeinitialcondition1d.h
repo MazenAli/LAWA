@@ -49,9 +49,9 @@ class SpaceTimeInitialCondition1D{
         SpaceTimeInitialCondition1D(const Basis& _basis);
 
         T                                                           // returns a(v,u)
-        operator()(XType row_xtype_x, int j1_x, long k1_x,
-                   XType col_xtype_t, int j2_t, long k2_t,
-                   XType col_xtype_x, int j2_x, long k2_x) const;
+        operator()(XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                   XType col_xtype_t, FLENS_DEFAULT_INDEXTYPE j2_t, FLENS_DEFAULT_INDEXTYPE k2_t,
+                   XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x) const;
 
         T
         operator()(const Index1D &row_index, const Index2D &col_index) const;

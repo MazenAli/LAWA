@@ -32,7 +32,7 @@ THRESH(const Coefficients<Lexicographical,T,Index1D> &v, T eta, bool deleteBSpli
     else {
         if (temp.size() > 0) {
             it lambda = temp.begin();
-            long double sum = 0L, bound = (long double)(temp.norm()*temp.norm() - eta*eta);
+            long double sum = (FLENS_DEFAULT_INDEXTYPE) 0, bound = (long double)(temp.norm()*temp.norm() - eta*eta);
             do {
                 sum += (long double) ((*lambda).first)*((*lambda).first);
                 ++lambda;
@@ -76,7 +76,7 @@ THRESH(const Coefficients<Lexicographical,T,Index2D> &v, T eta, bool deleteBSpli
     else {
         if (temp.size() > 0) {
             it lambda = temp.begin();
-            long double sum = 0L, bound = (long double) (temp.norm()*temp.norm() - eta*eta);
+            long double sum = (FLENS_DEFAULT_INDEXTYPE) 0, bound = (long double) (temp.norm()*temp.norm() - eta*eta);
             do {
                 sum += (long double) ((*lambda).first)*((*lambda).first);
                 ++lambda;
@@ -117,7 +117,7 @@ THRESH_NoCopy(Coefficients<Lexicographical,T,Index2D> &v, T eta)
 
     if (temp.size() > 0) {
         it lambda = temp.begin();
-        long double sum = 0L, bound = (long double) (temp.norm()*temp.norm() - eta*eta);
+        long double sum = (FLENS_DEFAULT_INDEXTYPE) 0, bound = (long double) (temp.norm()*temp.norm() - eta*eta);
         do {
             sum += (long double) ((*lambda).first)*((*lambda).first);
             ++lambda;
@@ -163,7 +163,7 @@ THRESH(const Coefficients<Lexicographical,T,Index3D> &v, T eta, bool deleteBSpli
     else {
         if (temp.size() > 0) {
             it lambda = temp.begin();
-            long double sum = 0L, bound = (long double) (temp.norm()*temp.norm() - eta*eta);
+            long double sum = (FLENS_DEFAULT_INDEXTYPE) 0, bound = (long double) (temp.norm()*temp.norm() - eta*eta);
             do {
                 sum += (long double) ((*lambda).first)*((*lambda).first);
                 ++lambda;
@@ -210,7 +210,7 @@ THRESH(const Coefficients<AbsoluteValue,T,Index > &v, T eta, bool hp)
          */
         if (!hp) {
             it lambda = temp.begin();
-            long double sum = 0L, bound = (long double)(temp.norm()*temp.norm()) - (long double)eta*eta;
+            long double sum = (FLENS_DEFAULT_INDEXTYPE) 0, bound = (long double)(temp.norm()*temp.norm()) - (long double)eta*eta;
             do {
                 sum += (long double)(((*lambda).first)*((*lambda).first));
                 //std::cerr.precision(25);
@@ -221,8 +221,8 @@ THRESH(const Coefficients<AbsoluteValue,T,Index > &v, T eta, bool hp)
         }
         else {
             reverse_it rev_lambda = temp.rbegin();
-            long double sum = 0L, bound = (long double)eta*eta;
-            int count=0;
+            long double sum = (FLENS_DEFAULT_INDEXTYPE) 0, bound = (long double)eta*eta;
+            FLENS_DEFAULT_INDEXTYPE count=0;
             do {
                 sum += (long double)(((*rev_lambda).first)*((*rev_lambda).first));
                 //std::cerr.precision(25);
@@ -232,7 +232,7 @@ THRESH(const Coefficients<AbsoluteValue,T,Index > &v, T eta, bool hp)
             } while ((rev_lambda != temp.rend()) && (sum <= bound));
             //std::cerr << "tol = " << eta << ", count = " << count << std::endl;
             it lambda = temp.begin();
-            for (int i=0; i<=(int)temp.size()-count; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0; i<=(FLENS_DEFAULT_INDEXTYPE)temp.size()-count; ++i) {
                 ++lambda;
             }
             temp.erase(lambda, temp.end());

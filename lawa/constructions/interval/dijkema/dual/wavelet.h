@@ -40,10 +40,10 @@ struct Wavelet<_T,Dual,Interval,Dijkema>
     Wavelet(const Basis<T,Dual,Interval,Dijkema> &_basis_);
 
     T
-    operator()(T x, int j, long k, unsigned short deriv=0) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv=0) const;
 
     Support<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     const Basis<T,Dual,Interval,Dijkema> &basis_;
 };

@@ -2,11 +2,11 @@
 
 namespace lawa {
 
-long
-factorial(int n)
+FLENS_DEFAULT_INDEXTYPE
+factorial(FLENS_DEFAULT_INDEXTYPE n)
 {
-    long fac = 1;
-    for (int i=2; i<=n; ++i) {
+    FLENS_DEFAULT_INDEXTYPE fac = 1;
+    for (FLENS_DEFAULT_INDEXTYPE i=2; i<=n; ++i) {
         fac *= i;
     }
     return fac;

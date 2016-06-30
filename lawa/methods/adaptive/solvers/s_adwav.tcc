@@ -27,8 +27,8 @@ namespace lawa {
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 S_ADWAV<T,Index,Basis,MA,RHS>::S_ADWAV(const Basis &_basis, MA &_A, RHS &_F, T _contraction,
                                  T start_threshTol, T start_linTol, T start_resTol,
-                                 int _NumOfIterations, int _MaxItsPerThreshTol, T _eps, int _MaxSizeLambda,
-                                  T _resStopTol, std::vector<int> _Jmaxvec)
+                                 FLENS_DEFAULT_INDEXTYPE _NumOfIterations, FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol, T _eps, FLENS_DEFAULT_INDEXTYPE _MaxSizeLambda,
+                                  T _resStopTol, std::vector<FLENS_DEFAULT_INDEXTYPE> _Jmaxvec)
     : basis(_basis), A(_A), F(_F), contraction(_contraction), threshTol(start_threshTol), linTol(start_linTol),
       resTol(start_resTol), NumOfIterations(_NumOfIterations), MaxItsPerThreshTol(_MaxItsPerThreshTol), eps(_eps),
       MaxSizeLambda(_MaxSizeLambda), resStopTol(_resStopTol), Jmaxvec(_Jmaxvec), relative_thresh(false)
@@ -50,7 +50,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::S_ADWAV(const Basis &_basis, MA &_A, RHS &_F, T _
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
 S_ADWAV<T,Index,Basis,MA,RHS>::solve(const IndexSet<Index> &InitialLambda, const char *linsolvertype,
-                                     const char *filename, int assemble_matrix, T H1norm)
+                                     const char *filename, FLENS_DEFAULT_INDEXTYPE assemble_matrix, T H1norm)
 {
     Timer timer;
 
@@ -59,13 +59,13 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve(const IndexSet<Index> &InitialLambda, const
 
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     T timeMatrixVector=0.;
     std::cout << "Simple adaptive solver started." << std::endl;
 
     std::ofstream file(filename);
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         std::cout << "*** " << its+1 << ".iteration" << std::endl;
 
         timer.start();
@@ -78,7 +78,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve(const IndexSet<Index> &InitialLambda, const
         //Galerkin step
         T r_norm_LambdaActive = 0.0;
         std::cout << "   CG solver started with N = " << LambdaActive.size() << std::endl;
-        int iterations=0;
+        FLENS_DEFAULT_INDEXTYPE iterations=0;
 
         if (strcmp(linsolvertype,"cg")==0) {
             iterations = CG_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, 100, timeMatrixVector, assemble_matrix);
@@ -197,7 +197,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve(const IndexSet<Index> &InitialLambda, const
         std::cout << "S-ADWAV: " << its+1 << ".iteration: Size of Lambda = " << supp(u).size() << ", cg-its = " << iterations
                   << ", residual = " << estim_res << " , current threshTol = " << threshTol << std::endl << std::endl;
 
-        if(supp(u).size() > (unsigned int) MaxSizeLambda){
+        if(supp(u).size() > (unsigned FLENS_DEFAULT_INDEXTYPE) MaxSizeLambda){
             NumOfIterations = its+1;
             solutions.resize(NumOfIterations);
             residuals.resize(NumOfIterations);
@@ -211,7 +211,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve(const IndexSet<Index> &InitialLambda, const
 
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
-S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, int assemble_matrix, T H1norm)
+S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix, T H1norm)
 {
     Timer timer;
 
@@ -220,7 +220,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, in
 
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     T timeMatrixVector=0.;
 
     std::cout << "Simple adaptive solver started." << std::endl;
@@ -229,7 +229,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, in
     filename << "s-adwav-otf.dat";
     std::ofstream file(filename.str().c_str());
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         std::cout << "*** " << its+1 << ".iteration" << std::endl;
         
         timer.start();
@@ -251,7 +251,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, in
 		//=========================================
 		*/
 		
-        int iterations = CG_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, 10000, timeMatrixVector, assemble_matrix);
+        FLENS_DEFAULT_INDEXTYPE iterations = CG_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, 10000, timeMatrixVector, assemble_matrix);
         linsolve_iterations[its] = iterations;
         //std::cout << "   ...finished." << std::endl;
 
@@ -274,7 +274,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, in
         	u = THRESH(u,threshTol,false, basis.d > 3 ? true : false);
         }
 
-				//int jmin,jmax;
+				//FLENS_DEFAULT_INDEXTYPE jmin,jmax;
         //getMinAndMaxLevel(LambdaActive, jmin, jmax);
         //std::cout << "Before THRESH: jmin = " << jmin << ", jmax = " << jmax << std::endl;
         //std::cout << "After THRESH: " << u << std::endl;
@@ -357,7 +357,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, in
         std::cout << "S-ADWAV: " << its+1 << ".iteration: Size of Lambda = " << supp(u).size() << ", cg-its = " << iterations
                   << ", residual = " << estim_res << " , current threshTol = " << threshTol << std::endl << std::endl;
         
-        if((supp(u).size() > (unsigned int) MaxSizeLambda) || (estim_res < resStopTol)){
+        if((supp(u).size() > (unsigned FLENS_DEFAULT_INDEXTYPE) MaxSizeLambda) || (estim_res < resStopTol)){
             NumOfIterations = its+1;
             solutions.resize(NumOfIterations);
             residuals.resize(NumOfIterations);
@@ -371,7 +371,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg(const IndexSet<Index> &InitialLambda, in
 
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
-S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &InitialLambda, int assemble_matrix, T H1norm)
+S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &InitialLambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix, T H1norm)
 {
     Timer timer;
 
@@ -380,7 +380,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &Initi
 
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
 		T timeMatrixVector = 0;
 		
     std::cout << "Simple adaptive solver started." << std::endl;
@@ -388,7 +388,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &Initi
     filename << "s-adwav-realline-helmholtz-otf.dat";
     std::ofstream file(filename.str().c_str());
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         std::cout << "*** " << its+1 << ".iteration" << std::endl;
 
         timer.start();
@@ -401,7 +401,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &Initi
         //Galerkin step
         T r_norm_LambdaActive = 0.0;
         std::cout << "   CG solver started with N = " << LambdaActive.size() << std::endl;
-        int iterations = CG_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, 1000, timeMatrixVector, assemble_matrix);
+        FLENS_DEFAULT_INDEXTYPE iterations = CG_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, 1000, timeMatrixVector, assemble_matrix);
         std::cout << "   ...finished with residual " << r_norm_LambdaActive << std::endl;
 
         //Threshold step
@@ -468,7 +468,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &Initi
         std::cout << "S-ADWAV: " << its+1 << ".iteration: Size of Lambda = " << supp(u).size() << ", cg-its = " << iterations
                   << ", residual = " << estim_res << " , current threshTol = " << threshTol << std::endl << std::endl;
                   
-        if((supp(u).size() > (unsigned int) MaxSizeLambda) || (estim_res < resStopTol)){
+        if((supp(u).size() > (unsigned FLENS_DEFAULT_INDEXTYPE) MaxSizeLambda) || (estim_res < resStopTol)){
             NumOfIterations = its+1;
             solutions.resize(NumOfIterations);
             residuals.resize(NumOfIterations);
@@ -483,7 +483,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cg_WO_XBSpline(const IndexSet<Index> &Initi
 
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
-S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda, int assemble_matrix)
+S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
     Timer timer;
     
@@ -492,14 +492,14 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda,
 
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     std::cout << "Simple adaptive solver started." << std::endl;
     std::stringstream filename;
     filename << "s-adwav-otf-gmres.dat";
     std::ofstream file(filename.str().c_str());
     T total_time = 0.;
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
 
     
         //Initialization step
@@ -512,8 +512,8 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda,
         //Galerkin step
         T r_norm_LambdaActive = 0.0;
         std::cout << "   GMRES solver started with N = " << LambdaActive.size() << std::endl;
-        int maxIterations = 10000;
-        int iterations = GMRES_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
+        FLENS_DEFAULT_INDEXTYPE maxIterations = 10000;
+        FLENS_DEFAULT_INDEXTYPE iterations = GMRES_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
         std::cout << "   ...finished with residual " << r_norm_LambdaActive << std::endl;
 
         /*
@@ -544,7 +544,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda,
         solutions[its] = u;
         LambdaThresh = supp(u);
         std::cout << "    Size of thresholded u = " << LambdaThresh.size() << std::endl;
-        //int current_jmin, current_jmax;
+        //FLENS_DEFAULT_INDEXTYPE current_jmin, current_jmax;
         //getMinAndMaxLevel(LambdaThresh, current_jmin, current_jmax);
         //std::cout << "    Current minimal level: " << current_jmin << ", current maximal level: " << current_jmax << std::endl;
 
@@ -611,7 +611,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda,
         std::cout << "S-ADWAV: " << its+1 << ".iteration: Size of Lambda = " << supp(u).size() << ", gmres-its = " << iterations;
         std::cout << ", residual = " << estim_res << " , current threshTol = " << threshTol << std::endl;
         
-        if((supp(u).size() > (unsigned int) MaxSizeLambda) || (estim_res < resStopTol)){
+        if((supp(u).size() > (unsigned FLENS_DEFAULT_INDEXTYPE) MaxSizeLambda) || (estim_res < resStopTol)){
             NumOfIterations = its+1;
             solutions.resize(NumOfIterations);
             residuals.resize(NumOfIterations);
@@ -627,8 +627,8 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda,
     LambdaActive = supp(u);
     f = F(LambdaActive);
     std::cout << "   GMRES solver started with N = " << LambdaActive.size() << std::endl;
-    int maxIterations = 10000;
-    int iterations = GMRES_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
+    FLENS_DEFAULT_INDEXTYPE maxIterations = 10000;
+    FLENS_DEFAULT_INDEXTYPE iterations = GMRES_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
     std::cout << "   ...finished with residual " << r_norm_LambdaActive << std::endl;
 
 	solutions[solutions.size()-1] = u;
@@ -636,7 +636,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmres(const IndexSet<Index> &InitialLambda,
 
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
-S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda, int assemble_matrix)
+S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
     Timer timer;
     
@@ -645,14 +645,14 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda
     
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     std::cout << "Simple adaptive solver started." << std::endl;
     std::stringstream filename;
     filename << "s-adwav-otf-gmres.dat";
     std::ofstream file(filename.str().c_str());
     T total_time = 0.;
     
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         
         
         //Initialization step
@@ -664,9 +664,9 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda
         
         //Galerkin step
         T r_norm_LambdaActive = 0.0;
-		int maxIterations = 10000;
+		FLENS_DEFAULT_INDEXTYPE maxIterations = 10000;
         std::cout << "   GMRESM solver started with N = " << LambdaActive.size() << std::endl;
-        int iterations = GMRESM_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
+        FLENS_DEFAULT_INDEXTYPE iterations = GMRESM_Solve(LambdaActive, A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
         std::cout << "   ...finished with residual " << r_norm_LambdaActive << std::endl;
         
         
@@ -683,7 +683,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda
         solutions[its] = u;
         LambdaThresh = supp(u);
         std::cout << "    Size of thresholded u = " << LambdaThresh.size() << std::endl;
-        //int current_jmin, current_jmax;
+        //FLENS_DEFAULT_INDEXTYPE current_jmin, current_jmax;
         //getMinAndMaxLevel(LambdaThresh, current_jmin, current_jmax);
         //std::cout << "    Current minimal level: " << current_jmin << ", current maximal level: " << current_jmax << std::endl;
         
@@ -751,7 +751,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda
         std::cout << "S-ADWAV: " << its+1 << ".iteration: Size of Lambda = " << supp(u).size() << ", gmresm-its = " << iterations;
         std::cout << ", residual = " << estim_res << " , current threshTol = " << threshTol << std::endl;
         
-        if((supp(u).size() > (unsigned int) MaxSizeLambda) || (estim_res < resStopTol)){
+        if((supp(u).size() > (unsigned FLENS_DEFAULT_INDEXTYPE) MaxSizeLambda) || (estim_res < resStopTol)){
             NumOfIterations = its+1;
             solutions.resize(NumOfIterations);
             residuals.resize(NumOfIterations);
@@ -766,7 +766,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_gmresm(const IndexSet<Index> &InitialLambda
 
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
-S_ADWAV<T,Index,Basis,MA,RHS>::solve_cgls(const IndexSet<Index> &InitialLambda, int assemble_matrix)
+S_ADWAV<T,Index,Basis,MA,RHS>::solve_cgls(const IndexSet<Index> &InitialLambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
     Timer timer;
 
@@ -776,13 +776,13 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cgls(const IndexSet<Index> &InitialLambda, 
 
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     std::cout << "Simple adaptive cgls time solver started." << std::endl;
     std::stringstream filename;
     filename << "s-adwav-cgls.dat";
     std::ofstream file(filename.str().c_str());
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         std::cout << "*** " << its+1 << ".iteration" << std::endl;
 
         timer.start();
@@ -795,8 +795,8 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cgls(const IndexSet<Index> &InitialLambda, 
         //Galerkin step
         T r_norm_LambdaActive = 0.0;
         std::cout << "   CG solver started with N = " << LambdaActive.size() << std::endl;
-				int maxIterations = 100000;
-        int iterations = CGLS_Solve(LambdaActive_test, LambdaActive,
+				FLENS_DEFAULT_INDEXTYPE maxIterations = 100000;
+        FLENS_DEFAULT_INDEXTYPE iterations = CGLS_Solve(LambdaActive_test, LambdaActive,
                                     A, u, f, r_norm_LambdaActive, linTol, maxIterations, assemble_matrix);
         std::cout << "   ...finished after " << iterations << " iterations with residual = " << r_norm_LambdaActive << std::endl;
 
@@ -865,7 +865,7 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cgls(const IndexSet<Index> &InitialLambda, 
         std::cout << "S-ADWAV: " << its+1 << ".iteration: Size of Lambda = " << supp(u).size() << ", cgls-its = " << iterations
                   << ", residual = " << estim_res << " , current threshTol = " << threshTol << std::endl << std::endl;
                   
-        if((supp(u).size() > (unsigned int) MaxSizeLambda) || (estim_res < resStopTol)){
+        if((supp(u).size() > (unsigned FLENS_DEFAULT_INDEXTYPE) MaxSizeLambda) || (estim_res < resStopTol)){
             NumOfIterations = its+1;
             solutions.resize(NumOfIterations);
             residuals.resize(NumOfIterations);
@@ -881,9 +881,9 @@ S_ADWAV<T,Index,Basis,MA,RHS>::solve_cgls(const IndexSet<Index> &InitialLambda, 
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
 S_ADWAV<T,Index,Basis,MA,RHS>::set_parameters(T _contraction, T start_threshTol, T _linTol, 
-                                              T _resTol, int _NumOfIterations, 
-                                              int _MaxItsPerThreshTol, T _eps, int _MaxSizeLambda, 
-                                              T _resStopTol, std::vector<int> _Jmaxvec)
+                                              T _resTol, FLENS_DEFAULT_INDEXTYPE _NumOfIterations, 
+                                              FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol, T _eps, FLENS_DEFAULT_INDEXTYPE _MaxSizeLambda, 
+                                              T _resStopTol, std::vector<FLENS_DEFAULT_INDEXTYPE> _Jmaxvec)
 {
     contraction = _contraction;
     threshTol = start_threshTol;
@@ -911,8 +911,8 @@ S_ADWAV<T,Index,Basis,MA,RHS>::set_parameters(T _contraction, T start_threshTol,
 template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 void
 S_ADWAV<T,Index,Basis,MA,RHS>::get_parameters(T& _contraction, T& _threshTol, T& _linTol, T& _resTol, 
-                                              int& _NumOfIterations, int& _MaxItsPerThreshTol, T& _eps, 
-                                              int& _MaxSizeLambda, T& _resStopTol, std::vector<int>& _Jmaxvec)
+                                              FLENS_DEFAULT_INDEXTYPE& _NumOfIterations, FLENS_DEFAULT_INDEXTYPE& _MaxItsPerThreshTol, T& _eps, 
+                                              FLENS_DEFAULT_INDEXTYPE& _MaxSizeLambda, T& _resStopTol, std::vector<FLENS_DEFAULT_INDEXTYPE>& _Jmaxvec)
 {
     _contraction = contraction;
     _threshTol = threshTol;
@@ -947,17 +947,17 @@ plotScatterCoeff2D(u, A.basis.first, A.basis.second, coefffile.str().c_str());
 /*
        std::cout << "Computing eigenvalues..." << std::endl;
        T cB, CB;
-       int N = LambdaActive.size();
+       FLENS_DEFAULT_INDEXTYPE N = LambdaActive.size();
        SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > A_sparse(N,N);
        A.toFlensSparseMatrix(LambdaActive,LambdaActive,A_sparse);
        flens::DenseVector<flens::Array<T> > x(N);
-       for (int i=1; i<=N; ++i) {
+       for (FLENS_DEFAULT_INDEXTYPE i=1; i<=N; ++i) {
            x(i) = 1.;
        }
        std::cout << "powerMethod started." << std::endl;
        lawa::powerMethod(A_sparse,(T)1e-12,CB,x);
        std::cout << "powerMethod finished." << std::endl;
-       for (int i=1; i<=N; ++i) {
+       for (FLENS_DEFAULT_INDEXTYPE i=1; i<=N; ++i) {
            x(i) = 1.;
        }
        std::cout << "inversePowerMethod started." << std::endl;

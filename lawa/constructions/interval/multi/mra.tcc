@@ -12,7 +12,7 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Orthogonal,Interval,Multi>::MRA(int _d, int j)
+MRA<T,Orthogonal,Interval,Multi>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), j0((j==-1) ? 0 : j), phi(*this), _bc(2,0), _j(j0)
 {
     assert(d>=1);
@@ -37,17 +37,17 @@ MRA<T,Orthogonal,Interval,Multi>::MRA(int _d, int j)
         _leftSupport[0] = Support<T>(0.,1.);
 
         _leftSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-        _leftSingularSupport[0].engine().resize(2,0);
+        _leftSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
         _leftSingularSupport[0] = 0., 1.;
 
         _leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-        _leftRefCoeffs[0].engine().resize(2,0);
+        _leftRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
         _leftRefCoeffs[0] = 1.L, 1.L;
 
         _leftRefCoeffs[0] *= std::pow(2.L,-0.5L);
         _leftRefCoeffs[1] *= std::pow(2.L,-0.5L);
 
-        _leftOffsets = new long[1];
+        _leftOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
         _leftOffsets[0] =  0;
 
         //_leftH1SemiNorms = new long double[0];
@@ -61,15 +61,15 @@ MRA<T,Orthogonal,Interval,Multi>::MRA(int _d, int j)
         _innerSupport[0] = Support<T>(0.,1.);
 
         _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-        _innerSingularSupport[0].engine().resize(2,0);
+        _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
         _innerSingularSupport[0] = 0., 1.;
 
         _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-        _innerRefCoeffs[0].engine().resize(2,0);
+        _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
         _innerRefCoeffs[0] = 1.L, 1.L;
         _innerRefCoeffs[0] *= std::pow(2.L,-0.5L);
 
-        _innerOffsets = new long[1];
+        _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
         _innerOffsets[0] =  0;
 
         //_innerH1SemiNorms = new long double[0];
@@ -81,7 +81,7 @@ MRA<T,Orthogonal,Interval,Multi>::MRA(int _d, int j)
         //_rightSupport = new Support<T>[0];
         //_rightSingularSupport = new flens::DenseVector<flens::Array<T> >[0];
         //_rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[0];
-        //_rightOffsets   = new long[0];
+        //_rightOffsets   = new FLENS_DEFAULT_INDEXTYPE[0];
         //_rightH1SemiNorms = new long double[0];
     }
     else {
@@ -137,31 +137,31 @@ MRA<T,Orthogonal,Interval,Multi>::~MRA()
 //--- cardinalities of whole, left, inner, right index sets. -------------------
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,Multi>::cardI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,Multi>::cardI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return _numLeftParts + (pow2i<int>(j)-1)*_numInnerParts + _numRightParts;
+    return _numLeftParts + (pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1)*_numInnerParts + _numRightParts;
 }
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,Multi>::cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,Multi>::cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numLeftParts;
 }
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,Multi>::cardII(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,Multi>::cardII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return (pow2i<int>(j)-1)*_numInnerParts;
+    return (pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1)*_numInnerParts;
 }
 
 template <typename T>
-int
-MRA<T,Orthogonal,Interval,Multi>::cardIR(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Orthogonal,Interval,Multi>::cardIR(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numRightParts;
 }
@@ -169,38 +169,38 @@ MRA<T,Orthogonal,Interval,Multi>::cardIR(int /*j*/) const
 //--- ranges of whole, left, inner, right index sets. --------------------------
 
 template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,Multi>::rangeI(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,Multi>::rangeI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(0,cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,cardI(j)-1);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,Multi>::rangeIL(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,Multi>::rangeIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<int>(0,cardIL() - 1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,cardIL() - 1);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,Multi>::rangeII(int j) const
-{
-    assert(j>=j0);
-    return flens::Range<int>(cardIL(), cardIL()+cardII(j)-1);
-}
-
-template <typename T>
-flens::Range<int>
-MRA<T,Orthogonal,Interval,Multi>::rangeIR(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,Multi>::rangeII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(cardIL()+cardII(j),cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardIL(), cardIL()+cardII(j)-1);
 }
 
 template <typename T>
-int
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Orthogonal,Interval,Multi>::rangeIR(FLENS_DEFAULT_INDEXTYPE j) const
+{
+    assert(j>=j0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardIL()+cardII(j),cardI(j)-1);
+}
+
+template <typename T>
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Orthogonal,Interval,Multi>::level() const
 {
     return _j;
@@ -208,7 +208,7 @@ MRA<T,Orthogonal,Interval,Multi>::level() const
 
 template <typename T>
 void
-MRA<T,Orthogonal,Interval,Multi>::setLevel(int j) const
+MRA<T,Orthogonal,Interval,Multi>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;
@@ -239,21 +239,21 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _leftSupport[1] = Support<T>(0.,1.);
             
             _leftSingularSupport = new flens::DenseVector<flens::Array<T> >[2];
-            _leftSingularSupport[0].engine().resize(3,0);
+            _leftSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftSingularSupport[0] = 0., 0.5, 1.;
-            _leftSingularSupport[1].engine().resize(5,0);
+            _leftSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _leftSingularSupport[1] = 0., 0.25, 0.5, 0.75, 1.;
             
             _leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[2];
-            _leftRefCoeffs[0].engine().resize(3,0);
+            _leftRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftRefCoeffs[0] = std::sqrt(3.L)/2.L, std::sqrt(3.L), std::sqrt(3.L)/2.L;
-            _leftRefCoeffs[1].engine().resize(3,0);
+            _leftRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftRefCoeffs[1] = 2.36574492784748641906L, -1.16774841624228445637L, -0.419497567443678991773L;
 
             _leftRefCoeffs[0] *= 0.5L;
             _leftRefCoeffs[1] *= 0.5L;
 
-            _leftOffsets = new long[2];
+            _leftOffsets = new FLENS_DEFAULT_INDEXTYPE[2];
             _leftOffsets[0] =  0;
             _leftOffsets[1] =  0;
 
@@ -274,19 +274,19 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _innerSupport[2] = Support<T>(-1.,1.);
             
             _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[3];
-            _innerSingularSupport[0].engine().resize(3,0);
+            _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerSingularSupport[0] = 0., 0.5, 1.;
-            _innerSingularSupport[1].engine().resize(5,0);
+            _innerSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerSingularSupport[1] = 0., 0.25, 0.5, 0.75, 1.;
-            _innerSingularSupport[2].engine().resize(9,0);
+            _innerSingularSupport[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _innerSingularSupport[2] = -1., -0.75, -0.5, -0.25, 0., 0.25, 0.5, 0.75, 1.;
             
             _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[3];
-            _innerRefCoeffs[0].engine().resize(3,0);
+            _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerRefCoeffs[0] = std::sqrt(3.L)/2.L, std::sqrt(3.L), std::sqrt(3.L)/2.L;
-            _innerRefCoeffs[1].engine().resize(3,0);
+            _innerRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerRefCoeffs[1] = 2.36574492784748641906L, -1.16774841624228445637L, -0.419497567443678991773L;
-            _innerRefCoeffs[2].engine().resize(7,0);
+            _innerRefCoeffs[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)7,0);
             _innerRefCoeffs[2] = 0.122907612914045134935L,-0.737445677484270809608L, 0.744295083998533270801L,
                                  2.17124059336723766167L, -0.579807160258591023705L, 0.145289152020478720063L,
                                 -0.0242148586700797866771L;
@@ -294,7 +294,7 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _innerRefCoeffs[1] *= 0.5L;
             _innerRefCoeffs[2] *= 0.5;
 
-            _innerOffsets = new long[3];
+            _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[3];
             _innerOffsets[0] =  0;
             _innerOffsets[1] =  0;
             _innerOffsets[2] = -4;
@@ -312,7 +312,7 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             //_rightSingularSupport = new flens::DenseVector<flens::Array<T> >[0];
 
             //_rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[0];
-            //_rightOffsets   = new long[0];
+            //_rightOffsets   = new FLENS_DEFAULT_INDEXTYPE[0];
             //_rightH1SemiNorms = new long double[0];
             break;
             
@@ -336,36 +336,36 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _leftSupport[4] = Support<T>(0.,1.);
             
             _leftSingularSupport = new flens::DenseVector<flens::Array<T> >[5];
-            _leftSingularSupport[0].engine().resize(9,0);
+            _leftSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _leftSingularSupport[0] = 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
-            _leftSingularSupport[1].engine().resize(5,0);
+            _leftSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _leftSingularSupport[1] = 0., 0.25, 0.5, 0.75, 1.;
-            _leftSingularSupport[2].engine().resize(5,0);
+            _leftSingularSupport[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _leftSingularSupport[2] = 0., 0.25, 0.5, 0.75, 1.;
-            _leftSingularSupport[3].engine().resize(9,0);
+            _leftSingularSupport[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _leftSingularSupport[3] = 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
-            _leftSingularSupport[4].engine().resize(9,0);
+            _leftSingularSupport[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _leftSingularSupport[4] = 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
             
             _leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[5];
-            _leftRefCoeffs[0].engine().resize(7,0);
+            _leftRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)7,0);
             _leftRefCoeffs[0] = 5.55117912386048439353L,  -1.96151750303782862164L,  0.00138479559372387609709L,
                                 0.603401146175499957922L, -0.356497187379049387413L, 0.0712917932693664232410L,
                                -0.00245833769894366976693L;
 
-            _leftRefCoeffs[1].engine().resize(6,0);
+            _leftRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[1] =                               std::sqrt(15.L/23.L)/2.L, 3.L*std::sqrt(15.L/23.L)/2.L,
                                 2.L*std::sqrt(15.L/23.L), 2.L*std::sqrt(15.L/23.L),     3.L*std::sqrt(15.L/23.L)/2.L,
                                 std::sqrt(15.L/23.L)/2.L;
-            _leftRefCoeffs[2].engine().resize(6,0);
+            _leftRefCoeffs[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[2] =                               std::sqrt(3.L/2.L)/2.L, 3.L*std::sqrt(3.L/2.L)/2.L,
                                 std::sqrt(3.L/2.L),         -std::sqrt(3.L/2.L),    -3.L*std::sqrt(3.L/2.L)/2.L,
                                -std::sqrt(3.L/2.L)/2.L;
-            _leftRefCoeffs[3].engine().resize(6,0);
+            _leftRefCoeffs[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[3] =                           -1.32957575266269475104L, 1.00928819006999249208L,
                                 1.11372017505655343851L,  -3.57158506454512406189L, 2.64084214163580360767L,
                                 0.614683388767643909165L;
-            _leftRefCoeffs[4].engine().resize(6,0);
+            _leftRefCoeffs[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[4] =                            3.35387951165860404196L, -0.141229992246845435862L,
                                -1.29954452099952139115L,  -0.599442481500795701774L, 1.08068229875787216245L,
                                 0.312647416473029867432L;
@@ -376,7 +376,7 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _leftRefCoeffs[3] *= std::pow(2.L,-1.5L);;
             _leftRefCoeffs[4] *= std::pow(2.L,-1.5L);;
 
-            _leftOffsets = new long[5];
+            _leftOffsets = new FLENS_DEFAULT_INDEXTYPE[5];
             _leftOffsets[0] =  0;
             _leftOffsets[1] =  1;
             _leftOffsets[2] =  1;
@@ -409,43 +409,43 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _innerSupport[5] = Support<T>(-1.,1.);
             
             _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[6];
-            _innerSingularSupport[0].engine().resize(5,0);
+            _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerSingularSupport[0] = 0., 0.25, 0.5, 0.75, 1.;
-            _innerSingularSupport[1].engine().resize(5,0);
+            _innerSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerSingularSupport[1] = 0., 0.25, 0.5, 0.75, 1.;
-            _innerSingularSupport[2].engine().resize(9,0);
+            _innerSingularSupport[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _innerSingularSupport[2] = 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
-            _innerSingularSupport[3].engine().resize(9,0);
+            _innerSingularSupport[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _innerSingularSupport[3] = 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
-            _innerSingularSupport[4].engine().resize(17,0);
+            _innerSingularSupport[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)17,0);
             _innerSingularSupport[4] = -1., -0.875, -0.75, -0.625, -0.5, -0.375, -0.25, -0.125, 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
-            _innerSingularSupport[5].engine().resize(17,0);
+            _innerSingularSupport[5].engine().resize((FLENS_DEFAULT_INDEXTYPE)17,0);
             _innerSingularSupport[5] = -1., -0.875, -0.75, -0.625, -0.5, -0.375, -0.25, -0.125, 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
             
             _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[6];
-            _innerRefCoeffs[0].engine().resize(6,0);
+            _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[0] =                               std::sqrt(15.L/23.L)/2.L, 3.L*std::sqrt(15.L/23.L)/2.L,
                                  2.L*std::sqrt(15.L/23.L), 2.L*std::sqrt(15.L/23.L),     3.L*std::sqrt(15.L/23.L)/2.L,
                                      std::sqrt(15.L/23.L)/2.L;
-            _innerRefCoeffs[1].engine().resize(6,0);
+            _innerRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[1] =                               std::sqrt(3.L/2.L)/2.L, 3.L*std::sqrt(3.L/2.L)/2.L,
                                   std::sqrt(3.L/2.L),         -std::sqrt(3.L/2.L),    -3.L*std::sqrt(3.L/2.L)/2.L,
                                   -std::sqrt(3.L/2.L)/2.L;
-            _innerRefCoeffs[2].engine().resize(6,0);
+            _innerRefCoeffs[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[2] =                           -1.32957575266269475104L, 1.00928819006999249208L,
                                  1.11372017505655343851L,  -3.57158506454512406189L, 2.64084214163580360767L,
                                  0.614683388767643909165L;
-            _innerRefCoeffs[3].engine().resize(6,0);
+            _innerRefCoeffs[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[3] =                            3.35387951165860404196L, -0.141229992246845435862L,
                                 -1.29954452099952139115L,  -0.599442481500795701774L, 1.08068229875787216245L,
                                  0.312647416473029867432L;
-            _innerRefCoeffs[4].engine().resize(14,0);
+            _innerRefCoeffs[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)14,0);
             _innerRefCoeffs[4] =                           -0.000661624087242333507038L, 0.0191870985300276717041L,
                                 -0.103410901756548045803L,  0.378884765460252640419L,   -1.07547200857749368479L,
                                  1.10969884455047509484L,   2.08619476135110666967L,     2.08619476135110666967L,
                                 -0.795461007681955947706L,  0.000218300557375081050850L, 0.247205601265849432686L,
                                 -0.146044023363594721918L,  0.0292055710131498807034L,  -0.00100708865562585795529L;
-            _innerRefCoeffs[5].engine().resize(14,0);
+            _innerRefCoeffs[5].engine().resize((FLENS_DEFAULT_INDEXTYPE)14,0);
             _innerRefCoeffs[5] =                           -0.00113465969390614975730L,  0.0329051311232783429617L,
                                 -0.176288182431553100420L,  0.619104902646686873282L,   -1.70854321322203183450L,
                                  2.15119201578740835235L,   1.45657142326475405947L,    -3.40474081654023230539L,
@@ -459,7 +459,7 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _innerRefCoeffs[4] *= std::pow(2.L,-1.5L);
             _innerRefCoeffs[5] *= std::pow(2.L,-1.5L);
 
-            _innerOffsets = new long[6];
+            _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[6];
             _innerOffsets[0] =  1;
             _innerOffsets[1] =  1;
             _innerOffsets[2] =  1;
@@ -484,18 +484,18 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _rightSupport[0] = Support<T>(0.,1.);
             
             _rightSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _rightSingularSupport[0].engine().resize(9,0);
+            _rightSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _rightSingularSupport[0] = 0., 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.;
 
             _rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _rightRefCoeffs[0].engine().resize(7,0);
+            _rightRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)7,0);
             _rightRefCoeffs[0] =                              0.00142497525191845132977L, -0.0413242823056350885634L,
                                   0.221677722902601882504L,  -0.785751966578387326726L,    2.18220331826362106174L,
                                  -2.63492100553502467145L,   -2.39932206435886330782L;
 
             _rightRefCoeffs[0] *= std::pow(2.L,-1.5L);
 
-            _rightOffsets = new long[1];
+            _rightOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _rightOffsets[0] =  1;
 
             _rightH1SemiNorms = new long double[1];
@@ -523,35 +523,35 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _leftSupport[4] = Support<T>(0.,1.);
             
             _leftSingularSupport = new flens::DenseVector<flens::Array<T> >[5];
-            _leftSingularSupport[0].engine().resize(5,0);
+            _leftSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _leftSingularSupport[0] = 0., 0.25, 0.5, 0.75, 1.;
-            _leftSingularSupport[1].engine().resize(3,0);
+            _leftSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftSingularSupport[1] = 0., 0.5, 1.;
-            _leftSingularSupport[2].engine().resize(3,0);
+            _leftSingularSupport[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _leftSingularSupport[2] = 0., 0.5, 1.;
-            _leftSingularSupport[3].engine().resize(5,0);
+            _leftSingularSupport[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _leftSingularSupport[3] = 0., 0.25, 0.5, 0.75, 1.;
-            _leftSingularSupport[4].engine().resize(5,0);
+            _leftSingularSupport[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _leftSingularSupport[4] = 0., 0.25, 0.5, 0.75, 1.;
             
             _leftRefCoeffs = new flens::DenseVector<flens::Array<long double> >[5];
-            _leftRefCoeffs[0].engine().resize(7,0);
+            _leftRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)7,0);
             _leftRefCoeffs[0] =  7.53726229992987105824L,  -1.60433108517705699801L, -0.921289031788500302018L,
                                  1.68322742933961880394L,  -1.08863576448802049026L,  0.310369430432088613678L,
                                 -0.0839025219232105910212L;
-            _leftRefCoeffs[1].engine().resize(6,0);
+            _leftRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[1] =                                std::sqrt(35.L/13.L)/4.L, 3.L*std::sqrt(35.L/13.L)/4.L,
                                    std::sqrt(35.L/13.L),       std::sqrt(35.L/13.L),     3.L*std::sqrt(35.L/13.L)/4.L,
                                    std::sqrt(35.L/13.L)/4.L;
-            _leftRefCoeffs[2].engine().resize(6,0);
+            _leftRefCoeffs[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[2] =                                std::sqrt(35.L/3.L)/4.L,   std::sqrt(35.L/3.L)/2.L,
                                    std::sqrt(35.L/3.L)/2.L,    -std::sqrt(35.L/3.L)/2.L,  -std::sqrt(35.L/3.L)/2.L,
                                   -std::sqrt(35.L/3.L)/4.L;
-            _leftRefCoeffs[3].engine().resize(6,0);
+            _leftRefCoeffs[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[3] =                            -1.20968608645812591492L,   0.723769207408211462783L,
                                  2.78393856347267693448L,  -5.12943299583678560134L,   3.02163500540779053256L,
                                  0.583314706422121720912L;
-            _leftRefCoeffs[4].engine().resize(6,0);
+            _leftRefCoeffs[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _leftRefCoeffs[4] =                             3.23422528793847648562L,   0.295496503819005929826L,
                                  -2.64548042111713192471L,  0.336105140833428426303L,  0.872145478151140075300L,
                                   0.546845047769619692603L;
@@ -562,7 +562,7 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _leftRefCoeffs[3] *= 0.5L;
             _leftRefCoeffs[4] *= 0.5L;
 
-            _leftOffsets = new long[5];
+            _leftOffsets = new FLENS_DEFAULT_INDEXTYPE[5];
             _leftOffsets[0] =  0;
             _leftOffsets[1] =  1;
             _leftOffsets[2] =  1;
@@ -596,43 +596,43 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _innerSupport[5] = Support<T>(-1.,1.);
             
             _innerSingularSupport = new flens::DenseVector<flens::Array<T> >[6];
-            _innerSingularSupport[0].engine().resize(3,0);
+            _innerSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerSingularSupport[0] = 0., 0.5, 1.;
-            _innerSingularSupport[1].engine().resize(3,0);
+            _innerSingularSupport[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)3,0);
             _innerSingularSupport[1] = 0., 0.5, 1.;
-            _innerSingularSupport[2].engine().resize(5,0);
+            _innerSingularSupport[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerSingularSupport[2] = 0., 0.25, 0.5, 0.75, 1.;
-            _innerSingularSupport[3].engine().resize(5,0);
+            _innerSingularSupport[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _innerSingularSupport[3] = 0., 0.25, 0.5, 0.75, 1.;
-            _innerSingularSupport[4].engine().resize(9,0);
+            _innerSingularSupport[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _innerSingularSupport[4] = -1., -0.75, -0.5, -0.25, 0., 0.25, 0.5, 0.75, 1.;
-            _innerSingularSupport[5].engine().resize(9,0);
+            _innerSingularSupport[5].engine().resize((FLENS_DEFAULT_INDEXTYPE)9,0);
             _innerSingularSupport[5] = -1., -0.75, -0.5, -0.25, 0., 0.25, 0.5, 0.75, 1.;
             
             _innerRefCoeffs = new flens::DenseVector<flens::Array<long double> >[6];
-            _innerRefCoeffs[0].engine().resize(6,0);
+            _innerRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[0] =                               std::sqrt(35.L/13.L)/4.L, 3.L*std::sqrt(35.L/13.L)/4.L,
                                    std::sqrt(35.L/13.L),       std::sqrt(35.L/13.L),     3.L*std::sqrt(35.L/13.L)/4.L,
                                    std::sqrt(35.L/13.L)/4.L;
-            _innerRefCoeffs[1].engine().resize(6,0);
+            _innerRefCoeffs[1].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[1] =                                std::sqrt(35.L/3.L)/4.L,   std::sqrt(35.L/3.L)/2.L,
                                    std::sqrt(35.L/3.L)/2.L,    -std::sqrt(35.L/3.L)/2.L,  -std::sqrt(35.L/3.L)/2.L,
                                   -std::sqrt(35.L/3.L)/4.L;
-            _innerRefCoeffs[2].engine().resize(6,0);
+            _innerRefCoeffs[2].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[2] =                           -1.20968608645812591492L,   0.723769207408211462783L,
                                  2.78393856347267693448L,  -5.12943299583678560134L,   3.02163500540779053256L,
                                  0.583314706422121720912L;
-            _innerRefCoeffs[3].engine().resize(6,0);
+            _innerRefCoeffs[3].engine().resize((FLENS_DEFAULT_INDEXTYPE)6,0);
             _innerRefCoeffs[3] =                            3.23422528793847648562L,   0.295496503819005929826L,
                                  -2.64548042111713192471L,  0.336105140833428426303L,  0.872145478151140075300L,
                                   0.546845047769619692603L;
-            _innerRefCoeffs[4].engine().resize(14,0);
+            _innerRefCoeffs[4].engine().resize((FLENS_DEFAULT_INDEXTYPE)14,0);
             _innerRefCoeffs[4] =                            -0.00757430944378488466295L,  0.0304795243208619817595L,
                                  -0.172103404134940755815L,  0.560461227654867482281L,   -1.42578946715790175367L,
                                   0.970460974994275945818L,  2.18881605627051402000L,     2.18881605627051402000L,
                                  -0.619734802216407440776L, -0.418091821163284038735L,    0.735614181183121958188L,
                                  -0.475237518862456267198L,  0.135438721938371823978L,   -0.0366114708090683515524L;
-            _innerRefCoeffs[5].engine().resize(14,0);
+            _innerRefCoeffs[5].engine().resize((FLENS_DEFAULT_INDEXTYPE)14,0);
             _innerRefCoeffs[5] =                            -0.0183274146720283930429L,   0.0714158787346878889722L,
                                  -0.346389724181854150965L,  0.968551554773324101920L,   -2.38163361520215938629L,
                                   1.98214605626068896928L,   3.24419184855680683262L,    -4.62339059465912210039L,
@@ -646,7 +646,7 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _innerRefCoeffs[4] *= 0.5L;
             _innerRefCoeffs[5] *= 0.5L;
 
-            _innerOffsets = new long[6];
+            _innerOffsets = new FLENS_DEFAULT_INDEXTYPE[6];
             _innerOffsets[0] =  1;
             _innerOffsets[1] =  1;
             _innerOffsets[2] =  1;
@@ -671,18 +671,18 @@ MRA<T,Orthogonal,Interval,Multi>::enforceBoundaryCondition()
             _rightSupport[0] = Support<T>(0.,1.);
             
             _rightSingularSupport = new flens::DenseVector<flens::Array<T> >[1];
-            _rightSingularSupport[0].engine().resize(5,0);
+            _rightSingularSupport[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)5,0);
             _rightSingularSupport[0] = 0., 0.25, 0.5, 0.75, 1.;
 
             _rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-            _rightRefCoeffs[0].engine().resize(7,0);
+            _rightRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)7,0);
             _rightRefCoeffs[0] =                              0.0227793146076243275116L,  -0.0890977886403828079147L,
                                   0.440560827664300141301L,  -1.25932003737469557193L,     3.11312728470113776594L,
                                  -2.51604382597377156721L,   -4.32606783787621990630L;
 
             _rightRefCoeffs[0] *= 0.5L;
 
-            _rightOffsets = new long[1];
+            _rightOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
             _rightOffsets[0] =  1;
 
             _rightH1SemiNorms = new long double[1];

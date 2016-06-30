@@ -37,17 +37,17 @@ struct Integral2D
     const Function2D<T> &F;
     const BasisX &basisx;
     const BasisY &basisy;
-    mutable int jx, jy;
+    mutable FLENS_DEFAULT_INDEXTYPE jx, jy;
     mutable unsigned short derivx, derivy;
-    mutable long kx, ky;
+    mutable FLENS_DEFAULT_INDEXTYPE kx, ky;
     mutable XType ex, ey;
     Quadrature2D<Quad, Integral2D<Quad,BasisX,BasisY> > quadrature;
 
     Integral2D(const Function2D<T> &_F, const BasisX &basisx, const BasisY &basisy);
 
     T
-    operator()(int _jx, long _kx, XType _ex, unsigned short _derivx,
-               int _jy, long _ky, XType _ey, unsigned short _derivy) const;
+    operator()(FLENS_DEFAULT_INDEXTYPE _jx, FLENS_DEFAULT_INDEXTYPE _kx, XType _ex, unsigned short _derivx,
+               FLENS_DEFAULT_INDEXTYPE _jy, FLENS_DEFAULT_INDEXTYPE _ky, XType _ey, unsigned short _derivy) const;
 
     T
     integrand(T x, T y) const;

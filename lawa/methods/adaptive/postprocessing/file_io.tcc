@@ -2,7 +2,7 @@ namespace lawa {
 
 template<typename T, typename Index>
 void
-writeCoefficientsToFile(Coefficients<Lexicographical,T,Index> &u, int i, const char* filename)
+writeCoefficientsToFile(Coefficients<Lexicographical,T,Index> &u, FLENS_DEFAULT_INDEXTYPE i, const char* filename)
 {
     typedef typename Coefficients<Lexicographical,T,Index>::const_iterator    const_coeff_it;
 
@@ -28,7 +28,7 @@ readCoefficientsFromFile(Coefficients<Lexicographical,T,Index2D> &u, const char*
         std::cout << "File is open, ready to read..." << std::endl;
         std::string line;
         //Coefficients<Lexicographical,T,Index1D> tmp;
-        int count = 0;
+        FLENS_DEFAULT_INDEXTYPE count = 0;
         while(std::getline( infile, line, '\n' )) {
             //cout << line << endl;
             std::string field1, field2, field3, field4, field5, field6, field7;
@@ -44,11 +44,11 @@ readCoefficientsFromFile(Coefficients<Lexicographical,T,Index2D> &u, const char*
             //          << " " << field5 << " " << field6 << " " << field7 << std::endl;
             Index1D index1, index2;
             double val;
-            int j1 = atoi(field2.c_str());
-            int k1 = atoi(field3.c_str());
+            FLENS_DEFAULT_INDEXTYPE j1 = atoi(field2.c_str());
+            FLENS_DEFAULT_INDEXTYPE k1 = atoi(field3.c_str());
             index1.j = j1; index1.k = k1;
-            int j2 = atoi(field5.c_str());
-            int k2 = atoi(field6.c_str());
+            FLENS_DEFAULT_INDEXTYPE j2 = atoi(field5.c_str());
+            FLENS_DEFAULT_INDEXTYPE k2 = atoi(field6.c_str());
             index2.j = j2; index2.k = k2;
             val = atof(field7.c_str());
             //std::cerr << field1 << " " << j1 << " " << k1 << " " << field4 << " " << j2 << " " << k2 << " " << val << " " << field7 << endl << endl;
@@ -83,7 +83,7 @@ readCoefficientsFromFile(Coefficients<Lexicographical,T,Index3D> &u, const char*
         std::cout << "File " << filename << " is open, ready to read..." << std::endl;
         std::string line;
         //Coefficients<Lexicographical,T,Index1D> tmp;
-        int count = 0;
+        FLENS_DEFAULT_INDEXTYPE count = 0;
         while(std::getline( infile, line, '\n' )) {
             //cout << line << endl;
             std::string field1,field2,field3,field4,field5,field6,field7,field8,field9,field10;
@@ -103,14 +103,14 @@ readCoefficientsFromFile(Coefficients<Lexicographical,T,Index3D> &u, const char*
             //          << field7 << " " << field8 << " " << field9 << " " << field10 << std::endl;
             Index1D index1, index2, index3;
             double val;
-            int j1 = atoi(field2.c_str());
-            int k1 = atoi(field3.c_str());
+            FLENS_DEFAULT_INDEXTYPE j1 = atoi(field2.c_str());
+            FLENS_DEFAULT_INDEXTYPE k1 = atoi(field3.c_str());
             index1.j = j1; index1.k = k1;
-            int j2 = atoi(field5.c_str());
-            int k2 = atoi(field6.c_str());
+            FLENS_DEFAULT_INDEXTYPE j2 = atoi(field5.c_str());
+            FLENS_DEFAULT_INDEXTYPE k2 = atoi(field6.c_str());
             index2.j = j2; index2.k = k2;
-            int j3 = atoi(field8.c_str());
-            int k3 = atoi(field9.c_str());
+            FLENS_DEFAULT_INDEXTYPE j3 = atoi(field8.c_str());
+            FLENS_DEFAULT_INDEXTYPE k3 = atoi(field9.c_str());
             index3.j = j3; index3.k = k3;
             val = atof(field10.c_str());
             //std::cerr << field1 << " " << j1 << " " << k1 << " " << field4 << " " << j2 << " " << k2 << " " << val << " " << field7 << endl << endl;

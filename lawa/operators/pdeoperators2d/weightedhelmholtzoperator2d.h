@@ -45,10 +45,10 @@ class WeightedHelmholtzOperator2D : public UniformOperator2D<T> {
         WeightedHelmholtzOperator2D(const Basis& _basis, const T _c, Function<T> weightFct_x, Function<T> weightFct_y);
         
         T
-    	operator()(XType row_xtype_x, int j1_x, long k1_x,
-                   XType row_xtype_y, int j1_y, long k1_y,
-                   XType col_xtype_x, int j2_x, long k2_x,
-                   XType col_xtype_y, int j2_y, long k2_y) const;
+    	operator()(XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                   XType row_xtype_y, FLENS_DEFAULT_INDEXTYPE j1_y, FLENS_DEFAULT_INDEXTYPE k1_y,
+                   XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x,
+                   XType col_xtype_y, FLENS_DEFAULT_INDEXTYPE j2_y, FLENS_DEFAULT_INDEXTYPE k2_y) const;
     	
         T
         operator()(const Index2D &row_index, const Index2D &col_index) const;

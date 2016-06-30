@@ -34,7 +34,7 @@ AlignedCoefficients<T,Index,PrincipalIndex,AlignedIndex,CoordX>
             (*p_prinindex).second.operator[](aligIndex) = (*it).second;
         }
         else {
-            size_t tmp = std::max((size_t)pow2i<long>(J-prinIndex.levelSum()+2),n2);
+            size_t tmp = std::max((size_t)pow2i<FLENS_DEFAULT_INDEXTYPE>(J-prinIndex.levelSum()+2),n2);
             Coefficients<Lexicographical,T,AlignedIndex> coeff_x2;
             //coeff_x2[aligIndex] = (*it).second;
             map[prinIndex] = coeff_x2;
@@ -64,7 +64,7 @@ AlignedCoefficients<T,Index,PrincipalIndex,AlignedIndex,CoordX>
         }
         else {
             prinIndices.insert(prinIndex);
-            size_t tmp = std::max((size_t)pow2i<long>(J-prinIndex.levelSum()+2),n2);
+            size_t tmp = std::max((size_t)pow2i<FLENS_DEFAULT_INDEXTYPE>(J-prinIndex.levelSum()+2),n2);
             Coefficients<Lexicographical,T,AlignedIndex> coeff_x2;
             //coeff_x2[aligIndex] = (*it).second;
             map[prinIndex] = coeff_x2;
@@ -97,7 +97,7 @@ AlignedCoefficients<T,Index,PrincipalIndex,AlignedIndex,CoordX>
             (*p_prinindex).second.operator[](aligIndex) = (*it).second;
         }
         else {
-            size_t tmp = std::max((size_t)pow2i<long>(J-prinIndex.levelSum()+2),n2);
+            size_t tmp = std::max((size_t)pow2i<FLENS_DEFAULT_INDEXTYPE>(J-prinIndex.levelSum()+2),n2);
             Coefficients<Lexicographical,T,AlignedIndex> coeff_x2;
             //coeff_x2[aligIndex] = (*it).second;
             map[prinIndex] = coeff_x2;
@@ -121,11 +121,11 @@ void
 AlignedCoefficients2<T,Index,PrincipalIndex,AlignedIndex>
 ::align_x1(const Coefficients<Lexicographical,T,Index> &coeff)
 {
-    int n=0;
+    FLENS_DEFAULT_INDEXTYPE n=0;
     for (const_coeff_index_it it=coeff.begin(); it!=coeff.end(); ++it) {
         const_coeff_prinindex_it prin_it = principalIndices.find((*it).first.index1);
         if (prin_it!=principalIndices.end()) {
-            int pos = (*prin_it).second;
+            FLENS_DEFAULT_INDEXTYPE pos = (*prin_it).second;
             const AlignedIndex* tmp = &((*it).first.index2);
             principalIndexToAlignedIndices[pos].push_back(tmp);
         }

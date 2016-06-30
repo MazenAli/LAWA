@@ -22,7 +22,7 @@
 namespace lawa {
 
 template <typename T>
-Wavelet<T,Dual,R,CDF>::Wavelet(int _d, int _d_)
+Wavelet<T,Dual,R,CDF>::Wavelet(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_)
     : d(_d), d_(_d_), mu(d&1), l1_((2-(d+d_))/2), l2_((d+d_)/2),
       b_(mask(d,d_)), phi(d), phi_(d,d_)
 {
@@ -40,13 +40,13 @@ Wavelet<T,Dual,R,CDF>::Wavelet(const BSpline<T,Primal,R,CDF> &_phi,
 
 template <typename T>
 T
-Wavelet<T,Dual,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Dual,R,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(deriv==0);
     
     T ret = T(0);
     x = pow2i<T>(j)*x-k;
-    for (int i=b_.firstIndex(); i<=b_.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=b_.firstIndex(); i<=b_.lastIndex(); ++i) {
         ret += b_(i)*phi_(2*x-i, 0, 0);
     }
     return pow2ih<T>(j) * ret;
@@ -54,7 +54,7 @@ Wavelet<T,Dual,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) cons
 
 template <typename T>
 Support<T>
-Wavelet<T,Dual,R,CDF>::support(int j, long k) const
+Wavelet<T,Dual,R,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return pow2i<T>(-j) * Support<T>(l1_+k, l2_+k);
 }
@@ -68,16 +68,16 @@ Wavelet<T,Dual,R,CDF>::mask() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Dual,R,CDF>::mask(int d, int d_)
+Wavelet<T,Dual,R,CDF>::mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     assert(d<=d_);
     assert(((d+d_)&1)==0);
 
-    int mu = d & 1;
+    FLENS_DEFAULT_INDEXTYPE mu = d & 1;
     BSpline<T,Primal,R,CDF>  phi(d);
     flens::DenseVector<flens::Array<T> > b_(flens::_(1-(d+mu)/2, 1+(d-mu)/2));
-    for (int k=b_.firstIndex(); k<=b_.lastIndex(); ++k) {
-        int sign = (k&1) ? -1 : 1;
+    for (FLENS_DEFAULT_INDEXTYPE k=b_.firstIndex(); k<=b_.lastIndex(); ++k) {
+        FLENS_DEFAULT_INDEXTYPE sign = (k&1) ? -1 : 1;
         b_(k) = sign * phi.a(1-k);
     }
     return b_;

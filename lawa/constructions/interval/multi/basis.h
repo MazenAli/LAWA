@@ -44,16 +44,16 @@ class Basis<_T,Orthogonal,Interval,Multi>
         typedef BSpline<T,Orthogonal,Interval,Multi>         BSplineType;
         typedef Wavelet<T,Orthogonal,Interval,Multi>         WaveletType;
 
-        Basis(const int d, const int j=-1);
+        Basis(const FLENS_DEFAULT_INDEXTYPE d, const FLENS_DEFAULT_INDEXTYPE j=-1);
     
         virtual
         ~Basis();
     
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
     
         void
-        setLevel(const int j) const;
+        setLevel(const FLENS_DEFAULT_INDEXTYPE j) const;
     
         template <BoundaryCondition BC>
             void
@@ -63,38 +63,38 @@ class Basis<_T,Orthogonal,Interval,Multi>
         generator(XType xtype) const;
 
         //--- cardinalities of whole, left, inner, right index set.
-        int
-        cardJ(const int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJ(const FLENS_DEFAULT_INDEXTYPE j) const;
         
-        int
-        cardJL(const int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        int
-        cardJI(const int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJI(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJR(const int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
     
         //--- ranges of whole, left, inner, right index set.
-        const flens::Range<int>
-        rangeJ(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJ(const FLENS_DEFAULT_INDEXTYPE j) const;
     
-        const flens::Range<int>
-        rangeJL(const int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJL(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        const flens::Range<int>
-        rangeJI(const int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJI(const FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJR(const int j=-1) const;
-
-        void
-        getLowerEnclosingScaling(int j_wavelet, long k_wavelet,
-                                 int &j_scaling, long &k_scaling) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJR(const FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
         void
-        getLowerEnclosingWavelet(int j_wavelet1, long k_wavelet1,
-                                 int &j_wavelet2, long &k_wavelet2) const;
+        getLowerEnclosingScaling(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
+                                 FLENS_DEFAULT_INDEXTYPE &j_scaling, FLENS_DEFAULT_INDEXTYPE &k_scaling) const;
+
+        void
+        getLowerEnclosingWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
+                                 FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet2) const;
 
         /// Returns the range of indicated functions from SecondBasis whose supports
         /// intersect the support of a given (multi-)scaling with level j_scaling and translation index
@@ -103,17 +103,17 @@ class Basis<_T,Orthogonal,Interval,Multi>
         /// on the same scale.
         template <typename SecondBasis>
             void
-            getScalingNeighborsForScaling(int j_scaling1, long k_scaling1,
+            getScalingNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling1, FLENS_DEFAULT_INDEXTYPE k_scaling1,
                                           const SecondBasis &secondbasis,
-                                          int &j_scaling2, long &k_scaling_first,
-                                          long &k_scaling_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_scaling2, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         template <typename SecondBasis>
             void
-            getWaveletNeighborsForScaling(int j_scaling, long k_scaling,
+            getWaveletNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling, FLENS_DEFAULT_INDEXTYPE k_scaling,
                                           const SecondBasis &secondbasis,
-                                          int &j_wavelet, long &k_wavelet_first,
-                                          long &k_wavelet_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
 
         /// Returns the range of indicated functions from SecondBasis and SecondRefinementBasis
@@ -123,61 +123,61 @@ class Basis<_T,Orthogonal,Interval,Multi>
         /// the corresponding refinements should live on the same scale.
         template <typename SecondRefinementBasis>
             void
-            getBSplineNeighborsForWavelet(int j_wavelet, long k_wavelet,
+            getBSplineNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
                                           const SecondRefinementBasis &secondrefinementbasis,
-                                          int &j_bspline, long &k_bspline_first,
-                                          long &k_bspline_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_bspline, FLENS_DEFAULT_INDEXTYPE &k_bspline_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_bspline_last) const;
 
         template <typename SecondBasis>
             void
-            getScalingNeighborsForWavelet(int j_wavelet, long k_wavelet,
+            getScalingNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
                                           const SecondBasis &secondbasis,
-                                          int &j_scaling, long &k_scaling_first,
-                                          long &k_scaling_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_scaling, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         template <typename SecondBasis>
             void
-            getWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+            getWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                           const SecondBasis &secondbasis,
-                                          int &j_wavelet2, long &k_wavelet_first,
-                                          long &k_wavelet_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         template <typename SecondBasis>
             void
-            getLowerWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+            getLowerWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                                const SecondBasis &secondbasis,
-                                               int &j_wavelet2, long &k_wavelet_first,
-                                               long &k_wavelet_last) const;
+                                               FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                               FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         template <typename SecondBasis>
             void
-            getHigherWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+            getHigherWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                                const SecondBasis &secondbasis,
-                                               int &j_wavelet2, long &k_wavelet_first,
-                                               long &k_wavelet_last) const;
+                                               FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                               FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         MRA<T,Orthogonal,Interval,Multi> mra;
 
-        const int d;
-        const int d_;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE d_;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
 
-        unsigned int _numLeftParts,
+        unsigned FLENS_DEFAULT_INDEXTYPE _numLeftParts,
                      _numInnerParts,
                      _numRightParts;
 
-        int _addRefinementLevel;    //B-splines for refinement are needed on higher levels
-        int _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
+        FLENS_DEFAULT_INDEXTYPE _addRefinementLevel;    //B-splines for refinement are needed on higher levels
+        FLENS_DEFAULT_INDEXTYPE _shiftFactor;           //Needed since we have multiple B-spline generators for refinement.
 
 
 
 
    // private:      // should be private one fine day
-        flens::DenseVector<flens::Array<int> > _bc;  // the boundary conditions
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > _bc;  // the boundary conditions
                                        // bc(0) = 1 -> Dirichlet BC left.
                                        // bc(1) = 1 -> Dirichlet BC right.
         
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
 
         Wavelet<T,Orthogonal,Interval,Multi> psi;
 
@@ -204,7 +204,7 @@ class Basis<_T,Orthogonal,Interval,Multi>
 
         long double *_leftH1SemiNorms, *_innerH1SemiNorms, *_rightH1SemiNorms;
 
-        long *_leftOffsets,
+        FLENS_DEFAULT_INDEXTYPE *_leftOffsets,
              *_innerOffsets,
              *_rightOffsets;
 

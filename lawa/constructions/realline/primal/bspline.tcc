@@ -28,10 +28,10 @@ namespace lawa {
 
 template <typename T>
     flens::DenseVector<flens::Array<T> >
-    _bspline_mask(int d);
+    _bspline_mask(FLENS_DEFAULT_INDEXTYPE d);
 
 template <typename T>
-BSpline<T,Primal,R,CDF>::BSpline(int _d)
+BSpline<T,Primal,R,CDF>::BSpline(FLENS_DEFAULT_INDEXTYPE _d)
     : d(_d), mu(d&1), l1(.5*(-d+mu)), l2(.5*(d+mu)),
       a(_bspline_mask<T>(d))
 {
@@ -52,21 +52,21 @@ BSpline<T,Primal,R,CDF>::~BSpline()
 
 template <typename T>
 T
-BSpline<T,Primal,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Primal,R,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     if (inner(x,support(j,k))) {
         T ret = T(0);
         x = pow2i<T>(j)*x-k - mu/2.;
         if (deriv==0) {
             x = fabs(x);
-            for (int p=0; p<=ifloor(d/2.-x); ++p) {
-                int sign = (p&1) ? -1 : 1;
+            for (FLENS_DEFAULT_INDEXTYPE p=0; p<=ifloor(d/2.-x); ++p) {
+                FLENS_DEFAULT_INDEXTYPE sign = (p&1) ? -1 : 1;
                 ret +=   sign * binomial(d, p) * pow(T(d/2.-x-p), d-1);
             }
             ret /= factorial(d - 1);
         } else {
-            for (int p=0; p<=ifloor(d/2.-fabs(x)); ++p) {
-                int sign = ( (p&1)==( (x>0)&&(deriv&1) ) ) ? 1 : -1;
+            for (FLENS_DEFAULT_INDEXTYPE p=0; p<=ifloor(d/2.-fabs(x)); ++p) {
+                FLENS_DEFAULT_INDEXTYPE sign = ( (p&1)==( (x>0)&&(deriv&1) ) ) ? 1 : -1;
                 ret += sign * binomial(d, p)
                             * pow(T(d/2.-fabs(x)-p), d-1-deriv);
             }
@@ -80,7 +80,7 @@ BSpline<T,Primal,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) co
 
 template <typename T>
 Support<T>
-BSpline<T,Primal,R,CDF>::support(int j, long k) const
+BSpline<T,Primal,R,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return pow2i<T>(-j) * Support<T>(l1 + k, l2 + k);
 }
@@ -88,14 +88,14 @@ BSpline<T,Primal,R,CDF>::support(int j, long k) const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-BSpline<T,Primal,R,CDF>::singularSupport(int j, long k) const
+BSpline<T,Primal,R,CDF>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return linspace(support(j,k).l1, support(j,k).l2, d+1);
 }
 
 template <typename T>
 T
-BSpline<T,Primal,R,CDF>::tic(int j) const
+BSpline<T,Primal,R,CDF>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-j);
 }
@@ -111,7 +111,7 @@ BSpline<T,Primal,R,CDF>::mask() const
 
 template <typename T>
 BSpline<T,Primal,R,CDF>
-N(int d)
+N(FLENS_DEFAULT_INDEXTYPE d)
 {
     return BSpline<T,Primal,R,CDF>(d);
 }
@@ -265,7 +265,7 @@ N10()
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-_calculate_bspline_mask(int d)
+_calculate_bspline_mask(FLENS_DEFAULT_INDEXTYPE d)
 {
     assert(d>=0);
 
@@ -275,12 +275,12 @@ _calculate_bspline_mask(int d)
         return res;
     }
     T factor = 1 << (d-1);
-    int kappa = d & 1;
+    FLENS_DEFAULT_INDEXTYPE kappa = d & 1;
 
-    int from = -(d+kappa)/2;
-    int to   =  (d+kappa)/2;
-    flens::DenseVector<flens::Array<T> > res(flens::_(from,to));
-    for (int i=from; i<=to; ++i) {
+    FLENS_DEFAULT_INDEXTYPE from = -(d+kappa)/2;
+    FLENS_DEFAULT_INDEXTYPE to   =  (d+kappa)/2;
+    flens::DenseVector<flens::Array<T> > res(flens::_(from, to));
+    for (FLENS_DEFAULT_INDEXTYPE i=from; i<=to; ++i) {
         res(i) = binomial(d,i-from) / factor;
     }
     return res;
@@ -288,7 +288,7 @@ _calculate_bspline_mask(int d)
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-_bspline_mask(int d)
+_bspline_mask(FLENS_DEFAULT_INDEXTYPE d)
 {
     assert(d>=1);
 

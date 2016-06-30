@@ -509,6 +509,9 @@ htawgm(Sepop<Optype>&                   A,
             (void) pcg_it;
         #endif
 
+        /* Recompress */
+        //u.truncate(residual*params.gamma*1e-01);
+
         /* Approximate residual */
         sweep = presidual(A, S, u, F, r, f,
                           Lambda, sweep, total,
@@ -516,7 +519,6 @@ htawgm(Sepop<Optype>&                   A,
 
         residual  = nrm2(r);
         factor    = compUnDistFac(r, S.order());
-        std::cout << "factor = " << factor << std::endl;
         residual *= factor;
 
 
@@ -540,7 +542,7 @@ htawgm(Sepop<Optype>&                   A,
 
         /* Extend u to new Lambda */
         extend(u, Lambda);
-        params.uzero = false;
+        params.uzero = true;
 
         #ifdef VERBOSE
             std::cout << "ht_awgm: Index set sizes\n";

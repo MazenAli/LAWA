@@ -6,7 +6,7 @@ namespace lawa {
   
 
 template <typename T>
-Wavelet<T,Primal,R,SparseMulti>::Wavelet(int _d)
+Wavelet<T,Primal,R,SparseMulti>::Wavelet(FLENS_DEFAULT_INDEXTYPE _d)
     : d(_d), vanishingMoments(_d)
 {
     assert(d>=2);
@@ -97,10 +97,10 @@ Wavelet<T,Primal,R,SparseMulti>::~Wavelet()
 
 template <typename T>
 T
-Wavelet<T,Primal,R,SparseMulti>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Primal,R,SparseMulti>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
-    const int type = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE type = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
 
     return pow2ih<T>(2*j*deriv+j) * _ScalingFactors(type) *
     _evaluator[type](pow2i<T>(j)*x - shift, deriv);
@@ -108,10 +108,10 @@ Wavelet<T,Primal,R,SparseMulti>::operator()(T x, int j, long k, unsigned short d
     
 template <typename T>
 Support<T>
-Wavelet<T,Primal,R,SparseMulti>::support(int j, long k) const
+Wavelet<T,Primal,R,SparseMulti>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int type = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE type = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     
 //    std::cerr << "k = " << k << " : type = " << type << ", shift = " << shift << std::endl;
 
@@ -127,10 +127,10 @@ Wavelet<T,Primal,R,SparseMulti>::max_support() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,R,SparseMulti>::singularSupport(int j, long k) const
+Wavelet<T,Primal,R,SparseMulti>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int typ = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE typ = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     
     flens::DenseVector<flens::Array<T> > result = _singularSupport[typ];
     result += shift;
@@ -140,14 +140,14 @@ Wavelet<T,Primal,R,SparseMulti>::singularSupport(int j, long k) const
 
 template <typename T>
 T
-Wavelet<T,Primal,R,SparseMulti>::tic(int j) const
+Wavelet<T,Primal,R,SparseMulti>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+3));
 }
 
 template <typename T>
-long
-Wavelet<T,Primal,R,SparseMulti>::_shift(long k) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Primal,R,SparseMulti>::_shift(FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (d==4) {
         return k>=0 ? 2*( k/_numSplines ) : 2*( -((-k-1)/_numSplines+1) );
@@ -160,11 +160,11 @@ Wavelet<T,Primal,R,SparseMulti>::_shift(long k) const
 }
 
 template <typename T>
-int
-Wavelet<T,Primal,R,SparseMulti>::_type(long k) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Primal,R,SparseMulti>::_type(FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (d==4) {
-        return k>=0 ? (int) (k%_numSplines) : (int) _numSplines-(int)((-k+_numSplines-1)%_numSplines)-1;
+        return k>=0 ? (FLENS_DEFAULT_INDEXTYPE) (k%_numSplines) : (FLENS_DEFAULT_INDEXTYPE) _numSplines-(FLENS_DEFAULT_INDEXTYPE)((-k+_numSplines-1)%_numSplines)-1;
     }
     else {
         std::cerr << "Wavelet<T,Primal,R,SparseMulti> not implemented for d=" << d << std::endl;

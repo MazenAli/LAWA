@@ -46,19 +46,19 @@ class Quadrature<Gauss,Integral>
         const T
         operator()(T a, T b) const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         order() const;
 
         void
-        setOrder(int order);
+        setOrder(FLENS_DEFAULT_INDEXTYPE order);
 
         const Integral &integral;
     private:
         static void
-        _legendre(int order);
+        _legendre(FLENS_DEFAULT_INDEXTYPE order);
 
-        int _order;
-        static int _precalculatedOrder;
+        FLENS_DEFAULT_INDEXTYPE _order;
+        static FLENS_DEFAULT_INDEXTYPE _precalculatedOrder;
         static flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > _knots;
         static flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > _weights;
 };
@@ -76,15 +76,15 @@ class Quadrature<Trapezoidal,Integral>
         const T
         operator()(T a, T b) const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         n() const;
 
         void
-        setN(int n);
+        setN(FLENS_DEFAULT_INDEXTYPE n);
 
         const Integral &integral;
     private:
-        int _n;
+        FLENS_DEFAULT_INDEXTYPE _n;
 };
 
 //-----------------------------------------------------------------------------

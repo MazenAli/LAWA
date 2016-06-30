@@ -54,58 +54,58 @@ class LocalRefinement
         // multiscaling!!) and a multilevel wavelet coefficient vector (including multiwavelets!!).
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<PrimalBasis>::value,T_>::value, void>::Type
-        reconstruct(const Coefficients<Lexicographical,T_,Index1D> &u, int j_scaling,
+        reconstruct(const Coefficients<Lexicographical,T_,Index1D> &u, FLENS_DEFAULT_INDEXTYPE j_scaling,
                     Coefficients<Lexicographical,T_,Index1D> &u_loc_single) const;
 
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<PrimalBasis>::value,T_>::value, void>::Type
-        reconstruct(const Coefficients<Lexicographical,T_,Index1D> &u, int j_scaling,
+        reconstruct(const Coefficients<Lexicographical,T_,Index1D> &u, FLENS_DEFAULT_INDEXTYPE j_scaling,
                     Coefficients<Lexicographical,T_,Index1D> &u_loc_single) const;
 
         // Computes the common local refinement of a b-spline vector (not multiscaling!!) and a
         // wavelet (including multi-wavelets!!).
         void
-        reconstruct(const CoefficientsByLevel<T> &u_bspline, int j_bspline,
-                    const CoefficientsByLevel<T> &u_wavelet, int j_wavelet,
-                    CoefficientsByLevel<T> &u_loc_single,    int &j_refinement) const;
+        reconstruct(const CoefficientsByLevel<T> &u_bspline, FLENS_DEFAULT_INDEXTYPE j_bspline,
+                    const CoefficientsByLevel<T> &u_wavelet, FLENS_DEFAULT_INDEXTYPE j_wavelet,
+                    CoefficientsByLevel<T> &u_loc_single,    FLENS_DEFAULT_INDEXTYPE &j_refinement) const;
 
         //Computes the local refinement of a multiscaling representation
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<PrimalBasis>::value,T_>::value, void>::Type
-        reconstructOnlyMultiScaling(const CoefficientsByLevel<T_> &u_scaling, int j,
-                                    CoefficientsByLevel<T_> &u_loc_single, int &j_refinement) const;
+        reconstructOnlyMultiScaling(const CoefficientsByLevel<T_> &u_scaling, FLENS_DEFAULT_INDEXTYPE j,
+                                    CoefficientsByLevel<T_> &u_loc_single, FLENS_DEFAULT_INDEXTYPE &j_refinement) const;
 
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<PrimalBasis>::value,T_>::value, void>::Type
-        reconstructOnlyMultiScaling(const CoefficientsByLevel<T_> &u_scaling, int j,
-                                    CoefficientsByLevel<T_> &u_loc_single, int &j_refinement) const;
+        reconstructOnlyMultiScaling(const CoefficientsByLevel<T_> &u_scaling, FLENS_DEFAULT_INDEXTYPE j,
+                                    CoefficientsByLevel<T_> &u_loc_single, FLENS_DEFAULT_INDEXTYPE &j_refinement) const;
 
     private:
         //Computes the local refinement of a B-spline (not multiscaling!!)
         void
-        reconstructBSpline(int j, long k, T coeff, CoefficientsByLevel<T> &u_loc_single,
-                           int &j_refinement) const;
+        reconstructBSpline(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, T coeff, CoefficientsByLevel<T> &u_loc_single,
+                           FLENS_DEFAULT_INDEXTYPE &j_refinement) const;
 
         //Computes the local refinement of a Wavelet (also multiwavelet!!)
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<PrimalBasis>::value,T_>::value, void>::Type
-        reconstructWavelet(int j, long k, T_ coeff, CoefficientsByLevel<T_> &u_loc_single,
-                           int &j_refinement) const;
+        reconstructWavelet(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, T_ coeff, CoefficientsByLevel<T_> &u_loc_single,
+                           FLENS_DEFAULT_INDEXTYPE &j_refinement) const;
 
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<PrimalBasis>::value,T_>::value, void>::Type
-        reconstructWavelet(int j, long k, T_ coeff, CoefficientsByLevel<T_> &u_loc_single,
-                           int &j_refinement) const;
+        reconstructWavelet(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, T_ coeff, CoefficientsByLevel<T_> &u_loc_single,
+                           FLENS_DEFAULT_INDEXTYPE &j_refinement) const;
 
     public:
         void
         decompose_(const CoefficientsByLevel<T>  &u_loc_single,
-                   CoefficientsByLevel<T>  &u_bspline, int j_bspline,
-                   CoefficientsByLevel<T>  &u_wavelet, int j_wavelet) const;
+                   CoefficientsByLevel<T>  &u_bspline, FLENS_DEFAULT_INDEXTYPE j_bspline,
+                   CoefficientsByLevel<T>  &u_wavelet, FLENS_DEFAULT_INDEXTYPE j_wavelet) const;
 
         void
         decompose_OnlyMultiScaling(const CoefficientsByLevel<T>  &u_loc_single,
-                                   CoefficientsByLevel<T>  &u_scaling, int j_scaling) const;
+                                   CoefficientsByLevel<T>  &u_scaling, FLENS_DEFAULT_INDEXTYPE j_scaling) const;
 
     private:
         // Computes $M^{\lambda;j,0}^T C where $\lambda$ corresponds to a (multi)-scaling
@@ -113,28 +113,28 @@ class LocalRefinement
         // to a (local) refinement B-spline vector.
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<PrimalBasis>::value,T_>::value, T_>::Type
-        decompose_Scaling(const CoefficientsByLevel<T_> &u_loc_single, int j, long k) const;
+        decompose_Scaling(const CoefficientsByLevel<T_> &u_loc_single, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<PrimalBasis>::value,T_>::value, T_>::Type
-        decompose_Scaling(const CoefficientsByLevel<T_> &u_loc_single, int j, long k) const;
+        decompose_Scaling(const CoefficientsByLevel<T_> &u_loc_single, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         // Computes $M^{\lambda;j,0}^T C where $\lambda$ corresponds to a (refinement)-bspline
         // index. Here, u_loc_single corresponds to $< \Phi_{j+1},v>$ and $\Phi_{j+1}$ corresponds
         // to a (local) refinement B-spline vector.
         typename PrimalBasis::T
-        decompose_BSpline(const CoefficientsByLevel<T> &u_loc_single, int j, long k) const;
+        decompose_BSpline(const CoefficientsByLevel<T> &u_loc_single, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         // Computes $M^{\lambda;j,1}^T C where $\lambda$ corresponds to a
         // (multi)-wavelet index. Here, u_loc_single corresponds to $< \Phi_{j+1},v>$ and
         // $\Phi_{j+1}$ corresponds to a (local) refinement B-spline vector.
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<PrimalBasis>::value,T_>::value, T_>::Type
-        decompose_Wavelet(const CoefficientsByLevel<T_> &u_loc_single, int j, long k) const;
+        decompose_Wavelet(const CoefficientsByLevel<T_> &u_loc_single, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<PrimalBasis>::value,T_>::value, T_>::Type
-        decompose_Wavelet(const CoefficientsByLevel<T_> &u_loc_single, int j, long k) const;
+        decompose_Wavelet(const CoefficientsByLevel<T_> &u_loc_single, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 };
 
 

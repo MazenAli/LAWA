@@ -38,8 +38,8 @@ namespace flens { namespace blas {
 
 template <typename T>
 void
-crs_gemv(cxxblas::Transpose trans, int m, int n, T alpha,
-         const T *a, const int *ia, const int *ja,
+crs_gemv(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, T alpha,
+         const T *a, const FLENS_DEFAULT_INDEXTYPE *ia, const FLENS_DEFAULT_INDEXTYPE *ja,
          const T *x, T beta, T *y)
 {
     assert((beta==T(0)) || (beta==T(1)));
@@ -54,27 +54,27 @@ crs_gemv(cxxblas::Transpose trans, int m, int n, T alpha,
 
     if (trans==cxxblas::NoTrans) {
         if (init) {
-            for (int i=1; i<=m; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
                 y[i] = T(0);
-                for (int k=ia[i]; k<ia[i+1]; ++k) {
+                for (FLENS_DEFAULT_INDEXTYPE k=ia[i]; k<ia[i+1]; ++k) {
                     y[i] += alpha*a[k]*x[ja[k]];
                 }
             }
         } else {
-            for (int i=1; i<=m; ++i) {
-                for (int k=ia[i]; k<ia[i+1]; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
+                for (FLENS_DEFAULT_INDEXTYPE k=ia[i]; k<ia[i+1]; ++k) {
                     y[i] += alpha*a[k]*x[ja[k]];
                 }
             }
         }
     } else {
         if (init) {
-            for (int i=1; i<=n; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=n; ++i) {
                 y[i] = T(0);
             }
         }
-        for (int i=1; i<=m; ++i) {
-            for (int k=ia[i]; k<ia[i+1]; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE k=ia[i]; k<ia[i+1]; ++k) {
                 y[ja[k]] += alpha*a[k]*x[i];
             }
         }
@@ -83,8 +83,8 @@ crs_gemv(cxxblas::Transpose trans, int m, int n, T alpha,
 
 template <typename T>
 void
-crs_symv(cxxblas::StorageUpLo upLo, int m, T alpha,
-         const T *a, const int *ia, const int *ja,
+crs_symv(cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE m, T alpha,
+         const T *a, const FLENS_DEFAULT_INDEXTYPE *ia, const FLENS_DEFAULT_INDEXTYPE *ja,
          const T *x, T beta, T *y)
 {
     assert((beta==T(0)) || (beta==T(1)));
@@ -97,19 +97,19 @@ crs_symv(cxxblas::StorageUpLo upLo, int m, T alpha,
     y = y-1;
 
     if (beta==T(0)) {
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             y[i] = 0;
         }
     }
 
     T a_k, x_i, y_i;
     if (upLo==cxxblas::Upper) {
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             assert(ja[ia[i]]==i);
             y_i = y[i];
             x_i = x[i];
             y_i += alpha*a[ia[i]]*x_i;
-            for (int k=ia[i]+1; k<ia[i+1]; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE k=ia[i]+1; k<ia[i+1]; ++k) {
                 a_k = a[k];
                 y_i += alpha*a_k*x[ja[k]];
                 y[ja[k]] += alpha*a_k*x_i;
@@ -117,10 +117,10 @@ crs_symv(cxxblas::StorageUpLo upLo, int m, T alpha,
             y[i] = y_i;
         }
     } else {
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             y_i = y[i];
             x_i = x[i];
-            for (int k=ia[i]; k<ia[i+1]-1; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE k=ia[i]; k<ia[i+1]-1; ++k) {
                 a_k = a[k];
                 y_i += alpha*a_k*x[ja[k]];
                 y[ja[k]] += alpha*a_k*x_i;

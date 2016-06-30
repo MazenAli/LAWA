@@ -22,7 +22,7 @@
 
 namespace lawa {
 
-int
+FLENS_DEFAULT_INDEXTYPE
 iceil(double x);
 
 } // namespace lawa

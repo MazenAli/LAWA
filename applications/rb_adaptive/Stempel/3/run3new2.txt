@@ -1,0 +1,188 @@
+Wavelets: d = 2, d_ = 2, dmw = 2, j0 = 2
+
+Parameters Training: 
+
+###### RB Training Parameters ######################
+# Training Type:        weak Greedy         
+# tol:                  0.001               
+# Nmax:                 40                  
+# Min_Param:            [ 0.01    0  ]
+# Max_Param:            [   10    1  ]
+# Nb of train. params:  [   20    9  ]
+# Log Scaling:          [    1    0  ]
+# print_info:                   true                
+# print in folder:              training_data_stempel
+# verbose:                      true                
+# write during training:        true                
+# print_paramset:               true                
+# erase snapshot params:        false               
+# orthonormalize bfs:           false               
+# tighten tolerance:            true                 (at repeated param choice)
+# tighten tolerance Riesz A:    false               
+# tighten tolerance Riesz F:    false               
+# tighten tolerance red.:       0.1                 
+# update snapshots:             true                
+# update Riesz Repr F:          false               
+# update Riesz Repr A:          false       
+# test estimator equivalence:   false                (no adjustment)
+#  riesz_constant_X:            5.6                 
+#  riesz_constant_Y:            2                   
+# write direct representors:    false               
+# min_error_reduction (if conv_rate_degrad.):0.5                 
+# reference sol accuracy (w.r.t snapshot acc):0.1                 
+# read in truth sols? :         0                   
+#       yes: how many?:         0                   
+####################################################
+
+###### RB Parameters #################
+# SolverType:           cg                  
+# Ref_Param:            [    1    1  ]
+# verbose:              true                
+#########################################
+
+Parameters Truth Solver: 
+
+###### AWGM Parameters #################
+# tol:                  1e-06               
+# alpha:                0.95                
+# max_its:              100                 
+# max_basissize:        10000000            
+# print_info:           true                
+# verbose:              true                
+# plot_solution:        false               
+# hashmapsize:          10                  
+# info_filename:        awgm_cg_conv_info.txt
+# plot_filename:        awgm_cg_u_plot      
+# clear solver:         0                   
+#########################################
+
+###### Inner Solver Parameters ##########
+# adaptive_tol:   true            
+# max_its:        300             
+# init_tol:       0.001           
+# res_reduction:  0.1             
+# absolute_tol:   1e-08           
+# verbose:        true            
+#########################################
+
+Parameters Riesz Solver F : 
+
+###### AWGM Parameters #################
+# tol:                  0.0005              
+# alpha:                0.95                
+# max_its:              100                 
+# max_basissize:        400000              
+# print_info:           true                
+# verbose:              true                
+# plot_solution:        false               
+# hashmapsize:          10                  
+# info_filename:        stempel_rieszF_conv_info.txt
+# plot_filename:        awgm_cg_u_plot      
+# clear solver:         0                   
+#########################################
+
+Parameters Riesz Solver A : 
+
+###### AWGM Parameters #################
+# tol:                  0.0005              
+# alpha:                0.95                
+# max_its:              100                 
+# max_basissize:        400000              
+# print_info:           true                
+# verbose:              true                
+# plot_solution:        false               
+# hashmapsize:          10                  
+# info_filename:        stempel_rieszA_conv_info.txt
+# plot_filename:        awgm_cg_u_plot      
+# clear solver:         0                   
+#########################################
+
+Parameters Riesz Solver Res : 
+
+###### AWGM Parameters #################
+# tol:                  0.0005              
+# alpha:                0.95                
+# max_its:              100                 
+# max_basissize:        400000              
+# print_info:           false               
+# verbose:              true                
+# plot_solution:        false               
+# hashmapsize:          10                  
+# info_filename:        awgm_cg_conv_info.txt
+# plot_filename:        awgm_cg_u_plot      
+# clear solver:         0                   
+#########################################
+
+j1max = 15
+j2max = 16
+j1max = 16
+j2max = 17
+Iteration 0 res 0.00562487
+j1max = 17
+j2max = 17
+Iteration 1 res 0.0034527
+j1max = 18
+j2max = 17
+Iteration 2 res 0.0023742
+j1max = 19
+j2max = 17
+Iteration 3 res 0.00170108
+j1max = 20
+j2max = 17
+Iteration 4 res 0.00119429
+j1max = 21
+j2max = 17
+Iteration 5 res 0.000830144
+j1max = 22
+j2max = 17
+Iteration 6 res 0.000601373
+j1max = 23
+j2max = 17
+Iteration 7 res 0.000420144
+j1max = 24
+j2max = 17
+Iteration 8 res 0.000300226
+j1max = 25
+j2max = 17
+Iteration 9 res 0.000212105
+j1max = 26
+j2max = 18
+Iteration 10 res 0.000152899
+j1max = 27
+j2max = 19
+Iteration 11 res 0.000109282
+j1max = 28
+j2max = 20
+Iteration 12 res 7.65879e-05
+j1max = 29
+j2max = 21
+Iteration 13 res 5.50235e-05
+j1max = 30
+j2max = 22
+Iteration 14 res 3.9657e-05
+j1max = 31
+j2max = 23
+Iteration 15 res 2.85952e-05
+j1max = 32
+j2max = 24
+Iteration 16 res 1.96069e-05
+j1max = 33
+j2max = 25
+Iteration 17 res 1.40793e-05
+j1max = 34
+j2max = 26
+Iteration 18 res 1.01214e-05
+j1max = 35
+j2max = 27
+Iteration 19 res 6.92741e-06
+j1max = 36
+j2max = 28
+Iteration 20 res 4.94772e-06
+j1max = 37
+j2max = 29
+Iteration 21 res 3.54121e-06
+j1max = 38
+j2max = 30
+Iteration 22 res 2.53638e-06
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc

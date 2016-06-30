@@ -29,7 +29,7 @@ Wavelet<T,Dual,Interval,Dijkema>::Wavelet(const Basis<T,Dual,Interval,Dijkema> &
 
 template <typename T>
 T
-Wavelet<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Dual,Interval,Dijkema>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(x>=0.);
     assert(x<=1.);
@@ -40,7 +40,7 @@ Wavelet<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short 
     
     const typename flens::DenseVector<flens::Array<T> >::ConstView coeffs = basis_.M1_(j,flens::_,k);
     T ret = 0;
-    for (int r=coeffs.firstIndex(); r<=coeffs.lastIndex(); ++r) {
+    for (FLENS_DEFAULT_INDEXTYPE r=coeffs.firstIndex(); r<=coeffs.lastIndex(); ++r) {
         ret += coeffs(r) * basis_.mra_.phi_(x,j+1,r);
     }
     return ret;
@@ -48,7 +48,7 @@ Wavelet<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short 
 
 template <typename T>
 Support<T>
-Wavelet<T,Dual,Interval,Dijkema>::support(int j, long k) const
+Wavelet<T,Dual,Interval,Dijkema>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     assert(j>=basis_.min_j0);
     assert(k>=basis_.rangeJ_(j).firstIndex());

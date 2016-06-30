@@ -201,3 +201,9 @@ construction_site/*.txt
 construction_site/*.out
 construction_site/output*
 construction_site/profile*
+applications/rb_adaptive/CDR/1/training_data_stage8/
+applications/rb_adaptive/CDR/2/training_data_stage8/
+applications/rb_adaptive/CDR/3/training_data_stage8/
+applications/rb_adaptive/Stempel/1/training_data_stempel/
+applications/rb_adaptive/Stempel/2/training_data_stempel/
+applications/rb_adaptive/Stempel/3/training_data_stempel/

@@ -31,11 +31,11 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Dual,Interval,Dijkema>::MRA(int _d, int _d_, int j)
+MRA<T,Dual,Interval,Dijkema>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), d_(_d_), mu(d&1),
       l1((mu-d)/2), l2((mu+d)/2),
       l1_(l1-d_+1), l2_(l2+d_-1),
-      min_j0(iceil<int>(log2(-2*l1_-1+mu))),
+      min_j0(iceil<FLENS_DEFAULT_INDEXTYPE>(log2(-2*l1_-1+mu))),
       j0((j==-1) ? min_j0 : j),
       phi_(*this),
       phi_R(_d,_d_),
@@ -56,31 +56,31 @@ MRA<T,Dual,Interval,Dijkema>::~MRA()
 //--- cardinalities of whole, left, inner, right index sets. -------------------
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Dijkema>::cardI_(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Dijkema>::cardI_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j) + d - 1 - (_bc(0)+_bc(1));
 }
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Dijkema>::cardI_L(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Dijkema>::cardI_L(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return d + d_ - 2 -_bc(0);
 }
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Dijkema>::cardI_I(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Dijkema>::cardI_I(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j) - 2*(d + d_ - 2);
 }
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Dijkema>::cardI_R(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Dijkema>::cardI_R(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return d + d_ - 2 - _bc(1);
 }
@@ -88,38 +88,38 @@ MRA<T,Dual,Interval,Dijkema>::cardI_R(int /*j*/) const
 //--- ranges of whole, left, inner, right index sets. --------------------------
 
 template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Dijkema>::rangeI_(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Dijkema>::rangeI_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
-    return flens::Range<int>(1 + _bc(0), pow2i<T>(j) + d - 1 - _bc(1));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1 + _bc(0), pow2i<T>(j) + d - 1 - _bc(1));
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Dijkema>::rangeI_L(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Dijkema>::rangeI_L(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<int>(1 + _bc(0), d + d_ - 2);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1 + _bc(0), d + d_ - 2);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Dijkema>::rangeI_I(int j) const
-{
-    assert(j>=min_j0);
-    return flens::Range<int>(d + d_ - 1, pow2i<T>(j) - d_ + 1);
-}
-
-template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Dijkema>::rangeI_R(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Dijkema>::rangeI_I(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
-    return flens::Range<int>(pow2i<T>(j) - d_ + 2, pow2i<T>(j) + d - 1 - _bc(1));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(d + d_ - 1, pow2i<T>(j) - d_ + 1);
 }
 
 template <typename T>
-int
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Dijkema>::rangeI_R(FLENS_DEFAULT_INDEXTYPE j) const
+{
+    assert(j>=min_j0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(pow2i<T>(j) - d_ + 2, pow2i<T>(j) + d - 1 - _bc(1));
+}
+
+template <typename T>
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Dual,Interval,Dijkema>::level() const
 {
     return _j;
@@ -127,7 +127,7 @@ MRA<T,Dual,Interval,Dijkema>::level() const
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Dijkema>::setLevel(int j) const
+MRA<T,Dual,Interval,Dijkema>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     _j = j;
@@ -156,12 +156,12 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
     typedef flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > FullColMatrix;
     typedef flens::DenseVector<flens::Array<T> > DenseVector;
     
-    const int cons_j = ((d==2) && ((d_==2) || (d_==4))) ? min_j0+1 : min_j0;
+    const FLENS_DEFAULT_INDEXTYPE cons_j = ((d==2) && ((d_==2) || (d_==4))) ? min_j0+1 : min_j0;
 
-    int extra = std::max(2-d+_bc(0),0);
+    FLENS_DEFAULT_INDEXTYPE extra = std::max(2-d+_bc(0),(FLENS_DEFAULT_INDEXTYPE) 0);
     FullColMatrix A(_(-l2_+1,-l1_-1+extra),_(-l2_+1,-l1_-1+extra));
-    for (int k=A.firstRow(); k<=A.lastRow(); ++k) {
-        for (int m=A.firstCol(); m<=A.lastCol(); ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE k=A.firstRow(); k<=A.lastRow(); ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE m=A.firstCol(); m<=A.lastCol(); ++m) {
             if (l1_<=k-2*m && k-2*m<=l2_) {
                 A(k,m) = phi_R.a_(k-2*m);
             }
@@ -178,8 +178,8 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
               descending_by_magnitude<T>());
 
     DenseVector positions(r.length());
-    for (int i=r.firstIndex(); i<=r.lastIndex(); ++i) {
-        int j=0;
+    for (FLENS_DEFAULT_INDEXTYPE i=r.firstIndex(); i<=r.lastIndex(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE j=0;
         while (r(i)!=r_sorted(++j)) { ; }
         positions(i) = j;
     }
@@ -187,48 +187,48 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
     DenseVector indices;
     if ((_bc(0)==1) && (_bc(1)==1)) {
         if ((d==3) && (d_==3)) {
-            indices.engine().resize(3);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)3);
             indices = 1, 2, 1;
         } else if ((d==3) && (d_==5)) {
-            indices.engine().resize(5);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)5);
             indices = 1, 3, 6, 8, 10;
         } else if ((d==3) && (d_==7)) {
-            indices.engine().resize(7);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
             indices = 1, 2, 5, 8, 10, 12, 14;
         } else if ((d==3) && (d_==9)) {
-            indices.engine().resize(9);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)9);
             indices = 1, 2, 5, 7, 10, 12, 14, 15, 18;
         } else if ((d==4) && (d_==6)) {
-            indices.engine().resize(7);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)7);
             indices = 1, 4, 6, 7, 9, 11, 13;
         } else if ((d==4) && (d_==8)) {
-            indices.engine().resize(9);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)9);
             indices = 1, 2, 4, 6, 9, 11, 13, 14, 17;
         } else if ((d==4) && (d_==10)) {
-            indices.engine().resize(11);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)11);
             indices = 1, 2, 5, 8, 10, 12, 13, 16, 17, 18, 21;
         } else if ((d==5) && (d_==9)) {
-            indices.engine().resize(11);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)11);
             indices = 1, 2, 4, 7, 9, 12, 13, 15, 16, 17, 20;
         } else if ((d==2) && (d_==2)) {
-            indices.engine().resize(2);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)2);
             //--------------------------
             //indices = 1, 1;
             indices = 2, 4;
             positions = 1, 2, 3, 4;
             //--------------------------
         } else if ((d==2) && (d_==4)) {
-            indices.engine().resize(4);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)4);
             indices = 1, 1, 4, 6;
         } else if ((d==2) && (d_==6)) {
-            indices.engine().resize(6);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)6);
             indices = 1, 6, 8, 12, 9, 11;
         } else if ((d==2) && (d_==8)) {
-            indices.engine().resize(8);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)8);
             indices = 1, 5, 4, 16, 11, 12, 9, 13;
         } else { // for d=2 we need all, for others not necessarily optimal!
-            indices.engine().resize(d+d_-2);
-            for (int i=indices.firstIndex(); i<=indices.lastIndex(); ++i) {
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)(d+d_-2));
+            for (FLENS_DEFAULT_INDEXTYPE i=indices.firstIndex(); i<=indices.lastIndex(); ++i) {
                 indices(i) = i;
             }
         }
@@ -236,52 +236,52 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
         assert(_bc(0)==0);
         assert(_bc(1)==0);
         if ((d==3) && (d_==3)) {
-            indices.engine().resize(4);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)4);
             indices = 2,4,5,6;
         } else if ((d==3) && (d_==5)) {
-            indices.engine().resize(6);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)6);
             indices = 1, 3, 6, 8, 10, 4;
         } else if ((d==3) && (d_==7)) {
-            indices.engine().resize(8);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)8);
             indices = 1, 2, 5, 7, 8, 10, 12, 14;
         } else if ((d==3) && (d_==9)) {
-            indices.engine().resize(10);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)10);
             indices = 1, 2, 3, 5, 7, 10, 12, 14, 15, 18;
         } else if ((d==4) && (d_==6)) {
-            indices.engine().resize(8);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)8);
             indices = 1, 4, 7, 9, 11, 13, 3, 8;
         } else if ((d==4) && (d_==8)) {
-            indices.engine().resize(10);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)10);
             indices = 1, 3, 4, 5, 6, 9, 11, 13, 14, 17;
         } else if ((d==4) && (d_==10)) {
-            indices.engine().resize(12);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)12);
             indices = 1, 2, 5, 7, 8, 9, 10, 13, 16, 17, 18, 21;
         } else if ((d==5) && (d_==9)) {
-            indices.engine().resize(12);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)12);
             indices = 1, 3, 4, 5, 7, 9, 11, 12, 15, 16, 17, 20;
             //--------------------------
         } else if ((d==2) && (d_== 2)) {
-            indices.engine().resize(2);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)2);
             indices = 2, 1;
             positions = 1, 2, 3;
             //--------------------------
         } else if ((d==2) && (d_==4)) {
-            indices.engine().resize(4);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)4);
             indices = 1, 4, 5, 2;
         } else if ((d==2) && (d_==2)) {
-            indices.engine().resize(2);
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)2);
             indices = 2,1;
             positions = 1,2,3;
         } else { // for d=2 we need all, for others not necessarily optimal!
-            indices.engine().resize(d+d_-2);
-            for (int i=indices.firstIndex(); i<=indices.lastIndex(); ++i) {
+            indices.engine().resize((FLENS_DEFAULT_INDEXTYPE)(d+d_-2));
+            for (FLENS_DEFAULT_INDEXTYPE i=indices.firstIndex(); i<=indices.lastIndex(); ++i) {
                 indices(i) = i;
             }
         }
     }
 
     FullColMatrix C_L(d+2*d_-3+extra, -l1_-1+l2+extra-_bc(0)-_bc(1));
-    for (int i=1+_bc(0); i<=indices.length(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1+_bc(0); i<=indices.length(); ++i) {
         C_L(_,i-_bc(0)) = VR(_,positions(indices(i)));
     }
 
@@ -290,8 +290,8 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
 
     FullColMatrix R_init(pow2i<T>(cons_j)+l2_-l1_-1,
                          pow2i<T>(cons_j)+l2-l1-1-_bc(0)-_bc(1),
-                         -l2_+1, -l2+1+_bc(0));
-    for (int c=R_init.firstCol(); c<=R_init.lastCol(); ++c) {
+                         (FLENS_DEFAULT_INDEXTYPE)(-l2_+1), -l2+1+_bc(0));
+    for (FLENS_DEFAULT_INDEXTYPE c=R_init.firstCol(); c<=R_init.lastCol(); ++c) {
         R_init(c,c) = 1.;
     }
     C_L.engine().changeIndexBase(-l2_+1, -l2+1+_bc(0));
@@ -300,18 +300,18 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
                                  R_init.lastCol()-C_R.numCols()+1);
     R_init(C_R) = C_R;
     BSpline<T,Primal,R,CDF> phi(d);
-    int kmin = -l2+1, mmin = -l2_+1, pmin = -l2+1, qmin = -l2_+1,
+    FLENS_DEFAULT_INDEXTYPE kmin = -l2+1, mmin = -l2_+1, pmin = -l2+1, qmin = -l2_+1,
         kmax = -l1-1, mmax = -l1_-1, pmax = -l1-1, qmax = -l1_-1;
     FullColMatrix C(_(pmin,pmax), _(qmin,qmax));
-    int ZLength = C.numRows()*C.numCols();
+    FLENS_DEFAULT_INDEXTYPE ZLength = C.numRows()*C.numCols();
     FullColMatrix Z(_(pmin*(qmax-qmin+1)+qmin,
                       pmin*(qmax-qmin+1)+qmin+ZLength-1),
                     _(pmin*(qmax-qmin+1)+qmin, 
                       pmin*(qmax-qmin+1)+qmin+ZLength-1));
-    for (int p=pmin; p<=pmax; ++p) {
-        for (int q=qmin; q<=qmax; ++q) {
-            for (int k=kmin; k<=kmax; ++k) {
-                for (int m=mmin; m<=mmax; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE p=pmin; p<=pmax; ++p) {
+        for (FLENS_DEFAULT_INDEXTYPE q=qmin; q<=qmax; ++q) {
+            for (FLENS_DEFAULT_INDEXTYPE k=kmin; k<=kmax; ++k) {
+                for (FLENS_DEFAULT_INDEXTYPE m=mmin; m<=mmax; ++m) {
                     if (l1<=k-2*p && k-2*p<=l2 &&
                         l1_<=m-2*q && m-2*q<=l2_) {
                             Z(p*(qmax-qmin+1)+q, k*(mmax-mmin+1)+m) =
@@ -321,17 +321,17 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
             }
         }
     }
-    for (int i=Z.firstRow(); i<=Z.lastRow(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=Z.firstRow(); i<=Z.lastRow(); ++i) {
         Z(i,i) -= 1.;
     }
     Z *= -1;
 
     DenseVector f(Z.numCols(), Z.firstCol());
-    for (int p=pmin; p<=pmax; ++p) {
-        for (int q=qmin; q<=qmax; ++q) {
+    for (FLENS_DEFAULT_INDEXTYPE p=pmin; p<=pmax; ++p) {
+        for (FLENS_DEFAULT_INDEXTYPE q=qmin; q<=qmax; ++q) {
             T sum = 0.;
-            for (int k=std::max(-l2+1,l1+2*p); k<=l2+2*p; ++k) {
-                for (int m=std::max(std::max(-l2_+1,l1_+2*q),l1-l2_+1+k);
+            for (FLENS_DEFAULT_INDEXTYPE k=std::max(-l2+1,l1+2*p); k<=l2+2*p; ++k) {
+                for (FLENS_DEFAULT_INDEXTYPE m=std::max(std::max(-l2_+1,l1_+2*q),l1-l2_+1+k);
                      m<=std::min(l2_+2*q, l2-l1_-1+k); ++m) {
                     if (!((kmin<=k && k<=kmax) && (mmin<=m && m<=mmax))) {
                         sum += 0.5 * phi.a(k-2*p) * phi_R.a_(m-2*q) * (k==m);
@@ -341,17 +341,17 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
             f(p*(qmax-qmin+1)+q) = sum;
         }
     }
-    flens::DenseVector<flens::Array<int> > pivots(f.length(),f.firstIndex());
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > pivots(f.length(),f.firstIndex());
     sv(Z,pivots,f);
-    for (int p=pmin; p<=pmax; ++p) {
-        for (int q=qmin; q<=qmax; ++q) {
+    for (FLENS_DEFAULT_INDEXTYPE p=pmin; p<=pmax; ++p) {
+        for (FLENS_DEFAULT_INDEXTYPE q=qmin; q<=qmax; ++q) {
             C(p,q) = f(p*(qmax-qmin+1)+q);
         }
     }
     FullColMatrix ExtMass(pow2i<T>(cons_j)+d-1,
                           pow2i<T>(cons_j)+l2_-l1_-1,
-                          -l2+1, -l2_+1);
-    for (int r=ExtMass.firstRow(); r<=ExtMass.lastRow(); ++r) {
+                          (FLENS_DEFAULT_INDEXTYPE)(-l2+1), -l2_+1);
+    for (FLENS_DEFAULT_INDEXTYPE r=ExtMass.firstRow(); r<=ExtMass.lastRow(); ++r) {
         ExtMass(r,r) = 1.;
     }
     ExtMass(C) = C;
@@ -364,8 +364,8 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
     //--- duplicate code from primal Primbs-MRA method _calc_M0 ----------------
     FullColMatrix R(_(1-l2, pow2i<T>(cons_j)-l1-1),
                     _(1-l2+_bc(0), pow2i<T>(cons_j)-l1-1-_bc(1)));
-    int rr = R.firstRow()+_bc(0);
-    for (int c=R.firstCol(); c<=R.lastCol(); ++c, ++rr) {
+    FLENS_DEFAULT_INDEXTYPE rr = R.firstRow()+_bc(0);
+    for (FLENS_DEFAULT_INDEXTYPE c=R.firstCol(); c<=R.lastCol(); ++c, ++rr) {
         R(rr,c) = 1.;
     }
     // replace this part as soon as well understood ;-)
@@ -373,7 +373,7 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
     knots.engine().changeIndexBase(1);
     FullColMatrix Transformation(knots.length()-d, knots.length()-d);
     Transformation.diag(0) = 1.;
-    for (int i=1; i<d; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<d; ++i) {
         FullColMatrix Tmp = insertKnot(d-1,knots,(T)0.), Tmp2;
         flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,
                  1.,Tmp,Transformation,0.,Tmp2);
@@ -406,9 +406,9 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
 
     FullColMatrix ExtM0(_(-l2+1,pow2i<T>(cons_j+1)-l1-1),
                         _(-l2+1,pow2i<T>(cons_j)-l1-1));
-    for (int q=ExtM0.firstCol(); q<=ExtM0.lastCol(); ++q) {
-        for (int p=std::max(l1+2*q,ExtM0.firstRow());
-             p<=std::min(l2+2*q,ExtM0.lastRow()); ++p) {
+    for (FLENS_DEFAULT_INDEXTYPE q=ExtM0.firstCol(); q<=ExtM0.lastCol(); ++q) {
+        for (FLENS_DEFAULT_INDEXTYPE p=std::max(l1+2*q,(FLENS_DEFAULT_INDEXTYPE)ExtM0.firstRow());
+             p<=std::min(l2+2*q,(FLENS_DEFAULT_INDEXTYPE)ExtM0.lastRow()); ++p) {
             ExtM0(p,q) = phi.a(p-2*q);
         }
     }
@@ -416,7 +416,7 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
     FullColMatrix RjPlus1(_(-l2+1,pow2i<T>(cons_j+1)-l1-1),
                           _(-l2+1+_bc(0),pow2i<T>(cons_j+1)-l1-1-_bc(1)));
     rr = RjPlus1.firstRow()+_bc(0);
-    for (int c=RjPlus1.firstCol(); c<=RjPlus1.lastCol(); ++c, ++rr) {
+    for (FLENS_DEFAULT_INDEXTYPE c=RjPlus1.firstCol(); c<=RjPlus1.lastCol(); ++c, ++rr) {
         RjPlus1(rr,c) = 1.;
     }
     if (d>2) {
@@ -456,17 +456,17 @@ MRA<T,Dual,Interval,Dijkema>::_calcM0_()
 
     FullColMatrix ExtM0_(_(-l2_+1,pow2i<T>(cons_j+1)-l1_-1),
                          _(-l2_+1,pow2i<T>(cons_j)-l1_-1));
-    for (int q=ExtM0_.firstCol(); q<=ExtM0_.lastCol(); ++q) {
-        for (int p=std::max(l1_+2*q, ExtM0_.firstRow());
-             p<=std::min(l2_+2*q, ExtM0_.lastRow()); ++p) {
+    for (FLENS_DEFAULT_INDEXTYPE q=ExtM0_.firstCol(); q<=ExtM0_.lastCol(); ++q) {
+        for (FLENS_DEFAULT_INDEXTYPE p=std::max(l1_+2*q, (FLENS_DEFAULT_INDEXTYPE)ExtM0_.firstRow());
+             p<=std::min(l2_+2*q, (FLENS_DEFAULT_INDEXTYPE)ExtM0_.lastRow()); ++p) {
             ExtM0_(p,q) = phi_R.a_(p-2*q);
         }
     }
 
     FullColMatrix ExtMassjPlus1(pow2i<T>(cons_j+1)+d-1, 
                                 pow2i<T>(cons_j+1)+l2_-l1_-1,
-                                -l2+1, -l2_+1);
-    for (int r=ExtMassjPlus1.firstRow(); r<=ExtMassjPlus1.lastRow(); ++r) {
+                                (FLENS_DEFAULT_INDEXTYPE)(-l2+1), -l2_+1);
+    for (FLENS_DEFAULT_INDEXTYPE r=ExtMassjPlus1.firstRow(); r<=ExtMassjPlus1.lastRow(); ++r) {
         ExtMassjPlus1(r,r) = 1.;
     }
     ExtMassjPlus1(C) = C;

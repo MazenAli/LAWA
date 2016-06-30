@@ -15,7 +15,7 @@ AdaptiveConvectionOperator1D<T,Side,Domain,Cons>::operator()(const Index1D &row_
                                                              const Index1D &col_index)
 {
     if (Domain==R) {
-        int min_j = std::min((int)row_index.j, (int)col_index.j);
+        FLENS_DEFAULT_INDEXTYPE min_j = std::min((FLENS_DEFAULT_INDEXTYPE)row_index.j, (FLENS_DEFAULT_INDEXTYPE)col_index.j);
         T scaling_factor = pow2i<T>(min_j);
         Index1D tmp_row_index(row_index.j-min_j,row_index.k,row_index.xtype);
         Index1D tmp_col_index(col_index.j-min_j,col_index.k,col_index.xtype);

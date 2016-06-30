@@ -42,12 +42,12 @@ class WeightedHelmholtzOperator1D{
         const T c;
 
         WeightedHelmholtzOperator1D(const Basis& _basis, const T _c,
-                                    Function<T> &weightFct, int order=10,
+                                    Function<T> &weightFct, FLENS_DEFAULT_INDEXTYPE order=10,
                                     const T left=0., const T right=1.);
 
         T
-        operator()(XType xtype1, int j1, long k1,
-                   XType xtype2, int j2, long k2) const;
+        operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                   XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
 
         T
         operator()(const Index1D &row_index, const Index1D &col_index) const;

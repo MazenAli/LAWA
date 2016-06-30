@@ -43,7 +43,7 @@ RHS1D<T,RHSINTEGRAL,Preconditioner>::readIndexSets(const char *filename)
                     std::getline( line_ss, field1, ',' );
                     std::getline( line_ss, field2, ',' );
                     std::getline( line_ss, field3, ',' );
-                    int j,k;
+                    FLENS_DEFAULT_INDEXTYPE j,k;
 
                     if (strcmp(field1.c_str(),"wavelet")==0) {
                         j = atoi(field2.c_str());
@@ -127,7 +127,7 @@ RHS1D<T,RHSINTEGRAL,Preconditioner>::operator()(T tol)
 
         //long double squared_ell2norm=current_ell2norm*current_ell2norm;
         long double squared_ell2norm=0.0L;
-        for (int i=0; i<(int)rhs_bucket.bucket_ell2norms.size(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)rhs_bucket.bucket_ell2norms.size(); ++i) {
             squared_ell2norm += (long double)std::pow(rhs_bucket.bucket_ell2norms[i],2.L);
             rhs_bucket.addBucketToCoefficients(ret,i);
             //std::cerr << "(" << i << ", " << rhs_bucket.bucket_ell2norms.size() << ")" << std::endl;

@@ -32,7 +32,7 @@ struct NoPreconditioner
     }
 
     T
-    operator()(XType xtype, int j, int k) const;
+    operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     T
     operator()(const Index &index) const;

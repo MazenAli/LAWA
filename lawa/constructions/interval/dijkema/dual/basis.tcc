@@ -22,21 +22,21 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Dual,Interval,Dijkema>::Basis(int _d, int _d_, int j)
+Basis<T,Dual,Interval,Dijkema>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : mra(_d, j), mra_(_d, _d_, j),
       d(_d), d_(_d_), mu(d&1),
       min_j0(mra_.min_j0), j0(mra_.j0), _bc(2,0), _j(-1), psi_(*this)
 {
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > Mj1, Mj1_;
     initial_stable_completion(mra,mra_,Mj1,Mj1_);
-    const int cons_j = ((d==2) && ((d_==2)||(d_==4))) ? mra_.min_j0+1 : mra_.min_j0;
+    const FLENS_DEFAULT_INDEXTYPE cons_j = ((d==2) && ((d_==2)||(d_==4))) ? mra_.min_j0+1 : mra_.min_j0;
     M1_ = flens::RefinementMatrix<T,Interval,Dijkema>(d+d_-2, d+d_-2, Mj1_, min_j0, cons_j);
     _j = std::max(min_j0,j);
     setLevel(_j);
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Dual,Interval,Dijkema>::level() const
 {
     return _j;
@@ -44,7 +44,7 @@ Basis<T,Dual,Interval,Dijkema>::level() const
 
 template <typename T>
 void
-Basis<T,Dual,Interval,Dijkema>::setLevel(int j) const
+Basis<T,Dual,Interval,Dijkema>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     _j = j;
@@ -64,7 +64,7 @@ Basis<T,Dual,Interval,Dijkema>::enforceBoundaryCondition()
         mra_.template enforceBoundaryCondition<BC>();
         flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > Mj1, Mj1_;
         initial_stable_completion(mra,mra_,Mj1,Mj1_);
-        const int cons_j = ((d==2) && ((d_==2)||(d_==4))) ? mra_.min_j0+1 : mra_.min_j0;
+        const FLENS_DEFAULT_INDEXTYPE cons_j = ((d==2) && ((d_==2)||(d_==4))) ? mra_.min_j0+1 : mra_.min_j0;
         M1_ = flens::RefinementMatrix<T,Interval,Dijkema>(d+d_-2, d+d_-2, 
                                                    Mj1_, min_j0, cons_j);
         setLevel(_j);
@@ -84,66 +84,66 @@ Basis<T,Dual,Interval,Dijkema>::generator(XType xtype) const
 
 // cardinalities of whole, left, inner, right index sets (primal).
 template <typename T>
-int
-Basis<T,Dual,Interval,Dijkema>::cardJ_(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Dual,Interval,Dijkema>::cardJ_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return pow2i<int>(j);
+    return pow2i<FLENS_DEFAULT_INDEXTYPE>(j);
 }
 
 template <typename T>
-int
-Basis<T,Dual,Interval,Dijkema>::cardJ_L(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Dual,Interval,Dijkema>::cardJ_L(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     return M1_.left.length();
 }
 
 template <typename T>
-int
-Basis<T,Dual,Interval,Dijkema>::cardJ_I(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Dual,Interval,Dijkema>::cardJ_I(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     return M1_.numCols() - M1_.left.length() - M1_.right.length();
 }
 
 template <typename T>
-int
-Basis<T,Dual,Interval,Dijkema>::cardJ_R(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Dual,Interval,Dijkema>::cardJ_R(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return M1_.right.length();
 }
 
 // ranges of whole, left, inner, right index sets (primal).
 template <typename T>
-const flens::Range<int>
-Basis<T,Dual,Interval,Dijkema>::rangeJ_(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Dual,Interval,Dijkema>::rangeJ_(FLENS_DEFAULT_INDEXTYPE j) const
 {
-    return flens::Range<int>(1,pow2i<int>(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,pow2i<FLENS_DEFAULT_INDEXTYPE>(j));
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Dual,Interval,Dijkema>::rangeJ_L(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Dual,Interval,Dijkema>::rangeJ_L(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(1,M1_.left.length());
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,M1_.left.length());
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Dual,Interval,Dijkema>::rangeJ_I(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Dual,Interval,Dijkema>::rangeJ_I(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(M1_.left.length()+1, pow2i<int>(j)-M1_.right.length());
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(M1_.left.length()+1, pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-M1_.right.length());
 }
 
 template <typename T>
-const flens::Range<int>
-Basis<T,Dual,Interval,Dijkema>::rangeJ_R(int j) const
+const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Dual,Interval,Dijkema>::rangeJ_R(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(pow2i<int>(j)-M1_.right.length()+1, pow2i<int>(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-M1_.right.length()+1, pow2i<FLENS_DEFAULT_INDEXTYPE>(j));
 }
 
 } // namespace lawa

@@ -22,30 +22,30 @@
 namespace lawa {
 
 template <typename T>
-typename cxxblas::RestrictTo<flens::IsSame<T,int>::value 
-                 || flens::IsSame<T,long>::value, T>::Type
-pow2i(int expo)
+typename cxxblas::RestrictTo<flens::IsSame<T,FLENS_DEFAULT_INDEXTYPE>::value 
+                 || flens::IsSame<T,FLENS_DEFAULT_INDEXTYPE>::value, T>::Type
+pow2i(FLENS_DEFAULT_INDEXTYPE expo)
 {
     return (T)std::ldexp(1., expo);
 }
 
 template <typename T>
 typename cxxblas::RestrictTo<flens::IsSame<T,double>::value, T>::Type
-pow2i(int expo)
+pow2i(FLENS_DEFAULT_INDEXTYPE expo)
 {
     return std::ldexp(1., expo);
 }
 
 template <typename T>
 typename cxxblas::RestrictTo<flens::IsSame<T,long double>::value, T>::Type
-pow2i(int expo)
+pow2i(FLENS_DEFAULT_INDEXTYPE expo)
 {
     return std::ldexp(1.L, expo);
 }
 
 template <typename T>
 T
-pow2ih(int expo)
+pow2ih(FLENS_DEFAULT_INDEXTYPE expo)
 {
     return (expo&1) ? (expo>0) ? std::ldexp(std::sqrt(T(2.)), expo/2)
                                : std::ldexp(T(1.)/std::sqrt(T(2.)), expo/2)

@@ -35,14 +35,14 @@ DiagonalMatrix<T>::diag() const
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 DiagonalMatrix<T>::numRows() const
 {
     return _diag.length();
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 DiagonalMatrix<T>::numCols() const
 {
     return _diag.length();
@@ -61,8 +61,8 @@ mv(cxxblas::Transpose /*trans*/, ALPHA alpha, const DiagonalMatrix<T> &D,
     } else {
         y *= beta;
     }
-    int cntr1=y.firstIndex(), cntr2=diag.firstIndex();
-    for (int i=x.firstIndex(); i<=x.lastIndex(); ++i, ++cntr1, ++cntr2) {
+    FLENS_DEFAULT_INDEXTYPE cntr1=y.firstIndex(), cntr2=diag.firstIndex();
+    for (FLENS_DEFAULT_INDEXTYPE i=x.firstIndex(); i<=x.lastIndex(); ++i, ++cntr1, ++cntr2) {
         y(cntr1) += alpha * diag(cntr2)*x(i);
     }
 }
@@ -73,7 +73,7 @@ inv(const DiagonalMatrix<T> &D)
 {
     const DenseVector<Array<T> > &diag = D.diag();
     DenseVector<Array<T> > v(diag.range());
-    for (int i=diag.firstIndex(); i<=diag.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=diag.firstIndex(); i<=diag.lastIndex(); ++i) {
         v(i)=1.0/diag(i);
     }
     return DiagonalMatrix<T>(v);
@@ -85,7 +85,7 @@ operator<<(std::ostream &out, const DiagonalMatrix<T> &D)
 {
     const DenseVector<Array<T> > & diag = D.diag();
     out << "diag( ";
-    for (int i=diag.firstIndex(); i<diag.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=diag.firstIndex(); i<diag.lastIndex(); ++i) {
         out << diag(i) << ", ";
     }
     out << diag(diag.lastIndex()) << " )";

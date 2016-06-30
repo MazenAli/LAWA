@@ -34,8 +34,8 @@ struct Integral
     Integral(const First &first, const Second &second);
 
     T
-    operator()(int _j1, long _k1, XType _e1, int _deriv1,
-               int _j2, long _k2, XType _e2, int _deriv2) const;
+    operator()(FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv1,
+               FLENS_DEFAULT_INDEXTYPE _j2, FLENS_DEFAULT_INDEXTYPE _k2, XType _e2, FLENS_DEFAULT_INDEXTYPE _deriv2) const;
 
     T
     integrand(T x) const;
@@ -44,9 +44,9 @@ struct Integral
     const Second &second;
     T left, right;
     mutable Quadrature<Quad,Integral<Quad,First,Second> > quadrature;
-    mutable int j1, deriv1,
+    mutable FLENS_DEFAULT_INDEXTYPE j1, deriv1,
                 j2, deriv2;
-    mutable long k1, k2;
+    mutable FLENS_DEFAULT_INDEXTYPE k1, k2;
     mutable XType e1, e2;
 };
 
@@ -66,11 +66,11 @@ struct IntegralF
     IntegralF() = delete;
 
     T
-    operator()(int _j1, long _k1, XType _e1, int _deriv) const;
+    operator()(FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv) const;
 
     T
-    operator()(int _j1, long _k1, XType _e1, int _deriv1,
-               int _j2, long _k2, XType _e2, int _deriv2) const;
+    operator()(FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv1,
+               FLENS_DEFAULT_INDEXTYPE _j2, FLENS_DEFAULT_INDEXTYPE _k2, XType _e2, FLENS_DEFAULT_INDEXTYPE _deriv2) const;
 
     T
     integrand(T x) const;
@@ -84,9 +84,9 @@ struct IntegralF
     const T SqrtRightmLeft;
     const T OneDivSqrtRightmLeft;
     const bool _f2;
-    mutable int j1, deriv1,
+    mutable FLENS_DEFAULT_INDEXTYPE j1, deriv1,
                 j2, deriv2;
-    mutable long k1, k2;
+    mutable FLENS_DEFAULT_INDEXTYPE k1, k2;
     mutable XType e1, e2;
     Quadrature<Quad,IntegralF<Quad,First,Second> > quadrature;
 };

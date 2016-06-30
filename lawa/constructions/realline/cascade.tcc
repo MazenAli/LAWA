@@ -30,16 +30,16 @@ template <typename T>
 struct cascade
 {
   T* vector;
-  int level;
-  int start;
-  int end;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE start;
+  FLENS_DEFAULT_INDEXTYPE end;
 };
 
 template <typename T>
 T
-cascade_ref(cascade<T>* c, int n)
+cascade_ref(cascade<T>* c, FLENS_DEFAULT_INDEXTYPE n)
 {
-  int h, i;
+  FLENS_DEFAULT_INDEXTYPE h, i;
 
   h = pow2i<T>(c->level);
   if(n<h*c->start)
@@ -54,7 +54,7 @@ template <typename T>
 void
 cascade_output(cascade<T>* c)
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   for(i=c->start*pow2i<T>(c->level); i<=c->end*pow2i<T>(c->level); i++)
     {
@@ -65,10 +65,10 @@ cascade_output(cascade<T>* c)
 
 template <typename T>
 cascade<T>*
-eval(const T* mask, int /*length*/, int start, int end, int level)
+eval(const T* mask, FLENS_DEFAULT_INDEXTYPE /*length*/, FLENS_DEFAULT_INDEXTYPE start, FLENS_DEFAULT_INDEXTYPE end, FLENS_DEFAULT_INDEXTYPE level)
 {
   cascade<T>* old, *newv;
-  int i,k,m,n;
+  FLENS_DEFAULT_INDEXTYPE i,k,m,n;
   T sum,h;
   T* v;
 
@@ -126,7 +126,7 @@ eval(const T* mask, int /*length*/, int start, int end, int level)
 
 template <typename X, typename Y>
 void
-evalAtDyadicGrid_Cascade(const flens::DenseVector<X> &sf, int J,
+evalAtDyadicGrid_Cascade(const flens::DenseVector<X> &sf, FLENS_DEFAULT_INDEXTYPE J,
                          flens::DenseVector<Y> &scaling)
 {
     typedef typename X::ElementType T;
@@ -134,7 +134,7 @@ evalAtDyadicGrid_Cascade(const flens::DenseVector<X> &sf, int J,
     cascade<T> *c = eval(sf.engine().data(), 0, sf.firstIndex(), sf.lastIndex(), J);
 
     scaling.engine().resize((pow2i<T>(J))*(sf.lastIndex()-sf.firstIndex())+1, 0, T(0));
-    for (int i=scaling.firstIndex(); i<=scaling.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=scaling.firstIndex(); i<=scaling.lastIndex(); ++i) {
         scaling(i) = c->vector[i];
     }
     scaling.engine().changeIndexBase(pow2i<T>(J)*sf.firstIndex());

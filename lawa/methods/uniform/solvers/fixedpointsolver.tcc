@@ -13,7 +13,7 @@ FixedPointSolver<T, Method>::getError(flens::DenseVector<flens::Array<T> >& u1,
 {   
     flens::DenseVector<flens::Array<T> > diff = u1 - u2;
     T error = 0.;
-    for(int i = diff.firstIndex(); i <= diff.lastIndex(); ++i){
+    for(FLENS_DEFAULT_INDEXTYPE i = diff.firstIndex(); i <= diff.lastIndex(); ++i){
         error += diff(i) * diff(i);
     }
     
@@ -23,10 +23,10 @@ FixedPointSolver<T, Method>::getError(flens::DenseVector<flens::Array<T> >& u1,
 template<typename T, typename Method>
 flens::DenseVector<flens::Array<T> >
 FixedPointSolver<T, Method>::solve(flens::DenseVector<flens::Array<T> > u_0, bool saveSols,
-                                   int maxIterations, T tol)
+                                   FLENS_DEFAULT_INDEXTYPE maxIterations, T tol)
 {
     flens::DenseVector<flens::Array<T> > u_T;
-    int countIterations = 0;
+    FLENS_DEFAULT_INDEXTYPE countIterations = 0;
     T error = 0;
     do{
         u_T = method.solve(u_0, saveSols); 
@@ -44,10 +44,10 @@ template<typename T, typename Method>
 flens::DenseVector<flens::Array<T> >
 FixedPointSolver<T, Method>::solve(flens::DenseVector<flens::Array<T> > u_0,
         flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& fmatrix,
-        int maxIterations, T tol)
+        FLENS_DEFAULT_INDEXTYPE maxIterations, T tol)
 {
     flens::DenseVector<flens::Array<T> > u_T;
-    int countIterations = 0;
+    FLENS_DEFAULT_INDEXTYPE countIterations = 0;
     T error = 0;
     do{
         u_T = method.solve(u_0, fmatrix); 

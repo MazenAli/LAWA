@@ -43,7 +43,7 @@ The default constructor is there only for practical reasons (to be able to use o
 RefinementMatrix(const GeMatrix<FullStorage<T, ColMajor> > &_Left,
                  const GeMatrix<FullStorage<T, ColMajor> > &_Right,
                  const DenseVector<Array<T> > &_band,
-                 int _j0);
+                 FLENS_DEFAULT_INDEXTYPE _j0);
 ====
 Constructs a refinement matrix on level [_j0] from its ingredients: upper left block [_Left], lower right block [_Right] and inner band [_band].
 
@@ -51,63 +51,63 @@ Constructs a refinement matrix on level [_j0] from its ingredients: upper left b
 ==subsection: Access one column of the matrix==
 ==code.cc==
 const typename DenseVector<Array<T> >::ConstView
-operator()(int j, const Underscore<int> &u, int col) const;
+operator()(FLENS_DEFAULT_INDEXTYPE j, const Underscore<FLENS_DEFAULT_INDEXTYPE> &u, FLENS_DEFAULT_INDEXTYPE col) const;
 ====
 
 ==section: Member functions==
 ==subsection: The row range on level j==
 ==code.cc==
-Range<int>
-rows(int j) const;
+Range<FLENS_DEFAULT_INDEXTYPE>
+rows(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: The column range on level j==
 ==code.cc==
-Range<int>
-cols(int j) const;
+Range<FLENS_DEFAULT_INDEXTYPE>
+cols(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: The number of rows on level j==
 ==code.cc==
-int
-numRows(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+numRows(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: The number of columns on level j==
 ==code.cc==
-int
-numCols(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+numCols(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: the first row index (on level j)==
 ==code.cc==
-int
-firstRow(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+firstRow(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: the last row index on level j==
 ==code.cc==
-int
-lastRow(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+lastRow(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: the first column index (on level j)==
 ==code.cc==
-int
-firstCol(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+firstCol(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==subsection: the last column index on level j==
 ==code.cc==
-int
-lastCol(int j) const;
+FLENS_DEFAULT_INDEXTYPE
+lastCol(FLENS_DEFAULT_INDEXTYPE j) const;
 ====
 
 ==section: Public Member Variables==
 ==code.cc==
 const GeMatrix<FullStorage<T, ColMajor> > Left, Right;
 const DenseVector<Array<T> > band;
-const int j0;
+const FLENS_DEFAULT_INDEXTYPE j0;
 ====
 
 ==subsection: The boundary blocks (Left, Right)==
@@ -121,5 +121,5 @@ const DenseVector<Array<T> > band;
 ====
 ==subsection: The initial level (j0)==
 ==code.cc==
-const int j0;
+const FLENS_DEFAULT_INDEXTYPE j0;
 ====

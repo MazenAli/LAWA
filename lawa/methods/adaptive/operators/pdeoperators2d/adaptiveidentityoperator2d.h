@@ -51,7 +51,7 @@ struct AdaptiveIdentityOperator2D
                                Compression1D_y, NoPreconditioner1D>  DataReaction_y;
 
     AdaptiveIdentityOperator2D(const Basis2D &_basis, T _entrybound=0.,
-                                   int _NumOfRows=4096, int _NumOfCols=2048);
+                                   FLENS_DEFAULT_INDEXTYPE _NumOfRows=4096, FLENS_DEFAULT_INDEXTYPE _NumOfCols=2048);
 
     T
     operator()(const Index2D &row_index, const Index2D &col_index);
@@ -69,7 +69,7 @@ struct AdaptiveIdentityOperator2D
     const IdentityOperator_y          op_identity_y;
 
     T entrybound;
-    int NumOfRows, NumOfCols;
+    FLENS_DEFAULT_INDEXTYPE NumOfRows, NumOfCols;
 
     DataReaction_x   data_identity_x;
     DataReaction_y   data_identity_y;

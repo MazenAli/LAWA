@@ -1,7 +1,7 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Orthogonal,R,MultiRefinement>::MRA(int _d, int j)
+MRA<T,Orthogonal,R,MultiRefinement>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), j0(j), _j(j0), phi(d)
 {
     if (d > 4) {
@@ -11,7 +11,7 @@ MRA<T,Orthogonal,R,MultiRefinement>::MRA(int _d, int j)
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Orthogonal,R,MultiRefinement>::level() const
 {
     return _j;
@@ -19,7 +19,7 @@ MRA<T,Orthogonal,R,MultiRefinement>::level() const
 
 template <typename T>
 void
-MRA<T,Orthogonal,R,MultiRefinement>::setLevel(int j) const
+MRA<T,Orthogonal,R,MultiRefinement>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(d==1 || j>=j0);
     _j = j;

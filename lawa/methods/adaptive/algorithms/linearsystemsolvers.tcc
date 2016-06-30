@@ -3,10 +3,10 @@ namespace lawa {
 #define CGMRES_ITER 10
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u,
-         const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, int maxIterations,
-         T &timeMatrixVector, int assemble_matrix)
+         const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations,
+         T &timeMatrixVector, FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
     typedef typename IndexSet<Index >::const_iterator const_set_it;
     typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
@@ -24,7 +24,7 @@ CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,In
         p -= r;
         rNormSquare = r*r;
 
-        for (int k=1; k<=maxIterations; k++) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=maxIterations; k++) {
             if (sqrt(rNormSquare)<=tol) {
                 res = sqrt(rNormSquare);
                 return k;
@@ -49,7 +49,7 @@ CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,In
     }
     else {
 
-        int N = Lambda.size();
+        FLENS_DEFAULT_INDEXTYPE N = Lambda.size();
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > A_flens(N,N);
         if (assemble_matrix==2) {
             A.toFlensSparseMatrix(Lambda, Lambda, A_flens, tol);
@@ -62,7 +62,7 @@ CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,In
           std::cout << "    Build Dense Vectors ..." << std::endl;
           timer.start();
             flens::DenseVector<flens::Array<T> > rhs(N), x(N), residual(N), Ax(N);
-            int row_count=1;
+            FLENS_DEFAULT_INDEXTYPE row_count=1;
             const_coeff_it f_end = f.end();
             const_coeff_it u_end = u.end();
             for (const_set_it row=Lambda.begin(); row!=Lambda.end(); ++row, ++row_count) {
@@ -79,7 +79,7 @@ CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,In
 
           std::cout << "    Start cg ... " << std::endl;
           timer.start();
-            int number_of_iterations = lawa::cg(A_flens,x,rhs, tol, maxIterations);
+            FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::cg(A_flens,x,rhs, tol, maxIterations);
           timer.stop();
 
           std::cout << "    .... done : " << timer.elapsed() << " seconds " << std::endl;
@@ -101,10 +101,10 @@ CG_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,In
 }
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u,
-            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, int maxIterations,
-            int assemble_matrix)
+            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations,
+            FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
         using flens::_;
 
@@ -115,7 +115,7 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
 
         std::cerr << "GMRES_Solve called." << std::endl;
 
-        int N = Lambda.size();
+        FLENS_DEFAULT_INDEXTYPE N = Lambda.size();
         if (assemble_matrix==0) {   //Algorithm by Saad, p.159
 
             Coefficients<Lexicographical,T,Index> v(2*u.size()), w_j(2*u.size());
@@ -124,14 +124,14 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
             /*
             Coefficients<Lexicographical,T,Index> v(2*u.size()), w_j(2*u.size());
             Coefficients<Lexicographical,T,Index> V[CGMRES_ITER+1];
-            for (int i=0;i<=CGMRES_ITER; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0;i<=CGMRES_ITER; ++i) {
                 V[i].rehash(2*u.size());
             }
             */
 
-            for (int iter=1; iter<=maxIterations/CGMRES_ITER; ++iter) {
+            for (FLENS_DEFAULT_INDEXTYPE iter=1; iter<=maxIterations/CGMRES_ITER; ++iter) {
                 v.setToZero();
-                for (int i=0; i<CGMRES_ITER+1; ++i) {
+                for (FLENS_DEFAULT_INDEXTYPE i=0; i<CGMRES_ITER+1; ++i) {
                     V[i].setToZero();
                 }
 
@@ -156,7 +156,7 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
                 V[0] = v;
                 g(1) = beta;
 
-                int j;
+                FLENS_DEFAULT_INDEXTYPE j;
                 for (j=0; j<CGMRES_ITER;) {
                     if (rho <= tol) {
                         break;
@@ -167,21 +167,21 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
                     A.apply(V[j-1], tol/3.,Lambda, w_j);
                     T normInitialWj = w_j.norm(2.);
 
-                    for (int i=1; i<=j; ++i) {
+                    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
                         H(i,j) = w_j * V[i-1];
                         w_j -= H(i,j) * V[i-1];
                     }
                     H(j+1,j) = w_j.norm(2.);
                     /*
                     if (H(j+1,j) / normInitialWj < 1.0) {
-                        for (int i=1; i<=j; ++i) {
+                        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
                             Htemp = w_j * V[i-1];
                             w_j -= Htemp * V[i-1];
                         }
                         H(j+1, j) = w_j.norm(2.);
                     }
                     */
-                    for (int i=1; i<=j-1; ++i) {
+                    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j-1; ++i) {
                         h_ij =      c(i) * H(i,j) + s(i) * H(i+1,j);
                         H(i+1,j) = -s(i) * H(i,j) + c(i) * H(i+1,j);
                         H(i,j) =    h_ij;
@@ -204,14 +204,14 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
 
                 if (j>=1) {
                     DeVector y(j);
-                    for (int i=j; i>=1; --i) {
+                    for (FLENS_DEFAULT_INDEXTYPE i=j; i>=1; --i) {
                         y(i) = g(i) / H(i,i);
-                        for (int l=j; l>i; --l) {
+                        for (FLENS_DEFAULT_INDEXTYPE l=j; l>i; --l) {
                             y(i) -= H(i,l) * y(l) / H(i,i);
                         }
                     }
                     //std::cerr << "y = " << y << std::endl;
-                    for (int i=1; i<=j; ++i) {
+                    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
                         u += V[i-1] * y(i);
                     }
                     if (rho <= tol) {
@@ -234,7 +234,7 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
 
             if (Lambda.size() > 0) {
                 flens::DenseVector<flens::Array<T> > rhs(N), x(N), residual(N), Ax(N);
-                int row_count=1;
+                FLENS_DEFAULT_INDEXTYPE row_count=1;
                 const_coeff_it f_end = f.end();
                 const_coeff_it u_end = u.end();
                 for (const_set_it row=Lambda.begin(); row!=Lambda.end(); ++row, ++row_count) {
@@ -246,7 +246,7 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
                     else               x(row_count) = 0.;
 
                 }
-                int number_of_iterations = lawa::gmres(A_flens,x,rhs, tol, maxIterations);
+                FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::gmres(A_flens,x,rhs, tol, maxIterations);
                 Ax = A_flens*x;
                 residual = Ax-rhs;
                 res = std::sqrt(residual*residual);
@@ -261,17 +261,17 @@ GMRES_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T
 }
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRESM_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,T,Index > &u,
-             const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, int maxIterations, 
-						 int assemble_matrix, int m)
+             const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations, 
+						 FLENS_DEFAULT_INDEXTYPE assemble_matrix, FLENS_DEFAULT_INDEXTYPE m)
 {
        typedef typename IndexSet<Index >::const_iterator const_set_it;
        typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
 
        std::cerr << "GMRESM_Solve called." << std::endl;
 
-       int N = Lambda.size();
+       FLENS_DEFAULT_INDEXTYPE N = Lambda.size();
        if (assemble_matrix==0) {
 					std::cerr << " Algorithm GMRESM not implemented yet for assemble_matrix == 0" << std::endl;
 					exit(1);
@@ -287,7 +287,7 @@ GMRESM_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,
 
            if (Lambda.size() > 0) {
                flens::DenseVector<flens::Array<T> > rhs(N), x(N), residual(N), Ax(N);
-               int row_count=1;
+               FLENS_DEFAULT_INDEXTYPE row_count=1;
                const_coeff_it f_end = f.end();
                const_coeff_it u_end = u.end();
                for (const_set_it row=Lambda.begin(); row!=Lambda.end(); ++row, ++row_count) {
@@ -299,7 +299,7 @@ GMRESM_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,
                    else               x(row_count) = 0.;
 
                }
-               int number_of_iterations = lawa::gmresm(A_flens,x,rhs, tol, m, maxIterations);
+               FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::gmresm(A_flens,x,rhs, tol, m, maxIterations);
                Ax = A_flens*x;
                residual = Ax-rhs;
                res = std::sqrt(residual*residual);
@@ -315,19 +315,19 @@ GMRESM_Solve(const IndexSet<Index> &Lambda, MA &A, Coefficients<Lexicographical,
 						
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRES_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol, MA &A, 
 						Coefficients<Lexicographical,T,Index > &u, 
-            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, int maxIterations,
-						int assemble_matrix)
+            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations,
+						FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
       typedef typename IndexSet<Index >::const_iterator const_set_it;
       typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
 
       std::cerr << "GMRES_Solve_PG called." << std::endl;
 
-      int NumOfRows = (int)LambdaRow.size();
-      int NumOfCols = (int)LambdaCol.size();
+      FLENS_DEFAULT_INDEXTYPE NumOfRows = (FLENS_DEFAULT_INDEXTYPE)LambdaRow.size();
+      FLENS_DEFAULT_INDEXTYPE NumOfCols = (FLENS_DEFAULT_INDEXTYPE)LambdaCol.size();
       if (assemble_matrix==0) {   //Algorithm by Saad, p.159
 				std::cerr << " Algorithm GMRES_PG not implemented yet for assemble_matrix == 0" << std::endl;
 				exit(1);      }
@@ -343,7 +343,7 @@ GMRES_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCo
 
           if (LambdaRow.size() > 0) {
               flens::DenseVector<flens::Array<T> > rhs(NumOfRows), x(NumOfCols), residual(NumOfRows), Ax(NumOfRows);
-              int row_count=1;
+              FLENS_DEFAULT_INDEXTYPE row_count=1;
               const_coeff_it f_end = f.end();
               const_coeff_it u_end = u.end();
               for (const_set_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
@@ -368,7 +368,7 @@ GMRES_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCo
               // ==================================
 
 
-              int number_of_iterations = lawa::gmres(A_flens,x,rhs, tol, maxIterations);
+              FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::gmres(A_flens,x,rhs, tol, maxIterations);
               Ax = A_flens*x;
               residual = Ax-rhs;
               res = std::sqrt(residual*residual);
@@ -384,19 +384,19 @@ GMRES_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCo
 }
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 GMRESM_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol, MA &A,
 						Coefficients<Lexicographical,T,Index > &u,
-            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, int maxIterations,
-						int assemble_matrix, int m)
+            const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations,
+						FLENS_DEFAULT_INDEXTYPE assemble_matrix, FLENS_DEFAULT_INDEXTYPE m)
 {
       typedef typename IndexSet<Index >::const_iterator const_set_it;
       typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
 
       std::cerr << "GMRESM_Solve_PG called." << std::endl;
 
-      int NumOfRows = (int)LambdaRow.size();
-      int NumOfCols = (int)LambdaCol.size();
+      FLENS_DEFAULT_INDEXTYPE NumOfRows = (FLENS_DEFAULT_INDEXTYPE)LambdaRow.size();
+      FLENS_DEFAULT_INDEXTYPE NumOfCols = (FLENS_DEFAULT_INDEXTYPE)LambdaCol.size();
       if (assemble_matrix==0) {   //Algorithm by Saad, p.159
 				std::cerr << " Algorithm GMRESM_PG not implemented yet for assemble_matrix == 0" << std::endl;
 				exit(1);      }
@@ -412,7 +412,7 @@ GMRESM_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaC
 
           if (LambdaRow.size() > 0) {
               flens::DenseVector<flens::Array<T> > rhs(NumOfRows), x(NumOfCols), residual(NumOfRows), Ax(NumOfRows);
-              int row_count=1;
+              FLENS_DEFAULT_INDEXTYPE row_count=1;
               const_coeff_it f_end = f.end();
               const_coeff_it u_end = u.end();
               for (const_set_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
@@ -437,7 +437,7 @@ GMRESM_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaC
               // ==================================
 
 
-              int number_of_iterations = lawa::gmresm(A_flens,x,rhs, tol, m, maxIterations);
+              FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::gmresm(A_flens,x,rhs, tol, m, maxIterations);
               Ax = A_flens*x;
               residual = Ax-rhs;
               res = std::sqrt(residual*residual);
@@ -454,10 +454,10 @@ GMRESM_Solve_PG(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaC
 
 						
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical,T,Index > &u,
-           const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, int maxIterations,
-           int assemble_matrix)
+           const Coefficients<Lexicographical,T,Index > &f, T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations,
+           FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
         typedef typename IndexSet<Index >::const_iterator const_set_it;
         typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
@@ -475,7 +475,7 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical
             gammaPrev_cgls = s*s;
             std::cerr << "      gammaPrev = " << gammaPrev_cgls << std::endl;
 
-            for (int k=1; k<=maxIterations; k++) {
+            for (FLENS_DEFAULT_INDEXTYPE k=1; k<=maxIterations; k++) {
                q.setToZero();
                A.apply(p,0.,q,cxxblas::NoTrans);   //q = A*p;
                alpha_cgls = gammaPrev_cgls/(q*q);
@@ -508,8 +508,8 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical
             //Attention: LambdaCol = supp(u)!!
             IndexSet<Index> LambdaCol;
             LambdaCol = supp(u);
-            int NumOfRows = (int)LambdaRow.size();
-            int NumOfCols = (int)LambdaCol.size();
+            FLENS_DEFAULT_INDEXTYPE NumOfRows = (FLENS_DEFAULT_INDEXTYPE)LambdaRow.size();
+            FLENS_DEFAULT_INDEXTYPE NumOfCols = (FLENS_DEFAULT_INDEXTYPE)LambdaCol.size();
             flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > A_flens(NumOfRows,NumOfCols);
             if (assemble_matrix==2) {
                 A.toFlensSparseMatrix(LambdaRow, LambdaCol, A_flens, tol);
@@ -520,7 +520,7 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical
 
             if (LambdaRow.size() > 0) {
                 flens::DenseVector<flens::Array<T> > rhs(NumOfRows), x(NumOfCols), residual(NumOfRows), Ax(NumOfRows);
-                int row_count=1;
+                FLENS_DEFAULT_INDEXTYPE row_count=1;
                 for (const_set_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
                     if (f.count((*row)) > 0) {
                         const_coeff_it it = f.find(*row);
@@ -529,12 +529,12 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical
                     else                     rhs(row_count) = 0.;
                 }
                 std::cout << "Starting cgls..." << std::endl;
-                int number_of_iterations = lawa::cgls(A_flens,x,rhs, tol, maxIterations);
+                FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::cgls(A_flens,x,rhs, tol, maxIterations);
                 std::cout << "... finished" << std::endl;
                 Ax = A_flens*x;
                 residual= Ax-rhs;
                 res= std::sqrt(residual*residual);
-                int col_count = 1;
+                FLENS_DEFAULT_INDEXTYPE col_count = 1;
                 for (const_set_it col=LambdaCol.begin(); col!=LambdaCol.end(); ++col, ++col_count) {
                     u[*col] = x(col_count);
                 }
@@ -547,10 +547,10 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, MA &A, Coefficients<Lexicographical
 
 
 template <typename T, typename Index, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,  MA &A,
  					 Coefficients<Lexicographical,T,Index > &u, const Coefficients<Lexicographical,T,Index > &f, 
-					 T &res, T tol, int maxIterations, int assemble_matrix)
+					 T &res, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations, FLENS_DEFAULT_INDEXTYPE assemble_matrix)
 {
 		if (assemble_matrix==0) {
 			std::cout << "CGLS called with LambdaRow and LambdaCol not set up to use with hashmap structure" << std::endl;
@@ -560,8 +560,8 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,  
       typedef typename IndexSet<Index >::const_iterator const_set_it;
       typedef typename Coefficients<Lexicographical,T,Index >::const_iterator const_coeff_it;
 
-      int NumOfRows = (int)LambdaRow.size();
-      int NumOfCols = (int)LambdaCol.size();
+      FLENS_DEFAULT_INDEXTYPE NumOfRows = (FLENS_DEFAULT_INDEXTYPE)LambdaRow.size();
+      FLENS_DEFAULT_INDEXTYPE NumOfCols = (FLENS_DEFAULT_INDEXTYPE)LambdaCol.size();
       flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > A_flens(NumOfRows,NumOfCols);
       if (assemble_matrix==2) {
           A.toFlensSparseMatrix(LambdaRow, LambdaCol, A_flens, tol);
@@ -571,7 +571,7 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,  
       }
       if (LambdaRow.size() > 0) {
           flens::DenseVector<flens::Array<T> > rhs(NumOfRows), x(NumOfCols), residual(NumOfRows), Ax(NumOfRows);
-          int row_count=1;
+          FLENS_DEFAULT_INDEXTYPE row_count=1;
           for (const_set_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
               if (f.count((*row)) > 0) {
                   const_coeff_it it = f.find(*row);
@@ -580,12 +580,12 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,  
               else                     rhs(row_count) = 0.;
           }
           std::cout << "Starting cgls..." << std::endl;
-          int number_of_iterations = lawa::cgls(A_flens,x,rhs, tol, maxIterations);
+          FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::cgls(A_flens,x,rhs, tol, maxIterations);
           std::cout << "... finished" << std::endl;
           Ax = A_flens*x;
           residual= Ax-rhs;
           res= std::sqrt(residual*residual);
-          int col_count = 1;
+          FLENS_DEFAULT_INDEXTYPE col_count = 1;
           for (const_set_it col=LambdaCol.begin(); col!=LambdaCol.end(); ++col, ++col_count) {
               u[*col] = x(col_count);
           }
@@ -596,13 +596,13 @@ CGLS_Solve(const IndexSet<Index> &LambdaRow, const IndexSet<Index> &LambdaCol,  
 }
 
 template <typename T, typename Index, typename SpaceIndex, typename MA>
-int
+FLENS_DEFAULT_INDEXTYPE
 CGLS_Solve(const IndexSet<Index> &LambdaRowOp, const IndexSet<SpaceIndex> &LambdaRowInitCond,
            MA &A, const IndexSet<Index> &LambdaCol,
            Coefficients<Lexicographical,T,Index > &u,
            const Coefficients<Lexicographical,T,Index > &f,
            const Coefficients<Lexicographical,T,SpaceIndex > &u0,
-           T &r, T tol, int maxIterations)
+           T &r, T tol, FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typedef typename IndexSet<Index >::const_iterator const_set_op_it;
     typedef typename IndexSet<SpaceIndex >::const_iterator const_set_initcond_it;
@@ -610,14 +610,14 @@ CGLS_Solve(const IndexSet<Index> &LambdaRowOp, const IndexSet<SpaceIndex> &Lambd
     typedef typename Coefficients<Lexicographical,T,SpaceIndex >::const_iterator const_coeff_initcond_it;
 
     std::cerr << "CGLS_SOLVE called..." << std::endl;
-    int NumOfCols = LambdaCol.size();
-    int NumOfRows = LambdaRowOp.size() + LambdaRowInitCond.size();
+    FLENS_DEFAULT_INDEXTYPE NumOfCols = LambdaCol.size();
+    FLENS_DEFAULT_INDEXTYPE NumOfRows = LambdaRowOp.size() + LambdaRowInitCond.size();
     flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > A_flens(NumOfRows,NumOfCols);
     toFlensSparseMatrix(A, LambdaRowOp, LambdaRowInitCond, LambdaCol, A_flens);
 
     if (LambdaCol.size() > 0) {
         flens::DenseVector<flens::Array<T> > rhs(NumOfRows), x(NumOfCols), res(NumOfRows), Ax(NumOfRows);
-        int row_count=1;
+        FLENS_DEFAULT_INDEXTYPE row_count=1;
         const_coeff_it f_end = f.end();
         for (const_set_op_it row=LambdaRowOp.begin(); row!=LambdaRowOp.end(); ++row, ++row_count) {
             const_coeff_it f_it = f.find(*row);
@@ -633,13 +633,13 @@ CGLS_Solve(const IndexSet<Index> &LambdaRowOp, const IndexSet<SpaceIndex> &Lambd
             else                      rhs(row_count) = 0.;
         }
         const_coeff_it u_end = u.end();
-        int col_count=1;
+        FLENS_DEFAULT_INDEXTYPE col_count=1;
         for (const_set_op_it col=LambdaCol.begin(); col!=LambdaCol.end(); ++col, ++col_count) {
             const_coeff_it u_it = u.find(*col);
             if (u_it != u_end) x(col_count) = (*u_it).second;
             else               x(col_count) = 0.;
         }
-        int number_of_iterations = lawa::cgls(A_flens,x,rhs, tol, maxIterations);
+        FLENS_DEFAULT_INDEXTYPE number_of_iterations = lawa::cgls(A_flens,x,rhs, tol, maxIterations);
         Ax = A_flens*x;
         res= Ax-rhs;
         r = std::sqrt(res*res);

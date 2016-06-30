@@ -65,11 +65,11 @@ struct AdaptiveHelmholtzOperator2D : public AdaptiveOperator2D<T>
                                Compression1D_y, NoPreconditioner1D>  DataLaplace_y;
 
     typedef HelmholtzOperator2D<T, Basis2D>                 HelmholtzBilinearForm2D;
-    typedef DiagonalMatrixPreconditioner2D<T, Basis2D,
+    typedef DiagonalMatrixPreconditioner2D<T,
                                         HelmholtzBilinearForm2D>  DiagonalHelmholtzPreconditioner2D;
 
     AdaptiveHelmholtzOperator2D(const Basis2D &_basis2d, T _c, const Preconditioner &_Prec,
-                                T thresh=0., int NumOfCols=4096, int NumOfRows=4096);
+                                T thresh=0., FLENS_DEFAULT_INDEXTYPE NumOfCols=4096, FLENS_DEFAULT_INDEXTYPE NumOfRows=4096);
 
     T
     operator()(const Index2D &row_index, const Index2D &col_index);
@@ -83,14 +83,14 @@ struct AdaptiveHelmholtzOperator2D : public AdaptiveOperator2D<T>
 
     void
     toFlensSparseMatrix(const IndexSet<Index2D>& LambdaRow, const IndexSet<Index2D>& LambdaCol,
-                        SparseMatrixT &A_flens, int J=-1, bool useLinearIndex=false);
+                        SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J=-1, bool useLinearIndex=false);
 
     void
     toFlensSparseMatrix(const IndexSet<Index2D>& LambdaRow, const IndexSet<Index2D>& LambdaCol,
                         SparseMatrixT &A_flens, T eps, bool useLinearIndex=false);
 
     Coefficients<Lexicographical,T,Index2D>
-    apply(const Coefficients<Lexicographical,T,Index2D> &v, int k, int J=-1000,
+    apply(const Coefficients<Lexicographical,T,Index2D> &v, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE J=-1000,
           cxxblas::Transpose trans=cxxblas::NoTrans);
 
     void

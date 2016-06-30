@@ -20,7 +20,7 @@
 namespace lawa {
     
 template<typename Basis>
-UniformIndex2D<Basis>::UniformIndex2D(const Basis& _basis, const int _J_x, const int _J_y)
+UniformIndex2D<Basis>::UniformIndex2D(const Basis& _basis, const FLENS_DEFAULT_INDEXTYPE _J_x, const FLENS_DEFAULT_INDEXTYPE _J_y)
     : basis(_basis), J_x(_J_x), J_y(_J_y),
       offsetIx(_basis.first.mra.rangeI(_basis.first.j0).firstIndex() - 1), 
       offsetIy(_basis.second.mra.rangeI(_basis.second.j0).firstIndex() - 1), 
@@ -30,9 +30,9 @@ UniformIndex2D<Basis>::UniformIndex2D(const Basis& _basis, const int _J_x, const
 }
 
 template<typename Basis>
-int
-UniformIndex2D<Basis>::operator()(XType xtype_x, int jx, int kx,
-                                  XType xtype_y, int jy, int ky) const
+FLENS_DEFAULT_INDEXTYPE
+UniformIndex2D<Basis>::operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE jx, FLENS_DEFAULT_INDEXTYPE kx,
+                                  XType xtype_y, FLENS_DEFAULT_INDEXTYPE jy, FLENS_DEFAULT_INDEXTYPE ky) const
 {
 
     if(xtype_x == XBSpline){

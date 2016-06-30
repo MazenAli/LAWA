@@ -23,7 +23,7 @@
 
 namespace lawa {
 
-int
+FLENS_DEFAULT_INDEXTYPE
 ifloor(double x);
 
 } // namespace lawa

@@ -22,10 +22,10 @@
 
 namespace lawa {
 
-int
+FLENS_DEFAULT_INDEXTYPE
 iceil(double x)
 {
-    return static_cast<int>(std::ceil(x));
+    return static_cast<FLENS_DEFAULT_INDEXTYPE>(std::ceil(x));
 }
 
 } // namespace lawa

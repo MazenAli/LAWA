@@ -21,12 +21,12 @@ namespace lawa {
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-linspace(T from, T to, int numTicks)
+linspace(T from, T to, FLENS_DEFAULT_INDEXTYPE numTicks)
 {
     T step = (to-from) / (numTicks-1);
     flens::DenseVector<flens::Array<T> > x(numTicks,0);
     x(0) = from;
-    for (int i=1; i<numTicks-1; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<numTicks-1; ++i) {
         x(i) = from + i*step;
     }
     x(x.lastIndex()) = to;

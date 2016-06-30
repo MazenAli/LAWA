@@ -118,7 +118,7 @@ template <typename T, typename _Basis, typename _Index,
          typename _Rhs, typename _Precon>
 void
 sample_f(const _Basis& basis, IndexSet<_Index> Lambda, _Rhs& f,
-         const _Precon& P,
+         _Precon& P,
          Coefficients<Lexicographical, T, _Index>& ret,
          T tol,
          bool IsMW, T alpha, std::size_t max_it)
@@ -235,7 +235,7 @@ template <typename T, typename _Basis, typename _Index, typename _Op,
           typename _Precon>
 void
 sample_Au(const _Basis& basis, IndexSet<_Index> Lambda, _Op& A,
-          const _Precon& P,
+          _Precon& P,
           const Coefficients<Lexicographical, T, _Index>& u,
           Coefficients<Lexicographical, T, _Index>& ret, T tol,
           bool IsMW, T alpha, std::size_t max_it)

@@ -67,7 +67,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 {
     CoefficientsByLevel<T> d, PhiPiCheck;
     if (TrialBasis::Cons==Multi || TrialBasis::Domain==Periodic) {
-        int j_bspline = 0;
+        FLENS_DEFAULT_INDEXTYPE j_bspline = 0;
         if (PsiLambdaHat[0].map.size()==0) {
             std::cerr << "ERROR: No scaling functions in tree PsiLambdaHat!" << std::endl;
             std::cerr << PsiLambdaHat << std::endl;
@@ -79,7 +79,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
         d = PsiLambdaHat[0];
     }
     if (TestBasis::Cons==Multi || TestBasis::Domain==Periodic) {
-        int j_bspline = 0;
+        FLENS_DEFAULT_INDEXTYPE j_bspline = 0;
         if (strcmp(mode,"L")!=0) {
             if (PsiLambdaCheck[0].map.size()==0) {
                 std::cerr << "ERROR: No scaling functions in tree PsiLambdaCheck!" << std::endl;
@@ -120,21 +120,21 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm, typename BilinearForm>
 void
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_evalA(int l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
+::_evalA(FLENS_DEFAULT_INDEXTYPE l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
         CoefficientsByLevel<T> &PhiPiCheck, TreeCoefficients1D<T> &PsiLambdaCheck)
 {
     //Timer time;
 
 //    std::cout << "EvalA on Level l = " << l << " with d = " << d <<
 //    		  "c = " << c << " PhiPiCheck = " << PhiPiCheck << "PsiLambdaCheck = " << PsiLambdaCheck << std::endl;
-    int shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
+    FLENS_DEFAULT_INDEXTYPE shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
     if (d.map.size()==0 && c[shifted_l].map.size()==0) return;
     if (PhiPiCheck.map.size()==0 && PsiLambdaCheck[shifted_l].map.size()==0) return;
 
-    int j_bspline_test =  l + testRefinementLevelOffset;
-    int j_bspline_trial = l + trialRefinementLevelOffset;
-    int j_wavelet_test =  l + testBasis.j0;
-    int j_wavelet_trial = l + trialBasis.j0;
+    FLENS_DEFAULT_INDEXTYPE j_bspline_test =  l + testRefinementLevelOffset;
+    FLENS_DEFAULT_INDEXTYPE j_bspline_trial = l + trialRefinementLevelOffset;
+    FLENS_DEFAULT_INDEXTYPE j_wavelet_test =  l + testBasis.j0;
+    FLENS_DEFAULT_INDEXTYPE j_wavelet_trial = l + trialBasis.j0;
 
     //size_t hm_size = COEFFBYLEVELSIZE;
     size_t hm_size = (size_t)(2*std::max(d.map.size(), PhiPiCheck.map.size()));
@@ -152,7 +152,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 
     //std::cout << "Level l = " << l << ": Split PhiPi into PhiPiCheck " << PhiPiCheck << "and PhiPiCheck2 "<< PhiPiCheck2 << std::endl;
     // Compute underlinePiCheck
-    int j_refinement_test = 0;
+    FLENS_DEFAULT_INDEXTYPE j_refinement_test = 0;
     CoefficientsByLevel<T> PhiPiunderlineCheck(l,hm_size);
     testLocalRefine.reconstruct(PhiPiCheck2,         j_bspline_test,
                                 PsiLambdaCheck[shifted_l],   j_wavelet_test,
@@ -184,7 +184,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
     // Compute underline d
     //time.start();
     CoefficientsByLevel<T> underline_d(l+1,4*hm_size);
-    int j_refinement_trial = 0;
+    FLENS_DEFAULT_INDEXTYPE j_refinement_trial = 0;
     trialLocalRefine.reconstruct(d2,           j_bspline_trial,
                                  c[shifted_l], j_wavelet_trial,
                                  underline_d,  j_refinement_trial);
@@ -224,16 +224,16 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm, typename BilinearForm>
 void
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_evalU(int l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
+::_evalU(FLENS_DEFAULT_INDEXTYPE l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
         CoefficientsByLevel<T> &PhiPiCheck, TreeCoefficients1D<T> &PsiLambdaCheck)
 {
-    int shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
+    FLENS_DEFAULT_INDEXTYPE shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
     if (d.map.size()==0 && c[shifted_l].map.size()==0) return;
 
-    int j_bspline_test =  l + testRefinementLevelOffset;
-    int j_bspline_trial = l + trialRefinementLevelOffset;
-    int j_wavelet_test =  l + testBasis.j0;
-    int j_wavelet_trial = l + trialBasis.j0;
+    FLENS_DEFAULT_INDEXTYPE j_bspline_test =  l + testRefinementLevelOffset;
+    FLENS_DEFAULT_INDEXTYPE j_bspline_trial = l + trialRefinementLevelOffset;
+    FLENS_DEFAULT_INDEXTYPE j_wavelet_test =  l + testBasis.j0;
+    FLENS_DEFAULT_INDEXTYPE j_wavelet_trial = l + trialBasis.j0;
 
     size_t hm_size = 2*COEFFBYLEVELSIZE;
 
@@ -242,7 +242,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
     _splitPhiPi(l, c[shifted_l], PhiPiCheck, PhiPiCheck2);
 
     // Compute underlinePiCheck
-    int j_refinement_test = 0;
+    FLENS_DEFAULT_INDEXTYPE j_refinement_test = 0;
     CoefficientsByLevel<T> PhiPiunderlineCheck(l,hm_size);
     testLocalRefine.reconstruct(PhiPiCheck2,         j_bspline_test,
                                 PsiLambdaCheck[shifted_l],   j_wavelet_test,
@@ -253,7 +253,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 
     // Compute underline d
     CoefficientsByLevel<T> help, underline_d(l+1,hm_size);
-    int j_refinement_trial = 0;
+    FLENS_DEFAULT_INDEXTYPE j_refinement_trial = 0;
     trialLocalRefine.reconstruct(help,         j_bspline_trial,
                                  c[shifted_l], j_wavelet_trial,
                                  underline_d,  j_refinement_trial);
@@ -276,21 +276,21 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm, typename BilinearForm>
 void
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_evalL(int l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
+::_evalL(FLENS_DEFAULT_INDEXTYPE l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
          TreeCoefficients1D<T> &PsiLambdaCheck)
 {
-    int shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
+    FLENS_DEFAULT_INDEXTYPE shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
     if (d.map.size()==0 && c[shifted_l].map.size()==0) return;
 
-    int j_bspline_test =  l + testRefinementLevelOffset;
-    int j_bspline_trial = l + trialRefinementLevelOffset;
-    int j_wavelet_test =  l + testBasis.j0;
-    int j_wavelet_trial = l + trialBasis.j0;
+    FLENS_DEFAULT_INDEXTYPE j_bspline_test =  l + testRefinementLevelOffset;
+    FLENS_DEFAULT_INDEXTYPE j_bspline_trial = l + trialRefinementLevelOffset;
+    FLENS_DEFAULT_INDEXTYPE j_wavelet_test =  l + testBasis.j0;
+    FLENS_DEFAULT_INDEXTYPE j_wavelet_trial = l + trialBasis.j0;
 
     size_t hm_size = 2*COEFFBYLEVELSIZE;
 
     // Compute underlinePiCheck
-    int j_refinement_test = 0;
+    FLENS_DEFAULT_INDEXTYPE j_refinement_test = 0;
     CoefficientsByLevel<T> help, PhiPiunderlineCheck(l,hm_size);
     testLocalRefine.reconstruct(help,                      j_bspline_test,
                                 PsiLambdaCheck[shifted_l], j_wavelet_test,
@@ -301,7 +301,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
     _splitd(l, PsiLambdaCheck[shifted_l], d, d2);
 
     // Compute $\underline{\underline d}$
-    int j_refinement_trial = 0;
+    FLENS_DEFAULT_INDEXTYPE j_refinement_trial = 0;
     CoefficientsByLevel<T> underline_d;
     trialLocalRefine.reconstruct(d2,          j_bspline_trial,
                                  help,        j_wavelet_trial,
@@ -329,22 +329,22 @@ template <typename TestBasis, typename TrialBasis, typename RefinementBilinearFo
 template <typename T_>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<TrialBasis>::value, T_>::value, void>::Type
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_splitPhiPi(int l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1, CoefficientsByLevel<T_> &PhiPiCheck2) const
+::_splitPhiPi(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1, CoefficientsByLevel<T_> &PhiPiCheck2) const
 {
     if (c_l.map.size()==0) return;
 
     if (c_l.map.size()>PhiPiCheck1.map.size()) {
         const_by_level_it p_c_l_end = c_l.map.end();
-        int j_bspline = l + testRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline = l + testRefinementLevelOffset;
         for (const_by_level_it mu=PhiPiCheck1.map.begin(); mu!=PhiPiCheck1.map.end();) {
             bool increment = false;
-            long k_bspline = (*mu).first;
-            int  j_wavelet = 0;
-            long k_wavelet_first = 0L, k_wavelet_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_bspline = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_wavelet = 0;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_wavelet_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             testRefinementBasis.getWaveletNeighborsForBSpline(j_bspline, k_bspline, trialBasis,
                                                     j_wavelet, k_wavelet_first, k_wavelet_last);
 
-            for (long k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+            for (FLENS_DEFAULT_INDEXTYPE k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
                 const_by_level_it p_entry_c_l = c_l.map.find(k_wavelet);
                 if (p_entry_c_l!=p_c_l_end) {
                     PhiPiCheck2.map[k_bspline] = 0.;
@@ -359,15 +359,15 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
         }
     }
     else {
-        int j_wavelet = l + trialBasis.j0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = l + trialBasis.j0;
         for (const_by_level_it mu=c_l.map.begin(); mu!=c_l.map.end(); ++mu) {
-            long k_wavelet = (*mu).first;
-            int  j_bspline = 0;
-            long k_bspline_first = 0L, k_bspline_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_bspline = 0;
+            FLENS_DEFAULT_INDEXTYPE k_bspline_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_bspline_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             trialBasis.getBSplineNeighborsForWavelet(j_wavelet, k_wavelet, testRefinementBasis,
                                                      j_bspline, k_bspline_first, k_bspline_last);
             //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
-            for (long k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
+            for (FLENS_DEFAULT_INDEXTYPE k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
                 const_by_level_it p_PhiPiCheck1 = PhiPiCheck1.map.find(k_bspline);
                 if (p_PhiPiCheck1!=PhiPiCheck1.map.end()) {
                     PhiPiCheck2.map[k_bspline] = 0.;
@@ -383,24 +383,24 @@ template <typename TestBasis, typename TrialBasis, typename RefinementBilinearFo
 template <typename T_>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<TrialBasis>::value, T_>::value, void>::Type
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_splitPhiPi(int l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1, CoefficientsByLevel<T_> &PhiPiCheck2) const
+::_splitPhiPi(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1, CoefficientsByLevel<T_> &PhiPiCheck2) const
 {
 
     if (c_l.map.size()==0) return;
 
     if (c_l.map.size()>PhiPiCheck1.map.size()) {
         const_by_level_it p_c_l_end = c_l.map.end();
-        int j_bspline = l + testRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline = l + testRefinementLevelOffset;
         for (const_by_level_it mu=PhiPiCheck1.map.begin(); mu!=PhiPiCheck1.map.end();) {
             bool increment = false;
-            long k_bspline = (*mu).first;
-            int  j_wavelet = 0;
-            long k_wavelet_first = 0L, k_wavelet_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_bspline = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_wavelet = 0;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_wavelet_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             testRefinementBasis.getWaveletNeighborsForBSpline(j_bspline, k_bspline, trialBasis,
                                                     j_wavelet, k_wavelet_first, k_wavelet_last);
 
             if(k_wavelet_first < k_wavelet_last){
-                for (long k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+                for (FLENS_DEFAULT_INDEXTYPE k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
 	                const_by_level_it p_entry_c_l = c_l.map.find(k_wavelet);
 	                if (p_entry_c_l!=p_c_l_end) {
 	                    PhiPiCheck2.map[k_bspline] = 0.;
@@ -412,7 +412,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
             }
             else{
             	bool is_break = false;
-                for (long k_wavelet=k_wavelet_first; k_wavelet<=trialBasis.rangeJ(j_wavelet).lastIndex(); ++k_wavelet) {
+                for (FLENS_DEFAULT_INDEXTYPE k_wavelet=k_wavelet_first; k_wavelet<=trialBasis.rangeJ(j_wavelet).lastIndex(); ++k_wavelet) {
 	                const_by_level_it p_entry_c_l = c_l.map.find(k_wavelet);
 	                if (p_entry_c_l!=p_c_l_end) {
 	                    PhiPiCheck2.map[k_bspline] = 0.;
@@ -423,7 +423,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 	                }
             	}
                 if(!is_break){
-                    for (long k_wavelet=trialBasis.rangeJ(j_wavelet).firstIndex(); k_wavelet <= k_wavelet_last; ++k_wavelet) {
+                    for (FLENS_DEFAULT_INDEXTYPE k_wavelet=trialBasis.rangeJ(j_wavelet).firstIndex(); k_wavelet <= k_wavelet_last; ++k_wavelet) {
     	                const_by_level_it p_entry_c_l = c_l.map.find(k_wavelet);
     	                if (p_entry_c_l!=p_c_l_end) {
     	                    PhiPiCheck2.map[k_bspline] = 0.;
@@ -440,16 +440,16 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
         }
     }
     else {
-        int j_wavelet = l + trialBasis.j0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = l + trialBasis.j0;
         for (const_by_level_it mu=c_l.map.begin(); mu!=c_l.map.end(); ++mu) {
-            long k_wavelet = (*mu).first;
-            int  j_bspline = 0;
-            long k_bspline_first = 0L, k_bspline_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_bspline = 0;
+            FLENS_DEFAULT_INDEXTYPE k_bspline_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_bspline_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             trialBasis.getBSplineNeighborsForWavelet(j_wavelet, k_wavelet, testRefinementBasis,
                                                      j_bspline, k_bspline_first, k_bspline_last);
             if(k_bspline_first < k_bspline_last){
                 //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
-                for (long k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
+                for (FLENS_DEFAULT_INDEXTYPE k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
                     const_by_level_it p_PhiPiCheck1 = PhiPiCheck1.map.find(k_bspline);
                     if (p_PhiPiCheck1!=PhiPiCheck1.map.end()) {
                         PhiPiCheck2.map[k_bspline] = 0.;
@@ -458,14 +458,14 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
                 }
             }
             else{
-                for (long k_bspline=k_bspline_first; k_bspline<=testRefinementBasis.mra.rangeI(j_bspline).lastIndex(); ++k_bspline) {
+                for (FLENS_DEFAULT_INDEXTYPE k_bspline=k_bspline_first; k_bspline<=testRefinementBasis.mra.rangeI(j_bspline).lastIndex(); ++k_bspline) {
                     const_by_level_it p_PhiPiCheck1 = PhiPiCheck1.map.find(k_bspline);
                     if (p_PhiPiCheck1!=PhiPiCheck1.map.end()) {
                         PhiPiCheck2.map[k_bspline] = 0.;
                         PhiPiCheck1.map.erase(k_bspline);
                     }
             	}
-				for (long k_bspline=testRefinementBasis.mra.rangeI(j_bspline).firstIndex(); k_bspline <= k_bspline_last; ++k_bspline) {
+				for (FLENS_DEFAULT_INDEXTYPE k_bspline=testRefinementBasis.mra.rangeI(j_bspline).firstIndex(); k_bspline <= k_bspline_last; ++k_bspline) {
 	                const_by_level_it p_PhiPiCheck1 = PhiPiCheck1.map.find(k_bspline);
 	                if (p_PhiPiCheck1!=PhiPiCheck1.map.end()) {
 	                    PhiPiCheck2.map[k_bspline] = 0.;
@@ -482,20 +482,20 @@ template <typename TestBasis, typename TrialBasis, typename RefinementBilinearFo
 template <typename T_>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<TestBasis>::value, T_>::value, void>::Type
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_splitd(int l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
+::_splitd(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
           CoefficientsByLevel<T_> &d1, CoefficientsByLevel<T_> &d2) const
 {
     if (PsiLambdaCheck_l.map.size()==0) return;
     if (d1.map.size()>PsiLambdaCheck_l.map.size()) {
-        int j_wavelet = l + testBasis.j0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = l + testBasis.j0;
         for (const_by_level_it mu=PsiLambdaCheck_l.map.begin(); mu!=PsiLambdaCheck_l.map.end(); ++mu) {
-            long k_wavelet = (*mu).first;
-            int  j_bspline = 0;
-            long k_bspline_first = 0L, k_bspline_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_bspline = 0;
+            FLENS_DEFAULT_INDEXTYPE k_bspline_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_bspline_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             testBasis.getBSplineNeighborsForWavelet(j_wavelet, k_wavelet, trialRefinementBasis,
                                                     j_bspline, k_bspline_first, k_bspline_last);
             Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
-            for (long k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
+            for (FLENS_DEFAULT_INDEXTYPE k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
                 Support<T> trialSupp = trialRefinementBasis.generator(XBSpline).support(j_bspline,k_bspline);
                 if (!(overlap(testSupp,trialSupp)> 0)) continue;
                 by_level_it p_entry_d1 = d1.map.find(k_bspline);
@@ -508,16 +508,16 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
     }
     else {
         const_by_level_it p_PsiLambdaCheck_l_end = PsiLambdaCheck_l.map.end();
-        int j_bspline = l + trialRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline = l + trialRefinementLevelOffset;
 
         for (const_by_level_it mu=d1.map.begin(); mu!=d1.map.end();) {
             bool increment = false;
-            long k_bspline = (*mu).first;
-            int  j_wavelet = 0;
-            long k_wavelet_first = 0L, k_wavelet_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_bspline = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_wavelet = 0;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_wavelet_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             trialRefinementBasis.getWaveletNeighborsForBSpline(j_bspline, k_bspline, testBasis,
                                                      j_wavelet, k_wavelet_first, k_wavelet_last);
-            for (long k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+            for (FLENS_DEFAULT_INDEXTYPE k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
                 //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
                 const_by_level_it p_PsiLambdaCheck_l = PsiLambdaCheck_l.map.find(k_wavelet);
                 if (/*overlap(testSupp,trialSupp) &&*/ p_PsiLambdaCheck_l!=p_PsiLambdaCheck_l_end) {
@@ -539,21 +539,21 @@ template <typename TestBasis, typename TrialBasis, typename RefinementBilinearFo
 template <typename T_>
 typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<TestBasis>::value, T_>::value, void>::Type
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_splitd(int l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
+::_splitd(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
           CoefficientsByLevel<T_> &d1, CoefficientsByLevel<T_> &d2) const
 {
     if (PsiLambdaCheck_l.map.size()==0) return;
     if (d1.map.size()>PsiLambdaCheck_l.map.size()) {
-        int j_wavelet = l + testBasis.j0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = l + testBasis.j0;
         for (const_by_level_it mu=PsiLambdaCheck_l.map.begin(); mu!=PsiLambdaCheck_l.map.end(); ++mu) {
-            long k_wavelet = (*mu).first;
-            int  j_bspline = 0;
-            long k_bspline_first = 0L, k_bspline_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_bspline = 0;
+            FLENS_DEFAULT_INDEXTYPE k_bspline_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_bspline_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             testBasis.getBSplineNeighborsForWavelet(j_wavelet, k_wavelet, trialRefinementBasis,
                                                     j_bspline, k_bspline_first, k_bspline_last);
             if(k_bspline_first < k_bspline_last){
                 //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
-                for (long k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
+                for (FLENS_DEFAULT_INDEXTYPE k_bspline=k_bspline_first; k_bspline<=k_bspline_last; ++k_bspline) {
                     //Support<T> trialSupp = trialBasis.generator(XBSpline).support(j_bspline,k_bspline);
                     //if (!overlap(testSupp,trialSupp)) continue;
                     by_level_it p_entry_d1 = d1.map.find(k_bspline);
@@ -564,7 +564,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
                 }
             }
             else{
-                for (long k_bspline=k_bspline_first; k_bspline<=trialRefinementBasis.mra.rangeI(j_bspline).lastIndex(); ++k_bspline) {
+                for (FLENS_DEFAULT_INDEXTYPE k_bspline=k_bspline_first; k_bspline<=trialRefinementBasis.mra.rangeI(j_bspline).lastIndex(); ++k_bspline) {
                     //Support<T> trialSupp = trialBasis.generator(XBSpline).support(j_bspline,k_bspline);
                     //if (!overlap(testSupp,trialSupp)) continue;
                     by_level_it p_entry_d1 = d1.map.find(k_bspline);
@@ -573,7 +573,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
                         d1.map.erase(p_entry_d1);
                     }
             	}
-				for (long k_bspline=trialRefinementBasis.mra.rangeI(j_bspline).firstIndex(); k_bspline <= k_bspline_last; ++k_bspline) {
+				for (FLENS_DEFAULT_INDEXTYPE k_bspline=trialRefinementBasis.mra.rangeI(j_bspline).firstIndex(); k_bspline <= k_bspline_last; ++k_bspline) {
 					//Support<T> trialSupp = trialBasis.generator(XBSpline).support(j_bspline,k_bspline);
 					//if (!overlap(testSupp,trialSupp)) continue;
 					by_level_it p_entry_d1 = d1.map.find(k_bspline);
@@ -587,16 +587,16 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
     }
     else {
         const_by_level_it p_PsiLambdaCheck_l_end = PsiLambdaCheck_l.map.end();
-        int j_bspline = l + trialRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline = l + trialRefinementLevelOffset;
         for (const_by_level_it mu=d1.map.begin(); mu!=d1.map.end();) {
             bool increment = false;
-            long k_bspline = (*mu).first;
-            int  j_wavelet = 0;
-            long k_wavelet_first = 0L, k_wavelet_last = 0L;
+            FLENS_DEFAULT_INDEXTYPE k_bspline = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE  j_wavelet = 0;
+            FLENS_DEFAULT_INDEXTYPE k_wavelet_first = (FLENS_DEFAULT_INDEXTYPE) 0, k_wavelet_last = (FLENS_DEFAULT_INDEXTYPE) 0;
             trialRefinementBasis.getWaveletNeighborsForBSpline(j_bspline, k_bspline, testBasis,
                                                      j_wavelet, k_wavelet_first, k_wavelet_last);
             if(k_wavelet_first < k_wavelet_last){
-                for (long k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+                for (FLENS_DEFAULT_INDEXTYPE k_wavelet=k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
                     //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
                     const_by_level_it p_PsiLambdaCheck_l = PsiLambdaCheck_l.map.find(k_wavelet);
                     if (/*overlap(testSupp,trialSupp) &&*/ p_PsiLambdaCheck_l!=p_PsiLambdaCheck_l_end) {
@@ -609,7 +609,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
             }
             else{
             	bool is_break = false;
-                for (long k_wavelet=k_wavelet_first; k_wavelet<=testBasis.rangeJ(j_wavelet).lastIndex(); ++k_wavelet) {
+                for (FLENS_DEFAULT_INDEXTYPE k_wavelet=k_wavelet_first; k_wavelet<=testBasis.rangeJ(j_wavelet).lastIndex(); ++k_wavelet) {
                     //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
                     const_by_level_it p_PsiLambdaCheck_l = PsiLambdaCheck_l.map.find(k_wavelet);
                     if (/*overlap(testSupp,trialSupp) &&*/ p_PsiLambdaCheck_l!=p_PsiLambdaCheck_l_end) {
@@ -620,7 +620,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
                     }
             	}
                 if(!is_break){
-                    for (long k_wavelet=testBasis.rangeJ(j_wavelet).firstIndex(); k_wavelet <= k_wavelet_last; ++k_wavelet) {
+                    for (FLENS_DEFAULT_INDEXTYPE k_wavelet=testBasis.rangeJ(j_wavelet).firstIndex(); k_wavelet <= k_wavelet_last; ++k_wavelet) {
                         //Support<T> testSupp = testBasis.generator(XWavelet).support(j_wavelet,k_wavelet);
                         const_by_level_it p_PsiLambdaCheck_l = PsiLambdaCheck_l.map.find(k_wavelet);
                         if (/*overlap(testSupp,trialSupp) &&*/ p_PsiLambdaCheck_l!=p_PsiLambdaCheck_l_end) {
@@ -644,23 +644,23 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 template <typename TestBasis, typename TrialBasis, typename RefinementBilinearForm, typename BilinearForm>
 void
 LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
-::_applyRefinementBilinearForm(int l, const CoefficientsByLevel<T> &d, CoefficientsByLevel<T> &PhiPiCheck)
+::_applyRefinementBilinearForm(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T> &d, CoefficientsByLevel<T> &PhiPiCheck)
 {
     if (d.map.size()==0 || PhiPiCheck.map.size()==0) return;
     if (d.map.size() > PhiPiCheck.map.size()) {
         const_by_level_it p_d_end = d.map.end();
-        int j_bspline1 = l + testRefinementLevelOffset;
-        int j_bspline2=0;
-        long k_bspline2_first=0L, k_bspline2_last=0L;
+        FLENS_DEFAULT_INDEXTYPE j_bspline1 = l + testRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline2=0;
+        FLENS_DEFAULT_INDEXTYPE k_bspline2_first=(FLENS_DEFAULT_INDEXTYPE) 0, k_bspline2_last=(FLENS_DEFAULT_INDEXTYPE) 0;
 
         for (by_level_it mu=PhiPiCheck.map.begin(); mu!=PhiPiCheck.map.end(); ++mu) {
             long double val = 0.;
-            long k_bspline1 = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE k_bspline1 = (*mu).first;
 
             testRefinementBasis.getBSplineNeighborsForBSpline(j_bspline1, k_bspline1,
                                trialRefinementBasis, j_bspline2, k_bspline2_first, k_bspline2_last);
 
-            for (long k_bspline2=k_bspline2_first; k_bspline2<=k_bspline2_last; ++k_bspline2) {
+            for (FLENS_DEFAULT_INDEXTYPE k_bspline2=k_bspline2_first; k_bspline2<=k_bspline2_last; ++k_bspline2) {
                 const_by_level_it p_entry_d = d.map.find(k_bspline2);
                 if (p_entry_d!=p_d_end) {
                     val += (long double)(RefinementBil(XBSpline, j_bspline1, k_bspline1,
@@ -674,17 +674,17 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 
     else {
         //const_by_level_it p_PhiPiCheck_end = PhiPiCheck.map.end();
-        int j_bspline2 = l + trialRefinementLevelOffset;
-        int j_bspline1=0;
-        long k_bspline1_first=0L, k_bspline1_last=0L;
+        FLENS_DEFAULT_INDEXTYPE j_bspline2 = l + trialRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline1=0;
+        FLENS_DEFAULT_INDEXTYPE k_bspline1_first=(FLENS_DEFAULT_INDEXTYPE) 0, k_bspline1_last=(FLENS_DEFAULT_INDEXTYPE) 0;
 
         for (const_by_level_it mu=d.map.begin(); mu!=d.map.end(); ++mu) {
             //long double val = 0.;
-            long k_bspline2 = (*mu).first;
+            FLENS_DEFAULT_INDEXTYPE k_bspline2 = (*mu).first;
             trialRefinementBasis.getBSplineNeighborsForBSpline(j_bspline2, k_bspline2,
                                 testRefinementBasis, j_bspline1, k_bspline1_first, k_bspline1_last);
 
-            for (long k_bspline1=k_bspline1_first; k_bspline1<=k_bspline1_last; ++k_bspline1) {
+            for (FLENS_DEFAULT_INDEXTYPE k_bspline1=k_bspline1_first; k_bspline1<=k_bspline1_last; ++k_bspline1) {
                 by_level_it p_PhiPiCheck=PhiPiCheck.map.find(k_bspline1);
                 if (p_PhiPiCheck!=PhiPiCheck.map.end()) {
                     (*p_PhiPiCheck).second
@@ -724,19 +724,19 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
 ::_evalA_nonRecursive(CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
                       CoefficientsByLevel<T> &PhiPiCheck, TreeCoefficients1D<T> &PsiLambdaCheck)
 {
-    int lmax = 0;
+    FLENS_DEFAULT_INDEXTYPE lmax = 0;
     TreeCoefficients1D<T> PhiPiCheck1(COEFFBYLEVELSIZE);
     TreeCoefficients1D<T> PhiPiCheck2(COEFFBYLEVELSIZE);
-    for (int l=0; l<=100; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=100; ++l) {
         //std::cout << "******* l = " << l <<  " *********" << std::endl;
-        int shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
+        FLENS_DEFAULT_INDEXTYPE shifted_l = l+1; // by convention v[0] contains scaling / B-spline indices.
 
         if (d.map.size()==0 && c[shifted_l].map.size()==0) break;
 
-        int j_bspline_test =  l + testRefinementLevelOffset;
-        int j_bspline_trial = l + trialRefinementLevelOffset;
-        int j_wavelet_test =  l + testBasis.j0;
-        int j_wavelet_trial = l + trialBasis.j0;
+        FLENS_DEFAULT_INDEXTYPE j_bspline_test =  l + testRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_bspline_trial = l + trialRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet_test =  l + testBasis.j0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet_trial = l + trialBasis.j0;
 
         size_t hm_size = l > 7 ? COEFFBYLEVELSIZE : 255;
 
@@ -747,7 +747,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
         //std::cout << " PhiPiCheck2[l] = " << PhiPiCheck2[l] << std::endl;
 
         // Compute underlinePiCheck
-        int j_refinement_test = 0;
+        FLENS_DEFAULT_INDEXTYPE j_refinement_test = 0;
         PhiPiCheck.map.clear();
         testLocalRefine.reconstruct(PhiPiCheck2[l],             j_bspline_test,
                                     PsiLambdaCheck[shifted_l],  j_wavelet_test,
@@ -768,7 +768,7 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
         // Compute underline d
         d.map.clear();
         d.set(l+1,hm_size);
-        int j_refinement_trial = 0;
+        FLENS_DEFAULT_INDEXTYPE j_refinement_trial = 0;
         trialLocalRefine.reconstruct(d2,           j_bspline_trial,
                                      c[shifted_l], j_wavelet_trial,
                                      d,            j_refinement_trial);
@@ -777,10 +777,10 @@ LocalOperator1D<TestBasis, TrialBasis, RefinementBilinearForm, BilinearForm>
     }
     //std::cout << std::endl << std::endl;
     //std::cout << "  Going back again..." << std::endl;
-    for (int l=lmax+1; l>=1; --l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=lmax+1; l>=1; --l) {
         std::cout << "******* l = " << l <<  " *********" << std::endl;
-        int j_bspline_test =  l + testRefinementLevelOffset - 1;
-        int j_wavelet_test =  l + testBasis.j0 - 1;
+        FLENS_DEFAULT_INDEXTYPE j_bspline_test =  l + testRefinementLevelOffset - 1;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet_test =  l + testBasis.j0 - 1;
 
         //std::cout << "PhiPiCheck1[l] = " << PhiPiCheck1[l] << std::endl;
         testLocalRefine.decompose_(PhiPiCheck1[l],

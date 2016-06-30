@@ -20,16 +20,16 @@
 namespace lawa {
     
 template <typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
-      long maxIterations)
+      FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typedef typename _gmres<MA>::T                                      T;
     typedef flens::DenseVector<flens::Array<T> >                        DeVector;
     typedef flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >  DeMatrix;
-    using   flens::_;
+    using flens::_;
 
-    int N = b.length();
+    FLENS_DEFAULT_INDEXTYPE N = b.length();
     if (maxIterations==-1) {
         maxIterations=2*N;
     }
@@ -55,7 +55,7 @@ gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
     
     g(1) = beta;
 
-    int j;
+    FLENS_DEFAULT_INDEXTYPE j;
     for (j=0; j<=maxIterations-1;) {
         #ifdef SOLVER_DEBUG
             std::cerr << "j = " << j << ", rho = " << rho << std::endl;
@@ -69,14 +69,14 @@ gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
         w_j =  A * V(_,j);
         T normInitialWj = sqrt(w_j * w_j);
 
-        for (int i=1; i<=j; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
             H(i,j) = w_j * V(_,i);
             w_j = w_j - H(i,j) * V(_, i);
         }
           H(j+1,j) = sqrt(w_j*w_j);
 
         if (H(j+1,j) / normInitialWj < 1.0) {
-            for (int i=1; i<=j; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
                 Htemp = w_j * V(_, i) ;
                 w_j = w_j - Htemp * V(_, i);
             }
@@ -84,7 +84,7 @@ gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
           }
 
 
-        for (int i=1; i<=j-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j-1; ++i) {
             h_ij =      c(i) * H(i,j) + s(i) * H(i+1,j);
             H(i+1,j) = -s(i) * H(i,j) + c(i) * H(i+1,j);
             H(i,j) =    h_ij;
@@ -109,15 +109,15 @@ gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
 
     if (j>=1) {
         DeVector y(j);
-        for (int i=j; i>=1; --i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=j; i>=1; --i) {
             y(i) = g(i) / H(i,i);
-            for (int l=j; l>i; --l) {
+            for (FLENS_DEFAULT_INDEXTYPE l=j; l>i; --l) {
                 y(i) -= H(i,l) * y(l) / H(i,i);
             }
           }
 
         //todo: For some unknown reasons, this causes trouble in waveletgalerkinoptionpricer when
-        //      long double and a sufficiently large number of time steps is used...
+        //      FLENS_DEFAULT_INDEXTYPE double and a sufficiently large number of time steps is used...
 
         //x += V(_,_(1,j)) * y;
 
@@ -125,8 +125,8 @@ gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
         tmpV = V(_,_(1,j));
 
         DeVector temp(N);
-        for (int i=1; i<=N; ++i) {
-            for (int k=1; k<=j; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=N; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE k=1; k<=j; ++k) {
                 temp(i) += tmpV(i,k) * y(k);
             }
         }
@@ -137,19 +137,19 @@ gmres(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
 }
 
 template <typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 gmresm(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
-       int restart, long maxIterations)
+       FLENS_DEFAULT_INDEXTYPE restart, FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typedef typename _gmres<MA>::T                  T;
     typedef flens::DenseVector<flens::Array<T> >    DeVector;
 
-    int N=b.length();
+    FLENS_DEFAULT_INDEXTYPE N=b.length();
     if (maxIterations==-1) {
         maxIterations=2*N;
     }
 
-    int k=0;
+    FLENS_DEFAULT_INDEXTYPE k=0;
     DeVector r=b-A*x;
     while (sqrt(r*r)>tol && k<=maxIterations) {
         k+=gmres(A,x,b,tol,restart);
@@ -162,15 +162,15 @@ gmresm(const MA &A, VX &x, const VB &b, typename _gmres<MA>::T tol,
 }
 
 template <typename Prec, typename MA, typename VX, typename VB>
-int pgmres (const Prec &P, const MA &A, VX &x, const VB &b,
-            typename _gmres<MA>::T tol, long maxIterations)
+FLENS_DEFAULT_INDEXTYPE pgmres (const Prec &P, const MA &A, VX &x, const VB &b,
+            typename _gmres<MA>::T tol, FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typedef typename _gmres<MA>::T                                      T;
     typedef flens::DenseVector<flens::Array<T> >                        DeVector;
     typedef flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >  DeMatrix;
     using flens::_;
 
-    int N = b.length();
+    FLENS_DEFAULT_INDEXTYPE N = b.length();
     if (maxIterations==-1) {
         maxIterations=2*N;
     }
@@ -195,7 +195,7 @@ int pgmres (const Prec &P, const MA &A, VX &x, const VB &b,
 
     g(1) = beta;
 
-    int j;
+    FLENS_DEFAULT_INDEXTYPE j;
     for (j=0; j<=maxIterations-1;) {
         #ifdef SOLVER_DEBUG
             std::cerr << "j = " << j << ", rho = " << rho << std::endl;
@@ -212,21 +212,21 @@ int pgmres (const Prec &P, const MA &A, VX &x, const VB &b,
         
         T normInitialWj = sqrt(w_j * w_j);
 
-        for (int i=1; i<=j; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
             H(i, j) = w_j * V(_,i);
             w_j = w_j - H(i, j) * V(_, i);
         }
           H(j+1, j) = sqrt(w_j * w_j);
 
         if ( H(j+1, j) / normInitialWj < 1.0) {
-            for (int i=1; i<=j; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j; ++i) {
                 Htemp = w_j * V(_, i) ;
                 w_j = w_j - Htemp * V(_, i);
             }
             H(j+1, j) = sqrt(w_j*w_j);
           }
 
-        for (int i=1; i<=j-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=j-1; ++i) {
             h_ij =      c(i) * H(i,j) + s(i) * H(i+1,j);
             H(i+1,j) = -s(i) * H(i,j) + c(i) * H(i+1,j);
             H(i,j) =    h_ij;
@@ -251,23 +251,23 @@ int pgmres (const Prec &P, const MA &A, VX &x, const VB &b,
 
     if (j >= 1 ) {
         DeVector y(j);
-        for (int i=j; i>=1; --i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=j; i>=1; --i) {
             y(i) = g(i) / H(i,i);
-            for (int l=j; l>i; --l) {
+            for (FLENS_DEFAULT_INDEXTYPE l=j; l>i; --l) {
                 y(i) -= H(i,l) * y(l) / H(i,i);
             }
           }
 
         //todo: For some unknown reasons, this causes trouble in waveletgalerkinoptionpricer when
-        //      long double and a sufficiently large number of time steps is used...
+        //      FLENS_DEFAULT_INDEXTYPE double and a sufficiently large number of time steps is used...
         //temp = V(_,_(1,j)) * y;
 
         DeMatrix tmpV(N,j);
         tmpV = V(_,_(1,j));
 
-        for (int i=1; i<=N; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=N; ++i) {
             temp(i) = 0.;
-            for (int k=1; k<=j; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE k=1; k<=j; ++k) {
                 temp(i) += tmpV(i,k) * y(k);
             }
         }
@@ -277,19 +277,19 @@ int pgmres (const Prec &P, const MA &A, VX &x, const VB &b,
 }
 
 template <typename Prec, typename MA, typename VX, typename VB>
-int
+FLENS_DEFAULT_INDEXTYPE
 pgmresm(const Prec &Pr, const MA &A, VX &x, const VB &b,
-        typename _gmres<MA>::T tol, int restart, long maxIterations)
+        typename _gmres<MA>::T tol, FLENS_DEFAULT_INDEXTYPE restart, FLENS_DEFAULT_INDEXTYPE maxIterations)
 {
     typedef typename _gmres<MA>::T                  T;
     typedef flens::DenseVector<flens::Array<T> >    DeVector;
 
-    int N=b.length();
+    FLENS_DEFAULT_INDEXTYPE N=b.length();
     if (maxIterations==-1) {
         maxIterations=2*N;
     }
 
-    int k=0;
+    FLENS_DEFAULT_INDEXTYPE k=0;
     DeVector r=b-A*x;
     while ((sqrt(r*r)>tol) && (k<=maxIterations)) {
         k+=pgmres(Pr,A,x,b,tol,restart);

@@ -35,56 +35,56 @@ class RefinementMatrix<T, lawa::Interval, Cons>
                 
         RefinementMatrix();
         
-        RefinementMatrix(int nLeft, int nRight,
+        RefinementMatrix(FLENS_DEFAULT_INDEXTYPE nLeft, FLENS_DEFAULT_INDEXTYPE nRight,
                          const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &A,
-                         int _min_j0, int cons_j);
+                         FLENS_DEFAULT_INDEXTYPE _min_j0, FLENS_DEFAULT_INDEXTYPE cons_j);
 
         const typename flens::DenseVector<flens::Array<T> >::ConstView
-        operator()(int j, const Underscore<int> &u, int col) const;
+        operator()(FLENS_DEFAULT_INDEXTYPE j, const Underscore<FLENS_DEFAULT_INDEXTYPE> &u, FLENS_DEFAULT_INDEXTYPE col) const;
         
-        flens::Range<int>
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
         rows() const;
 
-        flens::Range<int>
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
         cols() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         firstRow() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         lastRow() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         firstCol() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         lastCol() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         flens::DenseVector<flens::Array<flens::DenseVector<flens::Array<T> > > > left, right;
         flens::DenseVector<flens::Array<T> > leftband, rightband;
-        flens::DenseVector<flens::Array<int> > lengths;
-        int min_j0;
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > lengths;
+        FLENS_DEFAULT_INDEXTYPE min_j0;
 
     private:
         void
         _extractMasks(const flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > &A);        
         
-        int _cons_j;
-        mutable int _j;
-        int _firstRow, _firstCol, _lastRow, _lastCol;
-        mutable int _additionalRows, _additionalCols;
+        FLENS_DEFAULT_INDEXTYPE _cons_j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
+        FLENS_DEFAULT_INDEXTYPE _firstRow, _firstCol, _lastRow, _lastCol;
+        mutable FLENS_DEFAULT_INDEXTYPE _additionalRows, _additionalCols;
 };
 
 template <typename T, lawa::Construction Cons>

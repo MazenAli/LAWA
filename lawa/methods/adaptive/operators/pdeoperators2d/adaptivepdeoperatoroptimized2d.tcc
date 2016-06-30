@@ -166,11 +166,11 @@ template <typename T, DomainType Domain1, DomainType Domain2>
 void
 AdaptivePDEOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,SparseMulti>
 ::toFlensSparseMatrix(const IndexSet<Index2D>& LambdaRow, const IndexSet<Index2D>& LambdaCol,
-                      SparseMatrixT &A_flens, int J)
+                      SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J)
 {
     std::cerr << "  -> toFlensSparseMatrix called with J= " << J << std::endl;
 
-    int maxSizeSparsityPattern=0;
+    FLENS_DEFAULT_INDEXTYPE maxSizeSparsityPattern=0;
 
     std::map<Index1D,IndexSet<Index1D>,lt<Lexicographical,Index1D> > sparsitypatterns_x,
                                                                      sparsitypatterns_y;
@@ -185,17 +185,17 @@ AdaptivePDEOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,Spars
     compression_1d_y.setParameters(LambdaRow_y);
 
 
-    std::map<Index2D,int,lt<Lexicographical,Index2D> > row_indices;
+    std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> > row_indices;
 
-    int row_count = 1;
+    FLENS_DEFAULT_INDEXTYPE row_count = 1;
     for (const_set2d_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
         row_indices[(*row)] = row_count;
     }
-    std::map<Index2D,int,lt<Lexicographical,Index2D> >::const_iterator row_indices_end;
+    std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> >::const_iterator row_indices_end;
     row_indices_end = row_indices.end();
     const_set2d_it LambdaRow_end=LambdaRow.end();
 
-    int col_count = 1;
+    FLENS_DEFAULT_INDEXTYPE col_count = 1;
     for (const_set2d_it col=LambdaCol.begin(); col!=LambdaCol.end(); ++col, ++col_count) {
         Index2D col_index = *col;
         T prec_col_index = this->prec(col_index);
@@ -242,7 +242,7 @@ AdaptivePDEOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,Spars
             LambdaRowSparseLaplace_y    = sparsitypatterns_laplace_y[(*col).index2];
         }
 
-        maxSizeSparsityPattern=std::max(maxSizeSparsityPattern,(int)(LambdaRowSparse_x.size()*LambdaRowSparse_y.size()));
+        maxSizeSparsityPattern=std::max(maxSizeSparsityPattern,(FLENS_DEFAULT_INDEXTYPE)(LambdaRowSparse_x.size()*LambdaRowSparse_y.size()));
 
 
         for (const_set1d_it row_x=LambdaRowSparse_x.begin(); row_x!=LambdaRowSparse_x.end(); ++row_x) {
@@ -252,7 +252,7 @@ AdaptivePDEOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,Spars
             if (fabs(id_x)<1e-13 && fabs(d_x)<1e-13 && fabs(dd_x)<1e-13) continue;
             for (const_set1d_it row_y=LambdaRowSparse_y.begin(); row_y!=LambdaRowSparse_y.end(); ++row_y) {
                 Index2D row_index(*row_x,*row_y);
-                std::map<Index2D,int,lt<Lexicographical,Index2D> >::const_iterator row_count_ptr;
+                std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> >::const_iterator row_count_ptr;
                 row_count_ptr = row_indices.find(row_index);
                 if (row_count_ptr!=row_indices_end) {
                     T id_y = LambdaRowSparseIdentity_y[*row_y];
@@ -291,7 +291,7 @@ AdaptivePDEOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,Spars
 template <typename T, DomainType Domain1, DomainType Domain2>
 Coefficients<Lexicographical,T,Index2D>
 AdaptivePDEOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,SparseMulti>
-::apply(const Coefficients<Lexicographical,T,Index2D> &v, int /*k*/, int /*J*/,
+::apply(const Coefficients<Lexicographical,T,Index2D> &v, FLENS_DEFAULT_INDEXTYPE /*k*/, FLENS_DEFAULT_INDEXTYPE /*J*/,
         cxxblas::Transpose trans)
 {
     Coefficients<Lexicographical,T,Index2D> ret;

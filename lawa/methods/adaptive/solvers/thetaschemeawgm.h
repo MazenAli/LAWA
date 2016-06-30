@@ -40,8 +40,8 @@ struct ThetaSchemeAWGM {
     ThetaSchemeAWGM(ThetaTimeStepSolver &_multitree_solver);
 
     void
-    setParameters(T _theta, T _timestep, int numOfTimesteps, T _timestep_eps, int _maxiterations,
-                  T _init_cgtol, int _strategy);
+    setParameters(T _theta, T _timestep, FLENS_DEFAULT_INDEXTYPE numOfTimesteps, T _timestep_eps, FLENS_DEFAULT_INDEXTYPE _maxiterations,
+                  T _init_cgtol, FLENS_DEFAULT_INDEXTYPE _strategy);
 
     void
     applyPreconditioner(Coefficients<Lexicographical,T,Index> &v);
@@ -50,15 +50,15 @@ struct ThetaSchemeAWGM {
     applyInvPreconditioner(Coefficients<Lexicographical,T,Index> &v);
 
     void
-    solve(Coefficients<Lexicographical,T,Index> &u, int &avDof, int &maxDof, int &terminalDof, int j);
+    solve(Coefficients<Lexicographical,T,Index> &u, FLENS_DEFAULT_INDEXTYPE &avDof, FLENS_DEFAULT_INDEXTYPE &maxDof, FLENS_DEFAULT_INDEXTYPE &terminalDof, FLENS_DEFAULT_INDEXTYPE j);
 
     ThetaTimeStepSolver     &timestep_solver;
     T                       theta, timestep;
-    int                     numOfTimesteps;
+    FLENS_DEFAULT_INDEXTYPE                     numOfTimesteps;
     T                       timestep_eps;
-    int                     maxiterations;
+    FLENS_DEFAULT_INDEXTYPE                     maxiterations;
     T                       init_cgtol;
-    int                     strategy;
+    FLENS_DEFAULT_INDEXTYPE                     strategy;
 };
 
 

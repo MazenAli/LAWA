@@ -81,7 +81,7 @@ public:
 	write_rb_data(const std::string& directory_name = "offline_data");
 
 	void
-	read_rb_data(const std::string& directory_name = "offline_data", int nb = -1);
+	read_rb_data(const std::string& directory_name = "offline_data", FLENS_DEFAULT_INDEXTYPE nb = -1);
 
 	void
 	remove_basisfunction(std::size_t nb);

@@ -25,7 +25,7 @@ namespace lawa {
 
 template <typename T>
     T
-    _evaluateUnitBSpline(int d, T x, int j, long k, unsigned short deriv);
+    _evaluateUnitBSpline(FLENS_DEFAULT_INDEXTYPE d, T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv);
 
 //------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ BSpline<T,Primal,Interval,Cons>::BSpline(const MRA<T,Primal,Interval,Cons> &_mra
 
 template <typename T, Construction Cons>
 T
-BSpline<T,Primal,Interval,Cons>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Primal,Interval,Cons>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(j>=mra.j0);
     assert(k>=mra.rangeI(j).firstIndex());
@@ -47,43 +47,43 @@ BSpline<T,Primal,Interval,Cons>::operator()(T x, int j, long k, unsigned short d
 
 template <typename T, Construction Cons>
 Support<T>
-BSpline<T,Primal,Interval,Cons>::support(int j, long k) const
+BSpline<T,Primal,Interval,Cons>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     assert(j>=mra.j0);
     assert(k>=mra.rangeI(j).firstIndex());
     assert(k<=mra.rangeI(j).lastIndex());
-    return pow2i<T>(-j) * Support<T>(std::max(0L,k-mra.d),
-                                     std::min(k,pow2i<long>(j)));
+    return pow2i<T>(-j) * Support<T>(std::max((FLENS_DEFAULT_INDEXTYPE) 0,k-mra.d),
+                                     std::min(k,pow2i<FLENS_DEFAULT_INDEXTYPE>(j)));
 }
 
 template <typename T, Construction Cons>
 flens::DenseVector<flens::Array<T> >
-BSpline<T,Primal,Interval,Cons>::singularSupport(int j, long k) const
+BSpline<T,Primal,Interval,Cons>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int tics = (k<mra.d) ? k+1 : (k>pow2i<T>(j)) ? pow2i<T>(j)+mra.d-1-k+2 : mra.d+1;
-    return linspace(pow2i<T>(-j) * std::max(0L,k-mra.d),
+    const FLENS_DEFAULT_INDEXTYPE tics = (k<mra.d) ? k+1 : (k>pow2i<T>(j)) ? pow2i<T>(j)+mra.d-1-k+2 : mra.d+1;
+    return linspace(pow2i<T>(-j) * std::max((FLENS_DEFAULT_INDEXTYPE) 0,k-mra.d),
                     pow2i<T>(-j) * std::min(T(k),pow2i<T>(j)),
                     tics);
 }
 
 template <typename T, Construction Cons>
 T
-BSpline<T,Primal,Interval,Cons>::tic(int j) const
+BSpline<T,Primal,Interval,Cons>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-j);
 }
 
 template <typename T, Construction Cons>
-int
-BSpline<T,Primal,Interval,Cons>::getRefinementLevel(int j) const
+FLENS_DEFAULT_INDEXTYPE
+BSpline<T,Primal,Interval,Cons>::getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return j + 1;
 }
 
 template <typename T, Construction Cons>
 flens::DenseVector<flens::Array<long double> > *
-BSpline<T,Primal,Interval,Cons>::getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-												long &split, long &refinement_k_restart) const
+BSpline<T,Primal,Interval,Cons>::getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+												FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const
 {
 	// No split necessary, so set default values
 	refinement_k_restart = 1;
@@ -91,7 +91,7 @@ BSpline<T,Primal,Interval,Cons>::getRefinement(int j, long k, int &refinement_j,
     refinement_j = j + 1;
     // left boundary
     if (k<mra.rangeII(j).firstIndex()) {
-        int type  = k % mra.cardIL(j);
+        FLENS_DEFAULT_INDEXTYPE type  = k % mra.cardIL(j);
         refinement_k_first = mra._leftOffsets[type];
         split = mra._leftRefCoeffs[type].length()+1;
         return &(mra._leftRefCoeffs[type]);
@@ -103,9 +103,9 @@ BSpline<T,Primal,Interval,Cons>::getRefinement(int j, long k, int &refinement_j,
         return &(mra._innerRefCoeffs[0]);
     }
     // right part
-    //int type  = (int)(k - (mra.cardI(j)-1 - mra._numRightParts + 1));
-    int type  = (mra.rangeI(j).lastIndex()-k);
-    long shift = pow2i<long>(j)-1;
+    //FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k - (mra.cardI(j)-1 - mra._numRightParts + 1));
+    FLENS_DEFAULT_INDEXTYPE type  = (mra.rangeI(j).lastIndex()-k);
+    FLENS_DEFAULT_INDEXTYPE shift = pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
     refinement_k_first =2*shift+mra._rightOffsets[type];
     split = mra._rightRefCoeffs[type].length()+1;
     return &(mra._rightRefCoeffs[type]);
@@ -113,10 +113,10 @@ BSpline<T,Primal,Interval,Cons>::getRefinement(int j, long k, int &refinement_j,
 
 template <typename T, Construction Cons>
 T
-BSpline<T,Primal,Interval,Cons>::getL2Norm(int j, long k) const
+BSpline<T,Primal,Interval,Cons>::getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (k<mra.rangeII(j).firstIndex()) {
-        int type  = k % mra.cardIL(j);
+        FLENS_DEFAULT_INDEXTYPE type  = k % mra.cardIL(j);
         return mra._leftL2Norms[type];
     }
     // inner part
@@ -124,17 +124,17 @@ BSpline<T,Primal,Interval,Cons>::getL2Norm(int j, long k) const
         return mra._innerL2Norms[0];
     }
     // right part
-    int type  = (mra.rangeI(j).lastIndex()-k);
+    FLENS_DEFAULT_INDEXTYPE type  = (mra.rangeI(j).lastIndex()-k);
     return mra._rightL2Norms[type];
 }
 
 template <typename T, Construction Cons>
 T
-BSpline<T,Primal,Interval,Cons>::getH1SemiNorm(int j, long k) const
+BSpline<T,Primal,Interval,Cons>::getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    long double pow2ij = (long double)(1L << j);
+    long double pow2ij = (long double)((FLENS_DEFAULT_INDEXTYPE) 1 << j);
     if (k<mra.rangeII(j).firstIndex()) {
-        int type  = k % mra.cardIL(j);
+        FLENS_DEFAULT_INDEXTYPE type  = k % mra.cardIL(j);
         return pow2ij*mra._leftH1SemiNorms[type];
     }
     // inner part
@@ -142,7 +142,7 @@ BSpline<T,Primal,Interval,Cons>::getH1SemiNorm(int j, long k) const
         return pow2ij*mra._innerH1SemiNorms[0];
     }
     // right part
-    int type  = (mra.rangeI(j).lastIndex()-k);
+    FLENS_DEFAULT_INDEXTYPE type  = (mra.rangeI(j).lastIndex()-k);
     return pow2ij*mra._rightH1SemiNorms[type];
 }
 
@@ -150,7 +150,7 @@ BSpline<T,Primal,Interval,Cons>::getH1SemiNorm(int j, long k) const
 
 template <typename T>
 T
-_evaluateUnitBSpline(int d, T x, int j, long k, unsigned short deriv)
+_evaluateUnitBSpline(FLENS_DEFAULT_INDEXTYPE d, T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv)
 {
     assert(x>=0.0);
     assert(x<=1.0);
@@ -168,7 +168,7 @@ _evaluateUnitBSpline(int d, T x, int j, long k, unsigned short deriv)
 
         T twoj = pow2i<T>(j); 
         x *= twoj;
-        int pos = ifloor(x) - (x==twoj);
+        FLENS_DEFAULT_INDEXTYPE pos = ifloor(x) - (x==twoj);
         // we are not inside the support.
         if ((pos<k-d) || (pos>k-1)) {
             return 0;
@@ -182,13 +182,13 @@ _evaluateUnitBSpline(int d, T x, int j, long k, unsigned short deriv)
 
         // utilizing left multiplicities.
         if (k<d) {
-            for (int m=2; m<=d; ++m) {
-                for (int i=0; i<=d-m; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE m=2; m<=d; ++m) {
+                for (FLENS_DEFAULT_INDEXTYPE i=0; i<=d-m; ++i) {
                     if (m+i+k-1>d) {
-                        values(i) = (x-std::max(0L,i+k-d))*values(i) / (m+i+k-1-d-std::max(k+i-d,0L));                    
+                        values(i) = (x-std::max((FLENS_DEFAULT_INDEXTYPE) 0,i+k-d))*values(i) / (m+i+k-1-d-std::max(k+i-d,(FLENS_DEFAULT_INDEXTYPE) 0));                    
                     }
                     if (m+i+k>d) {
-                        values(i) += (m+i+k-d-x)*values(i+1) / (m+i+k-d-std::max(k+i+1-d,0L));                    
+                        values(i) += (m+i+k-d-x)*values(i+1) / (m+i+k-d-std::max(k+i+1-d,(FLENS_DEFAULT_INDEXTYPE) 0));                    
                     }
                 }
             }
@@ -196,10 +196,10 @@ _evaluateUnitBSpline(int d, T x, int j, long k, unsigned short deriv)
         }
 
         // utilizing right multiplicities.
-        long t = twoj;
+        FLENS_DEFAULT_INDEXTYPE t = twoj;
         if (k>t) {
-            for (int m=2; m<=d; ++m) {
-                for (int i=0; i<=d-m; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE m=2; m<=d; ++m) {
+                for (FLENS_DEFAULT_INDEXTYPE i=0; i<=d-m; ++i) {
                     if (k+i-d<t) {
                         values(i) = (x-(i+k-d))*values(i) / (std::min(m+i+k-1-d,t)-(k+i-d));                    
                     }
@@ -213,8 +213,8 @@ _evaluateUnitBSpline(int d, T x, int j, long k, unsigned short deriv)
 
         // 'inner' B-Splines.
         t = k-d;
-        for (int m=2; m<=d; ++m) {
-            for (int i=0; i<=d-m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE m=2; m<=d; ++m) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0; i<=d-m; ++i) {
                 values(i) =  ((x-(t+i))*values(i) + ((t+m+i)-x)*values(i+1))/(m-1);
             }
         }

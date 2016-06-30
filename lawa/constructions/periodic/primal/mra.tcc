@@ -22,7 +22,7 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Primal,Periodic,CDF>::MRA(int _d, int _d_, int j)
+MRA<T,Primal,Periodic,CDF>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), d_(_d_), j0(j), mu(d&1), _j(j), phi(*this), M0(phi)
 {
 
@@ -34,17 +34,17 @@ MRA<T,Primal,Periodic,CDF>::MRA(int _d, int _d_, int j)
 		_periodicRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
 		//_periodicRefCoeffs[0].engine().resize(3,0);
 		//_periodicRefCoeffs[0] =  1.L/(2.L*std::sqrt(2.L)), 1.L/std::sqrt(2.L), 1.L/(2.L*std::sqrt(2.L));
-		_periodicRefCoeffs[0].engine().resize(1,0);
+		_periodicRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)1,0);
 		_periodicRefCoeffs[0] =  1.L;
-		_periodicOffsets = new long[1];
+		_periodicOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
         _periodicOffsets[0] =  1;
 
         _rightRefCoeffs = new flens::DenseVector<flens::Array<long double> >[1];
-		_rightRefCoeffs[0].engine().resize(2,0);
+		_rightRefCoeffs[0].engine().resize((FLENS_DEFAULT_INDEXTYPE)2,0);
 		_rightRefCoeffs[0] =  1.L, 1.L;
-		_split = new long[1];
+		_split = new FLENS_DEFAULT_INDEXTYPE[1];
 		_split[0] = 1;
-		_rightOffsets = new long[1];
+		_rightOffsets = new FLENS_DEFAULT_INDEXTYPE[1];
         _rightOffsets[0] =  1;
 
 		_periodicL2Norms = new long double[1];
@@ -73,7 +73,7 @@ MRA<T,Primal,Periodic,CDF>::~MRA()
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Primal,Periodic,CDF>::level() const
 {
     return _j;
@@ -81,7 +81,7 @@ MRA<T,Primal,Periodic,CDF>::level() const
 
 template <typename T>
 void
-MRA<T,Primal,Periodic,CDF>::setLevel(int j) const
+MRA<T,Primal,Periodic,CDF>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=0);
     _j = j;
@@ -90,66 +90,66 @@ MRA<T,Primal,Periodic,CDF>::setLevel(int j) const
 //--- cardinalities of whole, left, inner, right index sets. -------------------
 
 template <typename T>
-int
-MRA<T,Primal,Periodic,CDF>::cardI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Periodic,CDF>::cardI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);   
     return pow2i<T>(j);
 }
 
 template <typename T>
-int
-MRA<T,Primal,Periodic,CDF>::cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Periodic,CDF>::cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return std::max( std::ceil( (d - mu)/2.0 - 1), 0.0);
 }
 
 template <typename T>
-int
-MRA<T,Primal,Periodic,CDF>::cardII(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Periodic,CDF>::cardII(FLENS_DEFAULT_INDEXTYPE j) const
 {
 	assert(j >= j0);
     return pow2i<T>(j) - cardIL() - cardIR();
 }
 
 template <typename T>
-int
-MRA<T,Primal,Periodic,CDF>::cardIR(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Periodic,CDF>::cardIR(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return std::ceil((d+mu)/2.0 - 1) + 1;
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Periodic,CDF>::rangeI(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Periodic,CDF>::rangeI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(1,pow2i<T>(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,pow2i<T>(j));
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Periodic,CDF>::rangeIL(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Periodic,CDF>::rangeIL(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     // If left index set is empty, return range = {1,0}
-    return flens::Range<int>(1, cardIL());
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1, cardIL());
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Periodic,CDF>::rangeII(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Periodic,CDF>::rangeII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(1 + cardIL() , pow2i<T>(j) - cardIR());
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1 + cardIL() , pow2i<T>(j) - cardIR());
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Periodic,CDF>::rangeIR(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Periodic,CDF>::rangeIR(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(pow2i<T>(j) - std::ceil((d+mu)/2.0 - 1), pow2i<T>(j));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(pow2i<T>(j) - std::ceil((d+mu)/2.0 - 1), pow2i<T>(j));
 }
 
 

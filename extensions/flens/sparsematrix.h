@@ -55,9 +55,9 @@ class SparseGeMatrix
         // -- constructors -----------------------------------------------------
         SparseGeMatrix();
 
-        SparseGeMatrix(int numRows, int numCols, int k=1);
+        SparseGeMatrix(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols, FLENS_DEFAULT_INDEXTYPE k=1);
 
-        SparseGeMatrix(int numRows, int numCols, Initializer *initializer, int k=1);
+        SparseGeMatrix(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols, Initializer *initializer, FLENS_DEFAULT_INDEXTYPE k=1);
 
         // -- operators --------------------------------------------------------
         template <typename RHS>
@@ -71,19 +71,19 @@ class SparseGeMatrix
         operator/=(T alpha);
 
         T &
-        operator()(int row, int col);
+        operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col);
 
         // -- methods ----------------------------------------------------------
         void
         finalize();
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numNonZeros() const;
 
         const_iterator
@@ -100,7 +100,7 @@ class SparseGeMatrix
 
         // TODO: discuss with Michael
         void
-        resize(int m, int n, int k=1);
+        resize(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k=1);
 
         // TODO: discuss with Michael
         //template <typename RHS>
@@ -142,7 +142,7 @@ class SparseSyMatrix
         // -- constructors -----------------------------------------------------
         SparseSyMatrix();
 
-        SparseSyMatrix(int dim, int k=1);
+        SparseSyMatrix(FLENS_DEFAULT_INDEXTYPE dim, FLENS_DEFAULT_INDEXTYPE k=1);
 
         // -- operators --------------------------------------------------------
         SparseSyMatrix &
@@ -152,16 +152,16 @@ class SparseSyMatrix
         operator/=(T alpha);
 
         T &
-        operator()(int row, int col);
+        operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col);
 
         // -- methods ----------------------------------------------------------
         void
         finalize();
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         dim() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numNonZeros() const;
 
         const_iterator
@@ -177,7 +177,7 @@ class SparseSyMatrix
         end();
 
         void
-        resize(int m, int k=1);
+        resize(FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE k=1);
 
         // -- implementation ---------------------------------------------------
         const Engine &
@@ -209,23 +209,23 @@ class SparseSymmetricMatrix
         typedef typename Engine::const_iterator  const_iterator;
 
         // -- constructors -----------------------------------------------------
-        SparseSymmetricMatrix(int numRows, int numCols);
+        SparseSymmetricMatrix(FLENS_DEFAULT_INDEXTYPE numRows, FLENS_DEFAULT_INDEXTYPE numCols);
 
         // -- operators --------------------------------------------------------
         T &
-        operator()(int row, int col);
+        operator()(FLENS_DEFAULT_INDEXTYPE row, FLENS_DEFAULT_INDEXTYPE col);
 
         // -- methods ----------------------------------------------------------
         void
         finalize();
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numRows() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numCols() const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         numNonZeros() const;
 
         const_iterator

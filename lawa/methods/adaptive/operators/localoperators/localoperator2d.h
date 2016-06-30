@@ -56,7 +56,7 @@ struct LocalOperator2D : AbstractLocalOperator2D<typename LocalOperator1::T>{
     LocalOperator2D(LocalOperator1 &_localoperator1, LocalOperator2 &_localoperator2);
 
     void
-    setJ(int J);
+    setJ(FLENS_DEFAULT_INDEXTYPE J);
 
     virtual
     void
@@ -171,7 +171,7 @@ struct LocalOperator2D : AbstractLocalOperator2D<typename LocalOperator1::T>{
     const TestBasis_x1      &testBasis_x1;
     const TrialBasis_x2     &trialBasis_x2;
     const TestBasis_x2      &testBasis_x2;
-    int                     J;
+    FLENS_DEFAULT_INDEXTYPE                     J;
     size_t                  hashTableLargeLength;
     size_t                  hashTableSmallLength;
 

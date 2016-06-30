@@ -18,7 +18,7 @@ template <typename T>
 //------------------------------------------------------------------------------
 
 template <typename T>
-Wavelet<T,Orthogonal,R,Multi>::Wavelet(int _d)
+Wavelet<T,Orthogonal,R,Multi>::Wavelet(FLENS_DEFAULT_INDEXTYPE _d)
     : d(_d), vanishingMoments(_d)
 {
     assert(d>=2);
@@ -101,10 +101,10 @@ Wavelet<T,Orthogonal,R,Multi>::~Wavelet()
 
 template <typename T>
 T
-Wavelet<T,Orthogonal,R,Multi>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Orthogonal,R,Multi>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
-    const int type = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE type = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     
     return pow2ih<T>(2*j*deriv+j) *
     _evaluator[type](pow2i<T>(j)*x - shift, deriv);
@@ -112,10 +112,10 @@ Wavelet<T,Orthogonal,R,Multi>::operator()(T x, int j, long k, unsigned short der
     
 template <typename T>
 Support<T>
-Wavelet<T,Orthogonal,R,Multi>::support(int j, long k) const
+Wavelet<T,Orthogonal,R,Multi>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int type = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE type = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     
     return pow2i<T>(-j) * (_support[type] + shift);    
 }
@@ -129,10 +129,10 @@ Wavelet<T,Orthogonal,R,Multi>::max_support() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Orthogonal,R,Multi>::singularSupport(int j, long k) const
+Wavelet<T,Orthogonal,R,Multi>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    const int typ = _type(k);
-    const long shift = _shift(k);
+    const FLENS_DEFAULT_INDEXTYPE typ = _type(k);
+    const FLENS_DEFAULT_INDEXTYPE shift = _shift(k);
     flens::DenseVector<flens::Array<T> > result = _singularSupport[typ];
     result += shift;
     
@@ -141,23 +141,23 @@ Wavelet<T,Orthogonal,R,Multi>::singularSupport(int j, long k) const
 
 template <typename T>
 T
-Wavelet<T,Orthogonal,R,Multi>::tic(int j) const
+Wavelet<T,Orthogonal,R,Multi>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+3));
 }
 
 template <typename T>
-long
-Wavelet<T,Orthogonal,R,Multi>::_shift(long k) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Orthogonal,R,Multi>::_shift(FLENS_DEFAULT_INDEXTYPE k) const
 {
     return k>=0 ? k/_numSplines : -((-k-1)/_numSplines+1);
 }
 
 template <typename T>
-int
-Wavelet<T,Orthogonal,R,Multi>::_type(long k) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Orthogonal,R,Multi>::_type(FLENS_DEFAULT_INDEXTYPE k) const
 {
-    return k>=0 ? (int) (k%3) : (int) _numSplines - (int)((-k+2)% ((int)_numSplines)) - 1;
+    return k>=0 ? (FLENS_DEFAULT_INDEXTYPE) (k%3) : (FLENS_DEFAULT_INDEXTYPE) _numSplines - (FLENS_DEFAULT_INDEXTYPE)((-k+2)% ((FLENS_DEFAULT_INDEXTYPE)_numSplines)) - 1;
 }
 
 //------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ _linear_wavelet_evaluator0(T _x, unsigned short deriv)
     long double value = 0.0L;
     long double x = (long double) _x;
     if (deriv == 0) {
-        if (0L <= x && x < 0.125L) {
+        if ((FLENS_DEFAULT_INDEXTYPE) 0 <= x && x < 0.125L) {
             value = 2.17124059336723766167L - 33.0125730435099442245L * x;
         } else if(-0.375L <= x && x < -0.25L) {
             value = -7.14234036204314274860L - 19.69261569230427143433L * x;
@@ -181,13 +181,13 @@ _linear_wavelet_evaluator0(T _x, unsigned short deriv)
             value = 1.11118460317702247406L - 2.51294751039500238824L * x;
         } else if(-1.0L <= x && x < -0.75L){
             value = -0.491630451656180539739L - 0.491630451656180539739L * x;
-        } else if(0.75L <= x && x < 1L){
+        } else if(0.75L <= x && x < (FLENS_DEFAULT_INDEXTYPE) 1){
             value = 0.096859434680319146709L - 0.096859434680319146709L * x;
         } else if(0.5L <= x && x < 0.75L) {
             value = -0.48429717340159573354L + 0.67801604276223402696L * x;
         } else if(-0.75L <= x && x < -0.5L){
             value = 2.458152258280902698695L + 3.44141316159326377817L *x;
-        } else if(-0.125L <= x && x < 0L){
+        } else if(-0.125L <= x && x < (FLENS_DEFAULT_INDEXTYPE) 0){
             value = 2.17124059336723766167L + 17.1233461124244526904L *x;
         } else if(-0.25L <= x && x < -0.125L){
             value = 2.28083109759543704076L + 18.0000701462500477231L *x;
@@ -197,7 +197,7 @@ _linear_wavelet_evaluator0(T _x, unsigned short deriv)
             value = 0.0;
         }
     } else if (deriv == 1) {
-        if (0L <= x && x < 0.125L) {
+        if ((FLENS_DEFAULT_INDEXTYPE) 0 <= x && x < 0.125L) {
             value = - 33.0125730435099442245L ;
         } else if(-0.375L <= x && x < -0.25L) {
             value = - 19.69261569230427143433L ;
@@ -209,13 +209,13 @@ _linear_wavelet_evaluator0(T _x, unsigned short deriv)
             value = -2.51294751039500238824L ;
         } else if(-1.0L <= x && x < -0.75L){
             value = -0.491630451656180539739L ;
-        } else if(0.75L <= x && x < 1L){
+        } else if(0.75L <= x && x < (FLENS_DEFAULT_INDEXTYPE) 1){
             value = -0.096859434680319146709L ;
         } else if(0.5L <= x && x < 0.75L) {
             value =  0.67801604276223402696L ;
         } else if(-0.75L <= x && x <-0.5L){
             value =  3.44141316159326377817L ;
-        } else if(-0.125L <= x && x < 0L){
+        } else if(-0.125L <= x && x < (FLENS_DEFAULT_INDEXTYPE) 0){
             value = 17.1233461124244526904L ;
         } else if(-0.25L <= x && x < -0.125L){
             value = 18.0000701462500477231L ;

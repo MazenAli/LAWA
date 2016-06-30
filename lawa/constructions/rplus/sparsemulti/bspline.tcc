@@ -25,7 +25,7 @@ BSpline<T,Primal,RPlus,SparseMulti>::~BSpline()
 
 template <typename T>
 T
-BSpline<T,Primal,RPlus,SparseMulti>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Primal,RPlus,SparseMulti>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(0<=k);
     if (d==4) {
@@ -36,8 +36,8 @@ BSpline<T,Primal,RPlus,SparseMulti>::operator()(T x, int j, long k, unsigned sho
         }
 
          // inner part
-        int type  = (int)(k % mra._numInnerParts);
-        long shift = (long)std::ceil(T(k) / T(mra._numInnerParts));
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k % mra._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = (FLENS_DEFAULT_INDEXTYPE)std::ceil(T(k) / T(mra._numInnerParts));
         //std::cerr << "type = " << type << ", shift = " << shift << " " << mra._innerScalingFactors(type) << std::endl;
         return pow2ih<T>(2*j*deriv+j) * mra._innerScalingFactors(type) *
                mra._innerEvaluator[type](pow2i<T>(j)*x-shift,deriv);
@@ -50,7 +50,7 @@ BSpline<T,Primal,RPlus,SparseMulti>::operator()(T x, int j, long k, unsigned sho
     
 template <typename T>
 Support<T>
-BSpline<T,Primal,RPlus,SparseMulti>::support(int j, long k) const
+BSpline<T,Primal,RPlus,SparseMulti>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (d==4) {
         // left boundary
@@ -58,8 +58,8 @@ BSpline<T,Primal,RPlus,SparseMulti>::support(int j, long k) const
             return pow2i<T>(-j) * mra._leftSupport[0];
         }
         // inner part
-        int type  = (int)(k % mra._numInnerParts);
-        long shift = (long)std::ceil(T(k) / T(mra._numInnerParts));
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k % mra._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = (FLENS_DEFAULT_INDEXTYPE)std::ceil(T(k) / T(mra._numInnerParts));
         return pow2i<T>(-j) * (mra._innerSupport[type]+shift);
 
     }
@@ -79,7 +79,7 @@ BSpline<T,Primal,RPlus,SparseMulti>::max_support() const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-BSpline<T,Primal,RPlus,SparseMulti>::singularSupport(int j, long k) const
+BSpline<T,Primal,RPlus,SparseMulti>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (d==4) {
         // left boundary
@@ -87,8 +87,8 @@ BSpline<T,Primal,RPlus,SparseMulti>::singularSupport(int j, long k) const
             return pow2i<T>(-j) * mra._leftSingularSupport[0];
         }
 
-        int type  = (int)(k % mra._numInnerParts);
-        long shift = (long)std::ceil(T(k) / T(mra._numInnerParts));
+        FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k % mra._numInnerParts);
+        FLENS_DEFAULT_INDEXTYPE shift = (FLENS_DEFAULT_INDEXTYPE)std::ceil(T(k) / T(mra._numInnerParts));
         flens::DenseVector<flens::Array<T> > result = mra._innerSingularSupport[type];
         result += shift;
         return pow2i<T>(-j) * result;
@@ -102,7 +102,7 @@ BSpline<T,Primal,RPlus,SparseMulti>::singularSupport(int j, long k) const
 
 template <typename T>
 T
-BSpline<T,Primal,RPlus,SparseMulti>::tic(int j) const
+BSpline<T,Primal,RPlus,SparseMulti>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-(j+3));
 }

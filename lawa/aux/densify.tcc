@@ -23,16 +23,16 @@ template <typename I>
 void
 densify(cxxblas::Transpose trans, const flens::Matrix<I> &A,
         flens::GeMatrix<flens::FullStorage<typename I::ElementType, cxxblas::ColMajor> > &D,
-        int firstRow, int firstCol)
+        FLENS_DEFAULT_INDEXTYPE firstRow, FLENS_DEFAULT_INDEXTYPE firstCol)
 {
     using flens::_;
 
     if (trans==cxxblas::NoTrans) {
-        int m = A.impl().numRows();
-        int n = A.impl().numCols();
+        FLENS_DEFAULT_INDEXTYPE m = A.impl().numRows();
+        FLENS_DEFAULT_INDEXTYPE n = A.impl().numCols();
         D.engine().resize(m,n,firstRow,firstCol);
         flens::DenseVector<flens::Array<typename I::ElementType> > e(n);
-        for (int i=1; i<=n; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=n; ++i) {
             flens::DenseVector<flens::Array<typename I::ElementType> > y(m);
             e(i) = 1.;
             D(_,i+firstCol-1) = A.impl()*e;
@@ -41,11 +41,11 @@ densify(cxxblas::Transpose trans, const flens::Matrix<I> &A,
     } else {
         assert(trans==cxxblas::Trans);
 
-        int m = A.impl().numRows();
-        int n = A.impl().numCols();
+        FLENS_DEFAULT_INDEXTYPE m = A.impl().numRows();
+        FLENS_DEFAULT_INDEXTYPE n = A.impl().numCols();
         D.engine().resize(n,m,firstCol,firstRow);
         flens::DenseVector<flens::Array<typename I::ElementType> > e(m);
-        for (int i=1; i<=m; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
             flens::DenseVector<flens::Array<typename I::ElementType> > y(n);
             e(i) = 1.;
             D(_,i+firstCol-1) = transpose(A.impl())*e;

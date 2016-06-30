@@ -53,8 +53,8 @@ mv(cxxblas::Transpose transA, typename X::ElementType alpha,
     assert(x.engine().stride()==1);
 
     const flens::DenseVector<flens::Array<T> > &a = A.band;
-    int lx = x.length();
-    int la = a.length();
+    FLENS_DEFAULT_INDEXTYPE lx = x.length();
+    FLENS_DEFAULT_INDEXTYPE la = a.length();
     
     if (transA==cxxblas::NoTrans) {
         if (beta==0) {
@@ -64,8 +64,8 @@ mv(cxxblas::Transpose transA, typename X::ElementType alpha,
             y.engine().changeIndexBase(x.firstIndex()-a.firstIndex());
         }
         const T *xp = x.engine().data();
-        for (int k=0; k<lx; ++k, ++xp) {
-            int mMin = a.firstIndex() + 2*k;
+        for (FLENS_DEFAULT_INDEXTYPE k=0; k<lx; ++k, ++xp) {
+            FLENS_DEFAULT_INDEXTYPE mMin = a.firstIndex() + 2*k;
             const T *abegin = a.engine().data();
                   T *ybegin = y.engine().data();
             cxxblas::axpy(la, *xp, abegin, 1, ybegin+mMin, 1);
@@ -78,8 +78,8 @@ mv(cxxblas::Transpose transA, typename X::ElementType alpha,
             y.engine().changeIndexBase(x.firstIndex()+a.firstIndex());
         }
         T *iter = y.engine().data();
-        for (int m=0; m<lx/2; ++m, ++iter) {
-            int kMin = 2*m;
+        for (FLENS_DEFAULT_INDEXTYPE m=0; m<lx/2; ++m, ++iter) {
+            FLENS_DEFAULT_INDEXTYPE kMin = 2*m;
             const T *abegin = a.engine().data();
             T dotValue;
             cxxblas::dot(la, abegin, 1, x.engine().data()+kMin, 1, dotValue);

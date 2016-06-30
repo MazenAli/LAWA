@@ -344,7 +344,7 @@ solve(Coefficients<Lexicographical,T,Index> &u, IndexSet<Index>& Lambda, T old_r
         }
 
 		// Add buckets to dummy vector: p
-		for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+		for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
 			P_Lambda_Res_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
 			r_bucket.addBucketToCoefficients(p,i);
 
@@ -449,7 +449,7 @@ coarsen(Coefficients<Lexicographical,T,Index>& u, T delta)
 		// Reconstruct u by adding buckets
 		u.clear();
 		T P_Lambda_Res_square = 0;
-		for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+		for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
 			P_Lambda_Res_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
 			r_bucket.addBucketToCoefficients(u,i);
 

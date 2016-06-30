@@ -29,9 +29,9 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Dual,Interval,Primbs>::MRA(int _d, int _d_, int j)
+MRA<T,Dual,Interval,Primbs>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), d_(_d_), mu(d&1),
-      min_j0(iceil<int>(log(d+2*d_-3)/log(2))+1),
+      min_j0(iceil<FLENS_DEFAULT_INDEXTYPE>(log(d+2*d_-3)/log(2))+1),
       j0((j==-1) ? min_j0 : j), phi_R(d,d_), phi_(),
       _bc(2,0), _j(j0)
 {
@@ -49,31 +49,31 @@ MRA<T,Dual,Interval,Primbs>::~MRA()
 //--- cardinalities of whole, left, inner, right index sets. -------------------
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Primbs>::cardI_(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Primbs>::cardI_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j) + d - 1 - (_bc(0)+_bc(1));
 }
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Primbs>::cardI_L(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Primbs>::cardI_L(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return d + d_ - 2 -_bc(0);
 }
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Primbs>::cardI_I(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Primbs>::cardI_I(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
     return pow2i<T>(j) + d - 1 - 2*(d+d_-2);
 }
 
 template <typename T>
-int
-MRA<T,Dual,Interval,Primbs>::cardI_R(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Dual,Interval,Primbs>::cardI_R(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return d + d_ - 2 - _bc(1);
 }
@@ -81,38 +81,38 @@ MRA<T,Dual,Interval,Primbs>::cardI_R(int /*j*/) const
 //--- ranges of whole, left, inner, right index sets. --------------------------
 
 template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Primbs>::rangeI_(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Primbs>::rangeI_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
-    return flens::Range<int>(1 + _bc(0), pow2i<T>(j) + d - 1 - _bc(1));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1 + _bc(0), pow2i<T>(j) + d - 1 - _bc(1));
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Primbs>::rangeI_L(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Primbs>::rangeI_L(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<int>(1 + _bc(0), d + d_ - 2);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1 + _bc(0), d + d_ - 2);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Primbs>::rangeI_I(int j) const
-{
-    assert(j>=min_j0);
-    return flens::Range<int>(d+d_-1, pow2i<T>(j)+d-1-(d+d_-2));
-}
-
-template <typename T>
-flens::Range<int>
-MRA<T,Dual,Interval,Primbs>::rangeI_R(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Primbs>::rangeI_I(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=min_j0);
-    return flens::Range<int>(pow2i<T>(j)+d-1-(d+d_-2)+1, pow2i<T>(j)+d-1-_bc(1));
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(d+d_-1, pow2i<T>(j)+d-1-(d+d_-2));
 }
 
 template <typename T>
-int
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Dual,Interval,Primbs>::rangeI_R(FLENS_DEFAULT_INDEXTYPE j) const
+{
+    assert(j>=min_j0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(pow2i<T>(j)+d-1-(d+d_-2)+1, pow2i<T>(j)+d-1-_bc(1));
+}
+
+template <typename T>
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Dual,Interval,Primbs>::level() const
 {
     return _j;
@@ -120,7 +120,7 @@ MRA<T,Dual,Interval,Primbs>::level() const
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Primbs>::setLevel(int j) const
+MRA<T,Dual,Interval,Primbs>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     if (j!=_j) {
         assert(j>=min_j0);
@@ -142,13 +142,13 @@ MRA<T,Dual,Interval,Primbs>::enforceBoundaryCondition()
     _twoScaleDual_2(d, d_);
 
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > A(d+d_-2,d+d_-2);
-    for (int n=1; n<=d+d_-2; ++n) {
-        for (int m=1; m<=d+d_-2; ++m) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=d+d_-2; ++n) {
+        for (FLENS_DEFAULT_INDEXTYPE m=1; m<=d+d_-2; ++m) {
             A(n,m) = MDD(m,n);
         }
     }
 
-    for (int n=1; n<=d+d_-2; ++n) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=d+d_-2; ++n) {
         A(n,n) = A(n,n)-1;
     }
     flens::DenseVector<flens::Array<T> > O(d+d_-2), x, tmp;
@@ -161,7 +161,7 @@ MRA<T,Dual,Interval,Primbs>::enforceBoundaryCondition()
     x = transpose(inv(TT))*tmp;
     x.engine().changeIndexBase(1);
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > TR(d+d_-2,d+d_-2);
-    for (int n=1; n<=d+d_-2; ++n) {
+    for (FLENS_DEFAULT_INDEXTYPE n=1; n<=d+d_-2; ++n) {
         TR(n,n) = 1;
         if (n>1) {
             TR(n,1) = -x(n) / x(1);
@@ -173,8 +173,8 @@ MRA<T,Dual,Interval,Primbs>::enforceBoundaryCondition()
 
 //    TRD(_(1,d+d_-2),_(1,d+d_-2)) = transpose(inv(TR));
     InvTR = inv(TR);
-    for (int r=1; r<=d+d_-2; ++r) {
-        for (int c=1; c<=d+d_-2; ++c) {
+    for (FLENS_DEFAULT_INDEXTYPE r=1; r<=d+d_-2; ++r) {
+        for (FLENS_DEFAULT_INDEXTYPE c=1; c<=d+d_-2; ++c) {
             TRD(r,c) = InvTR(c,r);
         }
     }
@@ -191,8 +191,8 @@ MRA<T,Dual,Interval,Primbs>::enforceBoundaryCondition()
     Bugfix = MDDD_H(_(2,MDDD.numRows()), _(2,MDDD.numCols()));
     flens::blas::scal(factor,Bugfix);
     Mj0_(_(2,MDDD.numRows()), _(2,MDDD.numCols())) = Bugfix;
-    int row = d+d_-1;
-    for (int c=MDDD.lastCol()+1; c<=Mj0_.lastCol()-MDDD.numCols()+1; ++c,row+=2) {
+    FLENS_DEFAULT_INDEXTYPE row = d+d_-1;
+    for (FLENS_DEFAULT_INDEXTYPE c=MDDD.lastCol()+1; c<=Mj0_.lastCol()-MDDD.numCols()+1; ++c,row+=2) {
         Mj0_(_(row,row+phi_R.a_.length()-1),c) = factor*phi_R.a_;
     }
     arrow(Bugfix,Mj0_Right);
@@ -208,13 +208,13 @@ void
 MRA<T,Dual,Interval,Primbs>::_orthonormalize(const flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > &L3,
                                              const flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > &LL3)
 {
-    int n = L3.numRows();
-    int m = L3.numCols();
+    FLENS_DEFAULT_INDEXTYPE n = L3.numRows();
+    FLENS_DEFAULT_INDEXTYPE m = L3.numCols();
 
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > L2(n-m,m), LL2(n-m,m), L22, C(m,m);
 
-    for (int j=1; j<=n-m; ++j) {
-        for (int k=1; k<=m; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=n-m; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=m; ++k) {
             L2(j,k) = L3(j+m,k);
             LL2(j,k) = LL3(j+m,k);
         }
@@ -222,8 +222,8 @@ MRA<T,Dual,Interval,Primbs>::_orthonormalize(const flens::GeMatrix<flens::FullSt
 
     // L22 = transpose(L2);
     L22.engine().resize(L2.cols(),L2.rows());
-    for (int r=L2.firstRow(); r<=L2.lastRow(); ++r) {
-        for (int c=L2.firstCol(); c<=L2.lastCol(); ++c) {
+    for (FLENS_DEFAULT_INDEXTYPE r=L2.firstRow(); r<=L2.lastRow(); ++r) {
+        for (FLENS_DEFAULT_INDEXTYPE c=L2.firstCol(); c<=L2.lastCol(); ++c) {
             L22(c,r) = L2(r,c);
         }
     }
@@ -231,24 +231,24 @@ MRA<T,Dual,Interval,Primbs>::_orthonormalize(const flens::GeMatrix<flens::FullSt
     flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,0.5,L22,LL2,0.,C);
     flens::DenseVector<flens::Array<T> > c(powii(m,2));
 
-    for (int j=1; j<=m; ++j) {
-        for (int k=1; k<=m; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=m; ++k) {
             c((j-1)*m+k) = C(j,k);
         }
     }
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > B(powii(m,2),powii(m,2));
 
-    for (int j=1; j<=m; ++j) {
-        for (int k=1; k<=m; ++k) {
-            for (int l=1; l<=m; ++l) {
-                for (int s=1; s<=m; ++s) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=m; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE l=1; l<=m; ++l) {
+                for (FLENS_DEFAULT_INDEXTYPE s=1; s<=m; ++s) {
                     B((j-1)*m+k,(l-1)*m+s) = -0.5*L3(l,j)*LL3(s,k);
                 }
             }
         }
     }
 
-    for (int j=1; j<=powii(m,2); ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=powii(m,2); ++j) {
         B(j,j) += 1;
     }
 
@@ -262,8 +262,8 @@ MRA<T,Dual,Interval,Primbs>::_orthonormalize(const flens::GeMatrix<flens::FullSt
     t.engine().changeIndexBase(1);
     TT.engine().resize(m,m);
 
-    for (int j=1; j<=m; ++j) {
-        for (int k=1; k<=m; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=m; ++k) {
             TT(j,k) = t((j-1)*m+k);
         }
     }
@@ -275,15 +275,15 @@ template <typename T>
 T
 _dividedDifferences(flens::DenseVector<flens::Array<T> > &a, T x)
 {
-    int m = a.length();
+    FLENS_DEFAULT_INDEXTYPE m = a.length();
     flens::DenseVector<flens::Array<T> > b(m);
 
-    for (int j=1; j<=m; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m; ++j) {
         b(j) = std::pow(std::max(a(j)-x,T(0)),m-2);
     }
 
-    for (int j=1; j<=m-1; ++j) {
-        for (int k=1; k<=m-j; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m-1; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=m-j; ++k) {
             if (a(k)==a(k+j)) {
                 b(k) = 0;
             } else {
@@ -296,20 +296,20 @@ _dividedDifferences(flens::DenseVector<flens::Array<T> > &a, T x)
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Primbs>::_Umrechnung1(int d)
+MRA<T,Dual,Interval,Primbs>::_Umrechnung1(FLENS_DEFAULT_INDEXTYPE d)
 {
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > B(d-1,d-1), C(d-1,d-1);
-    int m = d+1;
+    FLENS_DEFAULT_INDEXTYPE m = d+1;
     flens::DenseVector<flens::Array<T> > b(m), c(m);
-    for (int j=1; j<=m; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m; ++j) {
         c(j) = j-m;
     }
-    for (int l=1; l<=d-1; ++l) {
-        for (int j=1; j<=m-1; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE l=1; l<=d-1; ++l) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=m-1; ++j) {
             b(j) = b(j+1); c(j) = c(j)+1;
         }
         ++b(m); ++c(m);
-        for (int i=1; i<=d-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=d-1; ++i) {
             B(i,l) = l*_dividedDifferences(b,T(i-1));
             C(i,l) = d*_dividedDifferences(c,T(i-1));
         }
@@ -319,18 +319,18 @@ MRA<T,Dual,Interval,Primbs>::_Umrechnung1(int d)
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Primbs>::_Umrechnung2(int d)
+MRA<T,Dual,Interval,Primbs>::_Umrechnung2(FLENS_DEFAULT_INDEXTYPE d)
 {
     flens::DenseVector<flens::Array<T> > a(2*d+1);
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > Tmp, InvW, B(2*(d-1),2*(d-1));
     Mj.engine().resize(2*(d-1),d-1);
 
-    for (int j=1; j<=d+1; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d+1; ++j) {
         a(2*d+2-j) = pow2i<T>(1-d)*binomial(d,j-1);
     }
 
-    for (int j=1; j<=d-1; ++j) {
-        for (int k=1; k<=2*j; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d-1; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=2*j; ++k) {
             Mj(k,j) = a(2*d+1-2*j+k);
         }
     }
@@ -338,13 +338,13 @@ MRA<T,Dual,Interval,Primbs>::_Umrechnung2(int d)
     _Umrechnung1(d);
     InvW = inv(W);
 
-    for (int j=1; j<=d-1; ++j) {
-        for (int k=1; k<=d-1; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d-1; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d-1; ++k) {
             B(j,k) = InvW(j,k);
         }
     }
 
-    for (int j=d; j<=2*(d-1); ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=d; j<=2*(d-1); ++j) {
         B(j,j) = 1;
     }
     flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,1.,B,Mj,0.,Tmp);
@@ -353,21 +353,21 @@ MRA<T,Dual,Interval,Primbs>::_Umrechnung2(int d)
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Primbs>::_twoScalePrimal(int d, int d_)
+MRA<T,Dual,Interval,Primbs>::_twoScalePrimal(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     MP.engine().resize(3*d_+2*d-5, d+d_-2);
     _Umrechnung2(d);
 
-    for (int j=1; j<=2*d-2; ++j) {
-        for (int k=1; k<=d-1; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=2*d-2; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d-1; ++k) {
             MP(j,k) = Mp(j,k);
         }
     }
 
     flens::DenseVector<flens::Array<T> > b = BSpline<T,Primal,R,CDF>(d).a;
     b.engine().changeIndexBase(1);
-    for (int k=d; k<=d+d_-2; ++k) {
-        for (int j=2*k-d; j<=2*k; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE k=d; k<=d+d_-2; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE j=2*k-d; j<=2*k; ++j) {
             MP(j,k) = b(j-2*k+d+1);
         }
     }
@@ -375,7 +375,7 @@ MRA<T,Dual,Interval,Primbs>::_twoScalePrimal(int d, int d_)
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Primbs>::_twoScaleDual_1(int d, int d_)
+MRA<T,Dual,Interval,Primbs>::_twoScaleDual_1(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     M1.engine().resize(3*d_+2*d-5,d+d_-2) || M1.engine().fill();
     MD.engine().resize(3*d_+2*d-5,d+d_-2) || MD.engine().fill();
@@ -383,48 +383,48 @@ MRA<T,Dual,Interval,Primbs>::_twoScaleDual_1(int d, int d_)
     flens::DenseVector<flens::Array<T> > a = BSpline<T,Dual,R,CDF>(d,d_).a_;
     b.engine().changeIndexBase(1); a.engine().changeIndexBase(1);
 
-    for (int l=d/2+d_-1; l<=d/2+3*d_+d-5; ++l) {
-        int gu = std::max(0,iceil<int>((d/2+d_-3-l)/2.));
-        int go = std::min(2*d_+d-4, (d+d/2+3*d_-5-l)/2);
-        for (int n=gu; n<=go; ++n) {
-            M1(l+iceil<int>(d/2.),d+d_-2) += a(l+2*n-d/2-d_+4);
+    for (FLENS_DEFAULT_INDEXTYPE l=d/2+d_-1; l<=d/2+3*d_+d-5; ++l) {
+        FLENS_DEFAULT_INDEXTYPE gu = std::max((FLENS_DEFAULT_INDEXTYPE) 0,iceil<FLENS_DEFAULT_INDEXTYPE>((d/2+d_-3-l)/2.));
+        FLENS_DEFAULT_INDEXTYPE go = std::min(2*d_+d-4, (d+d/2+3*d_-5-l)/2);
+        for (FLENS_DEFAULT_INDEXTYPE n=gu; n<=go; ++n) {
+            M1(l+iceil<FLENS_DEFAULT_INDEXTYPE>(d/2.),d+d_-2) += a(l+2*n-d/2-d_+4);
         }
-        for (int k=1; k<=d_-1; ++k) {
-            for (int n=gu; n<=go; ++n) {
-                M1(l+iceil<int>(d/2.),d+d_-2-k) += powii(n,k)*a(l+2*n-d/2-d_+4);
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d_-1; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE n=gu; n<=go; ++n) {
+                M1(l+iceil<FLENS_DEFAULT_INDEXTYPE>(d/2.),d+d_-2-k) += powii(n,k)*a(l+2*n-d/2-d_+4);
             }
         }
     }
 
     flens::DenseVector<flens::Array<T> > m(d_);
-    for (int n=-1; n<=d+2*d_-3; ++n) {
+    for (FLENS_DEFAULT_INDEXTYPE n=-1; n<=d+2*d_-3; ++n) {
         m(1) += a(n+2);
     }
-    for (int j=2; j<=d_; ++j) {
-        for (int n=-1; n<=d+2*d_-3; ++n) {
+    for (FLENS_DEFAULT_INDEXTYPE j=2; j<=d_; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE n=-1; n<=d+2*d_-3; ++n) {
             m(j) += a(n+2)*powii(n,j-1);
         }
     }
     m *= .5;
 
-    for (int k=0; k<=d_-1; ++k) {
-        for (int r=0; r<=k; ++r) {
+    for (FLENS_DEFAULT_INDEXTYPE k=0; k<=d_-1; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE r=0; r<=k; ++r) {
             M1(d+d_-2-r,d+d_-2-k) = pow2i<T>(-k)*binomial(k,r)*m(k-r+1);
         }
     }
 
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > D3(d_,d_);
     D3(1,1) = 1;
-    for (int k=2; k<=d_; ++k) {
-        for (int i=1; i<=k; ++i) {
-            for (int s=0; s<=i-1; ++s) {
+    for (FLENS_DEFAULT_INDEXTYPE k=2; k<=d_; ++k) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=k; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE s=0; s<=i-1; ++s) {
                 D3(k,i) += powii(-1,(i-1)-s)*binomial(i-1,s)*powii(s,k-1);
             }
         }
     }
 
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > J(d_,d_);
-    for (int j=1; j<=d_; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d_; ++j) {
         J(d_+1-j,j) = 1;
     }
 
@@ -433,15 +433,15 @@ MRA<T,Dual,Interval,Primbs>::_twoScaleDual_1(int d, int d_)
     flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,1.,Tmp,J,0.,D4);
 
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > m1(d_,d_);
-    for (int j=1; j<=d_; ++j) {
-        for (int k=1; k<=d_; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d_; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d_; ++k) {
             m1(j,k) = M1(d-2+j,d-2+k);
         }
     }
 
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > m2(2*d_+d-3,d_);
-    for (int j=1; j<=2*d_+d-3; ++j) {
-        for (int k=1; k<=d_; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=2*d_+d-3; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d_; ++k) {
             m2(j,k) = M1(d+d_-2+j,d-2+k);
         }
     }
@@ -451,13 +451,13 @@ MRA<T,Dual,Interval,Primbs>::_twoScaleDual_1(int d, int d_)
     Tmp = m2;
     flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans,1.,Tmp,inv(D4),0.,m2);
 
-    for (int j=1; j<=d_; ++j) {
-        for (int k=1; k<=d_; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d_; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d_; ++k) {
             MD(d-2+j,d-2+k) = m1(j,k);
         }
     }
-    for (int j=1; j<=2*d_+d-3; ++j) {
-        for (int k=1; k<=d_; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=2*d_+d-3; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d_; ++k) {
             MD(d+d_-2+j,d-2+k) = m2(j,k);
         }
     }
@@ -465,34 +465,34 @@ MRA<T,Dual,Interval,Primbs>::_twoScaleDual_1(int d, int d_)
 
 template <typename T>
 void
-MRA<T,Dual,Interval,Primbs>::_twoScaleDual_2(int d, int d_)
+MRA<T,Dual,Interval,Primbs>::_twoScaleDual_2(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
-    int t = std::max(d+d_-2,4*d-6);
+    FLENS_DEFAULT_INDEXTYPE t = std::max(d+d_-2,4*d-6);
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > TL(t,t);
-    for (int j=1; j<=t; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=t; ++j) {
         TL(j,j) = 1.;
     }
     _twoScalePrimal(d,d_);
     _twoScaleDual_1(d,d_);
     MDD.engine().resize(3*d_+2*d-5,d+d_-2) || MDD.engine().fill();
 
-    for (int j=1; j<=3*d_+2*d-5; ++j) {
-        for (int k=1; k<=d+d_-2; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=3*d_+2*d-5; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=d+d_-2; ++k) {
             MDD(j,k) = MD(j,k);
         }
     }
 
-    for (int k=d-2; k>=1; --k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=d-2; k>=1; --k) {
         flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > B(d-1+k,d-1+k), C;
         _orthonormalize(MP,MDD);
-        for (int j=1; j<=d+d_-2; ++j) {
-            for (int s=1; s<=d+d_-2; ++s) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d+d_-2; ++j) {
+            for (FLENS_DEFAULT_INDEXTYPE s=1; s<=d+d_-2; ++s) {
                 TL(j,s) = TT(j,s);
             }
         }
-        for (int j=1; j<=d-1+k; ++j) {
-            for (int s=1; s<=d-1+k; ++s) {
-                for (int l=1; l<=2*k+2*d-2; ++l) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d-1+k; ++j) {
+            for (FLENS_DEFAULT_INDEXTYPE s=1; s<=d-1+k; ++s) {
+                for (FLENS_DEFAULT_INDEXTYPE l=1; l<=2*k+2*d-2; ++l) {
                     B(j,s) += MP(l,j)*TL(l,k+s);
                 }
                 B(j,s) *= .5;
@@ -503,11 +503,11 @@ MRA<T,Dual,Interval,Primbs>::_twoScaleDual_2(int d, int d_)
 
         MDD(k,k) = 0;
         flens::DenseVector<flens::Array<T> > x(d+k-1), y(d+k-1);
-        for (int j=1; j<=d+k-1; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d+k-1; ++j) {
             x(j) = MDD(k,k)*.5*MP(k,j);
         }
         y(k) = 1; x *= -1; x += y; y = C*x;
-        for (int j=1; j<=d+k-1; ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE j=1; j<=d+k-1; ++j) {
             MDD(k+j,k) = y(j);
         }
     }
@@ -536,8 +536,8 @@ MRA<T,Dual,Interval,Primbs>::_calcM0_()
     Bugfix = MDDD;
     flens::blas::scal(factor,Bugfix);
     Mj0_(MDDD.rows(), MDDD.cols()) = Bugfix;
-    int row = d+d_-1;
-    for (int c=MDDD.lastCol()+1; c<=Mj0_.lastCol()-MDDD.numCols(); ++c,row+=2) {
+    FLENS_DEFAULT_INDEXTYPE row = d+d_-1;
+    for (FLENS_DEFAULT_INDEXTYPE c=MDDD.lastCol()+1; c<=Mj0_.lastCol()-MDDD.numCols(); ++c,row+=2) {
         Mj0_(_(row,row+phi_R.a_.length()-1),c) = factor*phi_R.a_;
     }
     arrow(Bugfix,Mj0_Right);

@@ -27,7 +27,7 @@ template <typename T>
 struct HomogeneousRHS{
     
     T 
-    operator()(T time, XType xtype, int j, long k) const;
+    operator()(T time, XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
     
 };
 

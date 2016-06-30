@@ -201,7 +201,7 @@ print(const char* filename)
 template<typename ParamType>
 void
 RB_Greedy_Information<ParamType>::RB_Greedy_Information::
-read(const char* filename, std::size_t Qf, std::size_t Qa, int nb)
+read(const char* filename, std::size_t Qf, std::size_t Qa, FLENS_DEFAULT_INDEXTYPE nb)
 {
 	std::size_t pdim = ParamInfo<ParamType>::dim;
     std::ifstream infofile(filename);
@@ -209,11 +209,11 @@ read(const char* filename, std::size_t Qf, std::size_t Qa, int nb)
     	std::string header;
     	std::getline(infofile, header);
 
-    	int i;
+    	FLENS_DEFAULT_INDEXTYPE i;
     	typename ParamInfo<ParamType>::ValueType err, size;
 
-    	int countmax = (nb < 0) ? 10000 : nb;
-    	int count = 0;
+    	FLENS_DEFAULT_INDEXTYPE countmax = (nb < 0) ? 10000 : nb;
+    	FLENS_DEFAULT_INDEXTYPE count = 0;
     	while(!infofile.eof() && count < countmax){
     		// Read Error
     		infofile >> i;
@@ -270,14 +270,14 @@ read(const char* filename, std::size_t Qf, std::size_t Qa, int nb)
 template<typename ParamType>
 void
 RB_Greedy_Information<ParamType>::RB_Greedy_Information::
-read_repr_accuracies(const char* filename, std::size_t Qf, std::size_t Qa, int Nmax)
+read_repr_accuracies(const char* filename, std::size_t Qf, std::size_t Qa, FLENS_DEFAULT_INDEXTYPE Nmax)
 {
     std::ifstream accfile(filename);
     if(accfile.is_open()){
     	std::string header;
     	std::getline(accfile, header);
     	
-        int N;
+        FLENS_DEFAULT_INDEXTYPE N;
     	for(std::size_t n = 0; n < Nmax; ++n){
     		accfile >> N;
     		

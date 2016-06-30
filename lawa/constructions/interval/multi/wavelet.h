@@ -43,33 +43,33 @@ class Wavelet<_T,Orthogonal,Interval,Multi>
         ~Wavelet();
         
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
         
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
         
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
     
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
         
         flens::DenseVector<flens::Array<long double> > *
-        getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-        		long &split, long &refinement_k_restart) const;
+        getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+        		FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const;
 
-        int
-        getRefinementLevel(int j) const;
-
-        T
-        getL2Norm(int j, long k) const;
+        FLENS_DEFAULT_INDEXTYPE
+        getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         T
-        getH1SemiNorm(int j, long k) const;
+        getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
+
+        T
+        getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         const Basis<T,Orthogonal,Interval,Multi> &basis;
-        const int d;
-        const int vanishingMoments;
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE vanishingMoments;
         T initialticsize;
 };
     

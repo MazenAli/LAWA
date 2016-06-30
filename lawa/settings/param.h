@@ -26,7 +26,7 @@ namespace lawa {
 template <typename X>
 struct Param
 {
-    static int resolution;
+    static FLENS_DEFAULT_INDEXTYPE resolution;
 };
 
 } // namespace lawa

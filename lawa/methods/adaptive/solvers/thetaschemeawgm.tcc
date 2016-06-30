@@ -10,9 +10,9 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::ThetaSchemeAWGM(ThetaTimeStepSolver 
 
 template <typename Index, typename ThetaTimeStepSolver>
 void
-ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::setParameters(T _theta, T _timestep, int _numOfTimesteps,
-                                                          T _timestep_eps, int _maxiterations,
-                                                          T _init_cgtol, int _strategy)
+ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::setParameters(T _theta, T _timestep, FLENS_DEFAULT_INDEXTYPE _numOfTimesteps,
+                                                          T _timestep_eps, FLENS_DEFAULT_INDEXTYPE _maxiterations,
+                                                          T _init_cgtol, FLENS_DEFAULT_INDEXTYPE _strategy)
 {
     theta = _theta;
     timestep = _timestep;
@@ -49,7 +49,7 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::applyInvPreconditioner
 template <typename Index, typename ThetaTimeStepSolver>
 void
 ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::solve(Coefficients<Lexicographical,T,Index> &u,
-                                                  int &avDof, int &maxDof, int &terminalDof, int j)
+                                                  FLENS_DEFAULT_INDEXTYPE &avDof, FLENS_DEFAULT_INDEXTYPE &maxDof, FLENS_DEFAULT_INDEXTYPE &terminalDof, FLENS_DEFAULT_INDEXTYPE j)
 {
     size_t hms;
     hms = u.bucket_count();
@@ -58,22 +58,22 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::solve(Coefficients<Lexicographical,T
     Coefficients<Lexicographical,T,Index> propagated_u_k(hms), u0(hms), tmp(hms), tmp2(hms), tmp3(hms);
     u0 = u;
 
-    int N = u.size();
+    FLENS_DEFAULT_INDEXTYPE N = u.size();
 
     maxDof = 0;
     T _avDof = 0.;
     T current_theta = theta;
     T current_timestep = timestep;
 
-    int refinement_timesteps_mod = numOfTimesteps / 8;
+    FLENS_DEFAULT_INDEXTYPE refinement_timesteps_mod = numOfTimesteps / 8;
 
     std::stringstream filename;
     filename << "conv_awgm_in_thetascheme_" << u.size() << ".txt";
     std::ofstream file(filename.str().c_str());
 
 
-    for (int i=1; i<=numOfTimesteps+2; ++i) {
-//    for (int i=1; i<=numOfTimesteps; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=numOfTimesteps+2; ++i) {
+//    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=numOfTimesteps; ++i) {
 
 
         current_theta    = theta;
@@ -109,7 +109,7 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::solve(Coefficients<Lexicographical,T
 
         IndexSet<Index1D> Lambda_x, Lambda_y;
         split(supp(u),Lambda_x,Lambda_y);
-        int jmin_x=0, jmax_x=0, jmin_y=0, jmax_y=0;
+        FLENS_DEFAULT_INDEXTYPE jmin_x=0, jmax_x=0, jmin_y=0, jmax_y=0;
         getMinAndMaxLevel(Lambda_x,jmin_x,jmax_x);
         getMinAndMaxLevel(Lambda_y,jmin_y,jmax_y);
         std::cout << "   Max level = (" << jmax_x << ", " << jmax_y << ")" << std::endl;
@@ -126,9 +126,9 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::solve(Coefficients<Lexicographical,T
             //T threshold = j <= 5 ? 0.0001*std::pow((T)2.,(T)(-2.*j)) : 0.00001*std::pow((T)2.,(T)(-2.*j));
             T threshold = 0.00001*std::pow((T)2.,(T)(-2.*j))*u.norm(2.);
             //T threshold =  0.00005*std::pow((T)2.,(T)(-2.*j))*u.norm(2.);
-            int sizeBeforeThresh = u.size(), sizeAfterThresh = 0;
+            FLENS_DEFAULT_INDEXTYPE sizeBeforeThresh = u.size(), sizeAfterThresh = 0;
             std::cerr << "   APPLYING threshold strategy" << std::endl;
-            int maxLevelSum = 0;
+            FLENS_DEFAULT_INDEXTYPE maxLevelSum = 0;
             tmp = u;
             for (const_coeff_it it=tmp.begin(); it!=tmp.end(); ++it) {
                maxLevelSum = std::max(maxLevelSum, (*it).first.index1.j+(*it).first.index2.j);
@@ -164,15 +164,15 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::solve(Coefficients<Lexicographical,T
             }
         }
 
-        maxDof = std::max(maxDof, (int)u.size());
+        maxDof = std::max(maxDof, (FLENS_DEFAULT_INDEXTYPE)u.size());
         _avDof += u.size();
 
         std::cerr << std::endl;
         std::cerr << "   supp u = " << u.size() << std::endl << std::endl;
     }
-    terminalDof = (int)u.size();
+    terminalDof = (FLENS_DEFAULT_INDEXTYPE)u.size();
     _avDof /= (numOfTimesteps+2);
-    avDof = (int)_avDof;
+    avDof = (FLENS_DEFAULT_INDEXTYPE)_avDof;
     std::cerr << "Theta timestepping with theta = " << theta << " and timestep " << timestep
               << " finished at t = " << discrete_timepoint << " with maxDof = " << maxDof
               << " and avDof = " << avDof << std::endl;
@@ -185,7 +185,7 @@ ThetaSchemeAWGM<Index,ThetaTimeStepSolver>::solve(Coefficients<Lexicographical,T
             //T threshold = j <= 5 ? 0.0001*std::pow((T)2.,(T)(-2.*j)) : 0.00001*std::pow((T)2.,(T)(-2.*j));//T threshold = 1e-12; //ex1
             T threshold = j <= 5 ? 0.0005*std::pow((T)2.,(T)(-2.*j)) : 0.00005*std::pow((T)2.,(T)(-2.*j));//T threshold = 1e-12; //ex2
             std::cerr << "   APPLYING strategy 1" << std::endl;
-            int sizeBeforeThresh = u.size(), sizeAfterThresh = 0;
+            FLENS_DEFAULT_INDEXTYPE sizeBeforeThresh = u.size(), sizeAfterThresh = 0;
             u = MULTITREE_THRESH(u,threshold*u.norm(2.));
             erasedNode = true;
             sizeAfterThresh = u.size();

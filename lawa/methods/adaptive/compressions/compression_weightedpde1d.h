@@ -40,7 +40,7 @@ struct CompressionWeightedPDE1D
     setParameters(const IndexSet<Index1D> &LambdaRow);
 
     IndexSet<Index1D>
-    SparsityPattern(const Index1D &lambda_col, const IndexSet<Index1D> &LambdaRow, int J=-1);
+    SparsityPattern(const Index1D &lambda_col, const IndexSet<Index1D> &LambdaRow, FLENS_DEFAULT_INDEXTYPE J=-1);
 };
 
 } // namespace lawa

@@ -41,39 +41,39 @@ namespace flens { namespace blas {
 
 template <typename T>
     void
-    crs_gemv(cxxblas::Transpose trans, int m, int n, T alpha,
-             const T *a, const int *ia, const int *ja,
+    crs_gemv(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, T alpha,
+             const T *a, const FLENS_DEFAULT_INDEXTYPE *ia, const FLENS_DEFAULT_INDEXTYPE *ja,
              const T *x, T beta, T *y);
 
 template <typename T>
     void
-    crs_symv(cxxblas::StorageUpLo upLo, int m, T alpha,
-             const T *a, const int *ia, const int *ja,
+    crs_symv(cxxblas::StorageUpLo upLo, FLENS_DEFAULT_INDEXTYPE m, T alpha,
+             const T *a, const FLENS_DEFAULT_INDEXTYPE *ia, const FLENS_DEFAULT_INDEXTYPE *ja,
              const T *x, T beta, T *y);
 
 //-- csr - compressed sparse row - (the Intel variant for crs) -----------------
 
 void
-csrmv(cxxblas::Transpose trans, int m, int k, float alpha, char *matdescra,
-      float  *values, int *columns,  int *pointerB, int *pointerE,
+csrmv(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE k, float alpha, char *matdescra,
+      float  *values, FLENS_DEFAULT_INDEXTYPE *columns,  FLENS_DEFAULT_INDEXTYPE *pointerB, FLENS_DEFAULT_INDEXTYPE *pointerE,
       float *x, float beta, float *y);
 
 void
-csrmv(cxxblas::Transpose trans, int m, int k, double alpha, char *matdescra,
-      double  *values, int *columns,  int *pointerB, int *pointerE,
+csrmv(cxxblas::Transpose trans, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE k, double alpha, char *matdescra,
+      double  *values, FLENS_DEFAULT_INDEXTYPE *columns,  FLENS_DEFAULT_INDEXTYPE *pointerB, FLENS_DEFAULT_INDEXTYPE *pointerE,
       double *x, double beta, double *y);
 
 void
-csrmm(cxxblas::Transpose transA, int m, int n, int k, float alpha, char *matdescra,
-      const float *values, const int *columns, const int *pointerB,
-      const int *pointerE, const float *B, int ldb,
-      float beta, float *C, int ldc);
+csrmm(cxxblas::Transpose transA, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, float alpha, char *matdescra,
+      const float *values, const FLENS_DEFAULT_INDEXTYPE *columns, const FLENS_DEFAULT_INDEXTYPE *pointerB,
+      const FLENS_DEFAULT_INDEXTYPE *pointerE, const float *B, FLENS_DEFAULT_INDEXTYPE ldb,
+      float beta, float *C, FLENS_DEFAULT_INDEXTYPE ldc);
 
 void
-csrmm(cxxblas::Transpose transA, int m, int n, int k, double alpha, char *matdescra,
-      const double *values, const int *columns, const int *pointerB,
-      const int *pointerE, const double *B, int ldb,
-      double beta, double *C, int ldc);
+csrmm(cxxblas::Transpose transA, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, double alpha, char *matdescra,
+      const double *values, const FLENS_DEFAULT_INDEXTYPE *columns, const FLENS_DEFAULT_INDEXTYPE *pointerB,
+      const FLENS_DEFAULT_INDEXTYPE *pointerE, const double *B, FLENS_DEFAULT_INDEXTYPE ldb,
+      double beta, double *C, FLENS_DEFAULT_INDEXTYPE ldc);
 
 } } // namespace blas, flens
 

@@ -32,8 +32,8 @@ struct Rhs2D {
     operator()(const Index2D &index) const = 0;
     
     virtual T
-    operator()(XType xtype_x, int j_x, long k_x,
-               XType xtype_y, int j_y, long k_y) const = 0;
+    operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+               XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y) const = 0;
 };
     
 } // namespace lawa

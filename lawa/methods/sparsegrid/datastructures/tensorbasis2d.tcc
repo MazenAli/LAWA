@@ -27,13 +27,13 @@ TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::TensorBasis2D(const FirstBas
 }
 
 template<typename FirstBasis, typename SecondBasis>
-int
-TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::dim(const int J_x, const int J_y) const
+FLENS_DEFAULT_INDEXTYPE
+TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::dim(const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE J_y) const
 {
-    int d = first.mra.cardI(first.j0) * second.mra.cardI(J2_max(J_x, J_y, first.j0 - 1));
-    for(int jx = first.j0; jx <= J1_max(J_x, J_y, second.j0-1) - 1; ++jx){
+    FLENS_DEFAULT_INDEXTYPE d = first.mra.cardI(first.j0) * second.mra.cardI(J2_max(J_x, J_y, first.j0 - 1));
+    for(FLENS_DEFAULT_INDEXTYPE jx = first.j0; jx <= J1_max(J_x, J_y, second.j0-1) - 1; ++jx){
         d += first.cardJ(jx)*second.mra.cardI(second.j0);
-        for(int jy = second.j0; jy <= J2_max(J_x,J_y, jx) - 1; ++jy){
+        for(FLENS_DEFAULT_INDEXTYPE jy = second.j0; jy <= J2_max(J_x,J_y, jx) - 1; ++jy){
             d += first.cardJ(jx) * second.cardJ(jy);
         }
     }
@@ -54,15 +54,15 @@ TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::dim(const int J_x, const int
  *  => j_x < min(J_x, C - j_y + 1)
  */
 template<typename FirstBasis, typename SecondBasis>
-int 
-TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::J1_max(const int J_x, const int J_y, const int jy) const
+FLENS_DEFAULT_INDEXTYPE 
+TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::J1_max(const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE J_y, const FLENS_DEFAULT_INDEXTYPE jy) const
 {
     return std::min(J_x, std::max(J_x + second.j0 - 2, J_y + first.j0 - 2) - jy + 1);
 } 
 
 template<typename FirstBasis, typename SecondBasis>
-int 
-TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::J2_max(const int J_x, const int J_y, const int jx) const
+FLENS_DEFAULT_INDEXTYPE 
+TensorBasis2D<SparseGrid, FirstBasis, SecondBasis>::J2_max(const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE J_y, const FLENS_DEFAULT_INDEXTYPE jx) const
 {
     return std::min(J_y, std::max(J_x + second.j0 - 2, J_y + first.j0 - 2)- jx  + 1);
 }

@@ -24,7 +24,7 @@ namespace flens {
 
 template <typename T>
 void
-jacobi(T **a, int n, T d[], T **v, int *nrot);
+jacobi(T **a, FLENS_DEFAULT_INDEXTYPE n, T d[], T **v, FLENS_DEFAULT_INDEXTYPE *nrot);
 
 } // namespace flens
 

@@ -32,7 +32,7 @@ _integrate(const Integral2D<Quad,BasisX,BasisY>& integral)
     // -> implicit assumption: second.singularPoints are sorted!!
     flens::DenseVector<flens::Array<T> > SingularPoints_phi_x
                                   = phi_x.singularSupport(integral.jx,integral.kx);
-    int n_phi_x = SingularPoints_phi_x.length(),
+    FLENS_DEFAULT_INDEXTYPE n_phi_x = SingularPoints_phi_x.length(),
         n_F_x   = integral.F.singularPts_x.length();
 
     flens::DenseVector<flens::Array<T> > AllSingularPoints_x(n_phi_x + n_F_x);
@@ -45,7 +45,7 @@ _integrate(const Integral2D<Quad,BasisX,BasisY>& integral)
 
     flens::DenseVector<flens::Array<T> > SingularPoints_phi_y
                                        = phi_y.singularSupport(integral.jy,integral.ky);
-    int n_phi_y = SingularPoints_phi_y.length(),
+    FLENS_DEFAULT_INDEXTYPE n_phi_y = SingularPoints_phi_y.length(),
         n_F_y   = integral.F.singularPts_y.length();
 
     flens::DenseVector<flens::Array<T> > AllSingularPoints_y(n_phi_y + n_F_y);
@@ -62,10 +62,10 @@ _integrate(const Integral2D<Quad,BasisX,BasisY>& integral)
     T left_y  = SingularPoints_phi_y(SingularPoints_phi_y.firstIndex());
     T right_y = SingularPoints_phi_y(SingularPoints_phi_y.lastIndex());
     
-    for (int i=AllSingularPoints_x.firstIndex(); i<AllSingularPoints_x.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=AllSingularPoints_x.firstIndex(); i<AllSingularPoints_x.lastIndex(); ++i) {
         T a_x = AllSingularPoints_x(i), b_x = AllSingularPoints_x(i+1);
         if ((b_x <= left_x) || (a_x >= right_x)) continue;
-        for (int j=AllSingularPoints_y.firstIndex(); j<AllSingularPoints_y.lastIndex(); ++j) {
+        for (FLENS_DEFAULT_INDEXTYPE j=AllSingularPoints_y.firstIndex(); j<AllSingularPoints_y.lastIndex(); ++j) {
             T a_y = AllSingularPoints_y(j), b_y = AllSingularPoints_y(j+1);
             if ((b_y <= left_y) || (a_y >= right_y)) continue;
             T tmp = integral.quadrature(a_x,b_x,a_y,b_y);
@@ -85,8 +85,8 @@ Integral2D<Quad,BasisX,BasisY>::Integral2D(const Function2D<T> &_F,
     
 template <QuadratureType Quad, typename BasisX, typename BasisY>
 typename BasisX::T
-Integral2D<Quad,BasisX,BasisY>::operator()(int _jx, long _kx, XType _ex, unsigned short _derivx,
-                                           int _jy, long _ky, XType _ey, unsigned short _derivy)
+Integral2D<Quad,BasisX,BasisY>::operator()(FLENS_DEFAULT_INDEXTYPE _jx, FLENS_DEFAULT_INDEXTYPE _kx, XType _ex, unsigned short _derivx,
+                                           FLENS_DEFAULT_INDEXTYPE _jy, FLENS_DEFAULT_INDEXTYPE _ky, XType _ey, unsigned short _derivy)
                                            const
 {
     jx = _jx; kx = _kx; ex = _ex; derivx = _derivx;

@@ -1,4 +1,4 @@
-SUBDIRS := J12P
+SUBDIRS := 1 2 3
 
 
 all:

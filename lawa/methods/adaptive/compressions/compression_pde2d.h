@@ -55,8 +55,8 @@ struct CompressionPDE2D
     SparsityPattern(const Index2D &lambda_col, const IndexSet<Index2D> &LambdaRow);
 
 //  IndexSet<Index2D>
-//  SparsityPattern(const Index2D &lambda_col, int jmin_x, int jmin_y, int s_tilde,
-//                  int deriv_x, int deriv_y);
+//  SparsityPattern(const Index2D &lambda_col, FLENS_DEFAULT_INDEXTYPE jmin_x, FLENS_DEFAULT_INDEXTYPE jmin_y, FLENS_DEFAULT_INDEXTYPE s_tilde,
+//                  FLENS_DEFAULT_INDEXTYPE deriv_x, FLENS_DEFAULT_INDEXTYPE deriv_y);
 };
 
 } // namespace lawa

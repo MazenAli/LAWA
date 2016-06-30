@@ -25,9 +25,9 @@ namespace lawa {
 
 template <typename X, typename Basis>
 typename X::ElementType
-evaluate(const Basis &basis, const int J_x, const int J_y, const flens::DenseVector<X> &coeffs,
-         const typename X::ElementType x, const typename X::ElementType y, const int deriv_x,
-         const int deriv_y);
+evaluate(const Basis &basis, const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE J_y, const flens::DenseVector<X> &coeffs,
+         const typename X::ElementType x, const typename X::ElementType y, const FLENS_DEFAULT_INDEXTYPE deriv_x,
+         const FLENS_DEFAULT_INDEXTYPE deriv_y);
 
 } // namespace lawa
 

@@ -201,7 +201,7 @@ template <typename T, DomainType Domain>
 void
 AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain,Multi>
 ::toFlensSparseMatrix(const IndexSet<Index2D>& LambdaRow, const IndexSet<Index2D>& LambdaCol,
-                      SparseMatrixT &A_flens, int J)
+                      SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J)
 {
     std::cerr << "  -> toFlensSparseMatrix called with J= " << J << std::endl;
     IndexSet<Index1D> LambdaRow_x, LambdaRow_y;
@@ -217,13 +217,13 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 
     std::cerr << "AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain1,Multi,Orthogonal,Domain2,Multi>::toFlensSparseMatrix called." << std::endl;
 
-    std::map<Index2D,int,lt<Lexicographical,Index2D> > row_indices;
-    int row_count = 1;
+    std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> > row_indices;
+    FLENS_DEFAULT_INDEXTYPE row_count = 1;
     for (const_set2d_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
         row_indices[(*row)] = row_count;
     }
 
-    int col_count = 1;
+    FLENS_DEFAULT_INDEXTYPE col_count = 1;
     for (const_set2d_it col=LambdaCol.begin(); col!=LambdaCol.end(); ++col, ++col_count) {
         Index2D col_index = *col;
 
@@ -278,15 +278,15 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 ::toFlensSparseMatrix(const IndexSet<Index2D>& LambdaRow, const IndexSet<Index2D>& LambdaCol,
                       SparseMatrixT &A_flens, T eps)
 {
-    int d = basis.first.d;
+    FLENS_DEFAULT_INDEXTYPE d = basis.first.d;
     if (basis.first.d!=basis.second.d) {
         std::cerr << "AdaptiveHelmholtzOperatorOptimized2D::toFlensSparseMatrix not implemented "
                   << "for different polynomial orders " << basis.first.d << ", " << basis.second.d
                   << "." << std::endl;
         exit(1);
     }
-    int J=0;        //compression
-    J = (int)std::ceil(-1./(d-1.5)*log(eps/CA)/log(2.));
+    FLENS_DEFAULT_INDEXTYPE J=0;        //compression
+    J = (FLENS_DEFAULT_INDEXTYPE)std::ceil(-1./(d-1.5)*log(eps/CA)/log(2.));
     std::cerr << "   -> toFlensSparseMatrix: Estimated compression level for "
               << "tol = " << eps << " : " << J << std::endl;
     this->toFlensSparseMatrix(LambdaRow,LambdaCol,A_flens,J);
@@ -295,7 +295,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 template <typename T, DomainType Domain>
 Coefficients<Lexicographical,T,Index2D>
 AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain,Multi>
-::apply(const Coefficients<Lexicographical,T,Index2D> &v, int k, int J, cxxblas::Transpose /*trans*/)
+::apply(const Coefficients<Lexicographical,T,Index2D> &v, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE J, cxxblas::Transpose /*trans*/)
 {
     Coefficients<Lexicographical,T,Index2D> ret;
     if (v.size() == 0) return ret;
@@ -303,7 +303,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
     Coefficients<AbsoluteValue,T,Index2D> temp;
     temp = v;
 
-    int s = 0, count = 0;
+    FLENS_DEFAULT_INDEXTYPE s = 0, count = 0;
     for (const_abs_coeff2d_it it = temp.begin(); (it != temp.end()) && (s<=k); ++it) {
         ret[(*it).second] += c * (*it).first * this->prec((*it).second);
         Index1D col_index_x = (*it).second.index1;
@@ -312,7 +312,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
         T prec_col_index = this->prec(Index2D(col_index_x, col_index_y));
 
         IndexSet<Index1D> Lambda_x, Lambda_y;
-        int maxlevel_x, maxlevel_y;
+        FLENS_DEFAULT_INDEXTYPE maxlevel_x, maxlevel_y;
 
         J==-1000 ? maxlevel_x=col_index_x.j+(k-s)+1 : maxlevel_x=J;
         maxlevel_x =36;
@@ -334,7 +334,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
             ret[row_index] += this->laplace_data1d(*row_y, col_index_y) * prec_col_index * (*it).first;
         }
         ++count;
-        s = int(log(T(count))/log(T(2))) + 1;
+        s = (FLENS_DEFAULT_INDEXTYPE)(log(T(count))/log(T(2))) + 1;
     }
     for (const_coeff2d_it it=ret.begin(); it!=ret.end(); ++it) {
         ret[(*it).first] *= this->prec((*it).first);
@@ -353,7 +353,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 /*
     Coefficients<AbsoluteValue,T,Index2D> v_abs;
     v_abs = v;
-    int k = this->findK(v_abs, eps);
+    FLENS_DEFAULT_INDEXTYPE k = this->findK(v_abs, eps);
     ret = this->apply(v, k);
     return ret;
 */
@@ -363,9 +363,9 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
     long double squared_v_norm = (long double)std::pow(v.norm(2.),(T)2.);
     long double squared_v_bucket_norm = 0.;
     T delta=0.;
-    int l=0;
-    int support_size_all_buckets=0;
-    for (int i=0; i<(int)v_bucket.buckets.size(); ++i) {
+    FLENS_DEFAULT_INDEXTYPE l=0;
+    FLENS_DEFAULT_INDEXTYPE support_size_all_buckets=0;
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)v_bucket.buckets.size(); ++i) {
         squared_v_bucket_norm += v_bucket.bucket_ell2norms[i]*v_bucket.bucket_ell2norms[i];
         T squared_delta = fabs(squared_v_norm - squared_v_bucket_norm);
         support_size_all_buckets += v_bucket.buckets[i].size();
@@ -379,15 +379,15 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
     if (delta>tol) delta = eps/2.;
     //std::cerr << "APPLY: squared_v_norm=" << squared_v_norm << ", squared_v_bucket_norm=" << squared_v_bucket_norm << std::endl;
 
-    for (int i=0; i<l; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<l; ++i) {
         Coefficients<Lexicographical,T,Index2D> w_p;
         v_bucket.addBucketToCoefficients(w_p,i);
         if (w_p.size()==0) continue;
         T numerator = w_p.norm(2.) * support_size_all_buckets;
         T denominator = w_p.size() * (eps-delta) / CA;
         //std::cout << "Bucket " << i << ": size=" << w_p.size() << ", (eps-delta) " << fabs(eps-delta) << std::endl;
-        //int jp = (int)std::max(std::log(numerator/denominator) / std::log(2.) / (basis.d-1.5), 0.);
-        int jp = (int)std::max(std::log(numerator/denominator) / std::log(2.), (T)0.);
+        //FLENS_DEFAULT_INDEXTYPE jp = (FLENS_DEFAULT_INDEXTYPE)std::max(std::log(numerator/denominator) / std::log(2.) / (basis.d-1.5), 0.);
+        FLENS_DEFAULT_INDEXTYPE jp = (FLENS_DEFAULT_INDEXTYPE)std::max(std::log(numerator/denominator) / std::log(2.), (T)0.);
         //std::cout << "Bucket " << i << ": #wp= " << w_p.size() << ", jp=" << jp << std::endl;
         for (const_coeff2d_it it=w_p.begin(); it!=w_p.end(); ++it) {
             Index1D col_index_x = (*it).first.index1;
@@ -398,8 +398,8 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 
             IndexSet<Index1D> Lambda_x, Lambda_y;
 
-            int maxlevel_x = std::min(col_index_x.j+jp,36);
-            int maxlevel_y = std::min(col_index_y.j+jp,36);
+            FLENS_DEFAULT_INDEXTYPE maxlevel_x = std::min(col_index_x.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
+            FLENS_DEFAULT_INDEXTYPE maxlevel_y = std::min(col_index_y.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
             Lambda_x=lambdaTilde1d_PDE(col_index_x, basis.first, jp, basis.first.j0,
                                        maxlevel_x,false);
             Lambda_y=lambdaTilde1d_PDE(col_index_y, basis.second,jp, basis.second.j0,
@@ -431,7 +431,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 /*
     Coefficients<AbsoluteValue,T,Index2D> v_abs;
     v_abs = v;
-    int k = this->findK(v_abs, eps);
+    FLENS_DEFAULT_INDEXTYPE k = this->findK(v_abs, eps);
     ret = this->apply(v, k);
     return ret;
 */
@@ -443,9 +443,9 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
     long double squared_v_norm = (long double)std::pow(v.norm(2.),(T)2.);
     long double squared_v_bucket_norm = 0.;
     T delta=0.;
-    int l=0;
-    int support_size_all_buckets=0;
-    for (int i=0; i<(int)v_bucket.buckets.size(); ++i) {
+    FLENS_DEFAULT_INDEXTYPE l=0;
+    FLENS_DEFAULT_INDEXTYPE support_size_all_buckets=0;
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)v_bucket.buckets.size(); ++i) {
         squared_v_bucket_norm += v_bucket.bucket_ell2norms[i]*v_bucket.bucket_ell2norms[i];
         T squared_delta = fabs(squared_v_norm - squared_v_bucket_norm);
         support_size_all_buckets += v_bucket.buckets[i].size();
@@ -457,15 +457,15 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
     }
     //std::cerr << "APPLY: squared_v_norm=" << squared_v_norm << ", squared_v_bucket_norm=" << squared_v_bucket_norm << std::endl;
 
-    for (int i=0; i<l; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<l; ++i) {
         Coefficients<Lexicographical,T,Index2D> w_p;
         v_bucket.addBucketToCoefficients(w_p,i);
         if (w_p.size()==0) continue;
         T numerator = w_p.norm(2.) * support_size_all_buckets;
         T denominator = w_p.size() * (eps-delta) / CA;
         //std::cout << "Bucket " << i << ": size=" << w_p.size() << ", (eps-delta) " << fabs(eps-delta) << std::endl;
-        //int jp = (int)std::max(std::log(numerator/denominator) / std::log(2.) / (basis.d-1.5), 0.);
-        int jp = (int)std::max(std::log(numerator/denominator) / std::log(2.), (T)0.)+2;
+        //FLENS_DEFAULT_INDEXTYPE jp = (FLENS_DEFAULT_INDEXTYPE)std::max(std::log(numerator/denominator) / std::log(2.) / (basis.d-1.5), 0.);
+        FLENS_DEFAULT_INDEXTYPE jp = (FLENS_DEFAULT_INDEXTYPE)std::max(std::log(numerator/denominator) / std::log(2.), (T)0.)+2;
         //std::cout << "Bucket " << i << ": #wp= " << w_p.size() << ", jp=" << jp << std::endl;
         for (const_coeff2d_it it=w_p.begin(); it!=w_p.end(); ++it) {
             Index1D col_index_x = (*it).first.index1;
@@ -476,8 +476,8 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 
             IndexSet<Index1D> Lambda_x, Lambda_y;
 
-            int maxlevel_x = std::min(col_index_x.j+jp,36);
-            int maxlevel_y = std::min(col_index_y.j+jp,36);
+            FLENS_DEFAULT_INDEXTYPE maxlevel_x = std::min(col_index_x.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
+            FLENS_DEFAULT_INDEXTYPE maxlevel_y = std::min(col_index_y.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
             Lambda_x=lambdaTilde1d_PDE(col_index_x, basis.first, jp, basis.first.j0,
                                        maxlevel_x,false);
 
@@ -508,26 +508,26 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 }
 
 template <typename T, DomainType Domain>
-int
+FLENS_DEFAULT_INDEXTYPE
 AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain,Multi>
 ::findK(const Coefficients<AbsoluteValue,T,Index2D> &v, T eps)
 {
-    int d=basis.first.d;
+    FLENS_DEFAULT_INDEXTYPE d=basis.first.d;
     if (v.size() == 0) return 1;
     T s=d-1.5;    //s = gamma-1, gamma the smoothness index of the wavelet basis
 
     T tau = 1.0 / (s + 0.5);
     // here the constant in (7.27) (KU-Wavelet) is estimated with 10
-    int k_eps = static_cast<int>(10*log(std::pow(eps, -1.0/s)*std::pow(v.wtauNorm(tau), 1.0/s)) / log(2.0));
+    FLENS_DEFAULT_INDEXTYPE k_eps = static_cast<FLENS_DEFAULT_INDEXTYPE>(10*log(std::pow(eps, -1.0/s)*std::pow(v.wtauNorm(tau), 1.0/s)) / log(2.0));
     flens::DenseVector<flens::Array<T> > normsec = v.norm_sections();
     T ErrorEstimateFactor = 1.;
     //std::cout << "eps = " << eps << ", k_eps = " << k_eps << std::endl;
 
-    for (int k=1; k<=k_eps; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=k_eps; ++k) {
         //std::cout << "At k = " << setw(3) << k;
 
         T R_k = 0.0;
-        for (int i=k; i<=normsec.lastIndex()-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=k; i<=normsec.lastIndex()-1; ++i) {
             R_k += normsec(i+1);
         }
         R_k *= 2.8;//parameters.CA;
@@ -535,7 +535,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
         R_k += std::pow(2.,-k*s) * normsec(1);
         //std::cout << ", R_k = " << setw(10) << R_k;
 
-        for (int l=0; l<=k-1; ++l) {
+        for (FLENS_DEFAULT_INDEXTYPE l=0; l<=k-1; ++l) {
             if (k-l<=normsec.lastIndex()-1) {
                 //R_k += std::pow(l,-1.01)*std::pow(2.,-l*s) * normsec(k-l+1);
                 R_k += std::pow(2.,-l*s) * normsec(k-l+1);
@@ -547,13 +547,13 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Orthogonal,Domain,Multi,Orthogonal,Domain
 
         if (R_k<=eps) {
             std::cout << "   findK ==> k = " << k << " for eps =  " << eps << std::endl;
-            int maxlevel=22;
-            if (d==2)         {    maxlevel=28; }
-            else if (d==3)    {   maxlevel=28; }    //for non-singular examples, also lower values are possible
-            return std::min(std::max(k,1),maxlevel);
+            FLENS_DEFAULT_INDEXTYPE maxlevel=100;
+            if (d==2)         {    maxlevel=100; }
+            else if (d==3)    {   maxlevel=100; }    //for non-singular examples, also lower values are possible
+            return std::min(std::max(k,(FLENS_DEFAULT_INDEXTYPE) 1),maxlevel);
         }
     }
-    return std::min(k_eps,25);    //higher level differences result in translation indices that cannot be stored in int.
+    return std::min(k_eps,(FLENS_DEFAULT_INDEXTYPE) 60);    //higher level differences result in translation indices that cannot be stored in FLENS_DEFAULT_INDEXTYPE.
 }
 
 template <typename T, DomainType Domain>
@@ -671,11 +671,11 @@ template <typename T, DomainType Domain1, DomainType Domain2>
 void
 AdaptiveHelmholtzOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,SparseMulti>
 ::toFlensSparseMatrix(const IndexSet<Index2D>& LambdaRow, const IndexSet<Index2D>& LambdaCol,
-                      SparseMatrixT &A_flens, int J)
+                      SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J)
 {
     std::cerr << "  -> toFlensSparseMatrix called with J= " << J << std::endl;
 
-    int maxSizeSparsityPattern=0;
+    FLENS_DEFAULT_INDEXTYPE maxSizeSparsityPattern=0;
 
     std::map<Index1D,IndexSet<Index1D>,lt<Lexicographical,Index1D> > sparsitypatterns_x,
                                                                              sparsitypatterns_y;
@@ -690,19 +690,19 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2
     compression_1d_y.setParameters(LambdaRow_y);
 
 
-    std::map<Index2D,int,lt<Lexicographical,Index2D> > row_indices;
+    std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> > row_indices;
 
 
 
-    int row_count = 1;
+    FLENS_DEFAULT_INDEXTYPE row_count = 1;
     for (const_set2d_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row, ++row_count) {
         row_indices[(*row)] = row_count;
     }
-    std::map<Index2D,int,lt<Lexicographical,Index2D> >::const_iterator row_indices_end;
+    std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> >::const_iterator row_indices_end;
     row_indices_end = row_indices.end();
     const_set2d_it LambdaRow_end=LambdaRow.end();
 
-    int col_count = 1;
+    FLENS_DEFAULT_INDEXTYPE col_count = 1;
     for (const_set2d_it col=LambdaCol.begin(); col!=LambdaCol.end(); ++col, ++col_count) {
         Index2D col_index = *col;
         T prec_col_index = this->prec(col_index);
@@ -742,7 +742,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2
             LambdaRowSparseLaplace_y  = sparsitypatterns_laplace_y[(*col).index2];
         }
 
-        maxSizeSparsityPattern=std::max(maxSizeSparsityPattern,(int)(LambdaRowSparse_x.size()*LambdaRowSparse_y.size()));
+        maxSizeSparsityPattern=std::max(maxSizeSparsityPattern,(FLENS_DEFAULT_INDEXTYPE)(LambdaRowSparse_x.size()*LambdaRowSparse_y.size()));
 
         for (const_set1d_it row_x=LambdaRowSparse_x.begin(); row_x!=LambdaRowSparse_x.end(); ++row_x) {
             T id_x = 0., dd_x = 0.;
@@ -751,7 +751,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2
             if (fabs(id_x)<1e-13 && fabs(dd_x)<1e-13) continue;
             for (const_set1d_it row_y=LambdaRowSparse_y.begin(); row_y!=LambdaRowSparse_y.end(); ++row_y) {
                 Index2D row_index(*row_x,*row_y);
-                std::map<Index2D,int,lt<Lexicographical,Index2D> >::const_iterator row_count_ptr;
+                std::map<Index2D,FLENS_DEFAULT_INDEXTYPE,lt<Lexicographical,Index2D> >::const_iterator row_count_ptr;
                 row_count_ptr = row_indices.find(row_index);
                 if (row_count_ptr!=row_indices_end) {
                     T id_y = 0., dd_y = 0.;
@@ -788,7 +788,7 @@ AdaptiveHelmholtzOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2
 template <typename T, DomainType Domain1, DomainType Domain2>
 Coefficients<Lexicographical,T,Index2D>
 AdaptiveHelmholtzOperatorOptimized2D<T,Primal,Domain1,SparseMulti,Primal,Domain2,SparseMulti>
-::apply(const Coefficients<Lexicographical,T,Index2D> &v, int /*k*/, int /*J*/,
+::apply(const Coefficients<Lexicographical,T,Index2D> &v, FLENS_DEFAULT_INDEXTYPE /*k*/, FLENS_DEFAULT_INDEXTYPE /*J*/,
         cxxblas::Transpose /*trans*/)
 {
     Coefficients<Lexicographical,T,Index2D> ret;

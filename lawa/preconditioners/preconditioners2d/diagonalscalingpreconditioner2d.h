@@ -27,15 +27,15 @@ template<typename T>
 class DiagonalScalingPreconditioner2D
 {
     public:
-        DiagonalScalingPreconditioner2D(int sx, int sy);
+        DiagonalScalingPreconditioner2D(FLENS_DEFAULT_INDEXTYPE sx, FLENS_DEFAULT_INDEXTYPE sy);
 
         T
-        operator()(XType XisSpline, int jx, long kx,
-                   XType YisSpline, int jy, long ky) const;
+        operator()(XType XisSpline, FLENS_DEFAULT_INDEXTYPE jx, FLENS_DEFAULT_INDEXTYPE kx,
+                   XType YisSpline, FLENS_DEFAULT_INDEXTYPE jy, FLENS_DEFAULT_INDEXTYPE ky) const;
 
     private:
-        int _sx;
-        int _sy;
+        FLENS_DEFAULT_INDEXTYPE _sx;
+        FLENS_DEFAULT_INDEXTYPE _sy;
 };
 
 } // namespace lawa

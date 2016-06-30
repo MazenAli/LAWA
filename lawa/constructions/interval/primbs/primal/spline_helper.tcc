@@ -2,7 +2,7 @@ namespace lawa {
     
 template <typename T>
 T
-w(int i, int d, const flens::DenseVector<flens::Array<T> > &knots, T x)
+w(FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE d, const flens::DenseVector<flens::Array<T> > &knots, T x)
 {
     assert(1<=i);
     assert(i<=knots.length()-d+1);
@@ -18,25 +18,25 @@ w(int i, int d, const flens::DenseVector<flens::Array<T> > &knots, T x)
 
 template <typename T>
 flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> >
-insertKnot(int d, flens::DenseVector<flens::Array<T> > &knots, T x)
+insertKnot(FLENS_DEFAULT_INDEXTYPE d, flens::DenseVector<flens::Array<T> > &knots, T x)
 {
     assert(knots.length()-d-1>=1);
     
     flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > ret(knots.length()-d, 
                                                     knots.length()-d-1);
-    for (int i=ret.firstCol(); i<=ret.lastCol(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=ret.firstCol(); i<=ret.lastCol(); ++i) {
         ret(i,i) = w(i,d+1,knots,x);
         ret(i+1,i) = 1-w(i+1,d+1,knots,x);
     }
     std::list<T> temp;
-    for (int i=knots.firstIndex(); i<=knots.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=knots.firstIndex(); i<=knots.lastIndex(); ++i) {
         temp.push_back(knots(i));
     }
     temp.push_back(x);
     temp.sort();
     knots.engine().resize(knots.length()+1);
     typename std::list<T>::const_iterator it=temp.begin();
-    for (int i=1; it!=temp.end(); ++it, ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; it!=temp.end(); ++it, ++i) {
         knots(i) = *it;
     }
     return ret;

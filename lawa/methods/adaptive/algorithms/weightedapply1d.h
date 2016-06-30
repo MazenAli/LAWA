@@ -43,14 +43,14 @@ class SYM_WEIGHTED_APPLY_1D {
         SYM_WEIGHTED_APPLY_1D(const Parameters &_parameters, const Basis1D &_basis, MA &_A);
 
         Coefficients<Lexicographical,T,Index1D>
-        operator()(const Coefficients<Lexicographical,T,Index1D> &v, int k);
+        operator()(const Coefficients<Lexicographical,T,Index1D> &v, FLENS_DEFAULT_INDEXTYPE k);
 
         Coefficients<Lexicographical,T,Index1D>
         operator()(const Coefficients<Lexicographical,T,Index1D> &v, T eps);
 
     private:
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         findK(const Coefficients<AbsoluteValue,T,Index1D> &v, T eps);
 
 };

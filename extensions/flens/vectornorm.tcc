@@ -26,9 +26,9 @@ namespace lawa {
 //--- Traits for return type.---------------------------------------------------
 
 template <>
-struct NormTraits<l1, int>
+struct NormTraits<l1, FLENS_DEFAULT_INDEXTYPE>
 {
-    typedef int Type;
+    typedef FLENS_DEFAULT_INDEXTYPE Type;
 };
 
 template <typename T>
@@ -38,7 +38,7 @@ struct NormTraits<l1, flens::complex<T> >
 };
 
 template <>
-struct NormTraits<l2, int>
+struct NormTraits<l2, FLENS_DEFAULT_INDEXTYPE>
 {
     typedef double Type;
 };
@@ -50,9 +50,9 @@ struct NormTraits<l2, flens::complex<T> >
 };
 
 template <>
-struct NormTraits<lInfinity, int>
+struct NormTraits<lInfinity, FLENS_DEFAULT_INDEXTYPE>
 {
-    typedef int Type;
+    typedef FLENS_DEFAULT_INDEXTYPE Type;
 };
 
 template <typename T>
@@ -91,7 +91,7 @@ struct VectorNorm<l2, T>
     apply(const flens::DenseVector<flens::Array<T> > &x)
     {
         T norm=0.;
-        cxxblas::nrm2<int>((int)x.length(),x.engine().data(),(int)1,norm);
+        cxxblas::nrm2<FLENS_DEFAULT_INDEXTYPE>((FLENS_DEFAULT_INDEXTYPE)x.length(),x.engine().data(),(FLENS_DEFAULT_INDEXTYPE)1,norm);
         return norm;
     }
 
@@ -108,8 +108,8 @@ struct VectorNorm<lInfinity, T>
     static const typename NormTraits<lInfinity,T>::Type
     apply(const flens::DenseVector<flens::Array<T> > &x)
     {
-        int i=0;
-        cxxblas::iamax<int>((int)x.length(),x.engine().data(),(int)1,i);
+        FLENS_DEFAULT_INDEXTYPE i=0;
+        cxxblas::iamax<FLENS_DEFAULT_INDEXTYPE>((FLENS_DEFAULT_INDEXTYPE)x.length(),x.engine().data(),(FLENS_DEFAULT_INDEXTYPE)1,i);
         i+=1;       //Flens vectors are index one-based
         return fabs(x(i));
     }

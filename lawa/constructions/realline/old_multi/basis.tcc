@@ -1,13 +1,13 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Orthogonal,R,Multi>::Basis(int _d, int j)
+Basis<T,Orthogonal,R,Multi>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : mra(_d, j), d(_d), j0(mra.j0), _j(j0), psi(*this)
 {
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Orthogonal,R,Multi>::level() const
 {
     return _j;
@@ -15,7 +15,7 @@ Basis<T,Orthogonal,R,Multi>::level() const
 
 template <typename T>
 void
-Basis<T,Orthogonal,R,Multi>::setLevel(int j) const
+Basis<T,Orthogonal,R,Multi>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;

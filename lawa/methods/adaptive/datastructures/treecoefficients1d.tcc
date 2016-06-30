@@ -76,10 +76,10 @@ std::ostream& operator<<(std::ostream &s, const CoefficientsByLevel<T> &_coeff_b
 
 
 template <typename T>
-TreeCoefficients1D<T>::TreeCoefficients1D(size_t n, int basis_j0)
+TreeCoefficients1D<T>::TreeCoefficients1D(size_t n, FLENS_DEFAULT_INDEXTYPE basis_j0)
 : offset(basis_j0-1), maxTreeLevel(JMAX)
 {
-    for (int l=0; l<=JMAX; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=JMAX; ++l) {
         CoefficientsByLevel<T> tmp;
         bylevel[l] = tmp;
         bylevel[l].set(l,n);
@@ -91,7 +91,7 @@ TreeCoefficients1D<T>&
 TreeCoefficients1D<T>::operator=(const TreeCoefficients1D<T> &_coeff)
 {
     offset=_coeff.offset;
-    for (int l=0; l<=maxTreeLevel; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=maxTreeLevel; ++l) {
         this->bylevel[l] = _coeff.bylevel[l];
     }
     return *this;
@@ -103,7 +103,7 @@ TreeCoefficients1D<T>::operator=(const Coefficients<Lexicographical,T,Index1D> &
 {
     for (const_coeff1d_it it=_coeff.begin(); it!=_coeff.end(); ++it) {
         short j     = (*it).first.j;
-        long  k     = (*it).first.k;
+        FLENS_DEFAULT_INDEXTYPE  k     = (*it).first.k;
         XType xtype = (*it).first.xtype;
         if (xtype==XBSpline) {
             this->bylevel[j-1-offset].map.insert(val_type(k, (*it).second));
@@ -121,7 +121,7 @@ TreeCoefficients1D<T>::operator=(const std::list<const Index1D* > &_coeff)
 {
     for (const_indexlist_it it=_coeff.begin(); it!=_coeff.end(); ++it) {
         short j     = (*(*it)).j;
-        long  k     = (*(*it)).k;
+        FLENS_DEFAULT_INDEXTYPE  k     = (*(*it)).k;
         XType xtype = (*(*it)).xtype;
         if (xtype==XBSpline) {
             this->bylevel[j-1-offset].map.insert(val_type(k, (T)0));
@@ -139,7 +139,7 @@ TreeCoefficients1D<T>::operator-=(const Coefficients<Lexicographical,T,Index1D> 
 {
     for (const_coeff1d_it it=_coeff.begin(); it!=_coeff.end(); ++it) {
         short j     = (*it).first.j;
-        long  k     = (*it).first.k;
+        FLENS_DEFAULT_INDEXTYPE  k     = (*it).first.k;
         XType xtype = (*it).first.xtype;
 
         if (xtype==XBSpline) {
@@ -157,7 +157,7 @@ TreeCoefficients1D<T>&
 TreeCoefficients1D<T>::operator-=(const TreeCoefficients1D<T> &_coeff)
 {
     assert(offset=_coeff.offset);
-    for (int l=0; l<=maxTreeLevel; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=maxTreeLevel; ++l) {
         if (_coeff.bylevel[l].map.size()!=0) {
             for (const_by_level_it it=_coeff.bylevel[l].map.begin(); it!=_coeff.bylevel[l].map.end(); ++it) {
                 this->bylevel[l].map[(*it).first] -= (*it).second;
@@ -173,7 +173,7 @@ TreeCoefficients1D<T>::operator+=(const Coefficients<Lexicographical,T,Index1D> 
 {
     for (const_coeff1d_it it=_coeff.begin(); it!=_coeff.end(); ++it) {
         short j     = (*it).first.j;
-        long  k     = (*it).first.k;
+        FLENS_DEFAULT_INDEXTYPE  k     = (*it).first.k;
         XType xtype = (*it).first.xtype;
 
         if (xtype==XBSpline) {
@@ -191,7 +191,7 @@ TreeCoefficients1D<T>&
 TreeCoefficients1D<T>::operator*=(T factor)
 {
     long double norm=0.L;
-    for (int l=0; l<=maxTreeLevel; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=maxTreeLevel; ++l) {
         for (by_level_it it=this->bylevel[l].map.begin(); it!=this->bylevel[l].map.end(); ++it) {
             (*it).second *= factor;
         }
@@ -205,14 +205,14 @@ TreeCoefficients1D<T>::operator[](short i) const
 {
     // no offset here: i might be a level, then offset = 0. Or i is just the i-th stage and the
     // method calling this routine is supposed to know how work with the result vector.
-    return this->bylevel[(unsigned int)i];
+    return this->bylevel[(unsigned FLENS_DEFAULT_INDEXTYPE)i];
 }
 
 template <typename T>
 CoefficientsByLevel<T>&
 TreeCoefficients1D<T>::operator[](short i)
 {
-    return this->bylevel[(unsigned int)i];
+    return this->bylevel[(unsigned FLENS_DEFAULT_INDEXTYPE)i];
 }
 
 template <typename T>
@@ -222,10 +222,10 @@ TreeCoefficients1D<T>::addTo(const PrincipalIndex &lambda, Coefficients<Lexicogr
 {
     Join<Index,PrincipalIndex,Index1D,CoordX> join;
     // Splitting into separate sums does not payoff... (why?).
-    for (int l=0; l<=maxTreeLevel; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=maxTreeLevel; ++l) {
         if (this->bylevel[l].map.size()==0) continue;
         XType xtype_row_y;
-        int j;
+        FLENS_DEFAULT_INDEXTYPE j;
         if (l==0) { xtype_row_y = XBSpline; j=offset+l+1; }
         else      { xtype_row_y = XWavelet; j=offset+l;  }
         for (const_by_level_it it=this->bylevel[l].map.begin(); it!=this->bylevel[l].map.end(); ++it) {
@@ -242,7 +242,7 @@ template <typename T>
 void
 TreeCoefficients1D<T>::setToZero()
 {
-    for (int l=0; l<=maxTreeLevel; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=maxTreeLevel; ++l) {
         if (this->bylevel[l].map.size()!=0) {
             for (by_level_it it=this->bylevel[l].map.begin(); it!=this->bylevel[l].map.end(); ++it) {
                 (*it).second = 0.;
@@ -252,22 +252,22 @@ TreeCoefficients1D<T>::setToZero()
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 TreeCoefficients1D<T>::size()
 {
-    int ret = 0;
-    for (int l=0; l<=maxTreeLevel; ++l) {
+    FLENS_DEFAULT_INDEXTYPE ret = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=maxTreeLevel; ++l) {
         ret += bylevel[l].map.size();
     }
     return ret;
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 TreeCoefficients1D<T>::getMaxTreeLevel()
 {
-    int j=0;
-    for (int l=0; l<=JMAX; ++l) {
+    FLENS_DEFAULT_INDEXTYPE j=0;
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=JMAX; ++l) {
         if(bylevel[l].map.size()==0) break;
         j=l;
     }
@@ -277,7 +277,7 @@ TreeCoefficients1D<T>::getMaxTreeLevel()
 
 template <typename T>
 void
-TreeCoefficients1D<T>::setMaxTreeLevel(int j)
+TreeCoefficients1D<T>::setMaxTreeLevel(FLENS_DEFAULT_INDEXTYPE j)
 {
     maxTreeLevel = j;
 }
@@ -287,7 +287,7 @@ T
 TreeCoefficients1D<T>::norm(T factor)
 {
     long double norm=0.L;
-    for (int l=0; l<=JMAX; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=JMAX; ++l) {
         if (this->bylevel[l].map.size()!=0) {
             for (const_by_level_it it=this->bylevel[l].map.begin(); it!=this->bylevel[l].map.end(); ++it) {
                 norm += std::pow((T)fabs((*it).second),(T)factor);
@@ -307,7 +307,7 @@ fromTreeCoefficientsToCoefficients(const TreeCoefficients1D<T> &tree_v,
                                           it!=tree_v.bylevel[0].map.end(); ++it) {
         v[Index1D(tree_v.offset+1,(*it).first,XBSpline)] = (*it).second;
     }
-    for (int i=1; i<=JMAX; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=JMAX; ++i) {
         if (tree_v.bylevel[i].map.size()==0) break;
         for (typename CoefficientsByLevel<T>::const_it it= tree_v.bylevel[i].map.begin();
                                               it!=tree_v.bylevel[i].map.end(); ++it) {
@@ -325,7 +325,7 @@ fromCoefficientsToTreeCoefficients(const Coefficients<Lexicographical,T,Index1D>
 
     for (const_coeff1d_it it=v.begin(); it!=v.end(); ++it) {
         short j     = (*it).first.j;
-        long  k     = (*it).first.k;
+        FLENS_DEFAULT_INDEXTYPE  k     = (*it).first.k;
         XType xtype = (*it).first.xtype;
         if (xtype==XBSpline) {
             assert(j==tree_v.offset+1);
@@ -340,7 +340,7 @@ fromCoefficientsToTreeCoefficients(const Coefficients<Lexicographical,T,Index1D>
 template <typename T>
 std::ostream& operator<<(std::ostream &s, const TreeCoefficients1D<T> &_treecoeff)
 {
-    for (int l=0; l<=JMAX; ++l) {
+    for (FLENS_DEFAULT_INDEXTYPE l=0; l<=JMAX; ++l) {
         if (_treecoeff.bylevel[l].map.size()!=0) {
             s << "l = " << l << " : " << std::endl;
             for (typename TreeCoefficients1D<T>::const_by_level_it it=_treecoeff.bylevel[l].map.begin();

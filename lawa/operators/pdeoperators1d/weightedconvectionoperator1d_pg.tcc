@@ -11,8 +11,8 @@ WeightedConvectionOperator1D_PG(const TrialBasis& _trialbasis,
 template <typename T, typename TrialBasis, typename TestBasis, QuadratureType Quad>
 T
 WeightedConvectionOperator1D_PG<T,TrialBasis,TestBasis,Quad>::
-operator()(XType xtype1, int j1, int k1,
-		   XType xtype2, int j2, int k2) const
+operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+		   XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {   
     // v * u_x
     return integral(j1, k1, xtype1, 0, j2, k2, xtype2, 1);

@@ -47,14 +47,14 @@ class Quadrature2D<SparseGridGP,_Integral2D>
         double
         operator()(double ax, double bx, double ay, double by) const;
 
-        void setOrder(int order);
-        void setLevel(int level);
+        void setOrder(FLENS_DEFAULT_INDEXTYPE order);
+        void setLevel(FLENS_DEFAULT_INDEXTYPE level);
 
-        int numGridPoints;
+        FLENS_DEFAULT_INDEXTYPE numGridPoints;
 
     private:
         const _Integral2D &_integral;
-        int _level;
+        FLENS_DEFAULT_INDEXTYPE _level;
 
         void
         _initSparseGrid();
@@ -74,13 +74,13 @@ class Quadrature2D<FullGridGL,_Integral2D>
         const T
         operator()(T ax, T bx, T ay, T by) const;
 
-        void setOrder(int order);
+        void setOrder(FLENS_DEFAULT_INDEXTYPE order);
 
         void _initFullGrid();
         const _Integral2D &_integral;
 
     private:
-        int _order;
+        FLENS_DEFAULT_INDEXTYPE _order;
 
         flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > _knots;
         flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > _weights;
@@ -99,15 +99,15 @@ class Quadrature2D<FullGridGL_localOrder, _Integral2D>
         const T
         operator()(T ax, T bx, T ay, T by) const;
 
-        void setOrder(int order);
+        void setOrder(FLENS_DEFAULT_INDEXTYPE order);
 
         void set_refindfct(T (*_fct)(T));
 
         void set_refindtol(T _tol);
 
-        void set_lowOrder(int _lowOrder);
+        void set_lowOrder(FLENS_DEFAULT_INDEXTYPE _lowOrder);
 
-        void set_highOrder(int _highOrder);
+        void set_highOrder(FLENS_DEFAULT_INDEXTYPE _highOrder);
 
     private:
 
@@ -118,7 +118,7 @@ class Quadrature2D<FullGridGL_localOrder, _Integral2D>
         Quadrature2D<FullGridGL, Integral_nonLocal> quadrature_highOrder;
         T (*refindfct)(T);
         T refindtol;
-        int lowOrder, highOrder;
+        FLENS_DEFAULT_INDEXTYPE lowOrder, highOrder;
 
         bool
         ref_indicator(T at, T bt, T ax, T bx) const;

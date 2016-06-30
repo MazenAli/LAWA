@@ -28,7 +28,7 @@
 namespace lawa {
 
 //template <typename T>
-//BSpline<T,Primal,Periodic,CDF>::BSpline(int _d)
+//BSpline<T,Primal,Periodic,CDF>::BSpline(FLENS_DEFAULT_INDEXTYPE _d)
 //    : d(_d), mu(d&1), phiR(_d)
 //{
 //    assert(_d>0);
@@ -48,7 +48,7 @@ BSpline<T,Primal,Periodic,CDF>::~BSpline()
 
 template <typename T>
 T
-BSpline<T,Primal,Periodic,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Primal,Periodic,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     // maximal support: [0,1]
     if((x < 0.) || (x > 1.)){
@@ -58,7 +58,7 @@ BSpline<T,Primal,Periodic,CDF>::operator()(T x, int j, long k, unsigned short de
     // add contributions of original spline on R
     // = 'wrapping' around [0,1]
     T val = 0;
-    for(int l = ifloor(phiR.support(j,k).l1); l < iceil<int>(phiR.support(j,k).l2); ++l){
+    for(FLENS_DEFAULT_INDEXTYPE l = ifloor(phiR.support(j,k).l1); l < iceil<FLENS_DEFAULT_INDEXTYPE>(phiR.support(j,k).l2); ++l){
         val += phiR(l+x, j, k, deriv);
     }
     return val;
@@ -67,7 +67,7 @@ BSpline<T,Primal,Periodic,CDF>::operator()(T x, int j, long k, unsigned short de
 
 template <typename T>
 PeriodicSupport<T>
-BSpline<T,Primal,Periodic,CDF>::support(int j, long k) const
+BSpline<T,Primal,Periodic,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     Support<T> suppR = phiR.support(j,k);
     if(suppR.length() >= 1){
@@ -85,7 +85,7 @@ BSpline<T,Primal,Periodic,CDF>::support(int j, long k) const
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-BSpline<T,Primal,Periodic,CDF>::singularSupport(int j, long k) const
+BSpline<T,Primal,Periodic,CDF>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {   
     if((phiR.support(j,k).l1 >= 0) && (phiR.support(j,k).l2 <= 1)){
          return linspace(support(j,k).l1, support(j,k).l2, d+1);
@@ -95,14 +95,14 @@ BSpline<T,Primal,Periodic,CDF>::singularSupport(int j, long k) const
     flens::DenseVector<flens::Array<T> > singSuppR = linspace(phiR.support(j,k).l1, phiR.support(j,k).l2, d+1);
     temp.push_back(0.);
     temp.push_back(1.);
-    for(int i = singSuppR.firstIndex(); i <= singSuppR.lastIndex(); ++i){
+    for(FLENS_DEFAULT_INDEXTYPE i = singSuppR.firstIndex(); i <= singSuppR.lastIndex(); ++i){
         temp.push_back(singSuppR(i) - ifloor(singSuppR(i)));
     }
     temp.sort();
     temp.unique();
     
     flens::DenseVector<flens::Array<T> > singSupp(temp.size());
-    int i = 1;
+    FLENS_DEFAULT_INDEXTYPE i = 1;
     for (typename std::list<T>::const_iterator it = temp.begin(); it != temp.end(); ++it, ++i) {
         singSupp(i) = *it;
     }
@@ -112,15 +112,15 @@ BSpline<T,Primal,Periodic,CDF>::singularSupport(int j, long k) const
 
 template <typename T>
 T
-BSpline<T,Primal,Periodic,CDF>::tic(int j) const
+BSpline<T,Primal,Periodic,CDF>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-j);
 }
 
 template <typename T>
 flens::DenseVector<flens::Array<long double> > *
-BSpline<T,Primal,Periodic,CDF>::getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-											  long &split, long &refinement_k_restart) const
+BSpline<T,Primal,Periodic,CDF>::getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+											  FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const
 {
     refinement_j = j;
 
@@ -149,24 +149,24 @@ BSpline<T,Primal,Periodic,CDF>::getRefinement(int j, long k, int &refinement_j, 
 }
 
 template <typename T>
-int
-BSpline<T,Primal,Periodic,CDF>::getRefinementLevel(int j) const
+FLENS_DEFAULT_INDEXTYPE
+BSpline<T,Primal,Periodic,CDF>::getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
 	return j;
 }
 
 template <typename T>
 T
-BSpline<T,Primal,Periodic,CDF>::getL2Norm(int j, long k) const
+BSpline<T,Primal,Periodic,CDF>::getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return mra._periodicL2Norms[0];
 }
 
 template <typename T>
 T
-BSpline<T,Primal,Periodic,CDF>::getH1SemiNorm(int j, long k) const
+BSpline<T,Primal,Periodic,CDF>::getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    T pow2ij = (T)(1L << j);
+    T pow2ij = (T)((FLENS_DEFAULT_INDEXTYPE) 1 << j);
     return pow2ij*mra._periodicH1SemiNorms[0];
 }
 

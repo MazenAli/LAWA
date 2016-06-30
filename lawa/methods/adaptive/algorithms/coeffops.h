@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream& s,
 
 
 template <SortingCriterion S, typename T, typename Index, typename Basis>
-unsigned long
+unsigned FLENS_DEFAULT_INDEXTYPE
 maxintind(const Coefficients<S, T, Index>& coeffs, const Basis& basis);
 
 
@@ -67,7 +67,7 @@ set(HTCoefficients<T, Basis>& tree,
 template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
-    const unsigned long col, const Coefficients<S, T, Index>& coeff);
+    const unsigned FLENS_DEFAULT_INDEXTYPE col, const Coefficients<S, T, Index>& coeff);
 
 
 template <typename T, SortingCriterion S, typename Index, typename Basis>
@@ -79,7 +79,7 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
 template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
-     const unsigned long col, const T alpha,
+     const unsigned FLENS_DEFAULT_INDEXTYPE col, const T alpha,
      const Coefficients<S, T, Index>& coeff);
 
 
@@ -92,7 +92,7 @@ axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
 template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
-     const unsigned long col, const T alpha,
+     const unsigned FLENS_DEFAULT_INDEXTYPE col, const T alpha,
      const Coefficients<S, T, Index>& coeff);
 
 
@@ -106,7 +106,7 @@ template <typename T, typename Basis>
 Coefficients<Lexicographical, T, Index1D>
 extract(const HTCoefficients<T, Basis>& tree,
         const htucker::DimensionIndex& idx,
-        const unsigned long col);
+        const unsigned FLENS_DEFAULT_INDEXTYPE col);
 
 
 template <typename T, typename Basis>
@@ -294,7 +294,7 @@ eval(Sepop<Optype>& A,
 
 
 template <typename T, typename Basis>
-int
+FLENS_DEFAULT_INDEXTYPE
 maxlevel(const HTCoefficients<T, Basis>& u);
 
 
@@ -416,7 +416,7 @@ Coefficients<Lexicographical, T, Index>
 contraction(const HTCoefficients<T, Basis>& u,
             const IndexSet<Index>& activex,
             const flens::DenseVector<flens::Array<T> >& sigmas,
-            const int dim);
+            const FLENS_DEFAULT_INDEXTYPE dim);
 
 
 template <typename T, typename Basis, typename Index>

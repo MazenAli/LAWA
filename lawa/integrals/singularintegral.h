@@ -36,8 +36,8 @@ struct SingularIntegral
                      const T _left=0., const T _right=1.);
 
     T
-    operator()(int _j1, long _k1, XType _e1, int _deriv1,
-               int _j2, long _k2, XType _e2, int _deriv2) const;
+    operator()(FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv1,
+               FLENS_DEFAULT_INDEXTYPE _j2, FLENS_DEFAULT_INDEXTYPE _k2, XType _e2, FLENS_DEFAULT_INDEXTYPE _deriv2) const;
 
     T p1(T x) const;
 
@@ -53,9 +53,9 @@ struct SingularIntegral
     const T SqrtRightmLeft;
     const T OneDivSqrtRightmLeft;
     mutable SingularQuadrature<SingularIntegral<SingularKernel,First,Second> > singularquadrature;
-    mutable int j1, deriv1,
+    mutable FLENS_DEFAULT_INDEXTYPE j1, deriv1,
                 j2, deriv2;
-    mutable long k1, k2;
+    mutable FLENS_DEFAULT_INDEXTYPE k1, k2;
     mutable XType e1, e2;
 };
 
@@ -63,12 +63,12 @@ template <typename _T>
 struct Poly {
 
     typedef _T T;
-    Poly(int _d) : d(_d) {  };
+    Poly(FLENS_DEFAULT_INDEXTYPE _d) : d(_d) {  };
 
     T
     operator()(T x) const { return std::pow(x,T(d-1)); }
 
-    int d;
+    FLENS_DEFAULT_INDEXTYPE d;
 };
 
 template <typename SingularKernel, typename FirstPolynomial, typename SecondPolynomial>

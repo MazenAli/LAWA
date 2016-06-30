@@ -43,10 +43,10 @@ struct BSpline<_T,Dual,Interval,Dijkema>
     BSpline(const MRA<T,Dual,Interval,Dijkema> &_mra_);
 
     T
-    operator()(T x, int j, long k, unsigned short deriv=0) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv=0) const;
 
     Support<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
     const MRA<T,Dual,Interval,Dijkema> &mra_;
 };

@@ -16,7 +16,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 template <typename LocalOperator1, typename LocalOperator2>
 void
 LocalOperator2D<LocalOperator1, LocalOperator2>
-::setJ(int _J)
+::setJ(FLENS_DEFAULT_INDEXTYPE _J)
 {
     J = _J;
 }
@@ -201,18 +201,18 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 
     for (const_coeff1d_it row_x=Pe1_v.begin(); row_x!=Pe1_v.end(); ++row_x) {
         XType xtype_row_x = (*row_x).first.xtype;
-        int   j_row_x = (*row_x).first.j;
-        long  k_row_x = (*row_x).first.k;
+        FLENS_DEFAULT_INDEXTYPE   j_row_x = (*row_x).first.j;
+        FLENS_DEFAULT_INDEXTYPE  k_row_x = (*row_x).first.k;
         //IndexSet<Index1D> Lambda_y(98317);
         IndexSet<Index1D> Lambda_y;
         if (xtype_row_x==XWavelet) {
-            int j_col_x = 0;
-            long k_col_x_first = 0, k_col_x_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_col_x = 0;
+            FLENS_DEFAULT_INDEXTYPE k_col_x_first = 0, k_col_x_last = 0;
             trialBasis_x1.getHigherWaveletNeighborsForWavelet(j_row_x, k_row_x, testBasis_x1,
                                                               j_col_x,k_col_x_first,k_col_x_last);
             assert(j_row_x == j_col_x-1);
             Support<T> supp_row_x = trialBasis_x1.psi.support(j_row_x,k_row_x);
-            for (long k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
+            for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
                 if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
                     Index1D col_x(j_col_x,k_col_x,XWavelet);
                     typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -225,13 +225,13 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
             }
         }
         else {
-            int j_col_x = 0;
-            long k_col_x_first = 0, k_col_x_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_col_x = 0;
+            FLENS_DEFAULT_INDEXTYPE k_col_x_first = 0, k_col_x_last = 0;
             trialBasis_x1.getWaveletNeighborsForScaling(j_row_x, k_row_x, testBasis_x1,
                                                         j_col_x,k_col_x_first,k_col_x_last);
             assert(j_row_x == j_col_x);
             Support<T> supp_row_x = trialBasis_x1.mra.phi.support(j_row_x,k_row_x);
-            for (long k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
+            for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
                 if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
                     Index1D col_x(j_col_x,k_col_x,XWavelet);
                     typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -283,19 +283,19 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 
     for (const_coeff1d_it row_x=Pe1_v.begin(); row_x!=Pe1_v.end(); ++row_x) {
         XType xtype_row_x = (*row_x).first.xtype;
-        int   j_row_x = (*row_x).first.j;
-        long  k_row_x = (*row_x).first.k;
+        FLENS_DEFAULT_INDEXTYPE   j_row_x = (*row_x).first.j;
+        FLENS_DEFAULT_INDEXTYPE  k_row_x = (*row_x).first.k;
         //IndexSet<Index1D> Lambda_y(98317);
         IndexSet<Index1D> Lambda_y;
         if (xtype_row_x==XWavelet) {
-            int j_col_x = 0;
-            long k_col_x_first = 0, k_col_x_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_col_x = 0;
+            FLENS_DEFAULT_INDEXTYPE k_col_x_first = 0, k_col_x_last = 0;
             trialBasis_x1.getHigherWaveletNeighborsForWavelet(j_row_x, k_row_x, testBasis_x1,
                                                               j_col_x,k_col_x_first,k_col_x_last);
             assert(j_row_x == j_col_x-1);
             PeriodicSupport<T> supp_row_x = trialBasis_x1.psi.support(j_row_x,k_row_x);
             if(k_col_x_first < k_col_x_last){
-				for (long k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -308,7 +308,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 				}
             }
             else{
-				for (long k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -319,7 +319,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 						}
 					}
 				}
-				for (long k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -333,14 +333,14 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
             }
         }
         else {
-            int j_col_x = 0;
-            long k_col_x_first = 0, k_col_x_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_col_x = 0;
+            FLENS_DEFAULT_INDEXTYPE k_col_x_first = 0, k_col_x_last = 0;
             trialBasis_x1.getWaveletNeighborsForScaling(j_row_x, k_row_x, testBasis_x1,
                                                         j_col_x,k_col_x_first,k_col_x_last);
             assert(j_row_x == j_col_x);
             PeriodicSupport<T> supp_row_x = trialBasis_x1.mra.phi.support(j_row_x,k_row_x);
             if(k_col_x_first < k_col_x_last){
-				for (long k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -353,7 +353,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 				}
             }
             else{
-				for (long k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
                     if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
                         Index1D col_x(j_col_x,k_col_x,XWavelet);
                         typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -364,7 +364,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
                         }
                     }
                 }
-				for (long k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -415,19 +415,19 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 
     for (const_coeff1d_it row_x=Pe1_v.begin(); row_x!=Pe1_v.end(); ++row_x) {
         XType xtype_row_x = (*row_x).first.xtype;
-        int   j_row_x = (*row_x).first.j;
-        long  k_row_x = (*row_x).first.k;
+        FLENS_DEFAULT_INDEXTYPE   j_row_x = (*row_x).first.j;
+        FLENS_DEFAULT_INDEXTYPE  k_row_x = (*row_x).first.k;
         //IndexSet<Index1D> Lambda_y(98317);
         IndexSet<Index1D> Lambda_y;
         if (xtype_row_x==XWavelet) {
-            int j_col_x = 0;
-            long k_col_x_first = 0, k_col_x_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_col_x = 0;
+            FLENS_DEFAULT_INDEXTYPE k_col_x_first = 0, k_col_x_last = 0;
             trialBasis_x1.getHigherWaveletNeighborsForWavelet(j_row_x, k_row_x, testBasis_x1,
                                                               j_col_x,k_col_x_first,k_col_x_last);
             assert(j_row_x == j_col_x-1);
             Support<T> supp_row_x = trialBasis_x1.psi.support(j_row_x,k_row_x);
             if(k_col_x_first < k_col_x_last){
-				for (long k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -440,7 +440,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 				}
             }
             else{
-				for (long k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -451,7 +451,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 						}
 					}
 				}
-				for (long k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -465,14 +465,14 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
             }
         }
         else {
-            int j_col_x = 0;
-            long k_col_x_first = 0, k_col_x_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_col_x = 0;
+            FLENS_DEFAULT_INDEXTYPE k_col_x_first = 0, k_col_x_last = 0;
             trialBasis_x1.getWaveletNeighborsForScaling(j_row_x, k_row_x, testBasis_x1,
                                                         j_col_x,k_col_x_first,k_col_x_last);
             assert(j_row_x == j_col_x);
             Support<T> supp_row_x = trialBasis_x1.mra.phi.support(j_row_x,k_row_x);
             if(k_col_x_first < k_col_x_last){
-				for (long k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -485,7 +485,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 				}
             }
             else{
-				for (long k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=k_col_x_first; k_col_x<=trialBasis_x1.rangeJ(j_col_x).lastIndex(); ++k_col_x) {
                     if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
                         Index1D col_x(j_col_x,k_col_x,XWavelet);
                         typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -496,7 +496,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
                         }
                     }
                 }
-				for (long k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
+				for (FLENS_DEFAULT_INDEXTYPE k_col_x=trialBasis_x1.rangeJ(j_col_x).firstIndex(); k_col_x<=k_col_x_last; ++k_col_x) {
 					if (overlap(supp_row_x,testBasis_x1.psi.support(j_col_x,k_col_x))>0) {
 						Index1D col_x(j_col_x,k_col_x,XWavelet);
 						typename XOneAlignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.find(col_x);
@@ -565,7 +565,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 
         if ( x1aligned_IAz.map.find((*it).first)==x1aligned_IAz.map.end() ) continue;
         PsiLambdaCheck_x2 = x1aligned_IAz.map[(*it).first];
-        //int maxTreeLevel = PsiLambdaCheck_x2.getMaxTreeLevel();
+        //FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaCheck_x2.getMaxTreeLevel();
         PsiLambdaCheck_x2.setToZero();
         //time.stop();
         //time_setup_tree += time.elapsed();
@@ -631,7 +631,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         //time.start();
         TreeCoefficients1D<T> PsiLambdaCheck_x1(n2,testBasis_x1.j0);
         PsiLambdaCheck_x1 = x2aligned_LIz.map[(*it).first];
-        //int maxTreeLevel = PsiLambdaCheck_x1.getMaxTreeLevel();
+        //FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaCheck_x1.getMaxTreeLevel();
         PsiLambdaCheck_x1.setToZero();
         //time.stop();
 
@@ -691,7 +691,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         //time.stop();
         //time_setup_tree += time.elapsed();
 
-        int maxTreeLevel = PsiLambdaHat_x1.getMaxTreeLevel();
+        FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaHat_x1.getMaxTreeLevel();
 
 
         //time.start();
@@ -699,33 +699,33 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         // Checking scaling functions
         for (const_by_level_it level_it =PsiLambdaHat_x1[0].map.begin();
                                level_it!=PsiLambdaHat_x1[0].map.end(); ++level_it) {
-            int  j_scaling1 = trialBasis_x1.j0;
-            long k_scaling1 = (*level_it).first;
-            int  j_scaling2 = 0;
-            long k_scaling_first = 0, k_scaling_last = 0;
+            FLENS_DEFAULT_INDEXTYPE  j_scaling1 = trialBasis_x1.j0;
+            FLENS_DEFAULT_INDEXTYPE k_scaling1 = (*level_it).first;
+            FLENS_DEFAULT_INDEXTYPE  j_scaling2 = 0;
+            FLENS_DEFAULT_INDEXTYPE k_scaling_first = 0, k_scaling_last = 0;
             trialBasis_x1.getScalingNeighborsForScaling(j_scaling1,k_scaling1, testBasis_x1,
                                                         j_scaling2,k_scaling_first,k_scaling_last);
             assert(j_scaling1==j_scaling2);
             Support<T> supp1 = trialBasis_x1.mra.phi.support(j_scaling1,k_scaling1);
-            for (int k_scaling2=k_scaling_first; k_scaling2<=k_scaling_last; ++k_scaling2) {
+            for (FLENS_DEFAULT_INDEXTYPE k_scaling2=k_scaling_first; k_scaling2<=k_scaling_last; ++k_scaling2) {
                 if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
                     && Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
                     PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
                 }
             }
         }
-        for (int i=1; i<=maxTreeLevel; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=maxTreeLevel; ++i) {
             for (const_by_level_it level_it =PsiLambdaHat_x1[i].map.begin();
                                    level_it!=PsiLambdaHat_x1[i].map.end(); ++level_it) {
-                int  j_wavelet1 = trialBasis_x1.j0+i-1;
-                long k_wavelet1 = (*level_it).first;
-                int  j_wavelet2 = 0;
-                long k_wavelet_first = 0, k_wavelet_last = 0;
+                FLENS_DEFAULT_INDEXTYPE  j_wavelet1 = trialBasis_x1.j0+i-1;
+                FLENS_DEFAULT_INDEXTYPE k_wavelet1 = (*level_it).first;
+                FLENS_DEFAULT_INDEXTYPE  j_wavelet2 = 0;
+                FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
                 trialBasis_x1.getWaveletNeighborsForWavelet(j_wavelet1,k_wavelet1, testBasis_x1,
                                                             j_wavelet2,k_wavelet_first,k_wavelet_last);
                 assert(j_wavelet1==j_wavelet2);
                 Support<T> supp1 = trialBasis_x1.psi.support(j_wavelet1,k_wavelet1);
-                for (int k_wavelet2=k_wavelet_first; k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
+                for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=k_wavelet_first; k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
                     if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
                         && Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
                         PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
@@ -803,7 +803,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         //time.stop();
         //time_setup_tree += time.elapsed();
 
-        int maxTreeLevel = PsiLambdaHat_x1.getMaxTreeLevel();
+        FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaHat_x1.getMaxTreeLevel();
 
 
         //time.start();
@@ -812,16 +812,16 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         // Checking scaling functions
         for (const_by_level_it level_it =PsiLambdaHat_x1[0].map.begin();
                                level_it!=PsiLambdaHat_x1[0].map.end(); ++level_it) {
-            int  j_scaling1 = trialBasis_x1.j0;
-            long k_scaling1 = (*level_it).first;
-            int  j_scaling2 = 0;
-            long k_scaling_first = 0, k_scaling_last = 0;
+            FLENS_DEFAULT_INDEXTYPE  j_scaling1 = trialBasis_x1.j0;
+            FLENS_DEFAULT_INDEXTYPE k_scaling1 = (*level_it).first;
+            FLENS_DEFAULT_INDEXTYPE  j_scaling2 = 0;
+            FLENS_DEFAULT_INDEXTYPE k_scaling_first = 0, k_scaling_last = 0;
             trialBasis_x1.getScalingNeighborsForScaling(j_scaling1,k_scaling1, testBasis_x1,
                                                         j_scaling2,k_scaling_first,k_scaling_last);
             assert(j_scaling1==j_scaling2);
             PeriodicSupport<T> supp1 = trialBasis_x1.mra.phi.support(j_scaling1,k_scaling1);
             if(k_scaling_first < k_scaling_last){
-				for (int k_scaling2=k_scaling_first; k_scaling2<=k_scaling_last; ++k_scaling2) {
+				for (FLENS_DEFAULT_INDEXTYPE k_scaling2=k_scaling_first; k_scaling2<=k_scaling_last; ++k_scaling2) {
 					if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
 						&& Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
 						PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
@@ -829,13 +829,13 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 				}
             }
             else{
-                for (int k_scaling2=k_scaling_first; k_scaling2<=testBasis_x1.mra.rangeI(j_scaling2).lastIndex(); ++k_scaling2) {
+                for (FLENS_DEFAULT_INDEXTYPE k_scaling2=k_scaling_first; k_scaling2<=testBasis_x1.mra.rangeI(j_scaling2).lastIndex(); ++k_scaling2) {
                     if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
                         && Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
                         PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
                     }
                 }
-                for (int k_scaling2=testBasis_x1.mra.rangeI(j_scaling2).firstIndex(); k_scaling2<=k_scaling_last; ++k_scaling2) {
+                for (FLENS_DEFAULT_INDEXTYPE k_scaling2=testBasis_x1.mra.rangeI(j_scaling2).firstIndex(); k_scaling2<=k_scaling_last; ++k_scaling2) {
                     if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
                         && Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
                         PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
@@ -843,19 +843,19 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
                 }
             }
         }
-        for (int i=1; i<=maxTreeLevel; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=maxTreeLevel; ++i) {
             for (const_by_level_it level_it =PsiLambdaHat_x1[i].map.begin();
                                    level_it!=PsiLambdaHat_x1[i].map.end(); ++level_it) {
-                int  j_wavelet1 = trialBasis_x1.j0+i-1;
-                long k_wavelet1 = (*level_it).first;
-                int  j_wavelet2 = 0;
-                long k_wavelet_first = 0, k_wavelet_last = 0;
+                FLENS_DEFAULT_INDEXTYPE  j_wavelet1 = trialBasis_x1.j0+i-1;
+                FLENS_DEFAULT_INDEXTYPE k_wavelet1 = (*level_it).first;
+                FLENS_DEFAULT_INDEXTYPE  j_wavelet2 = 0;
+                FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
                 trialBasis_x1.getWaveletNeighborsForWavelet(j_wavelet1,k_wavelet1, testBasis_x1,
                                                             j_wavelet2,k_wavelet_first,k_wavelet_last);
                 assert(j_wavelet1==j_wavelet2);
                 PeriodicSupport<T> supp1 = trialBasis_x1.psi.support(j_wavelet1,k_wavelet1);
                 if(k_wavelet_first < k_wavelet_last){
-					for (int k_wavelet2=k_wavelet_first; k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
+					for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=k_wavelet_first; k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
 						if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
 							&& Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
 							PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
@@ -863,13 +863,13 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 					}
                 }
                 else{
-                    for (int k_wavelet2=k_wavelet_first; k_wavelet2<=testBasis_x1.rangeJ(j_wavelet2).lastIndex(); ++k_wavelet2) {
+                    for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=k_wavelet_first; k_wavelet2<=testBasis_x1.rangeJ(j_wavelet2).lastIndex(); ++k_wavelet2) {
                         if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
                             && Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
                             PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
                         }
                     }
-                    for (int k_wavelet2=testBasis_x1.rangeJ(j_wavelet2).firstIndex(); k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
+                    for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=testBasis_x1.rangeJ(j_wavelet2).firstIndex(); k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
                         if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
                             && Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
                             PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
@@ -948,7 +948,7 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         //time.stop();
         //time_setup_tree += time.elapsed();
 
-        int maxTreeLevel = PsiLambdaHat_x1.getMaxTreeLevel();
+        FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaHat_x1.getMaxTreeLevel();
 
 
         //time.start();
@@ -957,16 +957,16 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
         // Checking scaling functions
         for (const_by_level_it level_it =PsiLambdaHat_x1[0].map.begin();
                                level_it!=PsiLambdaHat_x1[0].map.end(); ++level_it) {
-            int  j_scaling1 = trialBasis_x1.j0;
-            long k_scaling1 = (*level_it).first;
-            int  j_scaling2 = 0;
-            long k_scaling_first = 0, k_scaling_last = 0;
+            FLENS_DEFAULT_INDEXTYPE  j_scaling1 = trialBasis_x1.j0;
+            FLENS_DEFAULT_INDEXTYPE k_scaling1 = (*level_it).first;
+            FLENS_DEFAULT_INDEXTYPE  j_scaling2 = 0;
+            FLENS_DEFAULT_INDEXTYPE k_scaling_first = 0, k_scaling_last = 0;
             trialBasis_x1.getScalingNeighborsForScaling(j_scaling1,k_scaling1, testBasis_x1,
                                                         j_scaling2,k_scaling_first,k_scaling_last);
             assert(j_scaling1==j_scaling2);
             Support<T> supp1 = trialBasis_x1.mra.phi.support(j_scaling1,k_scaling1);
             if(k_scaling_first < k_scaling_last){
-				for (int k_scaling2=k_scaling_first; k_scaling2<=k_scaling_last; ++k_scaling2) {
+				for (FLENS_DEFAULT_INDEXTYPE k_scaling2=k_scaling_first; k_scaling2<=k_scaling_last; ++k_scaling2) {
 					if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
 						&& Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
 						PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
@@ -974,13 +974,13 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 				}
             }
             else{
-                for (int k_scaling2=k_scaling_first; k_scaling2<=testBasis_x1.mra.rangeI(j_scaling2).lastIndex(); ++k_scaling2) {
+                for (FLENS_DEFAULT_INDEXTYPE k_scaling2=k_scaling_first; k_scaling2<=testBasis_x1.mra.rangeI(j_scaling2).lastIndex(); ++k_scaling2) {
                     if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
                         && Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
                         PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
                     }
                 }
-                for (int k_scaling2=testBasis_x1.mra.rangeI(j_scaling2).firstIndex(); k_scaling2<=k_scaling_last; ++k_scaling2) {
+                for (FLENS_DEFAULT_INDEXTYPE k_scaling2=testBasis_x1.mra.rangeI(j_scaling2).firstIndex(); k_scaling2<=k_scaling_last; ++k_scaling2) {
                     if (   overlap(supp1, testBasis_x1.mra.phi.support(j_scaling2,k_scaling2) ) >0
                         && Pe1_UIz.find(Index1D(j_scaling2,k_scaling2,XBSpline))!=Pe1_UIz.end() ) {
                         PsiLambdaCheck_x1[0].map[k_scaling2] = 0.;
@@ -988,19 +988,19 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
                 }
             }
         }
-        for (int i=1; i<=maxTreeLevel; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=maxTreeLevel; ++i) {
             for (const_by_level_it level_it =PsiLambdaHat_x1[i].map.begin();
                                    level_it!=PsiLambdaHat_x1[i].map.end(); ++level_it) {
-                int  j_wavelet1 = trialBasis_x1.j0+i-1;
-                long k_wavelet1 = (*level_it).first;
-                int  j_wavelet2 = 0;
-                long k_wavelet_first = 0, k_wavelet_last = 0;
+                FLENS_DEFAULT_INDEXTYPE  j_wavelet1 = trialBasis_x1.j0+i-1;
+                FLENS_DEFAULT_INDEXTYPE k_wavelet1 = (*level_it).first;
+                FLENS_DEFAULT_INDEXTYPE  j_wavelet2 = 0;
+                FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
                 trialBasis_x1.getWaveletNeighborsForWavelet(j_wavelet1,k_wavelet1, testBasis_x1,
                                                             j_wavelet2,k_wavelet_first,k_wavelet_last);
                 assert(j_wavelet1==j_wavelet2);
                 Support<T> supp1 = trialBasis_x1.psi.support(j_wavelet1,k_wavelet1);
                 if(k_wavelet_first < k_wavelet_last){
-					for (int k_wavelet2=k_wavelet_first; k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
+					for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=k_wavelet_first; k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
 						if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
 							&& Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
 							PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
@@ -1008,13 +1008,13 @@ LocalOperator2D<LocalOperator1, LocalOperator2>
 					}
                 }
                 else{
-                    for (int k_wavelet2=k_wavelet_first; k_wavelet2<=testBasis_x1.rangeJ(j_wavelet2).lastIndex(); ++k_wavelet2) {
+                    for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=k_wavelet_first; k_wavelet2<=testBasis_x1.rangeJ(j_wavelet2).lastIndex(); ++k_wavelet2) {
                         if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
                             && Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
                             PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
                         }
                     }
-                    for (int k_wavelet2=testBasis_x1.rangeJ(j_wavelet2).firstIndex(); k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
+                    for (FLENS_DEFAULT_INDEXTYPE k_wavelet2=testBasis_x1.rangeJ(j_wavelet2).firstIndex(); k_wavelet2<=k_wavelet_last; ++k_wavelet2) {
                         if (   overlap(supp1,testBasis_x1.psi.support(j_wavelet2,k_wavelet2) ) >0
                             && Pe1_UIz.find(Index1D(j_wavelet2,k_wavelet2,XWavelet))!=Pe1_UIz.end() ) {
                             PsiLambdaCheck_x1[i].map[k_wavelet2] = 0.;
@@ -1075,17 +1075,17 @@ clear()
 
 
 /*
-    int count = 0;
+    FLENS_DEFAULT_INDEXTYPE count = 0;
     time.start();
     for (typename alignedCoefficients::const_map_prindex_it it=x1aligned_LIIAv.map.begin(); it!=x1aligned_LIIAv.map.end(); ++it) {
         Index1D col_x = (*it).first;
         if (col_x.xtype==XWavelet && col_x.j>trialBasis_x1.j0) {
-            int j_row = 0;
-            long k_row_first = 0, k_row_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_row = 0;
+            FLENS_DEFAULT_INDEXTYPE k_row_first = 0, k_row_last = 0;
             testBasis_x1.getLowerWaveletNeighborsForWavelet(col_x.j, col_x.k, trialBasis_x1,j_row,k_row_first,k_row_last);
             assert(j_row == col_x.j-1);
             Support<T> supp_col_x = testBasis_x1.psi.support(col_x.j,col_x.k);
-            for (long k_row=k_row_first; k_row<=k_row_last; ++k_row) {
+            for (FLENS_DEFAULT_INDEXTYPE k_row=k_row_first; k_row<=k_row_last; ++k_row) {
 
                 Index1D row_x(j_row,k_row,XWavelet);
                 if (  (Pe1_v.find(row_x)!=Pe1_v.end()) &&  overlap(trialBasis_x1.psi.support(row_x.j,row_x.k), supp_col_x)>0
@@ -1102,13 +1102,13 @@ clear()
             }
         }
         else if (col_x.xtype==XWavelet && col_x.j==trialBasis_x1.j0) {
-            int j_row = 0;
-            long k_row_first = 0, k_row_last = 0;
+            FLENS_DEFAULT_INDEXTYPE j_row = 0;
+            FLENS_DEFAULT_INDEXTYPE k_row_first = 0, k_row_last = 0;
             testBasis_x1.getScalingNeighborsForWavelet(col_x.j,col_x.k,trialBasis_x1,j_row,
                                                                     k_row_first,k_row_last);
             assert(j_row == col_x.j);
             Support<T> supp_col_x = testBasis_x1.psi.support(col_x.j,col_x.k);
-            for (long k_row=k_row_first; k_row<=k_row_last; ++k_row) {
+            for (FLENS_DEFAULT_INDEXTYPE k_row=k_row_first; k_row<=k_row_last; ++k_row) {
                 Index1D row_x(j_row,k_row,XBSpline);
                 if ( Pe1_v.find(row_x)!=Pe1_v.end() && overlap(trialBasis_x1.mra.phi.support(row_x.j,row_x.k), supp_col_x)>0
                     //&& (Tree_Pe1_v[0].map.find(k_row)!=Tree_Pe1_v[0].map.end() ) ) {
@@ -1135,18 +1135,18 @@ clear()
     time.stop();
     std::cerr << "   -> New Alignment: " << time.elapsed() << std::endl;
     time.start();
-    int count = 0;
+    FLENS_DEFAULT_INDEXTYPE count = 0;
     for (typename alignedCoefficients2::const_coeff_prinindex_it it=x1aligned_LIIAv2.principalIndices.begin();
                  it!=x1aligned_LIIAv2.principalIndices.end(); ++it) {
        Index1D col_x = (*it).first;
-       int pos = (*it).second;
+       FLENS_DEFAULT_INDEXTYPE pos = (*it).second;
        if (col_x.xtype==XWavelet && col_x.j>trialBasis_x1.j0) {
-           int j_row = 0;
-           long k_row_first = 0, k_row_last = 0;
+           FLENS_DEFAULT_INDEXTYPE j_row = 0;
+           FLENS_DEFAULT_INDEXTYPE k_row_first = 0, k_row_last = 0;
            testBasis_x1.getLowerWaveletNeighborsForWavelet(col_x.j, col_x.k, trialBasis_x1,j_row,k_row_first,k_row_last);
            assert(j_row == col_x.j-1);
            Support<T> supp_col_x = testBasis_x1.psi.support(col_x.j,col_x.k);
-           for (long k_row=k_row_first; k_row<=k_row_last; ++k_row) {
+           for (FLENS_DEFAULT_INDEXTYPE k_row=k_row_first; k_row<=k_row_last; ++k_row) {
 
                Index1D row_x(j_row,k_row,XWavelet);
                if (  (Pe1_v.find(row_x)!=Pe1_v.end()) &&  overlap(trialBasis_x1.psi.support(row_x.j,row_x.k), supp_col_x)>0
@@ -1163,13 +1163,13 @@ clear()
            }
        }
        else if (col_x.xtype==XWavelet && col_x.j==trialBasis_x1.j0) {
-           int j_row = 0;
-           long k_row_first = 0, k_row_last = 0;
+           FLENS_DEFAULT_INDEXTYPE j_row = 0;
+           FLENS_DEFAULT_INDEXTYPE k_row_first = 0, k_row_last = 0;
            testBasis_x1.getScalingNeighborsForWavelet(col_x.j,col_x.k,trialBasis_x1,j_row,
                                                                    k_row_first,k_row_last);
            assert(j_row == col_x.j);
            Support<T> supp_col_x = testBasis_x1.psi.support(col_x.j,col_x.k);
-           for (long k_row=k_row_first; k_row<=k_row_last; ++k_row) {
+           for (FLENS_DEFAULT_INDEXTYPE k_row=k_row_first; k_row<=k_row_last; ++k_row) {
                Index1D row_x(j_row,k_row,XBSpline);
                if ( Pe1_v.find(row_x)!=Pe1_v.end() && overlap(trialBasis_x1.mra.phi.support(row_x.j,row_x.k), supp_col_x)>0
                    //&& (Tree_Pe1_v[0].map.find(k_row)!=Tree_Pe1_v[0].map.end() ) ) {

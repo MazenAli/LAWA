@@ -39,15 +39,15 @@ class Assembler1D
          */
         template <typename BilinearForm>
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> >
-        assembleStiffnessMatrix(BilinearForm& a, int J, T tol = 10e-15);
+        assembleStiffnessMatrix(BilinearForm& a, FLENS_DEFAULT_INDEXTYPE J, T tol = 10e-15);
     
         template <typename RHSIntegral>
         flens::DenseVector<flens::Array<T> >
-        assembleRHS(RHSIntegral& rhs, int J);
+        assembleRHS(RHSIntegral& rhs, FLENS_DEFAULT_INDEXTYPE J);
         
         template <typename Preconditioner>
         flens::DiagonalMatrix<T>    
-        assemblePreconditioner(Preconditioner& P, int J);
+        assemblePreconditioner(Preconditioner& P, FLENS_DEFAULT_INDEXTYPE J);
 };
 
 } // namespace lawa

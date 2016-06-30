@@ -18,9 +18,9 @@ OptimizedH1Preconditioner3D<T,Basis3D>::setParameters(T _a_x, T _a_y, T _a_z, T 
 
 template <typename T, typename Basis3D>
 T
-OptimizedH1Preconditioner3D<T,Basis3D>::operator()(XType xtype_x, int j_x, long k_x,
-                                                   XType xtype_y, int j_y, long k_y,
-                                                   XType xtype_z, int j_z, long k_z) const
+OptimizedH1Preconditioner3D<T,Basis3D>::operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+                                                   XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y,
+                                                   XType xtype_z, FLENS_DEFAULT_INDEXTYPE j_z, FLENS_DEFAULT_INDEXTYPE k_z) const
 {
     T id_x=0., dd_x=0., id_y=0., dd_y=0., id_z=0., dd_z=0.;
     id_x = basis_x.generator(xtype_x).getL2Norm(j_x,k_x);

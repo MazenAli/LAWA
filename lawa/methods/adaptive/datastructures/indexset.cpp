@@ -22,15 +22,15 @@
 namespace lawa {
 
 void
-getMinAndMaxLevel(const IndexSet<Index1D> &Lambda, int &jmin, int &jmax)
+getMinAndMaxLevel(const IndexSet<Index1D> &Lambda, FLENS_DEFAULT_INDEXTYPE &jmin, FLENS_DEFAULT_INDEXTYPE &jmax)
 {
     typedef IndexSet<Index1D>::const_iterator set1d_const_it;
     set1d_const_it it = Lambda.begin();
     jmin = (*it).j;
     jmax = (*it).j;
     for (set1d_const_it lambda=Lambda.begin(); lambda!=Lambda.end(); ++lambda) {
-        jmin = std::min(int((*lambda).j),jmin);
-        jmax = std::max(int((*lambda).j),jmax);
+        jmin = std::min((FLENS_DEFAULT_INDEXTYPE)((*lambda).j),jmin);
+        jmax = std::max((FLENS_DEFAULT_INDEXTYPE)((*lambda).j),jmax);
     }
 }
 

@@ -45,42 +45,42 @@ class Basis<_T,Primal,Periodic,CDF>
         typedef BSpline<T,Primal,Periodic,CDF> 			BSplineType;
         typedef Wavelet<T,Primal,Periodic,CDF> 			WaveletType;
 
-        Basis(int _d, int _d_, int j=0);
+        Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j=0);
 
         ~Basis();
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         const BasisFunctionType &
         generator(XType xtype) const;
         
-        int
-        cardJ(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJ(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJL(int j = 0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJL(FLENS_DEFAULT_INDEXTYPE j = 0) const;
 
-        int
-        cardJI(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJR(int j = 0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJR(FLENS_DEFAULT_INDEXTYPE j = 0) const;
 
-        const flens::Range<int>
-        rangeJ(int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJ(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJL(int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJL(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJI(int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJR(int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJR(FLENS_DEFAULT_INDEXTYPE j) const;
 
         /// Returns the range of indicated functions from SecondBasis whose supports
         /// intersect the support of a given (multi-)scaling with level j_scaling and translation index
@@ -88,28 +88,28 @@ class Basis<_T,Primal,Periodic,CDF>
         /// The returned level is chosen s.t. the corresponding refinements live
         /// on the same scale.
         void
-        getScalingNeighborsForScaling(int j_scaling1, long k_scaling1,
+        getScalingNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling1, FLENS_DEFAULT_INDEXTYPE k_scaling1,
         							  const Basis<T,Primal,Periodic,CDF> &secondbasis,
-        							  int &j_scaling2, long &k_scaling_first,
-        							  long &k_scaling_last) const;
+        							  FLENS_DEFAULT_INDEXTYPE &j_scaling2, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+        							  FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         void
-        getScalingNeighborsForScaling(int j_scaling1, long k_scaling1,
+        getScalingNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling1, FLENS_DEFAULT_INDEXTYPE k_scaling1,
         							  const Basis<T,Primal,Interval,Dijkema> &secondbasis,
-        							  int &j_scaling2, long &k_scaling_first,
-        							  long &k_scaling_last) const;
+        							  FLENS_DEFAULT_INDEXTYPE &j_scaling2, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+        							  FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         void
-        getWaveletNeighborsForScaling(int j_scaling1, long k_scaling1,
+        getWaveletNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling1, FLENS_DEFAULT_INDEXTYPE k_scaling1,
         							  const Basis<T,Primal,Periodic,CDF> &secondbasis,
-        							  int &j_wavelet, long &k_wavelet_first,
-        							  long &k_wavelet_last) const;
+        							  FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+        							  FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         void
-        getWaveletNeighborsForScaling(int j_scaling1, long k_scaling1,
+        getWaveletNeighborsForScaling(FLENS_DEFAULT_INDEXTYPE j_scaling1, FLENS_DEFAULT_INDEXTYPE k_scaling1,
         							  const Basis<T,Primal,Interval,Dijkema> &secondbasis,
-        							  int &j_wavelet, long &k_wavelet_first,
-        							  long &k_wavelet_last) const;
+        							  FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+        							  FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         /// Returns the range of indicated functions from SecondBasis and SecondRefinementBasis
         /// whose supports intersect the support of a given wavelet with level j_wavelet and
@@ -118,51 +118,51 @@ class Basis<_T,Primal,Periodic,CDF>
         /// the corresponding refinements should live on the same scale.
         template <typename SecondRefinementBasis>
 		void
-		getBSplineNeighborsForWavelet(int j_wavelet, long k_wavelet,
+		getBSplineNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
 									  const SecondRefinementBasis &secondrefinementbasis,
-									  int &j_bspline, long &k_bspline_first,
-									  long &k_bspline_last) const;
+									  FLENS_DEFAULT_INDEXTYPE &j_bspline, FLENS_DEFAULT_INDEXTYPE &k_bspline_first,
+									  FLENS_DEFAULT_INDEXTYPE &k_bspline_last) const;
 
         template <typename SecondBasis>
 		void
-		getScalingNeighborsForWavelet(int j_wavelet, long k_wavelet,
+		getScalingNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet, FLENS_DEFAULT_INDEXTYPE k_wavelet,
 									  const SecondBasis &secondbasis,
-									  int &j_scaling, long &k_scaling_first,
-									  long &k_scaling_last) const;
+									  FLENS_DEFAULT_INDEXTYPE &j_scaling, FLENS_DEFAULT_INDEXTYPE &k_scaling_first,
+									  FLENS_DEFAULT_INDEXTYPE &k_scaling_last) const;
 
         void
-        getWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+        getWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                       const Basis<T,Primal,Periodic,CDF> &secondbasis,
-                                      int &j_wavelet2, long &k_wavelet_first,
-                                      long &k_wavelet_last) const;
+                                      FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                      FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         void
-        getWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+        getWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                       const Basis<T,Primal,Interval,Dijkema> &secondbasis,
-                                      int &j_wavelet2, long &k_wavelet_first,
-                                      long &k_wavelet_last) const;
+                                      FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                      FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
 
         template <typename SecondBasis>
 		void
-		getLowerWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+		getLowerWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
 										   const SecondBasis &secondbasis,
-										   int &j_wavelet2, long &k_wavelet_first,
-										   long &k_wavelet_last) const;
+										   FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+										   FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
 		void
-		getHigherWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+		getHigherWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
 										   const Basis<T,Primal,Periodic,CDF> &secondbasis,
-										   int &j_wavelet2, long &k_wavelet_first,
-										   long &k_wavelet_last) const;
+										   FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+										   FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         void
-        getHigherWaveletNeighborsForWavelet(int j_wavelet1, long k_wavelet1,
+        getHigherWaveletNeighborsForWavelet(FLENS_DEFAULT_INDEXTYPE j_wavelet1, FLENS_DEFAULT_INDEXTYPE k_wavelet1,
                                            const Basis<T,Primal,Interval,Dijkema> &secondbasis,
-                                           int &j_wavelet2, long &k_wavelet_first,
-                                           long &k_wavelet_last) const;
+                                           FLENS_DEFAULT_INDEXTYPE &j_wavelet2, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                           FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
-        const int d, d_, j0;
+        const FLENS_DEFAULT_INDEXTYPE d, d_, j0;
         MRA<T,Primal,Periodic,CDF> mra;
         MRA<T,Dual,Periodic,CDF> mra_;
         Wavelet<T,Primal,Periodic,CDF> psi;
@@ -171,14 +171,14 @@ class Basis<_T,Primal,Periodic,CDF>
         Basis<T,Primal,Interval,Dijkema> refinementbasis;
 
     private:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 
         friend class Wavelet<T,Primal,Periodic,CDF>;
 
 
         flens::DenseVector<flens::Array<long double> > *_periodicRefCoeffs, *_rightRefCoeffs;
 
-        long 	*_innerOffsets, *_split;
+        FLENS_DEFAULT_INDEXTYPE 	*_innerOffsets, *_split;
         long double *_periodicL2Norms,  *_periodicH1SemiNorms;
 
         Basis(const Basis& secondbasis);

@@ -33,7 +33,7 @@ template <typename T, typename Index, typename AdaptiveOperator, typename RHS,
           typename PP_AdaptiveOperator, typename PP_RHS>
 Coefficients<Lexicographical,T,Index>
 GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
-::SOLVE(T nuM1, T _eps, const char *filename, int NumOfIterations, T H1norm)
+::SOLVE(T nuM1, T _eps, const char *filename, FLENS_DEFAULT_INDEXTYPE NumOfIterations, T H1norm)
 {
     T eps = _eps;
     Coefficients<Lexicographical,T,Index> w_k(SIZEHASHINDEX2D), g_kP1(SIZEHASHINDEX2D);
@@ -42,10 +42,10 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
     T nu_k   = 0.;
     T total_time=0.;
     T timeApply=0.;
-    int numOfIterations=0;
+    FLENS_DEFAULT_INDEXTYPE numOfIterations=0;
     T timeMatrixVector=0.;
-    int maxIterations=300;
-    int lengthOfResidual = 1;
+    FLENS_DEFAULT_INDEXTYPE maxIterations=300;
+    FLENS_DEFAULT_INDEXTYPE lengthOfResidual = 1;
 
 
     std::cerr << "GHS-NONSYM-ADWAV-SOLVE has started with the following parameters: " << std::endl;
@@ -55,7 +55,7 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
 
     std::ofstream file(filename);
 
-    for (int i=1; i<=NumOfIterations; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=NumOfIterations; ++i) {
         Timer time;
         std::cerr << "*** " << i << ".iteration ***" << std::endl;
         time.start();
@@ -75,7 +75,7 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
         /*
         IndexSet<Index1D> Lambda_x, Lambda_y;
         split(Lambda_kP1, Lambda_x, Lambda_y);
-        int jmin_x, jmax_x, jmin_y, jmax_y;
+        FLENS_DEFAULT_INDEXTYPE jmin_x, jmax_x, jmin_y, jmax_y;
         getMinAndMaxLevel(Lambda_x, jmin_x, jmax_x);
         getMinAndMaxLevel(Lambda_y, jmin_y, jmax_y);
         std::cerr << "   Current jmax  = (" << jmax_x << ", " << jmax_y << ")" << std::endl;
@@ -135,7 +135,7 @@ template <typename T, typename Index, typename AdaptiveOperator, typename RHS,
           typename PP_AdaptiveOperator, typename PP_RHS>
 IndexSet<Index>
 GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
-::GROW(const Coefficients<Lexicographical,T,Index> &w, T nu_bar, T &nu, int &lengthOfResidual,
+::GROW(const Coefficients<Lexicographical,T,Index> &w, T nu_bar, T &nu, FLENS_DEFAULT_INDEXTYPE &lengthOfResidual,
        T &timeApply)
 {
     T zeta = 2.*(omega*nu_bar)/(1-omega);
@@ -186,8 +186,8 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
     std::cerr << "      Before extension: ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_r_norm_square)
               << ", alpha*r_norm = " << alpha*r_norm << std::endl;
     if (nu > eps) {
-        int addDoF = 0;
-        for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE addDoF = 0;
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
             P_Lambda_r_norm_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
             addDoF += r_bucket.addBucketToIndexSet(Lambda,i);
             std::cerr << "      Currently " << addDoF << " added indices, ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_r_norm_square) << std::endl;
@@ -238,7 +238,7 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
         flens::DenseVector<flens::Array<T> > g_vec(LambdaRow.size()), x_vec(LambdaCol.size()), Ax_vec(LambdaRow.size());
         const_coeff_it g_end = g.end();
         const_coeff_it w_end = w.end();
-        int row_count=1;
+        FLENS_DEFAULT_INDEXTYPE row_count=1;
         for (const_set_it row=LambdaRow.begin(); row!=LambdaRow.end(); ++row) {
             const_coeff_it it = g.find(*row);
             if (it != g_end) g_vec(row_count) = (*it).second;
@@ -253,7 +253,7 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
             ++row_count;
         }
         std::cerr << "      target tolerance: " << tol << std::endl;
-        int iters = lawa::cgls(B,x_vec,g_vec,tol);
+        FLENS_DEFAULT_INDEXTYPE iters = lawa::cgls(B,x_vec,g_vec,tol);
 
         std::cerr << "      number of iterations: " << iters << ", res = " << tol << std::endl;
 
@@ -276,7 +276,7 @@ GHS_NONSYM_ADWAV<T,Index,AdaptiveOperator,RHS,PP_AdaptiveOperator,PP_RHS>
         gammaPrev_cgls = s*s;
         std::cerr << "      gammaPrev = " << gammaPrev_cgls << std::endl;
 
-        for (int k=1; k<=1000; k++) {
+        for (FLENS_DEFAULT_INDEXTYPE k=1; k<=1000; k++) {
            q.setToZero();
            A.apply(p,0.,q,cxxblas::NoTrans);   //q = A*p;
            alpha_cgls = gammaPrev_cgls/(q*q);

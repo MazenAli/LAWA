@@ -53,7 +53,7 @@ struct UniDirectionalLocalOperator
     UniDirectionalLocalOperator(LocalOperator1D &_localOperator1D, T _factor=1.);
 
     void
-    setParameters(int _J, size_t _hashTableLargeLength, size_t _hashTableSmallLength);
+    setParameters(FLENS_DEFAULT_INDEXTYPE _J, size_t _hashTableLargeLength, size_t _hashTableSmallLength);
 
     void
     eval(const Coefficients<Lexicographical,T,Index> &v,
@@ -71,7 +71,7 @@ struct UniDirectionalLocalOperator
     LocalOperator1D          &localOperator1D;
     const TrialBasis_CoordX  &trialBasis_CoordX;
     const TestBasis_CoordX   &testBasis_CoordX;
-    int                      J;
+    FLENS_DEFAULT_INDEXTYPE                      J;
     size_t                   hashTableLargeLength;
     size_t                   hashTableSmallLength;
 

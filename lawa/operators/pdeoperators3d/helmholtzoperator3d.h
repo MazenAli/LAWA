@@ -58,12 +58,12 @@ class HelmholtzOperator3D{
         HelmholtzOperator3D(const Basis3D& _basis, const T _c);
 
         T
-        operator()(XType row_xtype_x, int j1_x, long k1_x,
-                   XType row_xtype_y, int j1_y, long k1_y,
-                   XType row_xtype_z, int j1_z, long k1_z,
-                   XType col_xtype_x, int j2_x, long k2_x,
-                   XType col_xtpye_y, int j2_y, long k2_y,
-                   XType col_xtpye_z, int j2_z, long k2_z) const;
+        operator()(XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                   XType row_xtype_y, FLENS_DEFAULT_INDEXTYPE j1_y, FLENS_DEFAULT_INDEXTYPE k1_y,
+                   XType row_xtype_z, FLENS_DEFAULT_INDEXTYPE j1_z, FLENS_DEFAULT_INDEXTYPE k1_z,
+                   XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x,
+                   XType col_xtpye_y, FLENS_DEFAULT_INDEXTYPE j2_y, FLENS_DEFAULT_INDEXTYPE k2_y,
+                   XType col_xtpye_z, FLENS_DEFAULT_INDEXTYPE j2_z, FLENS_DEFAULT_INDEXTYPE k2_z) const;
 
         T
         operator()(const Index3D &row_index, const Index3D &col_index) const;

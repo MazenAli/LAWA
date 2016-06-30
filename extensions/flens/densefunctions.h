@@ -27,7 +27,7 @@ namespace flens {
 template <typename DX, typename DY, typename DZ>
     void
     concatenate(const DenseVector<DX> &x, const DenseVector<DY> &y,
-                DenseVector<DZ> &z, int firstIndex=1);
+                DenseVector<DZ> &z, FLENS_DEFAULT_INDEXTYPE firstIndex=1);
 
 } // namespace flens
 

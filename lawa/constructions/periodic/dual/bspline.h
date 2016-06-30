@@ -39,7 +39,7 @@ struct BSpline<_T,Dual,Periodic,CDF>
     static const DomainType Domain = Periodic;
     static const Construction Cons = CDF;
 
-    BSpline(int _d, int _d_);
+    BSpline(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_);
     
     BSpline(const MRA<T,Dual,Periodic,CDF> &mra);
 
@@ -47,15 +47,15 @@ struct BSpline<_T,Dual,Periodic,CDF>
     ~BSpline();
 
     T
-    operator()(T x, int j, long k, unsigned short deriv=0) const;
+    operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv=0) const;
 
     PeriodicSupport<T>
-    support(int j, long k) const;
+    support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
     
     const flens::DenseVector<flens::Array<T> > &
     mask() const;
 
-    const int d, d_, mu;
+    const FLENS_DEFAULT_INDEXTYPE d, d_, mu;
     const BSpline<T, Dual, R, CDF> phiR_;
 };
 

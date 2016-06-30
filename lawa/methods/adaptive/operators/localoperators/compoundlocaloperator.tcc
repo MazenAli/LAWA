@@ -203,7 +203,7 @@ template <typename Preconditioner>
 void
 CompoundLocalOperator<Index,FirstLocalOperator,SecondLocalOperator,ThirdLocalOperator,FourthLocalOperator>
 ::eval(Coefficients<Lexicographical,T,Index> &v,
-       Coefficients<Lexicographical,T,Index> &Av, Preconditioner &P, int operatornumber)
+       Coefficients<Lexicographical,T,Index> &Av, Preconditioner &P, FLENS_DEFAULT_INDEXTYPE operatornumber)
 {
     for (coeff_it it=v.begin(); it!=v.end(); ++it) {
         (*it).second *= P[(*it).first];
@@ -306,7 +306,7 @@ CompoundLocalOperator<Index,FirstLocalOperator,SecondLocalOperator,ThirdLocalOpe
 apply(Coefficients<Lexicographical,T,Index> &v,
       Coefficients<Lexicographical,T,Index> &Av, Preconditioner &P, T eps)
 {
-    int d = firstLocalOp.testBasis_CoordX.d;
+    FLENS_DEFAULT_INDEXTYPE d = firstLocalOp.testBasis_CoordX.d;
     if (d!=secondLocalOp.testBasis_CoordX.d) {
         std::cerr << "CompoundLocalOperator<...>::apply: Order of first local operator is not equal"
                   << " to order of second local operator: "
@@ -322,9 +322,9 @@ apply(Coefficients<Lexicographical,T,Index> &v,
     long double squared_v_norm = (long double)std::pow(v.norm(2.),(T)2.);
     long double squared_v_bucket_norm = 0.;
     T delta=0.;
-    int l=0;
-    int support_size_all_buckets=0;
-    for (int i=0; i<(int)v_bucket.buckets.size(); ++i) {
+    FLENS_DEFAULT_INDEXTYPE l=0;
+    FLENS_DEFAULT_INDEXTYPE support_size_all_buckets=0;
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)v_bucket.buckets.size(); ++i) {
         squared_v_bucket_norm += v_bucket.bucket_ell2norms[i]*v_bucket.bucket_ell2norms[i];
         T squared_delta = fabs(squared_v_norm - squared_v_bucket_norm);
         support_size_all_buckets += v_bucket.buckets[i].size();
@@ -344,21 +344,21 @@ apply(Coefficients<Lexicographical,T,Index> &v,
     delta = tol;
     Timer time;
     T critTime = 0.;
-    int critBucketsize = 0;
-    int critBucketnum = 0;
+    FLENS_DEFAULT_INDEXTYPE critBucketsize = 0;
+    FLENS_DEFAULT_INDEXTYPE critBucketnum = 0;
     T gamma = 0.5;
     if (d>=3) gamma = 1.5;      // smoothness of multiwavelets minus half the order of the operator
                                 // multiwavelets are only C^1!!
 
-    for (int i=0; i<l; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<l; ++i) {
         time.start();
         Coefficients<Lexicographical,T,Index> w_p;
         v_bucket.addBucketToCoefficients(w_p,i);
         if (w_p.size()==0) continue;
         T numerator = w_p.norm(2.) * support_size_all_buckets;
         T denominator = w_p.size() * (eps-delta) / CA;
-        int jp = (int)std::max(((std::log(numerator/denominator) / std::log(2.) ) / gamma )/*-1*/, (T)0.);
-        //int jp = ceil(std::max((std::log(numerator/denominator) / std::log(2.) / gamma )/*-1*/, (T)0.));
+        FLENS_DEFAULT_INDEXTYPE jp = (FLENS_DEFAULT_INDEXTYPE)std::max(((std::log(numerator/denominator) / std::log(2.) ) / gamma )/*-1*/, (T)0.);
+        //FLENS_DEFAULT_INDEXTYPE jp = ceil(std::max((std::log(numerator/denominator) / std::log(2.) / gamma )/*-1*/, (T)0.));
 
         //if (w_p.size()>1000 && eps > 5e-10) {
         //    jp = std::max(0, jp-1);
@@ -371,13 +371,13 @@ apply(Coefficients<Lexicographical,T,Index> &v,
                 typename FirstLocalOperator::notCoordXIndex notcoordX_col_index;
 
                 firstLocalOp.split((*it).first, coordX_col_index, notcoordX_col_index);
-                int maxlevel1 = std::min(coordX_col_index.j+jp,25);
+                FLENS_DEFAULT_INDEXTYPE maxlevel1 = std::min(coordX_col_index.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
                 Lambda=lambdaTilde1d_PDE(coordX_col_index, firstLocalOp.testBasis_CoordX, jp,
                                            firstLocalOp.trialBasis_CoordX.j0, maxlevel1,false);
                 firstLocalOp.nonTreeEval(coordX_col_index, notcoordX_col_index,
                                          prec_col_index*(*it).second, Lambda, Av, eps);
                 secondLocalOp.split((*it).first, coordX_col_index, notcoordX_col_index);
-                int maxlevel2 = std::min(coordX_col_index.j+jp,25);
+                FLENS_DEFAULT_INDEXTYPE maxlevel2 = std::min(coordX_col_index.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
                 Lambda=lambdaTilde1d_PDE(coordX_col_index, secondLocalOp.testBasis_CoordX,jp,
                                            secondLocalOp.testBasis_CoordX.j0, maxlevel2,false);
                 secondLocalOp.nonTreeEval(coordX_col_index, notcoordX_col_index,
@@ -390,21 +390,21 @@ apply(Coefficients<Lexicographical,T,Index> &v,
                 typename FirstLocalOperator::notCoordXIndex notcoordX_col_index;
 
                 firstLocalOp.split((*it).first, coordX_col_index, notcoordX_col_index);
-                int maxlevel1 = std::min(coordX_col_index.j+jp,25);
+                FLENS_DEFAULT_INDEXTYPE maxlevel1 = std::min(coordX_col_index.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
                 Lambda=lambdaTilde1d_PDE(coordX_col_index, firstLocalOp.testBasis_CoordX, jp,
                                            firstLocalOp.trialBasis_CoordX.j0, maxlevel1,false);
                 firstLocalOp.nonTreeEval(coordX_col_index, notcoordX_col_index,
                                          prec_col_index*(*it).second, Lambda, Av, eps);
 
                 secondLocalOp.split((*it).first, coordX_col_index, notcoordX_col_index);
-                int maxlevel2 = std::min(coordX_col_index.j+jp,25);
+                FLENS_DEFAULT_INDEXTYPE maxlevel2 = std::min(coordX_col_index.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
                 Lambda=lambdaTilde1d_PDE(coordX_col_index, secondLocalOp.testBasis_CoordX,jp,
                                            secondLocalOp.testBasis_CoordX.j0, maxlevel2,false);
                 secondLocalOp.nonTreeEval(coordX_col_index, notcoordX_col_index,
                                           prec_col_index*(*it).second, Lambda, Av, eps);
 
                 thirdLocalOp.split((*it).first, coordX_col_index, notcoordX_col_index);
-                int maxlevel3 = std::min(coordX_col_index.j+jp,25);
+                FLENS_DEFAULT_INDEXTYPE maxlevel3 = std::min(coordX_col_index.j+jp,(FLENS_DEFAULT_INDEXTYPE) 60);
                 Lambda=lambdaTilde1d_PDE(coordX_col_index, thirdLocalOp.testBasis_CoordX,jp,
                                            thirdLocalOp.testBasis_CoordX.j0, maxlevel3,false);
                 thirdLocalOp.nonTreeEval(coordX_col_index, notcoordX_col_index,

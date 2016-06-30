@@ -58,8 +58,8 @@ class LocalOperator1D : public AbstractLocalOperator1D<typename TrialBasis::T,
         BilinearForm                      &Bil;
         LocalRefinement<TestBasis>        testLocalRefine;
         LocalRefinement<TrialBasis>       trialLocalRefine;
-        int                               testRefinementLevelOffset;
-        int                               trialRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE                               testRefinementLevelOffset;
+        FLENS_DEFAULT_INDEXTYPE                               trialRefinementLevelOffset;
 
         void
         eval(const TreeCoefficients1D<T> &PsiLambdaHat, TreeCoefficients1D<T> &PsiLambdaCheck,
@@ -79,7 +79,7 @@ class LocalOperator1D : public AbstractLocalOperator1D<typename TrialBasis::T,
 
     private:
         void
-        _evalA(int l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
+        _evalA(FLENS_DEFAULT_INDEXTYPE l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
                CoefficientsByLevel<T> &PhiPiCheck, TreeCoefficients1D<T> &PsiLambdaCheck);
 
         void
@@ -87,11 +87,11 @@ class LocalOperator1D : public AbstractLocalOperator1D<typename TrialBasis::T,
                             CoefficientsByLevel<T> &PhiPiCheck, TreeCoefficients1D<T> &PsiLambdaCheck);
 
         void
-        _evalU(int l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
+        _evalU(FLENS_DEFAULT_INDEXTYPE l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
                CoefficientsByLevel<T> &PhiPiCheck, TreeCoefficients1D<T> &PsiLambdaCheck);
 
         void
-        _evalL(int l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
+        _evalL(FLENS_DEFAULT_INDEXTYPE l, CoefficientsByLevel<T> &d, const TreeCoefficients1D<T> &c,
                TreeCoefficients1D<T> &PsiLambdaCheck);
 
         /*
@@ -100,29 +100,29 @@ class LocalOperator1D : public AbstractLocalOperator1D<typename TrialBasis::T,
         // Non-Periodic version
         template<typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<TrialBasis>::value, T_>::value, void>::Type
-        _splitPhiPi(int l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1,
+        _splitPhiPi(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1,
                     CoefficientsByLevel<T_> &PhiPiCheck2) const;
 
         // Periodic version
         template<typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<TrialBasis>::value, T_>::value, void>::Type
-        _splitPhiPi(int l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1,
+        _splitPhiPi(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &c_l, CoefficientsByLevel<T_> &PhiPiCheck1,
                     CoefficientsByLevel<T_> &PhiPiCheck2) const;
 
         // Non-Periodic version
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<!IsPeriodic<TestBasis>::value, T_>::value, void>::Type
-        _splitd(int l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
+        _splitd(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
                 CoefficientsByLevel<T_> &d1, CoefficientsByLevel<T_> &d2) const;
 
         // Periodic Version
         template <typename T_>
         typename cxxblas::RestrictTo<SFINAE_Wrapper<IsPeriodic<TestBasis>::value, T_>::value, void>::Type
-        _splitd(int l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
+        _splitd(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T_> &PsiLambdaCheck_l,
                 CoefficientsByLevel<T_> &d1, CoefficientsByLevel<T_> &d2) const;
 
         void
-        _applyRefinementBilinearForm(int l, const CoefficientsByLevel<T> &d,
+        _applyRefinementBilinearForm(FLENS_DEFAULT_INDEXTYPE l, const CoefficientsByLevel<T> &d,
                                      CoefficientsByLevel<T> &PhiPiCheck);
 
 };

@@ -26,22 +26,22 @@ TensorBasis2D<Uniform, FirstBasis, SecondBasis>::TensorBasis2D(const FirstBasis 
 }
 
 template<typename FirstBasis, typename SecondBasis>
-int
-TensorBasis2D<Uniform, FirstBasis, SecondBasis>::dim(int J_x, int J_y) const
+FLENS_DEFAULT_INDEXTYPE
+TensorBasis2D<Uniform, FirstBasis, SecondBasis>::dim(FLENS_DEFAULT_INDEXTYPE J_x, FLENS_DEFAULT_INDEXTYPE J_y) const
 {
     return first.mra.cardI(J_x) * second.mra.cardI(J_y);
 }
 
 template<typename FirstBasis, typename SecondBasis>
-int
-TensorBasis2D<Uniform, FirstBasis, SecondBasis>::J1_max(const int J_x, const int /*J_y*/, const int /*jy*/) const
+FLENS_DEFAULT_INDEXTYPE
+TensorBasis2D<Uniform, FirstBasis, SecondBasis>::J1_max(const FLENS_DEFAULT_INDEXTYPE J_x, const FLENS_DEFAULT_INDEXTYPE /*J_y*/, const FLENS_DEFAULT_INDEXTYPE /*jy*/) const
 {
     return J_x;
 }
 
 template<typename FirstBasis, typename SecondBasis>
-int
-TensorBasis2D<Uniform, FirstBasis, SecondBasis>::J2_max(const int /*J_x*/, const int J_y, const int /*jx*/) const
+FLENS_DEFAULT_INDEXTYPE
+TensorBasis2D<Uniform, FirstBasis, SecondBasis>::J2_max(const FLENS_DEFAULT_INDEXTYPE /*J_x*/, const FLENS_DEFAULT_INDEXTYPE J_y, const FLENS_DEFAULT_INDEXTYPE /*jx*/) const
 {
     return J_y;
 }

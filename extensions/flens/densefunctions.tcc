@@ -22,7 +22,7 @@ namespace flens {
 template <typename DX, typename DY, typename DZ>
 void
 concatenate(const DenseVector<DX> &x, const DenseVector<DY> &y,
-            DenseVector<DZ> &z, int firstIndex)
+            DenseVector<DZ> &z, FLENS_DEFAULT_INDEXTYPE firstIndex)
 {
     z.engine().resize(x.length()+y.length(), firstIndex);
     z(_(firstIndex,firstIndex+x.length()-1)) = x;

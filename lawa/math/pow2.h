@@ -26,17 +26,17 @@
 namespace lawa {
 
 template <typename T>
-    typename cxxblas::RestrictTo<flens::IsSame<T,int>::value
-                     || flens::IsSame<T,long>::value, T>::Type
-    pow2i(int expo);
+    typename cxxblas::RestrictTo<flens::IsSame<T,FLENS_DEFAULT_INDEXTYPE>::value
+                     || flens::IsSame<T,FLENS_DEFAULT_INDEXTYPE>::value, T>::Type
+    pow2i(FLENS_DEFAULT_INDEXTYPE expo);
 
 template <typename T>
     typename cxxblas::RestrictTo<flens::IsSame<T,double>::value, T>::Type
-    pow2i(int expo);
+    pow2i(FLENS_DEFAULT_INDEXTYPE expo);
 
 template <typename T>
 T
-pow2ih(int expo);
+pow2ih(FLENS_DEFAULT_INDEXTYPE expo);
 
 } // namespace lawa
 

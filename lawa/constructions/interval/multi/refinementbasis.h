@@ -42,16 +42,16 @@ class Basis<_T,Orthogonal,Interval,MultiRefinement>
         typedef BasisFunction<T,Orthogonal,Interval,MultiRefinement> BasisFunctionType;
         typedef BSpline<T,Orthogonal,Interval,MultiRefinement> BSplineType;
 
-        Basis(const int d, const int j=-1);
+        Basis(const FLENS_DEFAULT_INDEXTYPE d, const FLENS_DEFAULT_INDEXTYPE j=-1);
 
         virtual
         ~Basis();
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(const int j) const;
+        setLevel(const FLENS_DEFAULT_INDEXTYPE j) const;
 
         template <BoundaryCondition BC>
             void
@@ -69,10 +69,10 @@ class Basis<_T,Orthogonal,Interval,MultiRefinement>
         /// should live on the same scale.
         template <typename SecondRefinementBasis>
             void
-            getBSplineNeighborsForBSpline(int j_bspline1, long k_bspline1,
+            getBSplineNeighborsForBSpline(FLENS_DEFAULT_INDEXTYPE j_bspline1, FLENS_DEFAULT_INDEXTYPE k_bspline1,
                                           const SecondRefinementBasis &secondrefinementbasis,
-                                          int &j_wavelet, long &k_bspline2_first,
-                                          long &k_bspline2_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_bspline2_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_bspline2_last) const;
 
         /// Returns the range of wavelets from SecondBasis whose supports intersect the support
         /// of a refinement B-spline with level j_bspline and translation index k_bspline
@@ -82,21 +82,21 @@ class Basis<_T,Orthogonal,Interval,MultiRefinement>
         /// live on the same scale.
         template <typename SecondBasis>
             void
-            getWaveletNeighborsForBSpline(int j_bspline, long k_bspline,
+            getWaveletNeighborsForBSpline(FLENS_DEFAULT_INDEXTYPE j_bspline, FLENS_DEFAULT_INDEXTYPE k_bspline,
                                           const SecondBasis &basis,
-                                          int &j_wavelet, long &k_wavelet_first,
-                                          long &k_wavelet_last) const;
+                                          FLENS_DEFAULT_INDEXTYPE &j_wavelet, FLENS_DEFAULT_INDEXTYPE &k_wavelet_first,
+                                          FLENS_DEFAULT_INDEXTYPE &k_wavelet_last) const;
 
         class LaplaceOperator1D {
             public:
-                LaplaceOperator1D(int _d,
+                LaplaceOperator1D(FLENS_DEFAULT_INDEXTYPE _d,
                                   const Basis<_T,Orthogonal,Interval,MultiRefinement> &_refinementbasis);
 
                 T
-                operator()(XType xtype1, int j1, long k1, XType xtype2, int j2, long k2);
+                operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1, XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2);
 
             private:
-                int d;
+                FLENS_DEFAULT_INDEXTYPE d;
                 const Basis<_T,Orthogonal,Interval,MultiRefinement> &refinementbasis;
 
                 flens::DenseVector<flens::Array<long double> > outer_values;
@@ -106,14 +106,14 @@ class Basis<_T,Orthogonal,Interval,MultiRefinement>
 
         class IdentityOperator1D {
             public:
-                IdentityOperator1D(int _d,
+                IdentityOperator1D(FLENS_DEFAULT_INDEXTYPE _d,
                                    const Basis<_T,Orthogonal,Interval,MultiRefinement> &_refinementbasis);
 
                 T
-                operator()(XType xtype1, int j1, long k1, XType xtype2, int j2, long k2);
+                operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1, XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2);
 
             private:
-                int d;
+                FLENS_DEFAULT_INDEXTYPE d;
                 const Basis<_T,Orthogonal,Interval,MultiRefinement> &refinementbasis;
 
                 flens::DenseVector<flens::Array<long double> > outer_values;
@@ -124,10 +124,10 @@ class Basis<_T,Orthogonal,Interval,MultiRefinement>
 
         MRA<T,Orthogonal,Interval,MultiRefinement> mra;
 
-        const int d;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
 
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
         
         LaplaceOperator1D  LaplaceOp1D;
         IdentityOperator1D IdentityOp1D;

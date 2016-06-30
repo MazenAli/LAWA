@@ -15,7 +15,7 @@ template <typename Index, CoordinateDirection CoordX, typename LocalOperator1D,
                           CoordinateDirection NotCoordX, typename NotCoordXIndex>
 void
 UniDirectionalLocalOperator<Index,CoordX,LocalOperator1D,NotCoordX,NotCoordXIndex>::
-setParameters(int _J, size_t _hashTableLargeLength, size_t _hashTableSmallLength)
+setParameters(FLENS_DEFAULT_INDEXTYPE _J, size_t _hashTableLargeLength, size_t _hashTableSmallLength)
 {
     J = _J;
     hashTableLargeLength = _hashTableLargeLength;
@@ -56,7 +56,7 @@ eval(const Coefficients<Lexicographical,T,Index> &v, Coefficients<Lexicographica
         if ( notCoordXAligned_IAIv.map.find((*it).first)==notCoordXAligned_IAIv.map.end() ) continue;
         PsiLambdaCheck_CoordX = notCoordXAligned_IAIv.map[(*it).first];
 
-        int maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
+        FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
         PsiLambdaCheck_CoordX.setToZero();
         time.stop();
         time_setup_tree += time.elapsed();
@@ -114,7 +114,7 @@ eval(const Coefficients<Lexicographical,T,Index> &v, Coefficients<Lexicographica
             TreeCoefficients1D<T> PsiLambdaCheck_CoordX(n2,testBasis_CoordX.j0);
             PsiLambdaCheck_CoordX = notCoordXAligned_v.map[(*it).first];
 
-            int maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
+            FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
             PsiLambdaCheck_CoordX.setToZero();
             time.stop();
             time_setup_tree += time.elapsed();
@@ -166,7 +166,7 @@ eval(const Coefficients<Lexicographical,T,Index> &v, Coefficients<Lexicographica
             PsiLambdaCheck_CoordX = PsiLambdaHat_CoordX;
             PsiLambdaCheck_CoordX += notCoordXAligned_IAIv.map[(*it).first];
 
-            int maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
+            FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
             PsiLambdaCheck_CoordX.setToZero();
             time.stop();
             time_setup_tree += time.elapsed();
@@ -214,7 +214,7 @@ eval(const Coefficients<Lexicographical,T,Index> &v, Coefficients<Lexicographica
             extendMultiTree(testBasis_CoordX, (*it).second, C_v, "standard");
             PsiLambdaCheck_CoordX = C_v;
 
-            int maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
+            FLENS_DEFAULT_INDEXTYPE maxTreeLevel = PsiLambdaCheck_CoordX.getMaxTreeLevel();
             PsiLambdaCheck_CoordX.setToZero();
             time.stop();
             time_setup_tree += time.elapsed();

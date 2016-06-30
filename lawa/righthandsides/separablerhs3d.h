@@ -49,12 +49,12 @@ class SeparableRHS3D
                        const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_x,
                        const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_y,
                        const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > &deltas_z,
-                       int order);
+                       FLENS_DEFAULT_INDEXTYPE order);
 
         T
-        operator()(XType xtype_x, int j_x, long k_x,
-                   XType xtype_y, int j_y, long k_y,
-                   XType xtype_z, int j_z, long k_z) const;
+        operator()(XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x,
+                   XType xtype_y, FLENS_DEFAULT_INDEXTYPE j_y, FLENS_DEFAULT_INDEXTYPE k_y,
+                   XType xtype_z, FLENS_DEFAULT_INDEXTYPE j_z, FLENS_DEFAULT_INDEXTYPE k_z) const;
 
         T
         operator()(const Index3D &index) const;

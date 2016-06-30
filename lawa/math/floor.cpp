@@ -22,10 +22,10 @@
 
 namespace lawa {
 
-int
+FLENS_DEFAULT_INDEXTYPE
 ifloor(double x)
 {
-    return static_cast<int>(std::floor(x));
+    return static_cast<FLENS_DEFAULT_INDEXTYPE>(std::floor(x));
 
 /*  to be generalized i.e. more than 64 bit.
     register double twoTo52 = 4503599627370496.0;
@@ -34,7 +34,7 @@ ifloor(double x)
     if (x<result) {
         result -= 1.0;
     }
-    return static_cast<int>(result);
+    return static_cast<FLENS_DEFAULT_INDEXTYPE>(result);
  */
 }
 

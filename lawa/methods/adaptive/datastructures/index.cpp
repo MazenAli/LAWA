@@ -26,8 +26,8 @@ Index1D::Index1D(void)
 : j(0), k(0), xtype(XBSpline)
 {}
 
-//Index1D::Index1D(int _j, long _k, XType _xtype)
-Index1D::Index1D(int _j, int _k, XType _xtype)
+//Index1D::Index1D(FLENS_DEFAULT_INDEXTYPE _j, FLENS_DEFAULT_INDEXTYPE _k, XType _xtype)
+Index1D::Index1D(FLENS_DEFAULT_INDEXTYPE _j, FLENS_DEFAULT_INDEXTYPE _k, XType _xtype)
 : j(_j), k(_k), xtype(_xtype)
 {}
 
@@ -46,7 +46,7 @@ Index1DC::Index1DC(void):
     Index1D(),
     d(0){}
 
-Index1DC::Index1DC(int _j, int _k, XType _xtype, unsigned _d):
+Index1DC::Index1DC(FLENS_DEFAULT_INDEXTYPE _j, FLENS_DEFAULT_INDEXTYPE _k, XType _xtype, unsigned _d):
     Index1D(_j, _k, _xtype),
     d(_d){}
 
@@ -142,10 +142,10 @@ IndexD::IndexD(const size_type _dim):
     index_(_dim){}
 
 
-int
+FLENS_DEFAULT_INDEXTYPE
 IndexD::levelSum() const
 {
-    int ret = 0;
+    FLENS_DEFAULT_INDEXTYPE ret = 0;
     for (size_type i=0; i<dim(); ++i) {
         ret += getIndex()[i].j;
     }

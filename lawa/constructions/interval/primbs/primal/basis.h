@@ -41,13 +41,13 @@ class Basis<_T,Primal,Interval,Primbs>
         typedef BSpline<T,Primal,Interval,Primbs> BSplineType;
         typedef Wavelet<T,Primal,Interval,Primbs> WaveletType;
 
-        Basis(int _d, int _d_, int j=-1);
+        Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j=-1);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         template <BoundaryCondition BC>
             void
@@ -57,49 +57,49 @@ class Basis<_T,Primal,Interval,Primbs>
         generator(XType xtype) const;
 
         // cardinalities of whole, left, inner, right index sets (primal).
-        int
-        cardJ(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJ(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJL(int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJL(FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        int
-        cardJI(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardJR(int j=-1) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardJR(FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
         // ranges of whole, left, inner, right index sets (primal).
-        const flens::Range<int>
-        rangeJ(int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJ(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJL(int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJL(FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
-        const flens::Range<int>
-        rangeJI(int j) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJI(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const flens::Range<int>
-        rangeJR(int j=-1) const;
+        const flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeJR(FLENS_DEFAULT_INDEXTYPE j=-1) const;
 
         MRA<T,Primal,Interval,Primbs> mra;
         MRA<T,Dual,Interval,Primbs>  mra_;
 
         flens::RefinementMatrix<T,Interval,Primbs> M1;
 
-        const int d, d_, mu;   // mu = mu(d) = d&1.
-        const int min_j0;      // minimal allowed(!) level;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE d, d_, mu;   // mu = mu(d) = d&1.
+        const FLENS_DEFAULT_INDEXTYPE min_j0;      // minimal allowed(!) level;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
 
     private:
         void
         _calcM1();
             
-        flens::DenseVector<flens::Array<int> > _bc;    // the boundary conditions
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > _bc;    // the boundary conditions
                                            // bc(0) = 1 -> Dirichlet BC left.
                                            // bc(1) = 1 -> Dirichlet BC right.
 
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
 
     public:
         Wavelet<T,Primal,Interval,Primbs> psi;

@@ -28,11 +28,11 @@ public:
 
     HTCoefficients(HTCoefficients&&)        = default;
 
-    HTCoefficients(const int d, const Basis& _basis);
+    HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const Basis& _basis);
 
-    HTCoefficients(const int d, const double split, const Basis& _basis);
+    HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const double split, const Basis& _basis);
 
-    int
+    FLENS_DEFAULT_INDEXTYPE
     dim() const;
 
     void
@@ -56,7 +56,7 @@ public:
                       const bool isorth = false);
 
     void
-    truncate(const int rank, bool isorth = false);
+    truncate(const FLENS_DEFAULT_INDEXTYPE rank, bool isorth = false);
 
     void
     truncate(double eps);
@@ -65,13 +65,13 @@ public:
     eval(const IndexD& index) const;
 
     T
-    eval(const IndexD& index, const int vardim) const;
+    eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim) const;
 
     T
     operator()(const IndexD& index) const;
 
     T
-    operator()(const IndexD& index, const int vardim) const;
+    operator()(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim) const;
 
     HTCoefficients<T, Basis>&
     operator=(const HTCoefficients<T, Basis>& copy);

@@ -48,7 +48,7 @@ mv(cxxblas::Transpose trans, T alpha, const SparseGeMatrix<flens::extensions::CR
     if (trans==cxxblas::Trans) {
         assert(A.numRows()==x.length());
     }
-    int yLength = (trans==cxxblas::NoTrans) ? A.numRows()
+    FLENS_DEFAULT_INDEXTYPE yLength = (trans==cxxblas::NoTrans) ? A.numRows()
                                             : A.numCols();
 
     assert((beta==0) || (y.length()==yLength));
@@ -112,9 +112,9 @@ my_mm_t(const SparseGeMatrix<flens::extensions::CRS<T> > &A,
 {
     assert(B.numRows() == A.numCols());
     assert(B.numCols() == A.numCols());
-    int m = A.numRows();
+    FLENS_DEFAULT_INDEXTYPE m = A.numRows();
     const T *a;
-    const int *ia, *ja;
+    const FLENS_DEFAULT_INDEXTYPE *ia, *ja;
     a  = A.engine().values.engine().data();
     ia = A.engine().rows.engine().data();
     ja = A.engine().columns.engine().data();
@@ -122,13 +122,13 @@ my_mm_t(const SparseGeMatrix<flens::extensions::CRS<T> > &A,
     ia = ia-1;
     ja = ja-1;
 
-    for (int i_t=1; i_t<=m; ++i_t) {
-        for (int k_t=ia[i_t]; k_t<ia[i_t+1]; ++k_t) {
+    for (FLENS_DEFAULT_INDEXTYPE i_t=1; i_t<=m; ++i_t) {
+        for (FLENS_DEFAULT_INDEXTYPE k_t=ia[i_t]; k_t<ia[i_t+1]; ++k_t) {
             //i_t = row index of A = column index of A^t
             //k_t = column index of A = row index of A^t
             T a_k_t_i_t = a[k_t];
-            for (int i=1; i<=m; ++i) {
-                for (int k=ia[i]; k<ia[i+1]; ++k) {
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
+                for (FLENS_DEFAULT_INDEXTYPE k=ia[i]; k<ia[i+1]; ++k) {
                     //i = row index of A
                     //k = column index of A
                     if (i_t == i) B(ja[k_t],ja[k]) = a_k_t_i_t * a[k];
@@ -146,9 +146,9 @@ my_mm_At_A(const SparseGeMatrix<flens::extensions::CRS<T> > &A,
 {
     assert(B.numRows() == A.numRows());
     assert(B.numCols() == A.numRows());
-    int m = A.numRows();
+    FLENS_DEFAULT_INDEXTYPE m = A.numRows();
     const T *a;
-    const int *ia, *ja;
+    const FLENS_DEFAULT_INDEXTYPE *ia, *ja;
     a  = A.engine().values.engine().data();
     ia = A.engine().rows.engine().data();
     ja = A.engine().columns.engine().data();
@@ -156,20 +156,20 @@ my_mm_At_A(const SparseGeMatrix<flens::extensions::CRS<T> > &A,
     ia = ia-1;
     ja = ja-1;
 
-    for (int i_t=1; i_t<=m; ++i_t) {
-        //int col_At_left =  ja[ia[i_t]];
-        //int col_At_right = ja[ia[i_t+1]-1];
-        for (int i=1; i<=i_t; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i_t=1; i_t<=m; ++i_t) {
+        //FLENS_DEFAULT_INDEXTYPE col_At_left =  ja[ia[i_t]];
+        //FLENS_DEFAULT_INDEXTYPE col_At_right = ja[ia[i_t+1]-1];
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=i_t; ++i) {
             T a_i_t_i = 0.;
-            //int row_A_left  =  ja[ia[i]];
-            //int row_A_right  = ja[ia[i+1]-1];
-            //int left  = std::max(col_At_left,row_A_left);
-            //int right = std::min(col_At_right,row_A_right);
-            for (int k_t=ia[i_t]; k_t<=ia[i_t+1]-1; ++k_t) {
+            //FLENS_DEFAULT_INDEXTYPE row_A_left  =  ja[ia[i]];
+            //FLENS_DEFAULT_INDEXTYPE row_A_right  = ja[ia[i+1]-1];
+            //FLENS_DEFAULT_INDEXTYPE left  = std::max(col_At_left,row_A_left);
+            //FLENS_DEFAULT_INDEXTYPE right = std::min(col_At_right,row_A_right);
+            for (FLENS_DEFAULT_INDEXTYPE k_t=ia[i_t]; k_t<=ia[i_t+1]-1; ++k_t) {
                 //if (ja[k_t]<left)  continue;
                 //if (ja[k_t]>right) break;
                 T a_k_t = a[k_t];
-                for (int k=ia[i]; k<=ia[i+1]-1; ++k) {
+                for (FLENS_DEFAULT_INDEXTYPE k=ia[i]; k<=ia[i+1]-1; ++k) {
                     //if (ja[k]<left)  continue;
                     //if (ja[k]>right) break;
                     if (ja[k_t] == ja[k]) a_i_t_i += a_k_t * a[k];
@@ -194,17 +194,18 @@ mm(cxxblas::Transpose transA,
 {
     assert(Storage==CRS_General);
     assert(transB==cxxblas::NoTrans); // Transposition not provided for B.
-    int m = (transA==cxxblas::NoTrans) ? A.numRows() : A.numCols();
-    int n = B.numCols();
+    FLENS_DEFAULT_INDEXTYPE m = (transA==cxxblas::NoTrans) ? A.numRows() : A.numCols();
+    FLENS_DEFAULT_INDEXTYPE n = B.numCols();
 
     assert((beta==0) || (C.numRows()==m));
     assert((beta==0) || (C.numCols()==n));
 
     C.engine().resize(m,n);
 
-    int r = A.numRows();
-    DenseVector<Array<int> > pointerE(r,1);
-    pointerE(Range<int>(1,r-1)) = A.engine().rows(Range<int>(2,r));
+    FLENS_DEFAULT_INDEXTYPE r = A.numRows();
+    DenseVector<Array<FLENS_DEFAULT_INDEXTYPE> > pointerE(r,1);
+    pointerE(Range<DenseVector<Array<FLENS_DEFAULT_INDEXTYPE>>::IndexType>(1,r-1)) =
+        A.engine().rows(Range<FLENS_DEFAULT_INDEXTYPE>(2,r));
     pointerE(r) = A.engine().values.length()+1;
 
     char matdescra[] = {'G', 'U', 'N', 'F', ' ', ' '};

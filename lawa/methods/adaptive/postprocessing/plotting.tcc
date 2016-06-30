@@ -32,13 +32,13 @@ getSingularPoints(const Basis &basis, const Coefficients<Lexicographical,T,Index
         
         flens::DenseVector<flens::Array<T> > bf_singpts = basis.generator((*it).first.xtype).singularSupport((*it).first.j, (*it).first.k);
 
-        for (int i = bf_singpts.firstIndex(); i <= bf_singpts.lastIndex(); ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i = bf_singpts.firstIndex(); i <= bf_singpts.lastIndex(); ++i) {
             temp.push_back(bf_singpts(i));
         }
     }
     temp.sort(); temp.unique();
-    sing_pts.engine().resize((int)temp.size());
-    int i = 1;
+    sing_pts.engine().resize((FLENS_DEFAULT_INDEXTYPE)temp.size());
+    FLENS_DEFAULT_INDEXTYPE i = 1;
     for (typename std::list<T>::const_iterator it = temp.begin(); it != temp.end(); ++it ) {
         sing_pts(i) = *it; ++i;
     }
@@ -58,13 +58,13 @@ plot(const Basis &basis, const Coefficients<Lexicographical,T,Index1D> coeff,
     flens::DenseVector<flens::Array<T> > sing_pts;
     getSingularPoints(basis, coeff, sing_pts);
 
-    for (int i=sing_pts.firstIndex(); i<=sing_pts.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=sing_pts.firstIndex(); i<=sing_pts.lastIndex(); ++i) {
         T x = sing_pts(i);
         T appr = 0.0;
         T exact= u(x);
         for (coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int j = (*it).first.j;
-            long k = (*it).first.k;
+            FLENS_DEFAULT_INDEXTYPE j = (*it).first.j;
+            FLENS_DEFAULT_INDEXTYPE k = (*it).first.k;
             T coeff = (*it).second, prec = P((*it).first);
             
             appr += prec * coeff * basis.generator((*it).first.xtype)(x,j,k,0);
@@ -88,8 +88,8 @@ plot(const Basis &basis, const Coefficients<Lexicographical,T,Index1D> coeff,
         T exact= u(x);
         T d_exact= du(x);
         for (coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int j = (*it).first.j;
-            long k = (*it).first.k;
+            FLENS_DEFAULT_INDEXTYPE j = (*it).first.j;
+            FLENS_DEFAULT_INDEXTYPE k = (*it).first.k;
             T coeff = (*it).second, prec = P((*it).first);
             
             appr   += prec * coeff * basis.generator((*it).first.xtype)(x,j,k,0);
@@ -113,8 +113,8 @@ w_plot(const Basis &basis, const Coefficients<Lexicographical,T,Index1D> coeff,
         T appr=0.;
         T exact= u(x);
         for (coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int j = (*it).first.j;
-            long k = (*it).first.k;
+            FLENS_DEFAULT_INDEXTYPE j = (*it).first.j;
+            FLENS_DEFAULT_INDEXTYPE k = (*it).first.k;
             T coeff = (*it).second, prec = P((*it).first);
             appr   += prec * coeff * basis.generator((*it).first.xtype)(x,j,k,0);
         }
@@ -144,8 +144,8 @@ plot2D(const Basis2D &basis, const Coefficients<Lexicographical,T,Index2D> coeff
             for (coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
                 XType xtype_x = (*it).first.index1.xtype;
                 XType xtype_y = (*it).first.index2.xtype;
-                int j_x = (*it).first.index1.j, j_y = (*it).first.index2.j;
-                long k_x = (*it).first.index1.k, k_y = (*it).first.index2.k;
+                FLENS_DEFAULT_INDEXTYPE j_x = (*it).first.index1.j, j_y = (*it).first.index2.j;
+                FLENS_DEFAULT_INDEXTYPE k_x = (*it).first.index1.k, k_y = (*it).first.index2.k;
 
                 T coeff = (*it).second, prec = P((*it).first);
                 
@@ -181,8 +181,8 @@ plot2D(const Basis2D &basis, const Coefficients<Lexicographical,T,Index2D> coeff
             for (coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
                 XType xtype_x = (*it).first.index1.xtype;
                 XType xtype_y = (*it).first.index2.xtype;
-                int j_x = (*it).first.index1.j, j_y = (*it).first.index2.j;
-                long k_x = (*it).first.index1.k, k_y = (*it).first.index2.k;
+                FLENS_DEFAULT_INDEXTYPE j_x = (*it).first.index1.j, j_y = (*it).first.index2.j;
+                FLENS_DEFAULT_INDEXTYPE k_x = (*it).first.index1.k, k_y = (*it).first.index2.k;
 
                 T coeff = (*it).second, prec = P((*it).first);
                 
@@ -208,17 +208,17 @@ plotCoeff(const Coefficients<Lexicographical,T,Index1D > &coeff, const Basis &ba
     gpsFilename << filename << ".gps";
     std::ofstream gps(gpsFilename.str().c_str());
 
-    int shift = locally_single_scale ? 0 : 1;
+    FLENS_DEFAULT_INDEXTYPE shift = locally_single_scale ? 0 : 1;
 
-    int j0  =  100000;
-    int J   = -100000;
+    FLENS_DEFAULT_INDEXTYPE j0  =  100000;
+    FLENS_DEFAULT_INDEXTYPE J   = -100000;
     T left  =  100000.;
     T right = -100000.;
     T maxCoeff = 0.;
 
     for (const_it it = coeff.begin(); it != coeff.end(); ++it) {
-        int  j = (*it).first.j;
-        long k = (*it).first.k;
+        FLENS_DEFAULT_INDEXTYPE  j = (*it).first.j;
+        FLENS_DEFAULT_INDEXTYPE k = (*it).first.k;
 
         j0 = std::min(j0, j);
         J  = std::max(J, j);
@@ -244,13 +244,13 @@ plotCoeff(const Coefficients<Lexicographical,T,Index1D > &coeff, const Basis &ba
     gps << "set terminal postscript eps enh color; set output '" << filename << ".eps'" << std::endl;
     gps << "set palette color; set colorbox vertical" << std::endl;
 
-    int i=1;
+    FLENS_DEFAULT_INDEXTYPE i=1;
     for (const_it it = coeff.begin(); it != coeff.end(); ++it) {
         T lineWidth = 0.1;
         T ctr, fromX, toX, fromY, toY;
         T color = 0.0;
-        int j       = (*it).first.j;
-        long k  = (*it).first.k;
+        FLENS_DEFAULT_INDEXTYPE j       = (*it).first.j;
+        FLENS_DEFAULT_INDEXTYPE k  = (*it).first.k;
         XType xtype = (*it).first.xtype;
 
         if (xtype==XBSpline) {
@@ -322,7 +322,7 @@ plotCoeff(const Coefficients<Lexicographical,T,Index1D > &coeff, const Basis &ba
     //gps << "set xtics 1" << endl;
     //gps << "set ytics ('" << j0 << "' " << j0-1;
     //gps << ", '" << j0 << "' " << j0;
-    //for (int j = j0+1; j <= J; ++j) {
+    //for (FLENS_DEFAULT_INDEXTYPE j = j0+1; j <= J; ++j) {
     //    gps << ", '" << j << "' " << j;
     //}
     //gps << ")" << std::endl;
@@ -351,9 +351,9 @@ plotCoeff(const Coefficients<AbsoluteValue,T,Index1D > &coeff, const Basis &basi
 
     T maxCoeffSca = -1.0;
     T maxCoeffWav = -1.0;
-    int j = (*coeff.begin()).second.j, k = (*coeff.begin()).second.k;
-    int j0 = j;
-    int J  = j;
+    FLENS_DEFAULT_INDEXTYPE j = (*coeff.begin()).second.j, k = (*coeff.begin()).second.k;
+    FLENS_DEFAULT_INDEXTYPE j0 = j;
+    FLENS_DEFAULT_INDEXTYPE J  = j;
     T a_sca = 5000.0, a_wav = 5000.0;
     T b_sca = -5000.0, b_wav = -5000.0;
     for (const_it it = coeff.begin(); it != coeff.end(); ++it) {
@@ -381,8 +381,8 @@ plotCoeff(const Coefficients<AbsoluteValue,T,Index1D > &coeff, const Basis &basi
         T color = 0.0;
 
         if ((*it).second.xtype==XBSpline) {
-            long k1 = ceil(pow2i<T>((*it).second.j)*a_sca - l1_sca), k2 = floor(pow2i<T>((*it).second.j)*b_sca - l2_sca);
-            int N = k2 - k1 + 1;
+            FLENS_DEFAULT_INDEXTYPE k1 = ceil(pow2i<T>((*it).second.j)*a_sca - l1_sca), k2 = floor(pow2i<T>((*it).second.j)*b_sca - l2_sca);
+            FLENS_DEFAULT_INDEXTYPE N = k2 - k1 + 1;
             fromX = a_sca + ((*it).second.k-k1)*(b_sca-a_sca)/(T)N;
             toX   = a_sca + ((*it).second.k-k1+1)*(b_sca-a_sca)/(T)N;
 
@@ -392,8 +392,8 @@ plotCoeff(const Coefficients<AbsoluteValue,T,Index1D > &coeff, const Basis &basi
         }
 
         else {
-            long k1 = ceil(pow2i<T>((*it).second.j)*a_wav - l1_wav), k2 = floor(pow2i<T>((*it).second.j)*b_wav - l2_wav);
-            long N = k2 - k1 + 1;
+            FLENS_DEFAULT_INDEXTYPE k1 = ceil(pow2i<T>((*it).second.j)*a_wav - l1_wav), k2 = floor(pow2i<T>((*it).second.j)*b_wav - l2_wav);
+            FLENS_DEFAULT_INDEXTYPE N = k2 - k1 + 1;
             fromX = a_wav + ((*it).second.k-k1)*(b_wav-a_wav)/(T)N;
             toX   = fromX + std::max((b_wav-a_wav)/N,0.1);  //was 0.05
 
@@ -422,7 +422,7 @@ plotCoeff(const Coefficients<AbsoluteValue,T,Index1D > &coeff, const Basis &basi
     //gps << "set xtics 1" << endl;
     gps << "set ytics ('" << j0 << "' " << j0-1;
     gps << ", '" << j0 << "' " << j0;
-    for (int j = j0+1; j <= J; ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j = j0+1; j <= J; ++j) {
         gps << ", '" << j << "' " << j;
     }
     gps << ")" << std::endl;
@@ -451,8 +451,8 @@ plotCoeff2D(const Coefficients<AbsoluteValue,T,Index> &coeff, const Basis_x &bas
     T max_value = fabs( (*first_element).first );
     T min_x=10000., max_x=-10000., min_y=10000., max_y=-10000.;
     for (const_coeff_abs_it it = coeff.begin(); it != coeff.end(); ++it) {
-        int j1=(*it).second.index1.j, j2=(*it).second.index2.j;
-        long k1=(*it).second.index1.k, k2=(*it).second.index2.k;
+        FLENS_DEFAULT_INDEXTYPE j1=(*it).second.index1.j, j2=(*it).second.index2.j;
+        FLENS_DEFAULT_INDEXTYPE k1=(*it).second.index1.k, k2=(*it).second.index2.k;
         XType type1=(*it).second.index1.xtype, type2=(*it).second.index2.xtype;
         
         //center of the support
@@ -466,7 +466,7 @@ plotCoeff2D(const Coefficients<AbsoluteValue,T,Index> &coeff, const Basis_x &bas
     T ratio = (max_y-min_y)/(max_x-min_x);
 
     for (const_coeff_abs_it it = coeff.begin(); it != coeff.end(); ++it) {
-        int j1=(*it).second.index1.j, k1=(*it).second.index1.k, j2=(*it).second.index2.j, k2=(*it).second.index2.k;
+        FLENS_DEFAULT_INDEXTYPE j1=(*it).second.index1.j, k1=(*it).second.index1.k, j2=(*it).second.index2.j, k2=(*it).second.index2.k;
         XType type1=(*it).second.index1.xtype, type2=(*it).second.index2.xtype;
      
         //center of the support
@@ -516,8 +516,8 @@ plotScatterCoeff2D(const Coefficients<AbsoluteValue,T,Index> &coeff, const Basis
     std::ofstream data(dataFilename.str().c_str());
 
     for (const_coeff_abs_it it = coeff.begin(); it != coeff.end(); ++it) {
-        int j1=(*it).second.index1.j, j2=(*it).second.index2.j;
-        long k1=(*it).second.index1.k, k2=(*it).second.index2.k;
+        FLENS_DEFAULT_INDEXTYPE j1=(*it).second.index1.j, j2=(*it).second.index2.j;
+        FLENS_DEFAULT_INDEXTYPE k1=(*it).second.index1.k, k2=(*it).second.index2.k;
         XType type1=(*it).second.index1.xtype, type2=(*it).second.index2.xtype;
 
         //center of the support
@@ -545,8 +545,8 @@ plotScatterCoeff2D(const Coefficients<Lexicographical,T,Index> &coeff, const Bas
     std::ofstream data(dataFilename.str().c_str());
 
     for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-        int j1=(*it).first.index1.j, j2=(*it).first.index2.j;
-        long k1=(*it).first.index1.k, k2=(*it).first.index2.k;
+        FLENS_DEFAULT_INDEXTYPE j1=(*it).first.index1.j, j2=(*it).first.index2.j;
+        FLENS_DEFAULT_INDEXTYPE k1=(*it).first.index1.k, k2=(*it).first.index2.k;
         XType type1=(*it).first.index1.xtype, type2=(*it).first.index2.xtype;
 
         //center of the support
@@ -573,11 +573,11 @@ plotScatterCoeff2D_interval(const Coefficients<Lexicographical,T,Index> &coeff, 
     dataFilename << filename << ".dat";
     std::ofstream data(dataFilename.str().c_str());
 
-    int offset_x = 1-basis_x.mra.rangeI(basis_x.j0).firstIndex();
-    int offset_y = 1-basis_y.mra.rangeI(basis_y.j0).firstIndex();
+    FLENS_DEFAULT_INDEXTYPE offset_x = 1-basis_x.mra.rangeI(basis_x.j0).firstIndex();
+    FLENS_DEFAULT_INDEXTYPE offset_y = 1-basis_y.mra.rangeI(basis_y.j0).firstIndex();
     for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-        int j1=(*it).first.index1.j, j2=(*it).first.index2.j;
-        long k1=(*it).first.index1.k, k2=(*it).first.index2.k;
+        FLENS_DEFAULT_INDEXTYPE j1=(*it).first.index1.j, j2=(*it).first.index2.j;
+        FLENS_DEFAULT_INDEXTYPE k1=(*it).first.index1.k, k2=(*it).first.index2.k;
         XType type1=(*it).first.index1.xtype, type2=(*it).first.index2.xtype;
 
         T x=0., y=0.;
@@ -611,8 +611,8 @@ plotScatterCoeff(const Coefficients<Lexicographical,T,Index2D> &coeff, const Bas
 
     if (useSupportCenter) {
         for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j;
-            long k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k;
+            FLENS_DEFAULT_INDEXTYPE  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j;
+            FLENS_DEFAULT_INDEXTYPE k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k;
             XType xtype_x=(*it).first.index1.xtype, xtype_y=(*it).first.index2.xtype;
 
             Support<T> supp_x = basis.first.generator(xtype_x).support(j_x,k_x);
@@ -633,11 +633,11 @@ plotScatterCoeff(const Coefficients<Lexicographical,T,Index2D> &coeff, const Bas
         }
     }
     else {
-        int offset_x = 1-basis.first.mra.rangeI(basis.first.j0).firstIndex();
-        int offset_y = 1-basis.second.mra.rangeI(basis.second.j0).firstIndex();
+        FLENS_DEFAULT_INDEXTYPE offset_x = 1-basis.first.mra.rangeI(basis.first.j0).firstIndex();
+        FLENS_DEFAULT_INDEXTYPE offset_y = 1-basis.second.mra.rangeI(basis.second.j0).firstIndex();
         for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j;
-            long k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k;
+            FLENS_DEFAULT_INDEXTYPE  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j;
+            FLENS_DEFAULT_INDEXTYPE k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k;
             XType xtype_x=(*it).first.index1.xtype, xtype_y=(*it).first.index2.xtype;
 
             T x=0., y=0.;
@@ -670,8 +670,8 @@ plotScatterCoeff(const Coefficients<Lexicographical,T,Index3D> &coeff, const Bas
 
     if (useSupportCenter) {
         for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j,  j_z=(*it).first.index3.j;
-            long k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k, k_z=(*it).first.index3.k;
+            FLENS_DEFAULT_INDEXTYPE  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j,  j_z=(*it).first.index3.j;
+            FLENS_DEFAULT_INDEXTYPE k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k, k_z=(*it).first.index3.k;
             XType xtype_x=(*it).first.index1.xtype, xtype_y=(*it).first.index2.xtype,
                   xtype_z=(*it).first.index3.xtype;
 
@@ -690,12 +690,12 @@ plotScatterCoeff(const Coefficients<Lexicographical,T,Index3D> &coeff, const Bas
         }
     }
     else {
-        int offset_x = 1-basis.first.mra.rangeI(basis.first.j0).firstIndex();
-        int offset_y = 1-basis.second.mra.rangeI(basis.second.j0).firstIndex();
-        int offset_z = 1-basis.third.mra.rangeI(basis.third.j0).firstIndex();
+        FLENS_DEFAULT_INDEXTYPE offset_x = 1-basis.first.mra.rangeI(basis.first.j0).firstIndex();
+        FLENS_DEFAULT_INDEXTYPE offset_y = 1-basis.second.mra.rangeI(basis.second.j0).firstIndex();
+        FLENS_DEFAULT_INDEXTYPE offset_z = 1-basis.third.mra.rangeI(basis.third.j0).firstIndex();
         for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
-            int  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j,  j_z=(*it).first.index3.j;
-            long k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k, k_z=(*it).first.index3.k;
+            FLENS_DEFAULT_INDEXTYPE  j_x=(*it).first.index1.j, j_y=(*it).first.index2.j,  j_z=(*it).first.index3.j;
+            FLENS_DEFAULT_INDEXTYPE k_x=(*it).first.index1.k,  k_y=(*it).first.index2.k, k_z=(*it).first.index3.k;
             XType xtype_x=(*it).first.index1.xtype, xtype_y=(*it).first.index2.xtype,
                   xtype_z=(*it).first.index3.xtype;
 

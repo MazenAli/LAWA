@@ -39,55 +39,55 @@ class MRA<_T,Dual,Interval,Dijkema>
         typedef BasisFunction<T,Dual,Interval,Dijkema> BasisFunctionType;
         typedef BSpline<T,Dual,Interval,Dijkema> BSplineType;
 
-        MRA(int d, int d_, int j=-1);
+        MRA(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_, FLENS_DEFAULT_INDEXTYPE j=-1);
 
         ~MRA();
 
         // cardinalities of whole, left, inner, right index sets.
-        int
-        cardI_(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI_(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardI_L(int j=0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI_L(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
-        int
-        cardI_I(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI_I(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardI_R(int j=0) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI_R(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
         // ranges of whole left, inner, right index sets.
-        flens::Range<int>
-        rangeI_(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI_(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        flens::Range<int>
-        rangeI_L(int j=0) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI_L(FLENS_DEFAULT_INDEXTYPE j=0) const;
 
-        flens::Range<int>
-        rangeI_I(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI_I(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        flens::Range<int>
-        rangeI_R(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI_R(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         template <BoundaryCondition BC>
             void
             enforceBoundaryCondition();
 
-        const int d, d_, mu;   // mu = mu(d) = d&1.
+        const FLENS_DEFAULT_INDEXTYPE d, d_, mu;   // mu = mu(d) = d&1.
 
     private:
-        const int l1, l2;        // support of phi  = [ l1, l2 ] (real line).
-        const int l1_, l2_;      // support of phi  = [ l1, l2 ] (real line).
+        const FLENS_DEFAULT_INDEXTYPE l1, l2;        // support of phi  = [ l1, l2 ] (real line).
+        const FLENS_DEFAULT_INDEXTYPE l1_, l2_;      // support of phi  = [ l1, l2 ] (real line).
 
     public:
-        const int min_j0;      // minimal allowed(!) level;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE min_j0;      // minimal allowed(!) level;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
 
         BSpline<T,Dual,Interval,Dijkema> phi_;
         flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > R_Left, R_Right;
@@ -99,11 +99,11 @@ class MRA<_T,Dual,Interval,Dijkema>
         _calcM0_();
 
     public: // FIXME: "public: " TO BE ELIMINATED !!!!!!!!!!!!!!
-        flens::DenseVector<flens::Array<int> > _bc;    // the boundary conditions
+        flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > _bc;    // the boundary conditions
                                            // bc(0) = 1 -> Dirichlet BC left.
                                            // bc(1) = 1 -> Dirichlet BC right.
 
-        mutable int _j;                // the current level.
+        mutable FLENS_DEFAULT_INDEXTYPE _j;                // the current level.
 };
 
 } // namespace lawa

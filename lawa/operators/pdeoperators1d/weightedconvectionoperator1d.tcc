@@ -9,8 +9,8 @@ WeightedConvectionOperator1D<T,Basis,Quad>::WeightedConvectionOperator1D(const B
 
 template <typename T, typename Basis, QuadratureType Quad>
 T
-WeightedConvectionOperator1D<T,Basis,Quad>::operator()(XType xtype1, int j1, int k1,
-                              		                XType xtype2, int j2, int k2) const
+WeightedConvectionOperator1D<T,Basis,Quad>::operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                              		                XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {   
     // v * u_x
     return integral(j1, k1, xtype1, 0, j2, k2, xtype2, 1);

@@ -18,7 +18,7 @@ C(const IndexSet<Index1D> &Lambda, T c, const Basis<T,Side,Domain,Cons> &basis) 
 
 template <typename T, FunctionSide Side, DomainType Domain, Construction Cons>
 IndexSet<Index1D>
-C(const IndexSet<Index1D> &Lambda, T c, const Basis<T,Side,Domain,Cons> &basis, const int Jmax) {
+C(const IndexSet<Index1D> &Lambda, T c, const Basis<T,Side,Domain,Cons> &basis, const FLENS_DEFAULT_INDEXTYPE Jmax) {
     IndexSet<Index1D> ret, tmp;
     typedef typename IndexSet<Index1D>::const_iterator const_it;
     for (const_it lambda=Lambda.begin(); lambda!=Lambda.end(); ++lambda) {
@@ -40,7 +40,7 @@ C(const Index1D &lambda, T c, const Basis<T,Side,Domain,Cons> &basis) {
 
 template <typename T, FunctionSide Side, DomainType Domain, Construction Cons>
 IndexSet<Index1D>
-C(const Index1D &lambda, T c, const Basis<T,Side,Domain,Cons> &basis, const int Jmax) {
+C(const Index1D &lambda, T c, const Basis<T,Side,Domain,Cons> &basis, const FLENS_DEFAULT_INDEXTYPE Jmax) {
     IndexSet<Index1D> ret;
     index_cone(lambda,c,basis,ret, Jmax);
     return ret;
@@ -56,9 +56,9 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,Cons> &basi
     using std::min;
     using std::max;
 
-    int j=lambda.j, jP1, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, jP1, k=lambda.k;
     XType xtype = lambda.xtype;
-    int kMin_mra = basis.mra.rangeI(j).firstIndex(), kMax_mra = basis.mra.rangeI(j).lastIndex();
+    FLENS_DEFAULT_INDEXTYPE kMin_mra = basis.mra.rangeI(j).firstIndex(), kMax_mra = basis.mra.rangeI(j).lastIndex();
     if (lambda.xtype==XBSpline) {
         jP1=j;
         ret.insert(Index1D(j,std::max(k-2,kMin_mra),xtype));
@@ -73,21 +73,21 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,Cons> &basi
     T zLambda=0.5*(supp.l2+supp.l1);
     Support<T> contractedSupp(c*supp.l1 + (1-c)*zLambda, c*supp.l2 + (1-c)*zLambda);
 
-    int kMin = basis.rangeJ(jP1).firstIndex(), kMax = basis.rangeJ(jP1).lastIndex();
-    int kStart = std::min(std::max(iceil<int>(contractedSupp.l1 * pow2i<T>(jP1)), kMin), kMax);
+    FLENS_DEFAULT_INDEXTYPE kMin = basis.rangeJ(jP1).firstIndex(), kMax = basis.rangeJ(jP1).lastIndex();
+    FLENS_DEFAULT_INDEXTYPE kStart = std::min(std::max(iceil<FLENS_DEFAULT_INDEXTYPE>(contractedSupp.l1 * pow2i<T>(jP1)), kMin), kMax);
     assert((overlap(contractedSupp, basis.psi.support(jP1,kStart))>0));
     while ((kStart-1 >= kMin) &&
            (overlap(contractedSupp, basis.psi.support(jP1,std::max(kStart-1, kMin)))>0)) {
         --kStart;
     }
-    int kEnd = std::max(std::min(ifloor(contractedSupp.l2 * pow2i<T>(jP1)), kMax), kMin);
+    FLENS_DEFAULT_INDEXTYPE kEnd = std::max(std::min(ifloor(contractedSupp.l2 * pow2i<T>(jP1)), kMax), kMin);
     assert((overlap(contractedSupp, basis.psi.support(jP1,kEnd))>0));
     while ((kEnd+1 <= kMax) &&
           (overlap(contractedSupp, basis.psi.support(jP1,std::min(kEnd+1, kMax)))>0)) {
         ++kEnd;
     }
 
-    for (int k=kStart; k<=kEnd; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=kStart; k<=kEnd; ++k) {
         ret.insert(Index1D(jP1,k,XWavelet));
     }
 }
@@ -95,14 +95,14 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,Cons> &basi
 template <typename T, Construction Cons>
 void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,Cons> &basis,
-           IndexSet<Index1D> &ret, const int Jmax)
+           IndexSet<Index1D> &ret, const FLENS_DEFAULT_INDEXTYPE Jmax)
 {
     using std::min;
     using std::max;
     
-    int j=lambda.j, jP1, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, jP1, k=lambda.k;
     XType xtype = lambda.xtype;
-    int kMin_mra = basis.mra.rangeI(j).firstIndex(), kMax_mra = basis.mra.rangeI(j).lastIndex();
+    FLENS_DEFAULT_INDEXTYPE kMin_mra = basis.mra.rangeI(j).firstIndex(), kMax_mra = basis.mra.rangeI(j).lastIndex();
     if (lambda.xtype==XBSpline) {
         jP1=j;
         ret.insert(Index1D(j,std::max(k-2,kMin_mra),xtype));
@@ -120,21 +120,21 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,Cons> &basi
     T zLambda=0.5*(supp.l2+supp.l1);
     Support<T> contractedSupp(c*supp.l1 + (1-c)*zLambda, c*supp.l2 + (1-c)*zLambda);
     
-    int kMin = basis.rangeJ(jP1).firstIndex(), kMax = basis.rangeJ(jP1).lastIndex();
-    int kStart = std::min(std::max(iceil<int>(contractedSupp.l1 * pow2i<T>(jP1)), kMin), kMax);
+    FLENS_DEFAULT_INDEXTYPE kMin = basis.rangeJ(jP1).firstIndex(), kMax = basis.rangeJ(jP1).lastIndex();
+    FLENS_DEFAULT_INDEXTYPE kStart = std::min(std::max(iceil<FLENS_DEFAULT_INDEXTYPE>(contractedSupp.l1 * pow2i<T>(jP1)), kMin), kMax);
     assert((overlap(contractedSupp, basis.psi.support(jP1,kStart))>0));
     while ((kStart-1 >= kMin) &&
            (overlap(contractedSupp, basis.psi.support(jP1,std::max(kStart-1, kMin)))>0)) {
         --kStart;
     }
-    int kEnd = std::max(std::min(ifloor(contractedSupp.l2 * pow2i<T>(jP1)), kMax), kMin);
+    FLENS_DEFAULT_INDEXTYPE kEnd = std::max(std::min(ifloor(contractedSupp.l2 * pow2i<T>(jP1)), kMax), kMin);
     assert((overlap(contractedSupp, basis.psi.support(jP1,kEnd))>0));
     while ((kEnd+1 <= kMax) &&
            (overlap(contractedSupp, basis.psi.support(jP1,std::min(kEnd+1, kMax)))>0)) {
         ++kEnd;
     }
     
-    for (int k=kStart; k<=kEnd; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=kStart; k<=kEnd; ++k) {
         ret.insert(Index1D(jP1,k,XWavelet));
     }
 }
@@ -145,7 +145,7 @@ void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis,
            IndexSet<Index1D> &ret)
 {
-    int j=lambda.j, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, k=lambda.k;
     XType xtype=lambda.xtype;
     //ret.insert(Index1D(j,k,xtype));
     if (xtype==XBSpline) {
@@ -161,12 +161,12 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp = c*supp + (1-c)*center;
 
-        int kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
-        int kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
+        FLENS_DEFAULT_INDEXTYPE kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
 
-        for (int k1=kMin; k1<=kMax; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.psiR.support(j,k1))>0){
-                int k = k1;
+                FLENS_DEFAULT_INDEXTYPE k = k1;
                 if(k < basis.rangeJ(j).firstIndex()){
                     k = basis.rangeJ(j).lastIndex() + ((1 - (basis.rangeJ(j).firstIndex() - k))%basis.cardJ(j));
                 }
@@ -182,12 +182,12 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp = c*supp + (1-c)*center;
         /*    no wavelet indices on the same level?!
-        long int kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
-        long int kMax = ceil(pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
+        FLENS_DEFAULT_INDEXTYPE kMax = ceil(pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
 
-        for (long int k1=kMin; k1<=kMax; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.psiR.support(j,k1))>0){
-                int k = k1;
+                FLENS_DEFAULT_INDEXTYPE k = k1;
                 if(k < basis.rangeJ(j).firstIndex()){
                     k = basis.rangeJ(j).lastIndex() + ((1 - (basis.rangeJ(j).firstIndex() - k))%basis.cardJ(j));
                 }
@@ -199,13 +199,13 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
         }
         */
 
-        long int kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
-        long int kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
+        FLENS_DEFAULT_INDEXTYPE kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
 
-        for (long int k1=kMin; k1<=kMax; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.psiR.support(j+1,k1))>0)
             {
-                int k = (int)k1;
+                FLENS_DEFAULT_INDEXTYPE k = (FLENS_DEFAULT_INDEXTYPE)k1;
                 if(k < basis.rangeJ(j+1).firstIndex()){
                     k = basis.rangeJ(j+1).lastIndex() + ((1 - (basis.rangeJ(j+1).firstIndex() - k))%basis.cardJ(j+1));
                 }
@@ -222,9 +222,9 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
 template <typename T>
 void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis,
-           IndexSet<Index1D> &ret, const int Jmax)
+           IndexSet<Index1D> &ret, const FLENS_DEFAULT_INDEXTYPE Jmax)
 {
-    int j=lambda.j, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, k=lambda.k;
     XType xtype=lambda.xtype;
     //ret.insert(Index1D(j,k,xtype));
     if (xtype==XBSpline) {
@@ -240,12 +240,12 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp = c*supp + (1-c)*center;
         
-        int kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
-        int kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
+        FLENS_DEFAULT_INDEXTYPE kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
         
-        for (int k1=kMin; k1<=kMax; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.psiR.support(j,k1))>0){
-                int k = k1;
+                FLENS_DEFAULT_INDEXTYPE k = k1;
                 if(k < basis.rangeJ(j).firstIndex()){
                     k = basis.rangeJ(j).lastIndex() + ((1 - (basis.rangeJ(j).firstIndex() - k))%basis.cardJ(j));
                 }
@@ -265,12 +265,12 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp = c*supp + (1-c)*center;
         /*    no wavelet indices on the same level?!
-         long int kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
-         long int kMax = ceil(pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
+         FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
+         FLENS_DEFAULT_INDEXTYPE kMax = ceil(pow2i<T>(j)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
          
-         for (long int k1=kMin; k1<=kMax; ++k1) {
+         for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
          if (overlap(contractedSupp, basis.psi.psiR.support(j,k1))>0){
-         int k = k1;
+         FLENS_DEFAULT_INDEXTYPE k = k1;
          if(k < basis.rangeJ(j).firstIndex()){
          k = basis.rangeJ(j).lastIndex() + ((1 - (basis.rangeJ(j).firstIndex() - k))%basis.cardJ(j));
          }
@@ -282,13 +282,13 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Periodic,CDF> &basis
          }
          */
         
-        long int kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
-        long int kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - basis.psi.psiR.support(0,0).l2);
+        FLENS_DEFAULT_INDEXTYPE kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - basis.psi.psiR.support(0,0).l1);
         
-        for (long int k1=kMin; k1<=kMax; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.psiR.support(j+1,k1))>0)
             {
-                int k = (int)k1;
+                FLENS_DEFAULT_INDEXTYPE k = (FLENS_DEFAULT_INDEXTYPE)k1;
                 if(k < basis.rangeJ(j+1).firstIndex()){
                     k = basis.rangeJ(j+1).lastIndex() + ((1 - (basis.rangeJ(j+1).firstIndex() - k))%basis.cardJ(j+1));
                 }
@@ -307,7 +307,7 @@ template <typename T>
 void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,CDF> &basis, IndexSet<Index1D> &ret)
 {
-    int j=lambda.j, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, k=lambda.k;
     XType xtype=lambda.xtype;
     if (xtype==XBSpline) {
         ret.insert(Index1D(j,k-1,xtype));
@@ -320,9 +320,9 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,CDF> &basis, Index
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
 
-        int kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.support(0,0).l2);
-        int kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - basis.psi.support(0,0).l1);
-        for (int k1=kMin; k1<=kMax; ++k1) {
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.support(0,0).l2);
+        FLENS_DEFAULT_INDEXTYPE kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - basis.psi.support(0,0).l1);
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.support(j,k1))>0) ret.insert(Index1D(j,k1,XWavelet));
         }
     }
@@ -331,11 +331,11 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,CDF> &basis, Index
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
-        long int kMin, kMax;
+        FLENS_DEFAULT_INDEXTYPE kMin, kMax;
 
         kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - basis.psi.support(0,0).l2);
         kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - basis.psi.support(0,0).l1);
-        for (long int k1=kMin; k1<=kMax; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
             if (overlap(contractedSupp, basis.psi.support(j+1,k1))>0) ret.insert(Index1D(j+1,k1,XWavelet));
         }
     }
@@ -347,18 +347,18 @@ void
 index_cone(const Index1D &lambda, T c, const Basis<T,Orthogonal,R,Multi> &basis,
            IndexSet<Index1D> &ret)
 {
-    int j=lambda.j, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, k=lambda.k;
     XType xtype=lambda.xtype;
 
     const BSpline<T,Orthogonal,R,Multi> &phi = basis.mra.phi;
     const Wavelet<T,Orthogonal,R,Multi> &psi = basis.psi;
-    int numSplines = (int)phi._numSplines;
-    int numWavelets = (int)psi._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numSplines = (FLENS_DEFAULT_INDEXTYPE)phi._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numWavelets = (FLENS_DEFAULT_INDEXTYPE)psi._numSplines;
     Support<T> max_support_refbspline = phi.max_support();
     Support<T> max_support_refwavelet = psi.max_support();
 
     if (xtype==XBSpline) {
-        for (int i=1; i<=2*numSplines; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=2*numSplines; ++i) {
             ret.insert(Index1D(j,k-i,xtype));
             ret.insert(Index1D(j,k+i,xtype));
         }
@@ -368,10 +368,10 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Orthogonal,R,Multi> &basis,
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
 
-        int kMin = floor( pow2i<T>(j)*contractedSupp.l1 - psi.max_support().l2);
-        int kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - psi.max_support().l1);
-        for (int k_help=kMin; k_help<=kMax; ++k_help) {
-            for (int k1=(k_help-1)*numWavelets+1; k1<=k_help*numWavelets; ++k1) {
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<T>(j)*contractedSupp.l1 - psi.max_support().l2);
+        FLENS_DEFAULT_INDEXTYPE kMax =  ceil( pow2i<T>(j)*contractedSupp.l2 - psi.max_support().l1);
+        for (FLENS_DEFAULT_INDEXTYPE k_help=kMin; k_help<=kMax; ++k_help) {
+            for (FLENS_DEFAULT_INDEXTYPE k1=(k_help-1)*numWavelets+1; k1<=k_help*numWavelets; ++k1) {
                 if (overlap(contractedSupp, basis.psi.support(j,k1))>0) {
                     ret.insert(Index1D(j,k1,XWavelet));
                 }
@@ -383,12 +383,12 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Orthogonal,R,Multi> &basis,
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
-        long int kMin, kMax;
+        FLENS_DEFAULT_INDEXTYPE kMin, kMax;
 
         kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - psi.max_support().l2);
         kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - psi.max_support().l1);
-        for (long int k_help=kMin; k_help<=kMax; ++k_help) {
-            for (long int k1=(k_help-1)*numWavelets+1; k1<=k_help*numWavelets; ++k1) {
+        for (FLENS_DEFAULT_INDEXTYPE k_help=kMin; k_help<=kMax; ++k_help) {
+            for (FLENS_DEFAULT_INDEXTYPE k1=(k_help-1)*numWavelets+1; k1<=k_help*numWavelets; ++k1) {
                 if (overlap(contractedSupp, psi.support(j+1,k1))>0) {
                     ret.insert(Index1D(j+1,k1,XWavelet));
                 }
@@ -403,7 +403,7 @@ void
 index_cone(const Index1D &lambda, T /*c*/, const Basis<T,Orthogonal,Interval,Multi> &basis,
            IndexSet<Index1D> &ret)
 {
-    int j=lambda.j, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, k=lambda.k;
     XType xtype=lambda.xtype;
 
     const BSpline<T,Orthogonal,Interval,Multi> &phi = basis.mra.phi;
@@ -411,25 +411,25 @@ index_cone(const Index1D &lambda, T /*c*/, const Basis<T,Orthogonal,Interval,Mul
 
     if (xtype==XBSpline) {
         Support<T> supp = phi.support(j,k);
-        int j_scaling = 0;
-        long k_scaling_first = 0, k_scaling_last = 0;
+        FLENS_DEFAULT_INDEXTYPE j_scaling = 0;
+        FLENS_DEFAULT_INDEXTYPE k_scaling_first = 0, k_scaling_last = 0;
         basis.getScalingNeighborsForScaling(j, k, basis,
                                             j_scaling, k_scaling_first, k_scaling_last);
 
-        for (int k_scaling = k_scaling_first; k_scaling<=k_scaling_last; ++k_scaling) {
+        for (FLENS_DEFAULT_INDEXTYPE k_scaling = k_scaling_first; k_scaling<=k_scaling_last; ++k_scaling) {
             if (overlap(supp, phi.support(j_scaling,k_scaling))>0) {
                 ret.insert(Index1D(j_scaling,k_scaling,XBSpline));
             }
         }
 
-        int j_wavelet = 0;
-        long k_wavelet_first = 0, k_wavelet_last = 0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = 0;
+        FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
         basis.getWaveletNeighborsForScaling(j, k, basis,
                                             j_wavelet, k_wavelet_first, k_wavelet_last);
         assert(j_wavelet==j);
-        k_wavelet_first = std::max((long)basis.rangeJ(j_wavelet).firstIndex(), k_wavelet_first-basis._numInnerParts);
-        k_wavelet_last  = std::min((long)basis.rangeJ(j_wavelet).lastIndex(),  k_wavelet_last+basis._numInnerParts);
-        for (int k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+        k_wavelet_first = std::max((FLENS_DEFAULT_INDEXTYPE)basis.rangeJ(j_wavelet).firstIndex(),(FLENS_DEFAULT_INDEXTYPE)( k_wavelet_first-basis._numInnerParts));
+        k_wavelet_last  = std::min((FLENS_DEFAULT_INDEXTYPE)basis.rangeJ(j_wavelet).lastIndex(), (FLENS_DEFAULT_INDEXTYPE)( k_wavelet_last+basis._numInnerParts));
+        for (FLENS_DEFAULT_INDEXTYPE k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
             if (overlap(supp, psi.support(j_wavelet,k_wavelet))>0) {
                 ret.insert(Index1D(j_wavelet,k_wavelet,XWavelet));
             }
@@ -437,15 +437,15 @@ index_cone(const Index1D &lambda, T /*c*/, const Basis<T,Orthogonal,Interval,Mul
     }
     else {
         Support<T> supp = psi.support(j,k);
-        int j_wavelet = 0;
-        long k_wavelet_first = 0, k_wavelet_last = 0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = 0;
+        FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
         basis.getHigherWaveletNeighborsForWavelet(j, k, basis,
                                                   j_wavelet, k_wavelet_first, k_wavelet_last);
         assert(j_wavelet==j+1);
-        k_wavelet_first = std::max((long)basis.rangeJ(j_wavelet).firstIndex(), k_wavelet_first-basis._numInnerParts);
-        k_wavelet_last  = std::min((long)basis.rangeJ(j_wavelet).lastIndex(),  k_wavelet_last+basis._numInnerParts);
-        for (int k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
-            if (j_wavelet >= 28) {
+        k_wavelet_first = std::max((FLENS_DEFAULT_INDEXTYPE)basis.rangeJ(j_wavelet).firstIndex(),(FLENS_DEFAULT_INDEXTYPE)( k_wavelet_first-basis._numInnerParts));
+        k_wavelet_last  = std::min((FLENS_DEFAULT_INDEXTYPE)basis.rangeJ(j_wavelet).lastIndex(),(FLENS_DEFAULT_INDEXTYPE)(  k_wavelet_last+basis._numInnerParts));
+        for (FLENS_DEFAULT_INDEXTYPE k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+            if (j_wavelet >= 60) {
                 std::cerr << "Level too large!!" << std::endl;
             }
             if (overlap(supp, psi.support(j_wavelet,k_wavelet))>0) {
@@ -459,9 +459,9 @@ index_cone(const Index1D &lambda, T /*c*/, const Basis<T,Orthogonal,Interval,Mul
 template <typename T>
 void
 index_cone(const Index1D &lambda, T c, const Basis<T,Orthogonal,Interval,Multi> &basis,
-           IndexSet<Index1D> &ret, const int Jmax)
+           IndexSet<Index1D> &ret, const FLENS_DEFAULT_INDEXTYPE Jmax)
 {
-    int j=lambda.j, k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j=lambda.j, k=lambda.k;
     XType xtype=lambda.xtype;
 
     const BSpline<T,Orthogonal,Interval,Multi> &phi = basis.mra.phi;
@@ -469,23 +469,23 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Orthogonal,Interval,Multi> 
 
     if (xtype==XBSpline) {
         Support<T> supp = phi.support(j,k);
-        int j_scaling = 0;
-        long k_scaling_first = 0, k_scaling_last = 0;
+        FLENS_DEFAULT_INDEXTYPE j_scaling = 0;
+        FLENS_DEFAULT_INDEXTYPE k_scaling_first = 0, k_scaling_last = 0;
         basis.getScalingNeighborsForScaling(j, k, basis,
                                             j_scaling, k_scaling_first, k_scaling_last);
 
-        for (int k_scaling = k_scaling_first; k_scaling<=k_scaling_last; ++k_scaling) {
+        for (FLENS_DEFAULT_INDEXTYPE k_scaling = k_scaling_first; k_scaling<=k_scaling_last; ++k_scaling) {
             if (overlap(supp, phi.support(j_scaling,k_scaling))>0) {
                 ret.insert(Index1D(j_scaling,k_scaling,XBSpline));
             }
         }
 
-        int j_wavelet = 0;
-        long k_wavelet_first = 0, k_wavelet_last = 0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = 0;
+        FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
         basis.getWaveletNeighborsForScaling(j, k, basis,
                                             j_wavelet, k_wavelet_first, k_wavelet_last);
         assert(j_wavelet==j);
-        for (int k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+        for (FLENS_DEFAULT_INDEXTYPE k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
             if (overlap(supp, psi.support(j_wavelet,k_wavelet))>0) {
                 ret.insert(Index1D(j_wavelet,k_wavelet,XWavelet));
             }
@@ -496,12 +496,12 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Orthogonal,Interval,Multi> 
             return;
         }
         Support<T> supp = psi.support(j,k);
-        int j_wavelet = 0;
-        long k_wavelet_first = 0, k_wavelet_last = 0;
+        FLENS_DEFAULT_INDEXTYPE j_wavelet = 0;
+        FLENS_DEFAULT_INDEXTYPE k_wavelet_first = 0, k_wavelet_last = 0;
         basis.getHigherWaveletNeighborsForWavelet(j, k, basis,
                                                   j_wavelet, k_wavelet_first, k_wavelet_last);
         assert(j_wavelet==j+1);
-        for (int k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
+        for (FLENS_DEFAULT_INDEXTYPE k_wavelet = k_wavelet_first; k_wavelet<=k_wavelet_last; ++k_wavelet) {
             if (overlap(supp, psi.support(j_wavelet,k_wavelet))>0) {
                 ret.insert(Index1D(j_wavelet,k_wavelet,XWavelet));
             }
@@ -515,20 +515,20 @@ void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,SparseMulti> &basis,
            IndexSet<Index1D> &ret)
 {
-    int  j=lambda.j;
+    FLENS_DEFAULT_INDEXTYPE  j=lambda.j;
     if (j>=JMAX) return;
-    long  k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE  k=lambda.k;
     XType xtype=lambda.xtype;
 
     const BSpline<T,Primal,R,SparseMulti> &phi = basis.mra.phi;
     const Wavelet<T,Primal,R,SparseMulti> &psi = basis.psi;
-    int numSplines = (int)phi._numSplines;
-    int numWavelets = (int)psi._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numSplines = (FLENS_DEFAULT_INDEXTYPE)phi._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numWavelets = (FLENS_DEFAULT_INDEXTYPE)psi._numSplines;
     Support<T> max_support_refwavelet = psi.max_support();
 
     //std::cout << "Index cone for " << lambda << std::endl;
     if (xtype==XBSpline) {
-        for (int i=1; i<=2*numSplines; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=2*numSplines; ++i) {
             ret.insert(Index1D(j,k-i,xtype));
             ret.insert(Index1D(j,k+i,xtype));
         }
@@ -538,10 +538,10 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,SparseMulti> &basi
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
 
-        long kMin = floor( pow2i<long double>(j)*contractedSupp.l1 - max_support_refwavelet.l2) - 1;
-        long kMax =  ceil( pow2i<long double>(j)*contractedSupp.l2 - max_support_refwavelet.l1) + 1;
+        FLENS_DEFAULT_INDEXTYPE kMin = floor( pow2i<long double>(j)*contractedSupp.l1 - max_support_refwavelet.l2) - 1;
+        FLENS_DEFAULT_INDEXTYPE kMax =  ceil( pow2i<long double>(j)*contractedSupp.l2 - max_support_refwavelet.l1) + 1;
 
-        for (int k_row=kMin*numSplines; k_row<=kMax*numSplines; ++k_row) {
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin*numSplines; k_row<=kMax*numSplines; ++k_row) {
             //std::cerr << "  -> wavelet (" << j << ", " << k_row << "): " << psi.support(j,k_row) << " vs. " << contractedSupp << std::endl;
             if (overlap(contractedSupp, phi.support(j,k_row)) > 0) {
                 ret.insert(Index1D(j,k_row,XWavelet));
@@ -553,7 +553,7 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,SparseMulti> &basi
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
-        long kMin, kMax;
+        FLENS_DEFAULT_INDEXTYPE kMin, kMax;
 
         kMin = floor( pow2i<long double>(j+1)*contractedSupp.l1 - max_support_refwavelet.l2) / 2 - 1;
         kMax =  ceil( pow2i<long double>(j+1)*contractedSupp.l2 - max_support_refwavelet.l1) / 2 + 1;
@@ -561,7 +561,7 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,R,SparseMulti> &basi
         kMin = kMin*numWavelets;
         kMax = kMax*numWavelets;
 
-        for (long k_row=kMin; k_row<=kMax; ++k_row) {
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=kMax; ++k_row) {
             Support<T> supp_row = psi.support(j+1,k_row);
             //std::cerr << "  -> wavelet (" << j+1 << ", " << k_row << "): " << supp_row << " vs. " << contractedSupp << std::endl;
             if (overlap(contractedSupp, supp_row) > 0)  {
@@ -578,25 +578,25 @@ void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,RPlus,SparseMulti> &basis,
            IndexSet<Index1D> &ret)
 {
-    int  j=lambda.j;
+    FLENS_DEFAULT_INDEXTYPE  j=lambda.j;
     if (j>=JMAX) return;
-    long  k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE  k=lambda.k;
     XType xtype=lambda.xtype;
 
     const BSpline<T,Primal,RPlus,SparseMulti> &phi = basis.mra.phi;
     const Wavelet<T,Primal,RPlus,SparseMulti> &psi = basis.psi;
-    int numSplines = (int)phi._numSplines;
-    int numWavelets = (int)psi._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numSplines = (FLENS_DEFAULT_INDEXTYPE)phi._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numWavelets = (FLENS_DEFAULT_INDEXTYPE)psi._numSplines;
     Support<T> max_support_refwavelet = psi.max_support();
 
     //std::cout << "Index cone for " << lambda << std::endl;
     if (xtype==XBSpline) {
-        long kMin = std::max(k-2*numSplines, basis.mra.rangeIL(j).firstIndex());
-        for (int k_row=kMin; k_row<=k-1; ++k_row) {
+        FLENS_DEFAULT_INDEXTYPE kMin = std::max(k-2*numSplines, basis.mra.rangeIL(j).firstIndex());
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=k-1; ++k_row) {
             ret.insert(Index1D(j,k_row,xtype));
         }
-        long kMax = k+2*numSplines;
-        for (int k_row=k+1; k_row<=kMax; ++k_row) {
+        FLENS_DEFAULT_INDEXTYPE kMax = k+2*numSplines;
+        for (FLENS_DEFAULT_INDEXTYPE k_row=k+1; k_row<=kMax; ++k_row) {
             ret.insert(Index1D(j,k_row,xtype));
         }
 
@@ -609,7 +609,7 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,RPlus,SparseMulti> &
         kMax =  ceil( pow2i<long double>(j)*contractedSupp.l2 - max_support_refwavelet.l1) + 1;
         kMin = std::max(kMin*numWavelets, basis.rangeJL(j).firstIndex());
         kMax = kMax*numWavelets;
-        for (int k_row=kMin; k_row<=kMax; ++k_row) {
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=kMax; ++k_row) {
             //std::cerr << "  -> wavelet (" << j << ", " << k_row << "): " << psi.support(j,k_row) << " vs. " << contractedSupp << std::endl;
             if (overlap(contractedSupp, phi.support(j,k_row)) > 0) {
                 ret.insert(Index1D(j,k_row,XWavelet));
@@ -621,13 +621,13 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,RPlus,SparseMulti> &
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
-        long kMin, kMax;
+        FLENS_DEFAULT_INDEXTYPE kMin, kMax;
         kMin = floor( pow2i<long double>(j+1)*contractedSupp.l1 - max_support_refwavelet.l2) / 2 - 1;
         kMax =  ceil( pow2i<long double>(j+1)*contractedSupp.l2 - max_support_refwavelet.l1) / 2 + 1;
         kMin = std::max(kMin*numWavelets, basis.rangeJL(j).firstIndex());
         kMax = kMax*numWavelets;
 
-        for (long k_row=kMin; k_row<=kMax; ++k_row) {
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=kMax; ++k_row) {
             Support<T> supp_row = psi.support(j+1,k_row);
             //std::cerr << "  -> wavelet (" << j+1 << ", " << k_row << "): " << supp_row << " vs. " << contractedSupp << std::endl;
             if (overlap(contractedSupp, supp_row) > 0)  {
@@ -644,25 +644,25 @@ void
 index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,SparseMulti> &basis,
            IndexSet<Index1D> &ret)
 {
-    int  j=lambda.j;
+    FLENS_DEFAULT_INDEXTYPE  j=lambda.j;
     if (j>=JMAX) return;
-    long  k=lambda.k;
+    FLENS_DEFAULT_INDEXTYPE  k=lambda.k;
     XType xtype=lambda.xtype;
 
     const BSpline<T,Primal,Interval,SparseMulti> &phi = basis.mra.phi;
     const Wavelet<T,Primal,Interval,SparseMulti> &psi = basis.psi;
-    int numSplines = (int)basis.mra._numSplines;
-    int numWavelets = (int)basis._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numSplines = (FLENS_DEFAULT_INDEXTYPE)basis.mra._numSplines;
+    FLENS_DEFAULT_INDEXTYPE numWavelets = (FLENS_DEFAULT_INDEXTYPE)basis._numSplines;
     Support<T> max_support_refwavelet = basis.max_support();
 
     //std::cout << "Index cone for " << lambda << std::endl;
     if (xtype==XBSpline) {
-        long kMin = std::max(k-2*numSplines, basis.mra.long_rangeI(j).firstIndex());
-        for (int k_row=kMin; k_row<=k-1; ++k_row) {
+        FLENS_DEFAULT_INDEXTYPE kMin = std::max(k-2*numSplines, basis.mra.long_rangeI(j).firstIndex());
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=k-1; ++k_row) {
             ret.insert(Index1D(j,k_row,xtype));
         }
-        long kMax = std::min(k+2*numSplines, basis.mra.long_rangeI(j).lastIndex());
-        for (int k_row=k+1; k_row<=kMax; ++k_row) {
+        FLENS_DEFAULT_INDEXTYPE kMax = std::min(k+2*numSplines, basis.mra.long_rangeI(j).lastIndex());
+        for (FLENS_DEFAULT_INDEXTYPE k_row=k+1; k_row<=kMax; ++k_row) {
             ret.insert(Index1D(j,k_row,xtype));
         }
 
@@ -675,7 +675,7 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,SparseMulti
         kMax =  ceil( pow2i<long double>(j)*contractedSupp.l2 - max_support_refwavelet.l1) + 1;
         kMin = std::max(kMin*numWavelets, basis.long_rangeJ(j+1).firstIndex());
         kMax = std::min(kMax*numWavelets, basis.long_rangeJ(j+1).lastIndex());
-        for (int k_row=kMin; k_row<=kMax; ++k_row) {
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=kMax; ++k_row) {
             //std::cerr << "  -> wavelet (" << j << ", " << k_row << "): " << psi.support(j,k_row) << " vs. " << contractedSupp << std::endl;
             if (overlap(contractedSupp, phi.support(j,k_row)) > 0) {
                 ret.insert(Index1D(j,k_row,XWavelet));
@@ -687,13 +687,13 @@ index_cone(const Index1D &lambda, T c, const Basis<T,Primal,Interval,SparseMulti
         T center = 0.5*(supp.l1 + supp.l2);
         contractedSupp.l1 = c*supp.l1 + (1-c)*center;
         contractedSupp.l2 = c*supp.l2 + (1-c)*center;
-        long kMin, kMax;
+        FLENS_DEFAULT_INDEXTYPE kMin, kMax;
         kMin = floor( pow2i<long double>(j+1)*contractedSupp.l1 - max_support_refwavelet.l2) / 2 - 1;
         kMax =  ceil( pow2i<long double>(j+1)*contractedSupp.l2 - max_support_refwavelet.l1) / 2 + 1;
         kMin = std::max(kMin*numWavelets, basis.long_rangeJ(j+1).firstIndex());
         kMax = std::min(kMax*numWavelets, basis.long_rangeJ(j+1).lastIndex());
 
-        for (long k_row=kMin; k_row<=kMax; ++k_row) {
+        for (FLENS_DEFAULT_INDEXTYPE k_row=kMin; k_row<=kMax; ++k_row) {
             Support<T> supp_row = psi.support(j+1,k_row);
             //std::cerr << "  -> wavelet (" << j+1 << ", " << k_row << "): " << supp_row << " vs. " << contractedSupp << std::endl;
             if (overlap(contractedSupp, supp_row) > 0)  {
@@ -726,29 +726,29 @@ template <typename T>
 IndexSet<Index1D>
 C_WO_XBSpline(const Index1D &lambda, T c, const Basis<T,Primal,R,CDF> &basis) {
     const Wavelet<T,Primal,R,CDF> psi(basis,0);
-    int j = lambda.j, k = lambda.k;
+    FLENS_DEFAULT_INDEXTYPE j = lambda.j, k = lambda.k;
     IndexSet<Index1D> ret;
     Support<T> contractedSupp, supp = basis.psi.support(j,k);
     T center = 0.5*(supp.l1 + supp.l2);
     contractedSupp.l1 = c*supp.l1 + (1-c)*center;
     contractedSupp.l2 = c*supp.l2 + (1-c)*center;
-    long int kMin, kMax;
+    FLENS_DEFAULT_INDEXTYPE kMin, kMax;
 
     kMin = floor( pow2i<T>(j-1)*contractedSupp.l1 - basis.psi.support(0,0).l2);
     kMax = ceil(pow2i<T>(j-1)*contractedSupp.l2 - basis.psi.support(0,0).l1);
-    for (long int k1=kMin; k1<=kMax; ++k1) {
+    for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
         if (overlap(contractedSupp, basis.psi.support(j-1,k1))>0) ret.insert(Index1D(j-1,k1,XWavelet));
     }
 
     kMin = floor( pow2i<T>(j)*contractedSupp.l1 - basis.psi.support(0,0).l2);
     kMax = ceil(pow2i<T>(j)*contractedSupp.l2 - basis.psi.support(0,0).l1);
-    for (long int k1=kMin; k1<=kMax; ++k1) {
+    for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
         if (overlap(contractedSupp, basis.psi.support(j,k1))>0) ret.insert(Index1D(j,k1,XWavelet));
     }
 
     kMin = floor( pow2i<T>(j+1)*contractedSupp.l1 - basis.psi.support(0,0).l2);
     kMax = ceil(pow2i<T>(j+1)*contractedSupp.l2 - basis.psi.support(0,0).l1);
-    for (long int k1=kMin; k1<=kMax; ++k1) {
+    for (FLENS_DEFAULT_INDEXTYPE k1=kMin; k1<=kMax; ++k1) {
         if (overlap(contractedSupp, basis.psi.support(j+1,k1))>0) ret.insert(Index1D(j+1,k1,XWavelet));
     }
     return ret;
@@ -803,7 +803,7 @@ C(const IndexSet<Index2D> &Lambda, T c, const Basis2D &basis, bool extralevel)
 //Security zone 2D with maximal level
 template <typename T, typename Basis2D>
 IndexSet<Index2D>
-C(const IndexSet<Index2D> &Lambda, T c, const Basis2D &basis, const int J1_max, const int J2_max )
+C(const IndexSet<Index2D> &Lambda, T c, const Basis2D &basis, const FLENS_DEFAULT_INDEXTYPE J1_max, const FLENS_DEFAULT_INDEXTYPE J2_max )
 {
     typedef typename IndexSet<Index2D>::const_iterator const_it_2d;
     typedef typename IndexSet<Index1D>::const_iterator const_it;

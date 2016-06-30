@@ -1,0 +1,1302 @@
+Wavelets: d = 2, d_ = 2, dmw = 2, j0 = 2
+
+******** Iteration 0
+   Current size of Lambda       33
+   --- Starting CG with tolerance 0.001 ---
+       CG Iteration 0  : current error 0.146427833053    
+       CG Iteration 1  : current error 0.0946700299141   
+       CG Iteration 2  : current error 0.0635826598846   
+       CG Iteration 3  : current error 0.0403212902206   
+       CG Iteration 4  : current error 0.0265225587311   
+       CG Iteration 5  : current error 0.0138781134248   
+       CG Iteration 6  : current error 0.0131506343558   
+       CG Iteration 7  : current error 0.0158614618162   
+       CG Iteration 8  : current error 0.021942344029    
+       CG Iteration 9  : current error 0.0286604631753   
+       CG Iteration 10 : current error 0.0165399362605   
+       CG Iteration 11 : current error 0.00437315297489  
+       CG Iteration 12 : current error 0.00169307025072  
+       CG Iteration 13 : current error 0.00351565643241  
+       CG Iteration 14 : current error 0.00580495379852  
+       CG Iteration 15 : current error 0.00353814954301  
+       CG Iteration 16 : current error 0.00100930854947  
+       CG Iteration 17 : current error 0.000412660197991 
+       CG stopped with error 0.00041266 after 17 iterations 
+   --- Approximate Residual ---
+       U_leafs:        33                  
+       Residual:  0.0246255847992      (on       91 indizes)
+   --- Computing next index set ---
+       Threshbound:         0.0010095175613
+       ||P_{Lambda}r ||_2:  0.000412660197991
+       alpha*Residual:   0.0233943055593
+          Bucket 0: L2-norm 0.0216734
+          Bucket 1: L2-norm 0
+          Bucket 2: L2-norm 0
+          Bucket 3: L2-norm 0.00926906
+       Lambda:  raw extension        39
+                multitree ext.        6
+                total size           39
+
+******** Iteration 1
+   Current size of Lambda       39
+   --- Starting CG with tolerance 0.001 ---
+       CG Iteration 0  : current error 0.00854038478802  
+       CG Iteration 1  : current error 0.0104130747157   
+       CG Iteration 2  : current error 0.0210852743111   
+       CG Iteration 3  : current error 0.016128530406    
+       CG Iteration 4  : current error 0.00845362917407  
+       CG Iteration 5  : current error 0.00316513900874  
+       CG Iteration 6  : current error 0.00225850987668  
+       CG Iteration 7  : current error 0.00461827136242  
+       CG Iteration 8  : current error 0.00662122385118  
+       CG Iteration 9  : current error 0.00261812175108  
+       CG Iteration 10 : current error 0.00088371592978  
+       CG stopped with error 0.000883716 after 10 iterations 
+   --- Approximate Residual ---
+       U_leafs:        6                   
+       Residual:  0.0108284541295      (on      137 indizes)
+   --- Computing next index set ---
+       Threshbound:         0.000340411820471
+       ||P_{Lambda}r ||_2:  0.00088371592978
+       alpha*Residual:   0.010287031423
+          Bucket 0: L2-norm 0.00604897
+          Bucket 1: L2-norm 0.00589399
+          Bucket 2: L2-norm 0.00236051
+          Bucket 3: L2-norm 0.00445105
+          Bucket 4: L2-norm 0.00329494
+       Lambda:  raw extension        68
+                multitree ext.       31
+                total size           70
+
+******** Iteration 2
+   Current size of Lambda       70
+   --- Starting CG with tolerance 0.001 ---
+       CG Iteration 0  : current error 0.0127009055835   
+       CG Iteration 1  : current error 0.0230272566291   
+       CG Iteration 2  : current error 0.0249018816052   
+       CG Iteration 3  : current error 0.0206473903353   
+       CG Iteration 4  : current error 0.0119381589561   
+       CG Iteration 5  : current error 0.00752666330983  
+       CG Iteration 6  : current error 0.00530519623623  
+       CG Iteration 7  : current error 0.00405416939741  
+       CG Iteration 8  : current error 0.00421950700766  
+       CG Iteration 9  : current error 0.00518774471969  
+       CG Iteration 10 : current error 0.00624225524309  
+       CG Iteration 11 : current error 0.00426707908115  
+       CG Iteration 12 : current error 0.00167710618205  
+       CG Iteration 13 : current error 0.00108166535011  
+       CG Iteration 14 : current error 0.00178514017973  
+       CG Iteration 15 : current error 0.00211559367973  
+       CG Iteration 16 : current error 0.00217408752092  
+       CG Iteration 17 : current error 0.00164981333937  
+       CG Iteration 18 : current error 0.00106758204558  
+       CG Iteration 19 : current error 0.00052800116689  
+       CG stopped with error 0.000528001 after 19 iterations 
+   --- Approximate Residual ---
+       U_leafs:        31                  
+       Residual:  0.0124122535073      (on      276 indizes)
+   --- Computing next index set ---
+       Threshbound:         0.000269790120332
+       ||P_{Lambda}r ||_2:  0.00052800116689
+       alpha*Residual:   0.0117916408319
+          Bucket 0: L2-norm 0.0101929
+          Bucket 1: L2-norm 0
+          Bucket 2: L2-norm 0.00274368
+          Bucket 3: L2-norm 0.00338197
+          Bucket 4: L2-norm 0.00340432
+          Bucket 5: L2-norm 0.00173526
+          Bucket 6: L2-norm 0.00293544
+       Lambda:  raw extension       113
+                multitree ext.       45
+                total size          115
+
+******** Iteration 3
+   Current size of Lambda      115
+   --- Starting CG with tolerance 0.001 ---
+       CG Iteration 0  : current error 0.00580713887251  
+       CG Iteration 1  : current error 0.0103936565456   
+       CG Iteration 2  : current error 0.0136851983171   
+       CG Iteration 3  : current error 0.0132085256411   
+       CG Iteration 4  : current error 0.0111575182656   
+       CG Iteration 5  : current error 0.0121524062037   
+       CG Iteration 6  : current error 0.0070392404918   
+       CG Iteration 7  : current error 0.00497743406004  
+       CG Iteration 8  : current error 0.00319090183265  
+       CG Iteration 9  : current error 0.00356728955529  
+       CG Iteration 10 : current error 0.00550307277944  
+       CG Iteration 11 : current error 0.0066589723481   
+       CG Iteration 12 : current error 0.00472909602132  
+       CG Iteration 13 : current error 0.00305801853582  
+       CG Iteration 14 : current error 0.00214061711134  
+       CG Iteration 15 : current error 0.00193944182772  
+       CG Iteration 16 : current error 0.00181771482054  
+       CG Iteration 17 : current error 0.0026378996642   
+       CG Iteration 18 : current error 0.00355278737376  
+       CG Iteration 19 : current error 0.00320304420633  
+       CG Iteration 20 : current error 0.00201325692814  
+       CG Iteration 21 : current error 0.00117180278976  
+       CG Iteration 22 : current error 0.000752295255996 
+       CG stopped with error 0.000752295 after 22 iterations 
+   --- Approximate Residual ---
+       U_leafs:        45                  
+       Residual:  0.00553197740793     (on      557 indizes)
+   --- Computing next index set ---
+       Threshbound:         8.13988354759e-05
+       ||P_{Lambda}r ||_2:  0.000752295255996
+       alpha*Residual:   0.00525537853753
+          Bucket 0: L2-norm 0.0034398
+          Bucket 1: L2-norm 0.000868485
+          Bucket 2: L2-norm 0.0018065
+          Bucket 3: L2-norm 0.00219405
+          Bucket 4: L2-norm 0.0021892
+          Bucket 5: L2-norm 0.00140826
+       Lambda:  raw extension       217
+                multitree ext.      107
+                total size          222
+
+******** Iteration 4
+   Current size of Lambda      222
+   --- Starting CG with tolerance 0.000553197740793 ---
+       CG Iteration 0  : current error 0.00518560683633  
+       CG Iteration 1  : current error 0.011195635197    
+       CG Iteration 2  : current error 0.0120232883571   
+       CG Iteration 3  : current error 0.0102553022232   
+       CG Iteration 4  : current error 0.00698374618937  
+       CG Iteration 5  : current error 0.00427587088706  
+       CG Iteration 6  : current error 0.00300800895452  
+       CG Iteration 7  : current error 0.00228435689676  
+       CG Iteration 8  : current error 0.00199951250741  
+       CG Iteration 9  : current error 0.00237107225953  
+       CG Iteration 10 : current error 0.00292438347686  
+       CG Iteration 11 : current error 0.00354555380569  
+       CG Iteration 12 : current error 0.00369542822449  
+       CG Iteration 13 : current error 0.00248345879752  
+       CG Iteration 14 : current error 0.00149996279738  
+       CG Iteration 15 : current error 0.00104628551187  
+       CG Iteration 16 : current error 0.00118572322248  
+       CG Iteration 17 : current error 0.00130129187931  
+       CG Iteration 18 : current error 0.00172084725995  
+       CG Iteration 19 : current error 0.00199417610696  
+       CG Iteration 20 : current error 0.00169995139944  
+       CG Iteration 21 : current error 0.00108188270573  
+       CG Iteration 22 : current error 0.000813149955898 
+       CG Iteration 23 : current error 0.000521021202469 
+       CG stopped with error 0.000521021 after 23 iterations 
+   --- Approximate Residual ---
+       U_leafs:        107                 
+       Residual:  0.00610743804021     (on     1069 indizes)
+   --- Computing next index set ---
+       Threshbound:         6.52880303604e-05
+       ||P_{Lambda}r ||_2:  0.000521021202469
+       alpha*Residual:   0.0058020661382
+          Bucket 0: L2-norm 0.00446604
+          Bucket 1: L2-norm 0.00205929
+          Bucket 2: L2-norm 0.000796033
+          Bucket 3: L2-norm 0.00118114
+          Bucket 4: L2-norm 0.00185215
+          Bucket 5: L2-norm 0.00118653
+          Bucket 6: L2-norm 0.00148744
+          Bucket 7: L2-norm 0.0013578
+       Lambda:  raw extension       375
+                multitree ext.      164
+                total size          386
+
+******** Iteration 5
+   Current size of Lambda      386
+   --- Starting CG with tolerance 0.000610743804021 ---
+       CG Iteration 0  : current error 0.00245108862532  
+       CG Iteration 1  : current error 0.00423470728626  
+       CG Iteration 2  : current error 0.00606995977024  
+       CG Iteration 3  : current error 0.00607276609679  
+       CG Iteration 4  : current error 0.00489715444595  
+       CG Iteration 5  : current error 0.00533244714897  
+       CG Iteration 6  : current error 0.00436011196681  
+       CG Iteration 7  : current error 0.00288202280801  
+       CG Iteration 8  : current error 0.00207567931102  
+       CG Iteration 9  : current error 0.0015618879957   
+       CG Iteration 10 : current error 0.00160237486958  
+       CG Iteration 11 : current error 0.00187384094271  
+       CG Iteration 12 : current error 0.00204468586466  
+       CG Iteration 13 : current error 0.00188836379124  
+       CG Iteration 14 : current error 0.0020130621168   
+       CG Iteration 15 : current error 0.00164846515626  
+       CG Iteration 16 : current error 0.00125013837671  
+       CG Iteration 17 : current error 0.00107093779531  
+       CG Iteration 18 : current error 0.000960726762985 
+       CG Iteration 19 : current error 0.000894388159727 
+       CG Iteration 20 : current error 0.00114603808262  
+       CG Iteration 21 : current error 0.00136109506406  
+       CG Iteration 22 : current error 0.00136209038225  
+       CG Iteration 23 : current error 0.00107168418584  
+       CG Iteration 24 : current error 0.000895893448738 
+       CG Iteration 25 : current error 0.000753130644229 
+       CG Iteration 26 : current error 0.000568626019938 
+       CG stopped with error 0.000568626 after 26 iterations 
+   --- Approximate Residual ---
+       U_leafs:        164                 
+       Residual:  0.00258893113661     (on     1984 indizes)
+   --- Computing next index set ---
+       Threshbound:         1.97286792724e-05
+       ||P_{Lambda}r ||_2:  0.000568626019938
+       alpha*Residual:   0.00245948457978
+          Bucket 0: L2-norm 0.000925403
+          Bucket 1: L2-norm 0.000782942
+          Bucket 2: L2-norm 0.00108949
+          Bucket 3: L2-norm 0.000396545
+          Bucket 4: L2-norm 0.000737823
+          Bucket 5: L2-norm 0.000991722
+          Bucket 6: L2-norm 0.000878504
+          Bucket 7: L2-norm 0.000787024
+       Lambda:  raw extension       686
+                multitree ext.      318
+                total size          704
+
+******** Iteration 6
+   Current size of Lambda      704
+   --- Starting CG with tolerance 0.000258893113661 ---
+       CG Iteration 0  : current error 0.00174497979772  
+       CG Iteration 1  : current error 0.00309430839739  
+       CG Iteration 2  : current error 0.00462125482983  
+       CG Iteration 3  : current error 0.00456067966205  
+       CG Iteration 4  : current error 0.00378099481617  
+       CG Iteration 5  : current error 0.00334825108073  
+       CG Iteration 6  : current error 0.00276879418131  
+       CG Iteration 7  : current error 0.00216373275228  
+       CG Iteration 8  : current error 0.00143299056833  
+       CG Iteration 9  : current error 0.00113970857219  
+       CG Iteration 10 : current error 0.000922619130548 
+       CG Iteration 11 : current error 0.00107447941671  
+       CG Iteration 12 : current error 0.00127669999825  
+       CG Iteration 13 : current error 0.00129942570298  
+       CG Iteration 14 : current error 0.00118031037253  
+       CG Iteration 15 : current error 0.000957850794504 
+       CG Iteration 16 : current error 0.000877447646021 
+       CG Iteration 17 : current error 0.000792490977357 
+       CG Iteration 18 : current error 0.000712039800905 
+       CG Iteration 19 : current error 0.000665568764945 
+       CG Iteration 20 : current error 0.000640682460958 
+       CG Iteration 21 : current error 0.000594122308234 
+       CG Iteration 22 : current error 0.000642084171217 
+       CG Iteration 23 : current error 0.000639744955373 
+       CG Iteration 24 : current error 0.000612518145693 
+       CG Iteration 25 : current error 0.000532496673769 
+       CG Iteration 26 : current error 0.000518252232479 
+       CG Iteration 27 : current error 0.000477423101001 
+       CG Iteration 28 : current error 0.000436486066806 
+       CG Iteration 29 : current error 0.000371475068617 
+       CG Iteration 30 : current error 0.000390238802771 
+       CG Iteration 31 : current error 0.000433204333498 
+       CG Iteration 32 : current error 0.000394554577276 
+       CG Iteration 33 : current error 0.000343152140684 
+       CG Iteration 34 : current error 0.000281969055098 
+       CG Iteration 35 : current error 0.000260187755425 
+       CG Iteration 36 : current error 0.000257633511159 
+       CG stopped with error 0.000257634 after 36 iterations 
+   --- Approximate Residual ---
+       U_leafs:        318                 
+       Residual:  0.00196062932074     (on     3641 indizes)
+   --- Computing next index set ---
+       Threshbound:         1.11985972412e-05
+       ||P_{Lambda}r ||_2:  0.000257633511159
+       alpha*Residual:   0.0018625978547
+          Bucket 0: L2-norm 0.00102994
+          Bucket 1: L2-norm 0.000324734
+          Bucket 2: L2-norm 0.000666482
+          Bucket 3: L2-norm 0.000775696
+          Bucket 4: L2-norm 0.000474084
+          Bucket 5: L2-norm 0.00058465
+          Bucket 6: L2-norm 0.000580164
+          Bucket 7: L2-norm 0.000516958
+          Bucket 8: L2-norm 0.000438916
+       Lambda:  raw extension      1330
+                multitree ext.      671
+                total size         1375
+
+******** Iteration 7
+   Current size of Lambda     1375
+   --- Starting CG with tolerance 0.000196062932074 ---
+       CG Iteration 0  : current error 0.00111635799444  
+       CG Iteration 1  : current error 0.00179440227214  
+       CG Iteration 2  : current error 0.00318919775634  
+       CG Iteration 3  : current error 0.00344110961499  
+       CG Iteration 4  : current error 0.00269566062693  
+       CG Iteration 5  : current error 0.00221292025878  
+       CG Iteration 6  : current error 0.00185067066767  
+       CG Iteration 7  : current error 0.00153253489731  
+       CG Iteration 8  : current error 0.00108036444045  
+       CG Iteration 9  : current error 0.000844507922209 
+       CG Iteration 10 : current error 0.000687867114257 
+       CG Iteration 11 : current error 0.000670379073104 
+       CG Iteration 12 : current error 0.000761169242763 
+       CG Iteration 13 : current error 0.000853724368652 
+       CG Iteration 14 : current error 0.000815586407361 
+       CG Iteration 15 : current error 0.00068242011904  
+       CG Iteration 16 : current error 0.000554939406477 
+       CG Iteration 17 : current error 0.000504475748964 
+       CG Iteration 18 : current error 0.000537710883637 
+       CG Iteration 19 : current error 0.000527267488354 
+       CG Iteration 20 : current error 0.000437921192778 
+       CG Iteration 21 : current error 0.000351015382038 
+       CG Iteration 22 : current error 0.000315684879597 
+       CG Iteration 23 : current error 0.000316858918315 
+       CG Iteration 24 : current error 0.000342446619646 
+       CG Iteration 25 : current error 0.000407108418883 
+       CG Iteration 26 : current error 0.000432619624823 
+       CG Iteration 27 : current error 0.000409282968674 
+       CG Iteration 28 : current error 0.000391912130911 
+       CG Iteration 29 : current error 0.000306650860388 
+       CG Iteration 30 : current error 0.000280899629003 
+       CG Iteration 31 : current error 0.000250620327087 
+       CG Iteration 32 : current error 0.000213339804064 
+       CG Iteration 33 : current error 0.000201882539367 
+       CG Iteration 34 : current error 0.000221776554543 
+       CG Iteration 35 : current error 0.000245206048459 
+       CG Iteration 36 : current error 0.000239472468891 
+       CG Iteration 37 : current error 0.000220200535794 
+       CG Iteration 38 : current error 0.000201148239367 
+       CG Iteration 39 : current error 0.000206570878884 
+       CG Iteration 40 : current error 0.000186361138643 
+       CG stopped with error 0.000186361 after 40 iterations 
+   --- Approximate Residual ---
+       U_leafs:        671                 
+       Residual:  0.00111347441197     (on     7097 indizes)
+   --- Computing next index set ---
+       Threshbound:         4.53146871432e-06
+       ||P_{Lambda}r ||_2:  0.000186361138643
+       alpha*Residual:   0.00105780069137
+          Bucket 0: L2-norm 0.000679758
+          Bucket 1: L2-norm 0.000122231
+          Bucket 2: L2-norm 0.000158986
+          Bucket 3: L2-norm 0.000425654
+          Bucket 4: L2-norm 0.000265851
+          Bucket 5: L2-norm 0.000334011
+          Bucket 6: L2-norm 0.000357347
+          Bucket 7: L2-norm 0.000319927
+       Lambda:  raw extension      2210
+                multitree ext.      876
+                total size         2251
+
+******** Iteration 8
+   Current size of Lambda     2251
+   --- Starting CG with tolerance 0.000111347441197 ---
+       CG Iteration 0  : current error 0.000656475520978 
+       CG Iteration 1  : current error 0.000891949632766 
+       CG Iteration 2  : current error 0.00162901485085  
+       CG Iteration 3  : current error 0.00189369052085  
+       CG Iteration 4  : current error 0.00143897463009  
+       CG Iteration 5  : current error 0.00120008049898  
+       CG Iteration 6  : current error 0.000991033248144 
+       CG Iteration 7  : current error 0.000883767176714 
+       CG Iteration 8  : current error 0.000631577900179 
+       CG Iteration 9  : current error 0.000471354179175 
+       CG Iteration 10 : current error 0.000423807617086 
+       CG Iteration 11 : current error 0.000410789269747 
+       CG Iteration 12 : current error 0.000458100885301 
+       CG Iteration 13 : current error 0.000504547986863 
+       CG Iteration 14 : current error 0.000515390884119 
+       CG Iteration 15 : current error 0.000468522440476 
+       CG Iteration 16 : current error 0.000408156867243 
+       CG Iteration 17 : current error 0.000348728783251 
+       CG Iteration 18 : current error 0.000318745026368 
+       CG Iteration 19 : current error 0.000310729281663 
+       CG Iteration 20 : current error 0.000301175279621 
+       CG Iteration 21 : current error 0.000271936653051 
+       CG Iteration 22 : current error 0.000259481252367 
+       CG Iteration 23 : current error 0.000248791874748 
+       CG Iteration 24 : current error 0.000243253012189 
+       CG Iteration 25 : current error 0.000236715740829 
+       CG Iteration 26 : current error 0.00025078394377  
+       CG Iteration 27 : current error 0.000259128435153 
+       CG Iteration 28 : current error 0.000240962663393 
+       CG Iteration 29 : current error 0.000255485400438 
+       CG Iteration 30 : current error 0.000246672336194 
+       CG Iteration 31 : current error 0.000206157454297 
+       CG Iteration 32 : current error 0.000164321786828 
+       CG Iteration 33 : current error 0.000140405756617 
+       CG Iteration 34 : current error 0.00013054167551  
+       CG Iteration 35 : current error 0.000129443891701 
+       CG Iteration 36 : current error 0.000134018790875 
+       CG Iteration 37 : current error 0.000132737238847 
+       CG Iteration 38 : current error 0.000140437654801 
+       CG Iteration 39 : current error 0.000147475393053 
+       CG Iteration 40 : current error 0.000130801668901 
+       CG Iteration 41 : current error 0.000110583045075 
+       CG stopped with error 0.000110583 after 41 iterations 
+   --- Approximate Residual ---
+       U_leafs:        876                 
+       Residual:  0.000671753468752    (on    11847 indizes)
+   --- Computing next index set ---
+       Threshbound:         2.11203628537e-06
+       ||P_{Lambda}r ||_2:  0.000110583045075
+       alpha*Residual:   0.000638165795315
+          Bucket 0: L2-norm 0.000430485
+          Bucket 1: L2-norm 0.000161806
+          Bucket 2: L2-norm 0.000120518
+          Bucket 3: L2-norm 0.000162057
+          Bucket 4: L2-norm 0.000183801
+          Bucket 5: L2-norm 0.000227563
+          Bucket 6: L2-norm 0.000206672
+          Bucket 7: L2-norm 0.000182642
+       Lambda:  raw extension      4020
+                multitree ext.     1862
+                total size         4113
+
+******** Iteration 9
+   Current size of Lambda     4113
+   --- Starting CG with tolerance 6.71753468752e-05 ---
+       CG Iteration 0  : current error 0.000382752662532 
+       CG Iteration 1  : current error 0.000655172821126 
+       CG Iteration 2  : current error 0.00113910471442  
+       CG Iteration 3  : current error 0.00114189482098  
+       CG Iteration 4  : current error 0.000904516377226 
+       CG Iteration 5  : current error 0.000830838328411 
+       CG Iteration 6  : current error 0.000732846186817 
+       CG Iteration 7  : current error 0.000641283660804 
+       CG Iteration 8  : current error 0.000472163467437 
+       CG Iteration 9  : current error 0.000328570359307 
+       CG Iteration 10 : current error 0.000276838208438 
+       CG Iteration 11 : current error 0.000248373433784 
+       CG Iteration 12 : current error 0.000262584576461 
+       CG Iteration 13 : current error 0.000330976270817 
+       CG Iteration 14 : current error 0.000349288898539 
+       CG Iteration 15 : current error 0.000326010369592 
+       CG Iteration 16 : current error 0.000305812327471 
+       CG Iteration 17 : current error 0.000262765063242 
+       CG Iteration 18 : current error 0.00023342714035  
+       CG Iteration 19 : current error 0.000213236702489 
+       CG Iteration 20 : current error 0.000198207491107 
+       CG Iteration 21 : current error 0.000182284784547 
+       CG Iteration 22 : current error 0.000157831546499 
+       CG Iteration 23 : current error 0.000165267142956 
+       CG Iteration 24 : current error 0.000182034432306 
+       CG Iteration 25 : current error 0.000187149404064 
+       CG Iteration 26 : current error 0.000178152225381 
+       CG Iteration 27 : current error 0.000157864567428 
+       CG Iteration 28 : current error 0.000156323609336 
+       CG Iteration 29 : current error 0.000161984941625 
+       CG Iteration 30 : current error 0.000171855869311 
+       CG Iteration 31 : current error 0.000171413378162 
+       CG Iteration 32 : current error 0.000150956437155 
+       CG Iteration 33 : current error 0.000124036631494 
+       CG Iteration 34 : current error 0.00010167857547  
+       CG Iteration 35 : current error 9.04627740526e-05 
+       CG Iteration 36 : current error 8.37197248138e-05 
+       CG Iteration 37 : current error 8.19164739527e-05 
+       CG Iteration 38 : current error 9.16480742478e-05 
+       CG Iteration 39 : current error 9.47328196377e-05 
+       CG Iteration 40 : current error 9.44566451659e-05 
+       CG Iteration 41 : current error 8.6480877471e-05  
+       CG Iteration 42 : current error 7.45121745243e-05 
+       CG Iteration 43 : current error 6.50984948663e-05 
+       CG stopped with error 6.50985e-05 after 43 iterations 
+   --- Approximate Residual ---
+       U_leafs:        1862                
+       Residual:  0.000451021043638    (on    21097 indizes)
+   --- Computing next index set ---
+       Threshbound:         1.06931964267e-06
+       ||P_{Lambda}r ||_2:  6.50984948663e-05
+       alpha*Residual:   0.000428469991456
+          Bucket 0: L2-norm 0.000195182
+          Bucket 1: L2-norm 0.000234746
+          Bucket 2: L2-norm 0.00013185
+          Bucket 3: L2-norm 0.00012197
+          Bucket 4: L2-norm 0.000112019
+          Bucket 5: L2-norm 0.000127168
+          Bucket 6: L2-norm 0.000123253
+          Bucket 7: L2-norm 0.000115702
+       Lambda:  raw extension      6420
+                multitree ext.     2400
+                total size         6513
+
+******** Iteration 10
+   Current size of Lambda     6513
+   --- Starting CG with tolerance 4.51021043638e-05 ---
+       CG Iteration 0  : current error 0.000210878462162 
+       CG Iteration 1  : current error 0.000331267277776 
+       CG Iteration 2  : current error 0.00060463731386  
+       CG Iteration 3  : current error 0.000629001401376 
+       CG Iteration 4  : current error 0.000565210274414 
+       CG Iteration 5  : current error 0.000520102882648 
+       CG Iteration 6  : current error 0.000449922520564 
+       CG Iteration 7  : current error 0.000367617024269 
+       CG Iteration 8  : current error 0.000283638670191 
+       CG Iteration 9  : current error 0.000187664069614 
+       CG Iteration 10 : current error 0.000146664056251 
+       CG Iteration 11 : current error 0.000128491095627 
+       CG Iteration 12 : current error 0.000120904897251 
+       CG Iteration 13 : current error 0.000147763264979 
+       CG Iteration 14 : current error 0.000173826817677 
+       CG Iteration 15 : current error 0.000174178280724 
+       CG Iteration 16 : current error 0.000159049141564 
+       CG Iteration 17 : current error 0.000133781471061 
+       CG Iteration 18 : current error 0.000118746207036 
+       CG Iteration 19 : current error 0.000109277309501 
+       CG Iteration 20 : current error 0.000103736896085 
+       CG Iteration 21 : current error 0.000100871854086 
+       CG Iteration 22 : current error 9.18687263665e-05 
+       CG Iteration 23 : current error 8.51097176724e-05 
+       CG Iteration 24 : current error 8.12082681884e-05 
+       CG Iteration 25 : current error 8.39171856855e-05 
+       CG Iteration 26 : current error 8.67421007993e-05 
+       CG Iteration 27 : current error 8.76568275467e-05 
+       CG Iteration 28 : current error 9.0619159111e-05  
+       CG Iteration 29 : current error 8.9019546758e-05  
+       CG Iteration 30 : current error 8.43897405103e-05 
+       CG Iteration 31 : current error 7.80182559857e-05 
+       CG Iteration 32 : current error 8.06692921513e-05 
+       CG Iteration 33 : current error 8.24262774424e-05 
+       CG Iteration 34 : current error 7.730846015e-05   
+       CG Iteration 35 : current error 6.69591818778e-05 
+       CG Iteration 36 : current error 5.91169261435e-05 
+       CG Iteration 37 : current error 5.48469306517e-05 
+       CG Iteration 38 : current error 5.09577154017e-05 
+       CG Iteration 39 : current error 5.57892869534e-05 
+       CG Iteration 40 : current error 5.74016614107e-05 
+       CG Iteration 41 : current error 5.54960734235e-05 
+       CG Iteration 42 : current error 5.49700097765e-05 
+       CG Iteration 43 : current error 5.37634726657e-05 
+       CG Iteration 44 : current error 5.24190359973e-05 
+       CG Iteration 45 : current error 4.81213335799e-05 
+       CG Iteration 46 : current error 4.20899657281e-05 
+       CG stopped with error 4.209e-05 after 46 iterations 
+   --- Approximate Residual ---
+       U_leafs:        2400                
+       Residual:  0.000237639782208    (on    35023 indizes)
+   --- Computing next index set ---
+       Threshbound:         4.3251555648e-07
+       ||P_{Lambda}r ||_2:  4.20899657281e-05
+       alpha*Residual:   0.000225757793097
+          Bucket 0: L2-norm 0.0001071
+          Bucket 1: L2-norm 5.64169e-05
+          Bucket 2: L2-norm 6.44919e-05
+          Bucket 3: L2-norm 8.40069e-05
+          Bucket 4: L2-norm 5.12353e-05
+          Bucket 5: L2-norm 8.79677e-05
+          Bucket 6: L2-norm 8.56154e-05
+          Bucket 7: L2-norm 7.36303e-05
+          Bucket 8: L2-norm 5.60724e-05
+       Lambda:  raw extension     12177
+                multitree ext.     5994
+                total size        12507
+
+******** Iteration 11
+   Current size of Lambda    12507
+   --- Starting CG with tolerance 2.37639782208e-05 ---
+       CG Iteration 0  : current error 0.000172118278968 
+       CG Iteration 1  : current error 0.000279305481002 
+       CG Iteration 2  : current error 0.000539508116621 
+       CG Iteration 3  : current error 0.000516321890496 
+       CG Iteration 4  : current error 0.000405588616256 
+       CG Iteration 5  : current error 0.000330285909107 
+       CG Iteration 6  : current error 0.000278237953238 
+       CG Iteration 7  : current error 0.000221966234588 
+       CG Iteration 8  : current error 0.000199988018803 
+       CG Iteration 9  : current error 0.00014278693256  
+       CG Iteration 10 : current error 0.000118032607507 
+       CG Iteration 11 : current error 0.000119046606293 
+       CG Iteration 12 : current error 0.000120622088515 
+       CG Iteration 13 : current error 0.00013757557453  
+       CG Iteration 14 : current error 0.000156470936281 
+       CG Iteration 15 : current error 0.000147494627189 
+       CG Iteration 16 : current error 0.000139285035524 
+       CG Iteration 17 : current error 0.000118661019794 
+       CG Iteration 18 : current error 9.8115736201e-05  
+       CG Iteration 19 : current error 8.83751190347e-05 
+       CG Iteration 20 : current error 8.40294947258e-05 
+       CG Iteration 21 : current error 8.10787307861e-05 
+       CG Iteration 22 : current error 7.64690086029e-05 
+       CG Iteration 23 : current error 6.88671852539e-05 
+       CG Iteration 24 : current error 6.52115104014e-05 
+       CG Iteration 25 : current error 6.92612715785e-05 
+       CG Iteration 26 : current error 7.10366758743e-05 
+       CG Iteration 27 : current error 7.31869712094e-05 
+       CG Iteration 28 : current error 7.51508107891e-05 
+       CG Iteration 29 : current error 7.28749426923e-05 
+       CG Iteration 30 : current error 7.01300467868e-05 
+       CG Iteration 31 : current error 7.04791752757e-05 
+       CG Iteration 32 : current error 7.0998314753e-05  
+       CG Iteration 33 : current error 7.2650977113e-05  
+       CG Iteration 34 : current error 7.18102656905e-05 
+       CG Iteration 35 : current error 5.9803512194e-05  
+       CG Iteration 36 : current error 5.07277989535e-05 
+       CG Iteration 37 : current error 4.34174820009e-05 
+       CG Iteration 38 : current error 3.96003416419e-05 
+       CG Iteration 39 : current error 3.73822224202e-05 
+       CG Iteration 40 : current error 3.94987157591e-05 
+       CG Iteration 41 : current error 4.14827391584e-05 
+       CG Iteration 42 : current error 4.2233472184e-05  
+       CG Iteration 43 : current error 3.99950806858e-05 
+       CG Iteration 44 : current error 3.73856135098e-05 
+       CG Iteration 45 : current error 3.3053378632e-05  
+       CG Iteration 46 : current error 3.09537374727e-05 
+       CG Iteration 47 : current error 2.97635615559e-05 
+       CG Iteration 48 : current error 2.73303494274e-05 
+       CG Iteration 49 : current error 2.5789224672e-05  
+       CG Iteration 50 : current error 2.31982195083e-05 
+       CG stopped with error 2.31982e-05 after 50 iterations 
+   --- Approximate Residual ---
+       U_leafs:        5994                
+       Residual:  0.000178943848075    (on    65063 indizes)
+   --- Computing next index set ---
+       Threshbound:         2.41672614544e-07
+       ||P_{Lambda}r ||_2:  2.31982195083e-05
+       alpha*Residual:   0.000169996655671
+          Bucket 0: L2-norm 0.000108745
+          Bucket 1: L2-norm 6.85346e-05
+          Bucket 2: L2-norm 3.22073e-05
+          Bucket 3: L2-norm 4.59666e-05
+          Bucket 4: L2-norm 5.13266e-05
+          Bucket 5: L2-norm 4.57234e-05
+          Bucket 6: L2-norm 4.8176e-05
+          Bucket 7: L2-norm 4.75249e-05
+       Lambda:  raw extension     18747
+                multitree ext.     6463
+                total size        18970
+
+******** Iteration 12
+   Current size of Lambda    18970
+   --- Starting CG with tolerance 1.78943848075e-05 ---
+       CG Iteration 0  : current error 7.83744632726e-05 
+       CG Iteration 1  : current error 0.000126534248765 
+       CG Iteration 2  : current error 0.000257916540254 
+       CG Iteration 3  : current error 0.000252848120569 
+       CG Iteration 4  : current error 0.000202721378231 
+       CG Iteration 5  : current error 0.000177984905187 
+       CG Iteration 6  : current error 0.000147636827515 
+       CG Iteration 7  : current error 0.000119678066015 
+       CG Iteration 8  : current error 9.71068863772e-05 
+       CG Iteration 9  : current error 7.0653981415e-05  
+       CG Iteration 10 : current error 5.66056929452e-05 
+       CG Iteration 11 : current error 5.52332666129e-05 
+       CG Iteration 12 : current error 5.63104255993e-05 
+       CG Iteration 13 : current error 6.4349345943e-05  
+       CG Iteration 14 : current error 7.46021492269e-05 
+       CG Iteration 15 : current error 7.37313503249e-05 
+       CG Iteration 16 : current error 6.84828227067e-05 
+       CG Iteration 17 : current error 5.89587459216e-05 
+       CG Iteration 18 : current error 5.53053310075e-05 
+       CG Iteration 19 : current error 5.14555638163e-05 
+       CG Iteration 20 : current error 4.67008720823e-05 
+       CG Iteration 21 : current error 4.37699586174e-05 
+       CG Iteration 22 : current error 4.39551011614e-05 
+       CG Iteration 23 : current error 4.14366739588e-05 
+       CG Iteration 24 : current error 3.6116009918e-05  
+       CG Iteration 25 : current error 3.54359309226e-05 
+       CG Iteration 26 : current error 3.66758067877e-05 
+       CG Iteration 27 : current error 3.71531828497e-05 
+       CG Iteration 28 : current error 4.02376186681e-05 
+       CG Iteration 29 : current error 4.16128056381e-05 
+       CG Iteration 30 : current error 4.13293537551e-05 
+       CG Iteration 31 : current error 3.86337314835e-05 
+       CG Iteration 32 : current error 3.46009376576e-05 
+       CG Iteration 33 : current error 3.34971166849e-05 
+       CG Iteration 34 : current error 3.49759035259e-05 
+       CG Iteration 35 : current error 3.28455376706e-05 
+       CG Iteration 36 : current error 2.94867326583e-05 
+       CG Iteration 37 : current error 2.70170148738e-05 
+       CG Iteration 38 : current error 2.39622885956e-05 
+       CG Iteration 39 : current error 2.18464764976e-05 
+       CG Iteration 40 : current error 2.09040272535e-05 
+       CG Iteration 41 : current error 2.25468655172e-05 
+       CG Iteration 42 : current error 2.28961888489e-05 
+       CG Iteration 43 : current error 2.24576152098e-05 
+       CG Iteration 44 : current error 2.12869863375e-05 
+       CG Iteration 45 : current error 1.89828992731e-05 
+       CG Iteration 46 : current error 1.85823117234e-05 
+       CG Iteration 47 : current error 1.8340492276e-05  
+       CG Iteration 48 : current error 1.79290645934e-05 
+       CG Iteration 49 : current error 1.65138896959e-05 
+       CG stopped with error 1.65139e-05 after 49 iterations 
+   --- Approximate Residual ---
+       U_leafs:        6463                
+       Residual:  9.09556327958e-05    (on   104503 indizes)
+   --- Computing next index set ---
+       Threshbound:         9.54962641121e-08
+       ||P_{Lambda}r ||_2:  1.65138896959e-05
+       alpha*Residual:   8.6407851156e-05
+          Bucket 0: L2-norm 1.32955e-05
+          Bucket 1: L2-norm 2.93061e-05
+          Bucket 2: L2-norm 3.87607e-05
+          Bucket 3: L2-norm 3.28355e-05
+          Bucket 4: L2-norm 1.91837e-05
+          Bucket 5: L2-norm 2.42057e-05
+          Bucket 6: L2-norm 3.11486e-05
+          Bucket 7: L2-norm 3.17548e-05
+          Bucket 8: L2-norm 2.72636e-05
+       Lambda:  raw extension     31343
+                multitree ext.    13096
+                total size        32066
+
+******** Iteration 13
+   Current size of Lambda    32066
+   --- Starting CG with tolerance 9.09556327958e-06 ---
+       CG Iteration 0  : current error 5.98467597337e-05 
+       CG Iteration 1  : current error 7.79024154379e-05 
+       CG Iteration 2  : current error 0.000165850596038 
+       CG Iteration 3  : current error 0.000163552661245 
+       CG Iteration 4  : current error 0.000144008601551 
+       CG Iteration 5  : current error 0.000127926049838 
+       CG Iteration 6  : current error 0.000119946545832 
+       CG Iteration 7  : current error 0.000103479721718 
+       CG Iteration 8  : current error 8.33982967857e-05 
+       CG Iteration 9  : current error 5.68056331855e-05 
+       CG Iteration 10 : current error 3.9731273253e-05  
+       CG Iteration 11 : current error 3.54710255371e-05 
+       CG Iteration 12 : current error 3.58592581244e-05 
+       CG Iteration 13 : current error 3.96195378227e-05 
+       CG Iteration 14 : current error 5.04249524137e-05 
+       CG Iteration 15 : current error 5.27113849992e-05 
+       CG Iteration 16 : current error 4.75829433259e-05 
+       CG Iteration 17 : current error 4.22788208056e-05 
+       CG Iteration 18 : current error 3.84079977298e-05 
+       CG Iteration 19 : current error 3.41266183796e-05 
+       CG Iteration 20 : current error 3.20075623619e-05 
+       CG Iteration 21 : current error 3.13013239051e-05 
+       CG Iteration 22 : current error 3.03169476094e-05 
+       CG Iteration 23 : current error 2.78914351152e-05 
+       CG Iteration 24 : current error 2.39832487508e-05 
+       CG Iteration 25 : current error 2.29846028186e-05 
+       CG Iteration 26 : current error 2.53534213349e-05 
+       CG Iteration 27 : current error 2.74781297577e-05 
+       CG Iteration 28 : current error 2.71665204086e-05 
+       CG Iteration 29 : current error 2.76379983989e-05 
+       CG Iteration 30 : current error 2.66468780477e-05 
+       CG Iteration 31 : current error 2.53331016128e-05 
+       CG Iteration 32 : current error 2.39724388491e-05 
+       CG Iteration 33 : current error 2.37227300802e-05 
+       CG Iteration 34 : current error 2.51088595051e-05 
+       CG Iteration 35 : current error 2.47175392865e-05 
+       CG Iteration 36 : current error 2.16431809987e-05 
+       CG Iteration 37 : current error 1.81332875007e-05 
+       CG Iteration 38 : current error 1.66499116276e-05 
+       CG Iteration 39 : current error 1.57857567038e-05 
+       CG Iteration 40 : current error 1.55518208632e-05 
+       CG Iteration 41 : current error 1.60376825203e-05 
+       CG Iteration 42 : current error 1.67514078801e-05 
+       CG Iteration 43 : current error 1.69840072173e-05 
+       CG Iteration 44 : current error 1.56856631454e-05 
+       CG Iteration 45 : current error 1.38979369059e-05 
+       CG Iteration 46 : current error 1.29076120669e-05 
+       CG Iteration 47 : current error 1.24799872082e-05 
+       CG Iteration 48 : current error 1.23220730739e-05 
+       CG Iteration 49 : current error 1.18446937233e-05 
+       CG Iteration 50 : current error 1.11297892238e-05 
+       CG Iteration 51 : current error 1.08671585231e-05 
+       CG Iteration 52 : current error 1.02253592948e-05 
+       CG Iteration 53 : current error 9.37919217246e-06 
+       CG Iteration 54 : current error 9.59807038226e-06 
+       CG Iteration 55 : current error 9.87879768249e-06 
+       CG Iteration 56 : current error 1.00081394948e-05 
+       CG Iteration 57 : current error 9.78920157157e-06 
+       CG Iteration 58 : current error 9.53838413595e-06 
+       CG Iteration 59 : current error 8.86312432594e-06 
+       CG stopped with error 8.86312e-06 after 59 iterations 
+   --- Approximate Residual ---
+       U_leafs:        13096               
+       Residual:  6.32847729681e-05    (on   182368 indizes)
+   --- Computing next index set ---
+       Threshbound:         5.04681766237e-08
+       ||P_{Lambda}r ||_2:  8.86312432594e-06
+       alpha*Residual:   6.01205343197e-05
+          Bucket 0: L2-norm 3.23413e-05
+          Bucket 1: L2-norm 1.65237e-05
+          Bucket 2: L2-norm 1.34391e-05
+          Bucket 3: L2-norm 2.49605e-05
+          Bucket 4: L2-norm 1.69662e-05
+          Bucket 5: L2-norm 1.6876e-05
+          Bucket 6: L2-norm 1.92008e-05
+          Bucket 7: L2-norm 1.83809e-05
+          Bucket 8: L2-norm 1.54464e-05
+       Lambda:  raw extension     52469
+                multitree ext.    21540
+                total size        53606
+
+******** Iteration 14
+   Current size of Lambda    53606
+   --- Starting CG with tolerance 6.32847729681e-06 ---
+       CG Iteration 0  : current error 3.67843184586e-05 
+       CG Iteration 1  : current error 5.50377357689e-05 
+       CG Iteration 2  : current error 0.000116824665047 
+       CG Iteration 3  : current error 0.00012504810758  
+       CG Iteration 4  : current error 0.000105979748421 
+       CG Iteration 5  : current error 8.24604698874e-05 
+       CG Iteration 6  : current error 7.48572504361e-05 
+       CG Iteration 7  : current error 5.97279461292e-05 
+       CG Iteration 8  : current error 5.25246208368e-05 
+       CG Iteration 9  : current error 3.81353981864e-05 
+       CG Iteration 10 : current error 2.73088323048e-05 
+       CG Iteration 11 : current error 2.41239554146e-05 
+       CG Iteration 12 : current error 2.40913122835e-05 
+       CG Iteration 13 : current error 2.40516744242e-05 
+       CG Iteration 14 : current error 2.79560215189e-05 
+       CG Iteration 15 : current error 3.08923769071e-05 
+       CG Iteration 16 : current error 2.93906023592e-05 
+       CG Iteration 17 : current error 2.7028773402e-05  
+       CG Iteration 18 : current error 2.32186155485e-05 
+       CG Iteration 19 : current error 1.9839415132e-05  
+       CG Iteration 20 : current error 1.98165821588e-05 
+       CG Iteration 21 : current error 1.86495676006e-05 
+       CG Iteration 22 : current error 1.82911411666e-05 
+       CG Iteration 23 : current error 1.71830975984e-05 
+       CG Iteration 24 : current error 1.5055942331e-05  
+       CG Iteration 25 : current error 1.40794115491e-05 
+       CG Iteration 26 : current error 1.44743807683e-05 
+       CG Iteration 27 : current error 1.57571241933e-05 
+       CG Iteration 28 : current error 1.64286422488e-05 
+       CG Iteration 29 : current error 1.70195193747e-05 
+       CG Iteration 30 : current error 1.62840318517e-05 
+       CG Iteration 31 : current error 1.54004860354e-05 
+       CG Iteration 32 : current error 1.5142694948e-05  
+       CG Iteration 33 : current error 1.53113854903e-05 
+       CG Iteration 34 : current error 1.56442167566e-05 
+       CG Iteration 35 : current error 1.63760802077e-05 
+       CG Iteration 36 : current error 1.5094909647e-05  
+       CG Iteration 37 : current error 1.36068143197e-05 
+       CG Iteration 38 : current error 1.19523983539e-05 
+       CG Iteration 39 : current error 1.03065792637e-05 
+       CG Iteration 40 : current error 9.30801248529e-06 
+       CG Iteration 41 : current error 9.55207057405e-06 
+       CG Iteration 42 : current error 9.97119078193e-06 
+       CG Iteration 43 : current error 1.06945568066e-05 
+       CG Iteration 44 : current error 1.0576080638e-05  
+       CG Iteration 45 : current error 9.7614832678e-06  
+       CG Iteration 46 : current error 8.98181755413e-06 
+       CG Iteration 47 : current error 8.4491298633e-06  
+       CG Iteration 48 : current error 7.91074367974e-06 
+       CG Iteration 49 : current error 7.68351453482e-06 
+       CG Iteration 50 : current error 7.24820753492e-06 
+       CG Iteration 51 : current error 6.60755179018e-06 
+       CG Iteration 52 : current error 6.24058711703e-06 
+       CG stopped with error 6.24059e-06 after 52 iterations 
+   --- Approximate Residual ---
+       U_leafs:        21540               
+       Residual:  4.04983520793e-05    (on   298446 indizes)
+   --- Computing next index set ---
+       Threshbound:         2.52510859859e-08
+       ||P_{Lambda}r ||_2:  6.24058711703e-06
+       alpha*Residual:   3.84734344753e-05
+          Bucket 0: L2-norm 2.27495e-06
+          Bucket 1: L2-norm 1.03322e-05
+          Bucket 2: L2-norm 2.42764e-05
+          Bucket 3: L2-norm 8.40043e-06
+          Bucket 4: L2-norm 4.94028e-06
+          Bucket 5: L2-norm 1.41973e-05
+          Bucket 6: L2-norm 9.11835e-06
+          Bucket 7: L2-norm 1.24286e-05
+          Bucket 8: L2-norm 1.2739e-05
+          Bucket 9: L2-norm 1.00104e-05
+       Lambda:  raw extension     88211
+                multitree ext.    36226
+                total size        89832
+
+******** Iteration 15
+   Current size of Lambda    89832
+   --- Starting CG with tolerance 4.04983520793e-06 ---
+       CG Iteration 0  : current error 2.27221702748e-05 
+       CG Iteration 1  : current error 2.95005630717e-05 
+       CG Iteration 2  : current error 7.12182830425e-05 
+       CG Iteration 3  : current error 7.66366049414e-05 
+       CG Iteration 4  : current error 6.2380223279e-05  
+       CG Iteration 5  : current error 5.0175521518e-05  
+       CG Iteration 6  : current error 4.25157744883e-05 
+       CG Iteration 7  : current error 3.21360770619e-05 
+       CG Iteration 8  : current error 2.66710353062e-05 
+       CG Iteration 9  : current error 2.32908329897e-05 
+       CG Iteration 10 : current error 1.81701785064e-05 
+       CG Iteration 11 : current error 1.65230256581e-05 
+       CG Iteration 12 : current error 1.67637282278e-05 
+       CG Iteration 13 : current error 1.64642410467e-05 
+       CG Iteration 14 : current error 1.82149516428e-05 
+       CG Iteration 15 : current error 2.11802700011e-05 
+       CG Iteration 16 : current error 2.06181545482e-05 
+       CG Iteration 17 : current error 1.87067344536e-05 
+       CG Iteration 18 : current error 1.64801700272e-05 
+       CG Iteration 19 : current error 1.43808968119e-05 
+       CG Iteration 20 : current error 1.26659212344e-05 
+       CG Iteration 21 : current error 1.19814372166e-05 
+       CG Iteration 22 : current error 1.12359506094e-05 
+       CG Iteration 23 : current error 1.11062172898e-05 
+       CG Iteration 24 : current error 1.06652086375e-05 
+       CG Iteration 25 : current error 9.59294544907e-06 
+       CG Iteration 26 : current error 9.42122634944e-06 
+       CG Iteration 27 : current error 1.02625070844e-05 
+       CG Iteration 28 : current error 1.10523567769e-05 
+       CG Iteration 29 : current error 1.15519379123e-05 
+       CG Iteration 30 : current error 1.16640423132e-05 
+       CG Iteration 31 : current error 1.12399002862e-05 
+       CG Iteration 32 : current error 1.08431940903e-05 
+       CG Iteration 33 : current error 9.94750013925e-06 
+       CG Iteration 34 : current error 9.49312417874e-06 
+       CG Iteration 35 : current error 9.63486654342e-06 
+       CG Iteration 36 : current error 9.64166289195e-06 
+       CG Iteration 37 : current error 8.87850398216e-06 
+       CG Iteration 38 : current error 7.92375417628e-06 
+       CG Iteration 39 : current error 7.3654328059e-06  
+       CG Iteration 40 : current error 6.60908929346e-06 
+       CG Iteration 41 : current error 6.2852661093e-06  
+       CG Iteration 42 : current error 6.14527834227e-06 
+       CG Iteration 43 : current error 6.15194903907e-06 
+       CG Iteration 44 : current error 6.53465633276e-06 
+       CG Iteration 45 : current error 6.43872931602e-06 
+       CG Iteration 46 : current error 5.88520960066e-06 
+       CG Iteration 47 : current error 5.35157622424e-06 
+       CG Iteration 48 : current error 5.06625102768e-06 
+       CG Iteration 49 : current error 4.72673222404e-06 
+       CG Iteration 50 : current error 4.61489664558e-06 
+       CG Iteration 51 : current error 4.32641888397e-06 
+       CG Iteration 52 : current error 3.98952293439e-06 
+       CG stopped with error 3.98952e-06 after 52 iterations 
+   --- Approximate Residual ---
+       U_leafs:        36226               
+       Residual:  2.40919509193e-05    (on   501272 indizes)
+   --- Computing next index set ---
+       Threshbound:         1.15660018827e-08
+       ||P_{Lambda}r ||_2:  3.98952293439e-06
+       alpha*Residual:   2.28873533734e-05
+          Bucket 0: L2-norm 1.05479e-05
+          Bucket 1: L2-norm 1.32579e-05
+          Bucket 2: L2-norm 4.02505e-06
+          Bucket 3: L2-norm 4.79087e-06
+          Bucket 4: L2-norm 5.93006e-06
+          Bucket 5: L2-norm 6.70618e-06
+          Bucket 6: L2-norm 8.08178e-06
+          Bucket 7: L2-norm 6.782e-06
+       Lambda:  raw extension    140848
+                multitree ext.    53017
+                total size       142849
+
+******** Iteration 16
+   Current size of Lambda   142849
+   --- Starting CG with tolerance 2.40919509193e-06 ---
+       CG Iteration 0  : current error 1.33624953372e-05 
+       CG Iteration 1  : current error 1.52993945214e-05 
+       CG Iteration 2  : current error 3.64794301445e-05 
+       CG Iteration 3  : current error 3.35160348642e-05 
+       CG Iteration 4  : current error 2.87384757652e-05 
+       CG Iteration 5  : current error 2.93027047437e-05 
+       CG Iteration 6  : current error 2.90520228619e-05 
+       CG Iteration 7  : current error 2.47898677345e-05 
+       CG Iteration 8  : current error 2.1592307338e-05  
+       CG Iteration 9  : current error 1.59355635561e-05 
+       CG Iteration 10 : current error 1.06631786005e-05 
+       CG Iteration 11 : current error 8.82075621909e-06 
+       CG Iteration 12 : current error 8.60809640443e-06 
+       CG Iteration 13 : current error 9.3210247756e-06  
+       CG Iteration 14 : current error 1.08165757769e-05 
+       CG Iteration 15 : current error 1.32534881405e-05 
+       CG Iteration 16 : current error 1.3043308266e-05  
+       CG Iteration 17 : current error 1.17110796231e-05 
+       CG Iteration 18 : current error 1.0385824174e-05  
+       CG Iteration 19 : current error 8.90928672618e-06 
+       CG Iteration 20 : current error 7.76107550123e-06 
+       CG Iteration 21 : current error 7.25940385221e-06 
+       CG Iteration 22 : current error 7.25405990434e-06 
+       CG Iteration 23 : current error 7.5325841582e-06  
+       CG Iteration 24 : current error 7.44763120517e-06 
+       CG Iteration 25 : current error 6.4295595921e-06  
+       CG Iteration 26 : current error 5.98208973393e-06 
+       CG Iteration 27 : current error 6.10384719339e-06 
+       CG Iteration 28 : current error 6.44755726356e-06 
+       CG Iteration 29 : current error 6.58808050421e-06 
+       CG Iteration 30 : current error 6.73766321187e-06 
+       CG Iteration 31 : current error 6.80771606234e-06 
+       CG Iteration 32 : current error 6.61258855115e-06 
+       CG Iteration 33 : current error 6.25821654638e-06 
+       CG Iteration 34 : current error 5.83090807373e-06 
+       CG Iteration 35 : current error 5.71606982265e-06 
+       CG Iteration 36 : current error 6.0672636656e-06  
+       CG Iteration 37 : current error 6.06755502017e-06 
+       CG Iteration 38 : current error 5.43764048485e-06 
+       CG Iteration 39 : current error 4.89699829286e-06 
+       CG Iteration 40 : current error 4.39543591522e-06 
+       CG Iteration 41 : current error 4.0010973237e-06  
+       CG Iteration 42 : current error 3.81609098283e-06 
+       CG Iteration 43 : current error 3.82356243836e-06 
+       CG Iteration 44 : current error 3.97407657201e-06 
+       CG Iteration 45 : current error 4.20089453049e-06 
+       CG Iteration 46 : current error 4.27336117991e-06 
+       CG Iteration 47 : current error 3.93158194845e-06 
+       CG Iteration 48 : current error 3.57000746499e-06 
+       CG Iteration 49 : current error 3.31591880722e-06 
+       CG Iteration 50 : current error 3.04697094782e-06 
+       CG Iteration 51 : current error 2.91408304475e-06 
+       CG Iteration 52 : current error 2.76386224562e-06 
+       CG Iteration 53 : current error 2.65743266562e-06 
+       CG Iteration 54 : current error 2.5853849298e-06  
+       CG Iteration 55 : current error 2.53530502374e-06 
+       CG Iteration 56 : current error 2.32776994228e-06 
+       CG stopped with error 2.32777e-06 after 56 iterations 
+   --- Approximate Residual ---
+       U_leafs:        53017               
+       Residual:  1.27958853717e-05    (on   830296 indizes)
+   --- Computing next index set ---
+       Threshbound:         4.73854854417e-09
+       ||P_{Lambda}r ||_2:  2.32776994228e-06
+       alpha*Residual:   1.21560911032e-05
+          Bucket 0: L2-norm 3.71812e-06
+          Bucket 1: L2-norm 3.99184e-06
+          Bucket 2: L2-norm 2.78216e-06
+          Bucket 3: L2-norm 5.53547e-06
+          Bucket 4: L2-norm 3.05743e-06
+          Bucket 5: L2-norm 3.30644e-06
+          Bucket 6: L2-norm 4.44594e-06
+          Bucket 7: L2-norm 4.43249e-06
+          Bucket 8: L2-norm 3.72752e-06
+          Bucket 9: L2-norm 3.08807e-06
+       Lambda:  raw extension    273504
+                multitree ext.   137808
+                total size       280657
+
+******** Iteration 17
+   Current size of Lambda   280657
+   --- Starting CG with tolerance 1.27958853717e-06 ---
+       CG Iteration 0  : current error 1.09881757547e-05 
+       CG Iteration 1  : current error 1.40482319958e-05 
+       CG Iteration 2  : current error 3.2292950413e-05  
+       CG Iteration 3  : current error 3.23324778174e-05 
+       CG Iteration 4  : current error 2.50798425919e-05 
+       CG Iteration 5  : current error 2.21451487815e-05 
+       CG Iteration 6  : current error 2.03746478626e-05 
+       CG Iteration 7  : current error 1.67390828313e-05 
+       CG Iteration 8  : current error 1.39619092843e-05 
+       CG Iteration 9  : current error 1.16917106858e-05 
+       CG Iteration 10 : current error 8.53001263525e-06 
+       CG Iteration 11 : current error 6.74340124686e-06 
+       CG Iteration 12 : current error 6.51104733878e-06 
+       CG Iteration 13 : current error 6.90776292239e-06 
+       CG Iteration 14 : current error 7.41013879786e-06 
+       CG Iteration 15 : current error 8.84449304644e-06 
+       CG Iteration 16 : current error 9.60432551912e-06 
+       CG Iteration 17 : current error 8.58278166285e-06 
+       CG Iteration 18 : current error 7.55200973773e-06 
+       CG Iteration 19 : current error 6.59525658842e-06 
+       CG Iteration 20 : current error 5.48553425272e-06 
+       CG Iteration 21 : current error 4.9283960198e-06  
+       CG Iteration 22 : current error 4.87890496176e-06 
+       CG Iteration 23 : current error 4.88586183975e-06 
+       CG Iteration 24 : current error 4.87668621075e-06 
+       CG Iteration 25 : current error 4.69592525794e-06 
+       CG Iteration 26 : current error 4.40238280843e-06 
+       CG Iteration 27 : current error 4.20570347713e-06 
+       CG Iteration 28 : current error 4.50257380879e-06 
+       CG Iteration 29 : current error 4.93622529293e-06 
+       CG Iteration 30 : current error 5.1108856602e-06  
+       CG Iteration 31 : current error 5.22531091077e-06 
+       CG Iteration 32 : current error 5.09653330027e-06 
+       CG Iteration 33 : current error 4.68765588715e-06 
+       CG Iteration 34 : current error 4.28727933717e-06 
+       CG Iteration 35 : current error 3.98363693122e-06 
+       CG Iteration 36 : current error 3.8366253247e-06  
+       CG Iteration 37 : current error 4.015896746e-06   
+       CG Iteration 38 : current error 4.19254697031e-06 
+       CG Iteration 39 : current error 3.99790962814e-06 
+       CG Iteration 40 : current error 3.59436903319e-06 
+       CG Iteration 41 : current error 3.29999158576e-06 
+       CG Iteration 42 : current error 3.02680075842e-06 
+       CG Iteration 43 : current error 2.93297796648e-06 
+       CG Iteration 44 : current error 2.98625819699e-06 
+       CG Iteration 45 : current error 2.99560702461e-06 
+       CG Iteration 46 : current error 2.99246530745e-06 
+       CG Iteration 47 : current error 3.00280574294e-06 
+       CG Iteration 48 : current error 2.79818370874e-06 
+       CG Iteration 49 : current error 2.45420621033e-06 
+       CG Iteration 50 : current error 2.22092060314e-06 
+       CG Iteration 51 : current error 2.15252696879e-06 
+       CG Iteration 52 : current error 2.1357987314e-06  
+       CG Iteration 53 : current error 2.08200233321e-06 
+       CG Iteration 54 : current error 2.00149849271e-06 
+       CG Iteration 55 : current error 1.91096586737e-06 
+       CG Iteration 56 : current error 1.82890559448e-06 
+       CG Iteration 57 : current error 1.74286412827e-06 
+       CG Iteration 58 : current error 1.65508942658e-06 
+       CG Iteration 59 : current error 1.71311364315e-06 
+       CG Iteration 60 : current error 1.84120910657e-06 
+       CG Iteration 61 : current error 1.90464869812e-06 
+       CG Iteration 62 : current error 1.84040571649e-06 
+       CG Iteration 63 : current error 1.72931717389e-06 
+       CG Iteration 64 : current error 1.60780758103e-06 
+       CG Iteration 65 : current error 1.54629828156e-06 
+       CG Iteration 66 : current error 1.51890069298e-06 
+       CG Iteration 67 : current error 1.48085645966e-06 
+       CG Iteration 68 : current error 1.49403519398e-06 
+       CG Iteration 69 : current error 1.55847585836e-06 
+       CG Iteration 70 : current error 1.58866213985e-06 
+       CG Iteration 71 : current error 1.52621604354e-06 
+       CG Iteration 72 : current error 1.47273397827e-06 
+       CG Iteration 73 : current error 1.46937146674e-06 
+       CG Iteration 74 : current error 1.46903743607e-06 
+       CG Iteration 75 : current error 1.43265578474e-06 
+       CG Iteration 76 : current error 1.36589307352e-06 
+       CG Iteration 77 : current error 1.24360256459e-06 
+       CG stopped with error 1.2436e-06 after 77 iterations 
+   --- Approximate Residual ---
+       U_leafs:        137808              
+       Residual:  9.5775929222e-06     (on  1546000 indizes)
+   --- Computing next index set ---
+       Threshbound:         2.63610249756e-09
+       ||P_{Lambda}r ||_2:  1.24360256459e-06
+       alpha*Residual:   9.09871327609e-06
+          Bucket 0: L2-norm 5.75685e-06
+          Bucket 1: L2-norm 2.23494e-06
+          Bucket 2: L2-norm 2.60972e-06
+          Bucket 3: L2-norm 2.39963e-06
+          Bucket 4: L2-norm 3.29737e-06
+          Bucket 5: L2-norm 2.0805e-06
+          Bucket 6: L2-norm 2.56167e-06
+          Bucket 7: L2-norm 2.4101e-06
+          Bucket 8: L2-norm 2.21929e-06
+       Lambda:  raw extension    410052
+                multitree ext.   133853
+                total size       414510
+
+******** Iteration 18
+   Current size of Lambda   414510
+   --- Starting CG with tolerance 9.5775929222e-07 ---
+       CG Iteration 0  : current error 4.50089523828e-06 
+       CG Iteration 1  : current error 5.36431967714e-06 
+       CG Iteration 2  : current error 1.3576410199e-05  
+       CG Iteration 3  : current error 1.48701105259e-05 
+       CG Iteration 4  : current error 1.22259587069e-05 
+       CG Iteration 5  : current error 1.03715680961e-05 
+       CG Iteration 6  : current error 9.35702452202e-06 
+       CG Iteration 7  : current error 8.03291730333e-06 
+       CG Iteration 8  : current error 6.81834292853e-06 
+       CG Iteration 9  : current error 5.65494800738e-06 
+       CG Iteration 10 : current error 4.08854198266e-06 
+       CG Iteration 11 : current error 3.37471299746e-06 
+       CG Iteration 12 : current error 3.21750760162e-06 
+       CG Iteration 13 : current error 3.00161426928e-06 
+       CG Iteration 14 : current error 2.90981082722e-06 
+       CG Iteration 15 : current error 3.13659150364e-06 
+       CG Iteration 16 : current error 3.35450576396e-06 
+       CG Iteration 17 : current error 3.34518658959e-06 
+       CG Iteration 18 : current error 3.30518787454e-06 
+       CG Iteration 19 : current error 2.98298297092e-06 
+       CG Iteration 20 : current error 2.67283216414e-06 
+       CG Iteration 21 : current error 2.6532689955e-06  
+       CG Iteration 22 : current error 2.60181167236e-06 
+       CG Iteration 23 : current error 2.34002007059e-06 
+       CG Iteration 24 : current error 2.18403352029e-06 
+       CG Iteration 25 : current error 2.13299755023e-06 
+       CG Iteration 26 : current error 1.93084498753e-06 
+       CG Iteration 27 : current error 1.79882696175e-06 
+       CG Iteration 28 : current error 1.88681606869e-06 
+       CG Iteration 29 : current error 2.01653152137e-06 
+       CG Iteration 30 : current error 2.05078379398e-06 
+       CG Iteration 31 : current error 2.11262119036e-06 
+       CG Iteration 32 : current error 2.10125585098e-06 
+       CG Iteration 33 : current error 2.01048838801e-06 
+       CG Iteration 34 : current error 1.92268432127e-06 
+       CG Iteration 35 : current error 1.830999366e-06   
+       CG Iteration 36 : current error 1.77527699707e-06 
+       CG Iteration 37 : current error 1.80431908726e-06 
+       CG Iteration 38 : current error 1.87396573823e-06 
+       CG Iteration 39 : current error 1.80038724005e-06 
+       CG Iteration 40 : current error 1.70505748932e-06 
+       CG Iteration 41 : current error 1.61966933838e-06 
+       CG Iteration 42 : current error 1.43302135091e-06 
+       CG Iteration 43 : current error 1.29838128556e-06 
+       CG Iteration 44 : current error 1.28090932746e-06 
+       CG Iteration 45 : current error 1.32967726287e-06 
+       CG Iteration 46 : current error 1.39408103172e-06 
+       CG Iteration 47 : current error 1.44684906049e-06 
+       CG Iteration 48 : current error 1.36791248196e-06 
+       CG Iteration 49 : current error 1.25570656221e-06 
+       CG Iteration 50 : current error 1.14180156449e-06 
+       CG Iteration 51 : current error 1.01772365078e-06 
+       CG Iteration 52 : current error 9.5777104294e-07  
+       CG Iteration 53 : current error 9.82005556055e-07 
+       CG Iteration 54 : current error 9.89559359056e-07 
+       CG Iteration 55 : current error 9.27777668529e-07 
+       CG stopped with error 9.27778e-07 after 55 iterations 
+   --- Approximate Residual ---
+       U_leafs:        133853              
+       Residual:  5.29212673782e-06    (on  2300191 indizes)
+   --- Computing next index set ---
+       Threshbound:         1.18473110194e-09
+       ||P_{Lambda}r ||_2:  9.27777668529e-07
+       alpha*Residual:   5.02752040093e-06
+          Bucket 0: L2-norm 2.08823e-06
+          Bucket 1: L2-norm 2.67674e-06
+          Bucket 2: L2-norm 1.11158e-06
+          Bucket 3: L2-norm 1.41932e-06
+          Bucket 4: L2-norm 1.38116e-06
+          Bucket 5: L2-norm 1.48315e-06
+          Bucket 6: L2-norm 1.88706e-06
+          Bucket 7: L2-norm 1.56342e-06
+       Lambda:  raw extension    643674
+                multitree ext.   237763
+                total size       652273
+
+******** Iteration 19
+   Current size of Lambda   652273
+   --- Starting CG with tolerance 5.29212673782e-07 ---
+       CG Iteration 0  : current error 3.31258503662e-06 
+       CG Iteration 1  : current error 3.26701673647e-06 
+       CG Iteration 2  : current error 8.060743698e-06   
+       CG Iteration 3  : current error 9.04351946366e-06 
+       CG Iteration 4  : current error 7.50338245498e-06 
+       CG Iteration 5  : current error 7.11653772521e-06 
+       CG Iteration 6  : current error 6.80170429535e-06 
+       CG Iteration 7  : current error 5.7805689382e-06  
+       CG Iteration 8  : current error 4.77348834525e-06 
+       CG Iteration 9  : current error 4.14373427295e-06 
+       CG Iteration 10 : current error 3.24199988312e-06 
+       CG Iteration 11 : current error 2.48326350993e-06 
+       CG Iteration 12 : current error 2.16870648439e-06 
+       CG Iteration 13 : current error 2.0560096751e-06  
+       CG Iteration 14 : current error 2.12724153293e-06 
+       CG Iteration 15 : current error 2.46235608601e-06 
+       CG Iteration 16 : current error 2.75341259074e-06 
+       CG Iteration 17 : current error 2.65230794654e-06 
+       CG Iteration 18 : current error 2.45170542051e-06 
+       CG Iteration 19 : current error 2.25594843798e-06 
+       CG Iteration 20 : current error 1.95397388373e-06 
+       CG Iteration 21 : current error 1.72905658661e-06 
+       CG Iteration 22 : current error 1.67075550697e-06 
+       CG Iteration 23 : current error 1.65184135694e-06 
+       CG Iteration 24 : current error 1.69383886572e-06 
+       CG Iteration 25 : current error 1.75371924028e-06 
+       CG Iteration 26 : current error 1.54534793129e-06 
+       CG Iteration 27 : current error 1.28711709489e-06 
+       CG Iteration 28 : current error 1.26057694793e-06 
+       CG Iteration 29 : current error 1.36705394993e-06 
+       CG Iteration 30 : current error 1.4001796387e-06  
+       CG Iteration 31 : current error 1.41429376047e-06 
+       CG Iteration 32 : current error 1.38947708738e-06 
+       CG Iteration 33 : current error 1.39881055126e-06 
+       CG Iteration 34 : current error 1.402026418e-06   
+       CG Iteration 35 : current error 1.36626896296e-06 
+       CG Iteration 36 : current error 1.32047418875e-06 
+       CG Iteration 37 : current error 1.31645880543e-06 
+       CG Iteration 38 : current error 1.40020278224e-06 
+       CG Iteration 39 : current error 1.44342582166e-06 
+       CG Iteration 40 : current error 1.32735786711e-06 
+       CG Iteration 41 : current error 1.18328270609e-06 
+       CG Iteration 42 : current error 1.04331497426e-06 
+       CG Iteration 43 : current error 9.14579115437e-07 
+       CG Iteration 44 : current error 8.52251529151e-07 
+       CG Iteration 45 : current error 8.43049342916e-07 
+       CG Iteration 46 : current error 8.40275094876e-07 
+       CG Iteration 47 : current error 8.89043856631e-07 
+       CG Iteration 48 : current error 9.28459809537e-07 
+       CG Iteration 49 : current error 8.63214066232e-07 
+       CG Iteration 50 : current error 7.53409478037e-07 
+       CG Iteration 51 : current error 6.7976269956e-07  
+       CG Iteration 52 : current error 6.61062193381e-07 
+       CG Iteration 53 : current error 6.53251566451e-07 
+       CG Iteration 54 : current error 6.49232957402e-07 
+       CG Iteration 55 : current error 6.2648020404e-07  
+       CG Iteration 56 : current error 5.9188761989e-07  
+       CG Iteration 57 : current error 5.76817478472e-07 
+       CG Iteration 58 : current error 5.68205634234e-07 
+       CG Iteration 59 : current error 5.35032182521e-07 
+       CG Iteration 60 : current error 4.9337208788e-07  
+       CG stopped with error 4.93372e-07 after 60 iterations 
+   --- Approximate Residual ---
+       U_leafs:        237763              
+       Residual:  3.19035676084e-06    (on  3694525 indizes)
+AWGM target tolerance reached after 19 iterations: Residual = 3.19036e-06 , awgm_tol = 3.33333e-06
+
+=====>  Writing AWGM CG information to file 
+

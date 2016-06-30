@@ -31,7 +31,7 @@ namespace lawa {
 
 template <typename T, typename Basis>
 flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> >
-computeDeltas(const Basis &basis, int j, long k, XType e);
+computeDeltas(const Basis &basis, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, XType e);
 
 }    //namespace lawa
 

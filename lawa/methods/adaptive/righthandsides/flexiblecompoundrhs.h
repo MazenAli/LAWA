@@ -47,11 +47,11 @@ public:
 	
     virtual
 	void
-	set_active_comp(int i);
+	set_active_comp(FLENS_DEFAULT_INDEXTYPE i);
 
     virtual
     const RHSType&
-    get_comp(int i) const;
+    get_comp(FLENS_DEFAULT_INDEXTYPE i) const;
 	
 	void
     clear();
@@ -59,7 +59,7 @@ public:
 protected:
 
     std::vector<RHSType*>& 	rhsvec;
-    std::vector<int> 		active_comp;
+    std::vector<FLENS_DEFAULT_INDEXTYPE> 		active_comp;
 
 private:
 

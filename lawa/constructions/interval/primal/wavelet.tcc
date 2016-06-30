@@ -29,7 +29,7 @@ Wavelet<T,Primal,Interval,Cons>::Wavelet(const Basis<T,Primal,Interval,Cons> &_b
 
 template <typename T, Construction Cons>
 T
-Wavelet<T,Primal,Interval,Cons>::operator()(T x, int j, long k, unsigned short deriv) const
+Wavelet<T,Primal,Interval,Cons>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     using flens::_;
 
@@ -41,7 +41,7 @@ Wavelet<T,Primal,Interval,Cons>::operator()(T x, int j, long k, unsigned short d
 
     const typename flens::DenseVector<flens::Array<T> >::ConstView coeffs = basis.M1(j,_,k);
     T ret = 0;
-    for (int r=coeffs.firstIndex(); r<=coeffs.lastIndex(); ++r) {
+    for (FLENS_DEFAULT_INDEXTYPE r=coeffs.firstIndex(); r<=coeffs.lastIndex(); ++r) {
         ret += coeffs(r) * basis.mra.phi(x,j+1,r,deriv);
     }
     return ret;
@@ -49,7 +49,7 @@ Wavelet<T,Primal,Interval,Cons>::operator()(T x, int j, long k, unsigned short d
 
 template <typename T, Construction Cons>
 Support<T>
-Wavelet<T,Primal,Interval,Cons>::support(int j, long k) const
+Wavelet<T,Primal,Interval,Cons>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     assert(j>=basis.min_j0);
     assert(k>=basis.rangeJ(j).firstIndex());
@@ -62,13 +62,13 @@ Wavelet<T,Primal,Interval,Cons>::support(int j, long k) const
                         *(basis.M1.lengths(k-1-pow2i<T>(j))), 1.);
     }
     // FIXME: remove std::max: left support end cannot be less than 0. Check for error (Primbs!!!)
-    return pow2i<T>(-j-1)*Support<T>(std::max(0L,basis.M1.lengths(0)+1-basis.d+2*(k-basis.M1.left.lastIndex()-1)),
+    return pow2i<T>(-j-1)*Support<T>(std::max((FLENS_DEFAULT_INDEXTYPE) 0,basis.M1.lengths(0)+1-basis.d+2*(k-basis.M1.left.lastIndex()-1)),
                                      basis.M1.lengths(0)+basis.M1.leftband.length()+2*(k-basis.M1.left.lastIndex()-1));
 }
 
 template <typename T, Construction Cons>
 flens::DenseVector<flens::Array<T> >
-Wavelet<T,Primal,Interval,Cons>::singularSupport(int j, long k) const
+Wavelet<T,Primal,Interval,Cons>::singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     assert(j>=basis.min_j0);
     assert(k>=basis.rangeJ(j).firstIndex());
@@ -94,8 +94,8 @@ Wavelet<T,Primal,Interval,Cons>::singularSupport(int j, long k) const
 }
 
 template <typename T, Construction Cons>
-int
-Wavelet<T,Primal,Interval,Cons>::vanishingMoments(int j, long k) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Primal,Interval,Cons>::vanishingMoments(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     assert(j>=basis.min_j0);
     assert(k>=basis.rangeJ(j).firstIndex());
@@ -107,15 +107,15 @@ Wavelet<T,Primal,Interval,Cons>::vanishingMoments(int j, long k) const
 
 template <typename T, Construction Cons>
 T
-Wavelet<T,Primal,Interval,Cons>::tic(int j) const
+Wavelet<T,Primal,Interval,Cons>::tic(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return pow2i<T>(-j-1);
 }
 
 template <typename T, Construction Cons>
 flens::DenseVector<flens::Array<long double> > *
-Wavelet<T,Primal,Interval,Cons>::getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-												long &split, long &refinement_k_restart) const
+Wavelet<T,Primal,Interval,Cons>::getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+												FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const
 {
 	// No split necessary, so set default values
 	refinement_k_restart = 1;
@@ -130,31 +130,31 @@ Wavelet<T,Primal,Interval,Cons>::getRefinement(int j, long k, int &refinement_j,
     }
     // inner part
     if (k<basis.cardJL(j)+basis.cardJI(j)) {
-        int type = 0;
+        FLENS_DEFAULT_INDEXTYPE type = 0;
         if (basis.d % 2 != 0 && k+1>basis.cardJ(j)/2.) type = 1;
-        long shift = k+1L;
+        FLENS_DEFAULT_INDEXTYPE shift = k+(FLENS_DEFAULT_INDEXTYPE) 1;
         refinement_k_first = 2*shift+basis._innerOffsets[type];
         return &(basis._innerRefCoeffs[type]);
     }
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
-    long shift = pow2i<long>(j)-1;
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
+    FLENS_DEFAULT_INDEXTYPE shift = pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
     refinement_k_first = 2*shift+basis._rightOffsets[type];
     return &(basis._rightRefCoeffs[type]);
 }
 
 template <typename T, Construction Cons>
-int
-Wavelet<T,Primal,Interval,Cons>::getRefinementLevel(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Wavelet<T,Primal,Interval,Cons>::getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     return j + 1;
 }
 
 template <typename T, Construction Cons>
 void
-Wavelet<T,Primal,Interval,Cons>::getRefinementNeighbors(int j, long k, int &refinement_j,
-                                                        long &refinement_k_first,
-                                                        long &refinement_k_last) const
+Wavelet<T,Primal,Interval,Cons>::getRefinementNeighbors(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j,
+                                                        FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+                                                        FLENS_DEFAULT_INDEXTYPE &refinement_k_last) const
 {
     k -= 1;
     refinement_j = j + 1;
@@ -166,16 +166,16 @@ Wavelet<T,Primal,Interval,Cons>::getRefinementNeighbors(int j, long k, int &refi
     }
     // inner part
     if (k<basis.cardJL(j)+basis.cardJI(j)) {
-        int type = 0;
+        FLENS_DEFAULT_INDEXTYPE type = 0;
         if (basis.d % 2 != 0 && k+1>basis.cardJ(j)/2.) type = 1;
-        long shift = k+1L;
+        FLENS_DEFAULT_INDEXTYPE shift = k+(FLENS_DEFAULT_INDEXTYPE) 1;
         refinement_k_first = 2*shift+basis._innerOffsets[type];
         refinement_k_last  = refinement_k_first + basis._innerRefCoeffs[type].lastIndex();
         return;
     }
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
-    long shift = pow2i<long>(j)-1;
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
+    FLENS_DEFAULT_INDEXTYPE shift = pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-1;
     refinement_k_first = 2*shift+basis._rightOffsets[type];
     refinement_k_last  = refinement_k_first + basis._rightRefCoeffs[type].lastIndex();
     return;
@@ -183,7 +183,7 @@ Wavelet<T,Primal,Interval,Cons>::getRefinementNeighbors(int j, long k, int &refi
 
 template <typename T, Construction Cons>
 T
-Wavelet<T,Primal,Interval,Cons>::getL2Norm(int j, long k) const
+Wavelet<T,Primal,Interval,Cons>::getL2Norm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     k -= 1;
     // left boundary
@@ -195,15 +195,15 @@ Wavelet<T,Primal,Interval,Cons>::getL2Norm(int j, long k) const
         return basis._innerL2Norms[0];
     }
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
     return basis._rightL2Norms[type];
 }
 
 template <typename T, Construction Cons>
 T
-Wavelet<T,Primal,Interval,Cons>::getH1SemiNorm(int j, long k) const
+Wavelet<T,Primal,Interval,Cons>::getH1SemiNorm(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
-    T pow2ij = (T)(1L << j);
+    T pow2ij = (T)((FLENS_DEFAULT_INDEXTYPE) 1 << j);
     k -= 1;
     // left boundary
     if (k<basis.cardJL(j)) {
@@ -214,7 +214,7 @@ Wavelet<T,Primal,Interval,Cons>::getH1SemiNorm(int j, long k) const
         return pow2ij*basis._innerH1SemiNorms[0];
     }
     // right part
-    int type  = (int)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
+    FLENS_DEFAULT_INDEXTYPE type  = (FLENS_DEFAULT_INDEXTYPE)(k+1 - (basis.cardJ(j) - basis.cardJL(j) + 1));
     return pow2ij*basis._rightH1SemiNorms[type];
 }
 

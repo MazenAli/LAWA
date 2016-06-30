@@ -89,7 +89,7 @@ _integrate_f1(const IntegralF<Quad,First,Second> &integral)
 {
     typedef typename First::T T;
     const typename First::BasisFunctionType &first = integral.first.generator(integral.e1);
-    int p = integral.function.singularPoints.length();
+    FLENS_DEFAULT_INDEXTYPE p = integral.function.singularPoints.length();
 
     Support<T> common = first.support(integral.j1,integral.k1);
     common.l1 *= integral.RightmLeft;
@@ -105,7 +105,7 @@ _integrate_f1(const IntegralF<Quad,First,Second> &integral)
             firstSingularPoints *= integral.RightmLeft;
             firstSingularPoints += integral.left;
 
-            int m = firstSingularPoints.length();
+            FLENS_DEFAULT_INDEXTYPE m = firstSingularPoints.length();
             singularPoints.engine().resize(m+p);
 
             std::merge(firstSingularPoints.engine().data(),
@@ -117,13 +117,13 @@ _integrate_f1(const IntegralF<Quad,First,Second> &integral)
             singularPoints = first.singularSupport(integral.j1,integral.k1);
         }
     } else {
-        singularPoints.engine().resize(2);
+        singularPoints.engine().resize((FLENS_DEFAULT_INDEXTYPE)2);
         Support<T> supp = first.support(integral.j1,integral.k1);
         singularPoints = supp.l1, supp.l2;
     }
 
     T ret = 0.0;
-    for (int i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
         T a = singularPoints(i);
         T b = singularPoints(i+1);
         if (a==b)              continue;
@@ -157,7 +157,7 @@ _integrate_f2(const IntegralF<Quad,First,Second> &integral)
     common.l2 += integral.left;
 
     flens::DenseVector<flens::Array<T> > singularPoints;
-    int p = function.singularPoints.length();
+    FLENS_DEFAULT_INDEXTYPE p = function.singularPoints.length();
 
     if (!BothDual<First,Second>::value) { // we do have (additional) singular points
         // merge singular points of bsplines/wavelets and function to one list.
@@ -171,8 +171,8 @@ _integrate_f2(const IntegralF<Quad,First,Second> &integral)
             secondSingularPoints *= integral.RightmLeft;
             secondSingularPoints += integral.left;
 
-            int m = firstSingularPoints.length();
-            int n = secondSingularPoints.length();
+            FLENS_DEFAULT_INDEXTYPE m = firstSingularPoints.length();
+            FLENS_DEFAULT_INDEXTYPE n = secondSingularPoints.length();
             singularPoints.engine().resize(m+n+p);
 
             std::merge(firstSingularPoints.engine().data(),
@@ -190,7 +190,7 @@ _integrate_f2(const IntegralF<Quad,First,Second> &integral)
             if (IsPrimal<First>::value or IsOrthogonal<First>::value) {
                 if (p>0) {
                     const flens::DenseVector<flens::Array<T> > & firstSingularPoints = first.singularSupport(integral.j1,integral.k1);
-                    int m = firstSingularPoints.length();
+                    FLENS_DEFAULT_INDEXTYPE m = firstSingularPoints.length();
                     singularPoints.engine().resize(m+p);
 
                     std::merge(firstSingularPoints.engine().data(),
@@ -204,7 +204,7 @@ _integrate_f2(const IntegralF<Quad,First,Second> &integral)
             } else {
                 if (p>0) {
                     const flens::DenseVector<flens::Array<T> > & secondSingularPoints = second.singularSupport(integral.j2,integral.k2);
-                    int n = secondSingularPoints.length();
+                    FLENS_DEFAULT_INDEXTYPE n = secondSingularPoints.length();
                     singularPoints.engine().resize(n+p);
 
                     std::merge(secondSingularPoints.engine().data(),
@@ -222,7 +222,7 @@ _integrate_f2(const IntegralF<Quad,First,Second> &integral)
 
     //T ret = 0.0;
     long double ret = 0.0;
-    for (int i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=singularPoints.firstIndex(); i<singularPoints.lastIndex(); ++i) {
         T a = singularPoints(i);
         T b = singularPoints(i+1);
         if (a==b)              continue;
@@ -283,8 +283,8 @@ Integral<Quad,First,Second>::Integral(const First &_first,
 
 template <QuadratureType Quad, typename First, typename Second>
 typename First::T
-Integral<Quad,First,Second>::operator()(int _j1, long _k1, XType _e1, int _deriv1, 
-                                        int _j2, long _k2, XType _e2, int _deriv2) const
+Integral<Quad,First,Second>::operator()(FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv1, 
+                                        FLENS_DEFAULT_INDEXTYPE _j2, FLENS_DEFAULT_INDEXTYPE _k2, XType _e2, FLENS_DEFAULT_INDEXTYPE _deriv2) const
 {
     j1 = _j1; k1 = _k1; e1 = _e1; deriv1 = _deriv1;
     j2 = _j2; k2 = _k2; e2 = _e2; deriv2 = _deriv2;
@@ -345,7 +345,7 @@ IntegralF<Quad,First,Second>::IntegralF(const IntegralF& _F):
 
 template <QuadratureType Quad, typename First, typename Second>
 typename First::T
-IntegralF<Quad,First,Second>::operator()(int _j, long _k, XType _e, int _deriv) const
+IntegralF<Quad,First,Second>::operator()(FLENS_DEFAULT_INDEXTYPE _j, FLENS_DEFAULT_INDEXTYPE _k, XType _e, FLENS_DEFAULT_INDEXTYPE _deriv) const
 {
     j1 = _j; k1 = _k; e1 = _e; deriv1 = _deriv;
     return _integrate_f1(*this);
@@ -353,8 +353,8 @@ IntegralF<Quad,First,Second>::operator()(int _j, long _k, XType _e, int _deriv) 
 
 template <QuadratureType Quad, typename First, typename Second>
 typename First::T
-IntegralF<Quad,First,Second>::operator()(int _j1, long _k1, XType _e1, int _deriv1,
-                                         int _j2, long _k2, XType _e2, int _deriv2) const
+IntegralF<Quad,First,Second>::operator()(FLENS_DEFAULT_INDEXTYPE _j1, FLENS_DEFAULT_INDEXTYPE _k1, XType _e1, FLENS_DEFAULT_INDEXTYPE _deriv1,
+                                         FLENS_DEFAULT_INDEXTYPE _j2, FLENS_DEFAULT_INDEXTYPE _k2, XType _e2, FLENS_DEFAULT_INDEXTYPE _deriv2) const
 {
     j1 = _j1; k1 = _k1; e1 = _e1; deriv1 = _deriv1;
     j2 = _j2; k2 = _k2; e2 = _e2; deriv2 = _deriv2;

@@ -7,7 +7,7 @@ template <typename T, typename Index, typename SpaceIndex, typename Basis, typen
 S_ADWAV_SPACETIME<T,Index,SpaceIndex,Basis,MA,RHSOperator,RHSInitialCond>::S_ADWAV_SPACETIME
                                                      (const Basis &_basis, MA &_A, RHSOperator &_F, RHSInitialCond &_U0,
                                                       T _contraction, T _threshTol, T _linTol, T _resTol,
-                                                      int _NumOfIterations, int _MaxItsPerThreshTol, T _eps)
+                                                      FLENS_DEFAULT_INDEXTYPE _NumOfIterations, FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol, T _eps)
     : basis(_basis), A(_A), F(_F), U0(_U0), contraction(_contraction), threshTol(_threshTol), linTol(_linTol),
       resTol(_resTol), NumOfIterations(_NumOfIterations), MaxItsPerThreshTol(_MaxItsPerThreshTol), eps(_eps)
 {
@@ -23,7 +23,7 @@ S_ADWAV_SPACETIME<T,Index,SpaceIndex,Basis,MA,RHSOperator,RHSInitialCond>::solve
 {
     Timer timer;
 
-    int d=InitialLambda.d, d_=InitialLambda.d_;
+    FLENS_DEFAULT_INDEXTYPE d=InitialLambda.d, d_=InitialLambda.d_;
     IndexSet<Index> LambdaActive(d,d_), LambdaThresh(d,d_), LambdaActivable(d,d_);
     IndexSet<Index>      LambdaActive_test_operator(d,d_), DeltaLambda_test_operator(d,d_);
     IndexSet<SpaceIndex> LambdaActive_test_initcond(d,d_), DeltaLambda_test_initcond(d,d_);
@@ -32,13 +32,13 @@ S_ADWAV_SPACETIME<T,Index,SpaceIndex,Basis,MA,RHSOperator,RHSInitialCond>::solve
 
     LambdaActive = InitialLambda;
     T old_res = 0.;
-    int its_per_threshTol=0;
+    FLENS_DEFAULT_INDEXTYPE its_per_threshTol=0;
     std::cout << "Simple adaptive space time solver started." << std::endl;
     std::stringstream filename;
     filename << "s-adwav-st-realline-heat1d_" << d << "_" << d_ << ".dat";
     std::ofstream file(filename.str().c_str());
 
-    for (int its=0; its<NumOfIterations; ++its) {
+    for (FLENS_DEFAULT_INDEXTYPE its=0; its<NumOfIterations; ++its) {
         std::cout << "*** " << its+1 << ".iteration" << std::endl;
 
         timer.start();
@@ -55,7 +55,7 @@ S_ADWAV_SPACETIME<T,Index,SpaceIndex,Basis,MA,RHSOperator,RHSInitialCond>::solve
         //Galerkin step
         T r_norm_LambdaActive = 0.0;
         std::cout << "   CGLS solver started with N = " << LambdaActive.size() << std::endl;
-        int iterations = CGLS_Solve(LambdaActive_test_operator, LambdaActive_test_initcond, A, LambdaActive,
+        FLENS_DEFAULT_INDEXTYPE iterations = CGLS_Solve(LambdaActive_test_operator, LambdaActive_test_initcond, A, LambdaActive,
                                     u, f, u0, r_norm_LambdaActive, linTol, 100000);
         std::cout << "   ...finished after " << iterations << " iterations with residual = " << r_norm_LambdaActive << std::endl;
 

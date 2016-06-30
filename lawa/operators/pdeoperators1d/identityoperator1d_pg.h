@@ -44,8 +44,8 @@ class IdentityOperator1D_PG{
         IdentityOperator1D_PG(const TrialBasis& _trialbasis, const TestBasis& _testbasis);
 
         T
-        operator()(XType xtype1, int j1, long k1,
-                   XType xtype2, int j2, long k2) const;
+        operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                   XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
 
         T
         operator()(const Index1D &row_index, const Index1D &col_index) const;

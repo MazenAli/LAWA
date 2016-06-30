@@ -31,8 +31,8 @@ MultiTreeAWGM<Index,Basis,LocalOperator,RHS,Preconditioner>::setParameters
 template <typename Index, typename Basis, typename LocalOperator, typename RHS, typename Preconditioner>
 typename LocalOperator::T
 MultiTreeAWGM<Index,Basis,LocalOperator,RHS,Preconditioner>::
-cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, T _init_cgtol,
-         T EnergyNormSquared, const char *filename, const char *coefffilename, int maxDof)
+cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, FLENS_DEFAULT_INDEXTYPE NumOfIterations, T _init_cgtol,
+         T EnergyNormSquared, const char *filename, const char *coefffilename, FLENS_DEFAULT_INDEXTYPE maxDof)
 {
     Coefficients<Lexicographical,T,Index> r(hashMapSize),       // residual vector for cg
                                           p(hashMapSize),       // auxiliary vector for cg
@@ -42,8 +42,8 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
 
     Index maxIndex;
     Index maxWaveletIndex;
-    int *jmax = new int[1];
-    int arrayLength = 1;
+    FLENS_DEFAULT_INDEXTYPE *jmax = new FLENS_DEFAULT_INDEXTYPE[1];
+    FLENS_DEFAULT_INDEXTYPE arrayLength = 1;
     long double Residual = 1.L;
 
     Timer time;
@@ -64,14 +64,14 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
     T time_total_comp = 0.;
     T time_total_galerkin = 0.;
     T time_total_residual = 0.;
-    for (int iter=1; iter<=NumOfIterations; ++iter) {
+    for (FLENS_DEFAULT_INDEXTYPE iter=1; iter<=NumOfIterations; ++iter) {
         T time_mv_linsys = 0.;
         T time_mv_residual = 0.;
         T time_multitree_residual = 0.;
         iteration_time.start();
 
-        int N = u.size();
-        int N_residual = 0;
+        FLENS_DEFAULT_INDEXTYPE N = u.size();
+        FLENS_DEFAULT_INDEXTYPE N_residual = 0;
 
 
         std::cerr << std::endl << "   *****  AWGM Iteration " << iter << " *****" << std::endl << std::endl;
@@ -108,8 +108,8 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
         p *= (T)(-1.);
         T cg_rNormSquare = r*r;
         T tol = std::min(_init_cgtol,gamma*(T)Residual);
-        int maxIterations=1000;
-        int cg_iter=0;
+        FLENS_DEFAULT_INDEXTYPE maxIterations=1000;
+        FLENS_DEFAULT_INDEXTYPE cg_iter=0;
         for (cg_iter=0; cg_iter<maxIterations; ++cg_iter) {
             if (std::sqrt(cg_rNormSquare)<=tol) {
                 std::cerr << "         CG stopped with error " << sqrt(cg_rNormSquare) << std::endl;
@@ -176,8 +176,8 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
         */
         /*
         getLevelInfo(u, maxIndex, maxWaveletIndex, jmax, arrayLength);
-        int J = -100;
-        for (int i=0; i<arrayLength; ++i) {
+        FLENS_DEFAULT_INDEXTYPE J = -100;
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<arrayLength; ++i) {
             if (J<jmax[i]) J=jmax[i];
         }
 
@@ -186,7 +186,7 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
                  << maxWaveletIndex << std::endl;
         std::cerr << "      arrayLength = " << arrayLength << std::endl;
         std::cerr << "      Highest level per coordinate direction:";
-        for (int i=0; i<arrayLength; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<arrayLength; ++i) {
             std::cerr << " " << jmax[i];
         }
         std::cerr << std::endl;
@@ -261,7 +261,7 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
 //            std::cerr << "         ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_Residual_square)
 //                      << ", alpha*Residual = " << alpha*Residual << std::endl;
 
-            for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
                 P_Lambda_Residual_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
                 r_bucket.addBucketToCoefficients(p,i);
                 if (P_Lambda_Residual_square >= alpha*Residual*alpha*Residual) {
@@ -312,8 +312,8 @@ cg_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, 
 template <typename Index, typename Basis, typename LocalOperator, typename RHS, typename Preconditioner>
 typename LocalOperator::T
 MultiTreeAWGM<Index,Basis,LocalOperator,RHS,Preconditioner>::
-bicgstab_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterations, T _init_cgtol,
-               T EnergyNormSquared, const char *filename, const char *coefffilename, int maxDof)
+bicgstab_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, FLENS_DEFAULT_INDEXTYPE NumOfIterations, T _init_cgtol,
+               T EnergyNormSquared, const char *filename, const char *coefffilename, FLENS_DEFAULT_INDEXTYPE maxDof)
 {
     Coefficients<Lexicographical,T,Index> r(hashMapSize),       // residual vector for bicg
                                           rstar(hashMapSize),   // residual vector for bigcg
@@ -326,8 +326,8 @@ bicgstab_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterat
 
     Index maxIndex;
     Index maxWaveletIndex;
-    int *jmax = new int[1];
-    int arrayLength = 1;
+    FLENS_DEFAULT_INDEXTYPE *jmax = new FLENS_DEFAULT_INDEXTYPE[1];
+    FLENS_DEFAULT_INDEXTYPE arrayLength = 1;
     long double Residual = 1.L;
 
     Timer time;
@@ -351,14 +351,14 @@ bicgstab_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterat
     T time_total_comp = 0.;
     T time_total_galerkin = 0.;
     T time_total_residual = 0.;
-    for (int iter=1; iter<=NumOfIterations; ++iter) {
+    for (FLENS_DEFAULT_INDEXTYPE iter=1; iter<=NumOfIterations; ++iter) {
         T time_mv_linsys = 0.;
         T time_mv_residual = 0.;
         T time_multitree_residual = 0.;
         iteration_time.start();
 
-        int N = u.size();
-        int N_residual = 0;
+        FLENS_DEFAULT_INDEXTYPE N = u.size();
+        FLENS_DEFAULT_INDEXTYPE N_residual = 0;
 
 
         std::cerr << std::endl << "   *****  AWGM Iteration " << iter << " *****" << std::endl << std::endl;
@@ -400,8 +400,8 @@ bicgstab_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterat
 
         T bicg_rNormSquare = r*r;
         T tol = std::min(_init_cgtol,gamma*(T)Residual);
-        int maxIterations=1000;
-        int bicg_iter=0;
+        FLENS_DEFAULT_INDEXTYPE maxIterations=1000;
+        FLENS_DEFAULT_INDEXTYPE bicg_iter=0;
         for (bicg_iter=0; bicg_iter<maxIterations; ++bicg_iter) {
             if (std::sqrt(bicg_rNormSquare)<=tol) {
                 std::cerr << "         BiCGStab stopped with error " << sqrt(bicg_rNormSquare) << std::endl;
@@ -531,7 +531,7 @@ bicgstab_solve(Coefficients<Lexicographical,T,Index> &u, T _eps, int NumOfIterat
             //std::cerr << "         ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_Residual_square)
             //          << ", alpha*Residual = " << alpha*Residual << std::endl;
 
-            for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
                 P_Lambda_Residual_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
                 r_bucket.addBucketToCoefficients(p,i);
                 if (P_Lambda_Residual_square >= alpha*Residual*alpha*Residual) {
@@ -582,7 +582,7 @@ template <typename Index, typename Basis, typename LocalOperator, typename RHS, 
 void
 MultiTreeAWGM<Index,Basis,LocalOperator,RHS,Preconditioner>::
 approxL2(Coefficients<Lexicographical,T,Index> &u, T _eps, T (*weightFunction)(const Index &index),
-         int NumOfIterations, T _init_cgtol,
+         FLENS_DEFAULT_INDEXTYPE NumOfIterations, T _init_cgtol,
          T EnergyNormSquared, const char *filename, const char *coefffilename)
 {
     if (!IsMW) {    // Local operator is assumed to be a mass matrix
@@ -604,9 +604,9 @@ approxL2(Coefficients<Lexicographical,T,Index> &u, T _eps, T (*weightFunction)(c
 
         std::ofstream convfile("conv_u0.txt");
 
-        for (int iter=1; iter<=NumOfIterations; ++iter) {
-            int N = u.size();
-            int N_residual = 0;
+        for (FLENS_DEFAULT_INDEXTYPE iter=1; iter<=NumOfIterations; ++iter) {
+            FLENS_DEFAULT_INDEXTYPE N = u.size();
+            FLENS_DEFAULT_INDEXTYPE N_residual = 0;
 
 
             std::cerr << std::endl << "   *****  AWGM L2-Approx Iteration " << iter << " *****" << std::endl << std::endl;
@@ -654,7 +654,7 @@ approxL2(Coefficients<Lexicographical,T,Index> &u, T _eps, T (*weightFunction)(c
                 std::cerr << "         ||P_{Lambda}r ||_2 = " << std::sqrt(P_Lambda_Residual_square)
                           << ", alpha*Residual = " << alpha*Residual << std::endl;
 
-                for (int i=0; i<(int)r_bucket.bucket_ell2norms.size(); ++i) {
+                for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)r_bucket.bucket_ell2norms.size(); ++i) {
                     P_Lambda_Residual_square += std::pow(r_bucket.bucket_ell2norms[i],2.0L);
                     r_bucket.addBucketToCoefficients(p,i);
                     if (P_Lambda_Residual_square >= alpha*Residual*alpha*Residual) {

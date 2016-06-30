@@ -23,18 +23,18 @@ SIGN(const T &a, const T&b)
 }
 
 template <typename MX, typename VX, typename VY>
-int
+FLENS_DEFAULT_INDEXTYPE
 qrf(GeMatrix<MX> &A, DenseVector<VX> &c,
     DenseVector<VY> &d, bool &singular)
 {
     typedef typename MX::ElementType T;
-    int n = A.numRows();
+    FLENS_DEFAULT_INDEXTYPE n = A.numRows();
     c.engine().resize(n,0);
     d.engine().resize(n,0);
     singular = false;
-    for (int k=0; k<n-1; ++k) {
+    for (FLENS_DEFAULT_INDEXTYPE k=0; k<n-1; ++k) {
         T scale = 0.;
-        for (int i=k; i<n; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=k; i<n; ++i) {
             T tmp = fabs(A(i,k));
             scale = std::max(scale, tmp);
         }
@@ -42,11 +42,11 @@ qrf(GeMatrix<MX> &A, DenseVector<VX> &c,
             singular = true;
             c(k) = d(k) = 0.;
         } else {
-            for (int i=k; i<n; ++i) {
+            for (FLENS_DEFAULT_INDEXTYPE i=k; i<n; ++i) {
                 A(i,k) /= scale;
             }
             T sum;
-            int i;
+            FLENS_DEFAULT_INDEXTYPE i;
             for (sum=0., i=k; i<n; ++i) {
                 sum += A(i,k)*A(i,k);
             }
@@ -55,7 +55,7 @@ qrf(GeMatrix<MX> &A, DenseVector<VX> &c,
             A(k,k) += sigma;
             c(k) = sigma*A(k,k);
             d(k) = -scale*sigma;
-            for (int j=k+1; j<n; ++j) {
+            for (FLENS_DEFAULT_INDEXTYPE j=k+1; j<n; ++j) {
                 for (sum=0., i=k; i<n; ++i) {
                     sum += A(i,k) * A(i,j);
                 }
@@ -80,11 +80,11 @@ rsolv(GeMatrix<MX> &A,
 {
     typedef typename MX::ElementType T;
 
-    int n = A.numRows();
+    FLENS_DEFAULT_INDEXTYPE n = A.numRows();
     b(n-1) /= d(n-1);
-    for (int i=n-2; i>=0; --i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=n-2; i>=0; --i) {
         T sum;
-        int j;
+        FLENS_DEFAULT_INDEXTYPE j;
         for (sum=0.,j=i+1; j<n; ++j) {
             sum += A(i,j)*b(j);
         }
@@ -99,10 +99,10 @@ qrsolv(GeMatrix<MX> &A, DenseVector<VX> &c,
        DenseVector<VY> &d, DenseVector<VZ> &b)
 {
     typedef typename MX::ElementType T;
-    int n = A.numRows();
-    for (int j=0; j<n-1; ++j) {
+    FLENS_DEFAULT_INDEXTYPE n = A.numRows();
+    for (FLENS_DEFAULT_INDEXTYPE j=0; j<n-1; ++j) {
         T sum;
-        int i;
+        FLENS_DEFAULT_INDEXTYPE i;
         for (sum=0., i=j; i<n; ++i) {
             sum += A(i,j) * b(i);
         }
@@ -123,10 +123,10 @@ qrinv(GeMatrix<FullStorage<T,cxxblas::ColMajor> > &A,
     DenseVector<Array<T> > c, d;
     qrf(A,c,d,singular);
     assert(!singular);
-    int n=A.numRows();
+    FLENS_DEFAULT_INDEXTYPE n=A.numRows();
     InvA.resize(n,n,0,0);
     DenseVector<Array<T> > b(n,0);
-    for (int i=0; i<n; ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<n; ++i) {
         b(i) = 1.;
         qrsolv(A,c,d,b);
         InvA(_,i) = b;
@@ -163,11 +163,11 @@ svdGMP(const GeMatrix<FullStorage<T,Order> > &A,
     GeMatrix<FullStorage<T,Order> > &V)
 {
     bool flag;
-    int i, its, j, jj, k, l, nm;
+    FLENS_DEFAULT_INDEXTYPE i, its, j, jj, k, l, nm;
     T anorm, c, f, g, h, tmp, scale, x, y, z;
 
     U = A;
-    int m = U.numRows(),
+    FLENS_DEFAULT_INDEXTYPE m = U.numRows(),
         n = U.numCols();
     s.resize(std::min(m,n));
     V.resize(n,n);

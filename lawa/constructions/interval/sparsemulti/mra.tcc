@@ -23,7 +23,7 @@
 namespace lawa {
 
 template <typename T>
-MRA<T,Primal,Interval,SparseMulti>::MRA(int _d, int j)
+MRA<T,Primal,Interval,SparseMulti>::MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), j0((j==-1) ? 0 : j), _bc(2,0), _j(j0), _numSplines(4), phi(*this)
 {
     if (d!=4) {
@@ -59,31 +59,31 @@ MRA<T,Primal,Interval,SparseMulti>::max_support() const
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,SparseMulti>::cardI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::cardI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<int>(j);
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j);
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,SparseMulti>::cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numLeftParts;
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,SparseMulti>::cardII(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::cardII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<int>(j)-_numLeftParts-_numRightParts;
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-_numLeftParts-_numRightParts;
 }
 
 template <typename T>
-int
-MRA<T,Primal,Interval,SparseMulti>::cardIR(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::cardIR(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numRightParts;
 }
@@ -91,100 +91,100 @@ MRA<T,Primal,Interval,SparseMulti>::cardIR(int /*j*/) const
 //--- ranges of whole, left, inner, right index sets. --------------------------
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,SparseMulti>::rangeI(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::rangeI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<int>(0,cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,cardI(j)-1);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,SparseMulti>::rangeIL(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::rangeIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<int>(0,0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,0);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,SparseMulti>::rangeII(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::rangeII(FLENS_DEFAULT_INDEXTYPE j) const
 {
-    return flens::Range<int>(1,cardI(j)-2);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,cardI(j)-2);
 }
 
 template <typename T>
-flens::Range<int>
-MRA<T,Primal,Interval,SparseMulti>::rangeIR(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::rangeIR(FLENS_DEFAULT_INDEXTYPE j) const
 {
-    return flens::Range<int>(cardI(j)-1,cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(cardI(j)-1,cardI(j)-1);
 }
 
 
-//For adaptive schemes, we may require "long" as index type for local scaling function repr.
+//For adaptive schemes, we may require "FLENS_DEFAULT_INDEXTYPE" as index type for local scaling function repr.
 template <typename T>
-long
-MRA<T,Primal,Interval,SparseMulti>::long_cardI(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::long_cardI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<long>(j);
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j);
 }
 
 template <typename T>
-long
-MRA<T,Primal,Interval,SparseMulti>::long_cardIL(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::long_cardIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numLeftParts;
 }
 
 template <typename T>
-long
-MRA<T,Primal,Interval,SparseMulti>::long_cardII(int j) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::long_cardII(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return 2*pow2i<long>(j)-_numLeftParts-_numRightParts;
+    return 2*pow2i<FLENS_DEFAULT_INDEXTYPE>(j)-_numLeftParts-_numRightParts;
 }
 
 template <typename T>
-long
-MRA<T,Primal,Interval,SparseMulti>::long_cardIR(int /*j*/) const
+FLENS_DEFAULT_INDEXTYPE
+MRA<T,Primal,Interval,SparseMulti>::long_cardIR(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
     return _numRightParts;
 }
 
 template <typename T>
-flens::Range<long>
-MRA<T,Primal,Interval,SparseMulti>::long_rangeI(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::long_rangeI(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
-    return flens::Range<long>(0,long_cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,long_cardI(j)-1);
 }
 
 template <typename T>
-flens::Range<long>
-MRA<T,Primal,Interval,SparseMulti>::long_rangeIL(int /*j*/) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::long_rangeIL(FLENS_DEFAULT_INDEXTYPE /*j*/) const
 {
-    return flens::Range<long>(0,0);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,0);
 }
 
 template <typename T>
-flens::Range<long>
-MRA<T,Primal,Interval,SparseMulti>::long_rangeII(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::long_rangeII(FLENS_DEFAULT_INDEXTYPE j) const
 {
-    return flens::Range<long>(1,long_cardI(j)-2);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(1,long_cardI(j)-2);
 }
 
 template <typename T>
-flens::Range<long>
-MRA<T,Primal,Interval,SparseMulti>::long_rangeIR(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+MRA<T,Primal,Interval,SparseMulti>::long_rangeIR(FLENS_DEFAULT_INDEXTYPE j) const
 {
-    return flens::Range<long>(long_cardI(j)-1,long_cardI(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(long_cardI(j)-1,long_cardI(j)-1);
 }
 
 
 
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 MRA<T,Primal,Interval,SparseMulti>::level() const
 {
     return _j;
@@ -192,7 +192,7 @@ MRA<T,Primal,Interval,SparseMulti>::level() const
 
 template <typename T>
 void
-MRA<T,Primal,Interval,SparseMulti>::setLevel(int j) const
+MRA<T,Primal,Interval,SparseMulti>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;

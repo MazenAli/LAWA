@@ -61,7 +61,7 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Primal,R,CDF> {
                      Compression1D, NoPreconditioner1D>                       DataHelmholtz1D;
 
     AdaptiveHelmholtzOperatorOptimized1D(const ReallineCDFBasis1D &_basis, bool _w_XBSpline, T _c,
-                                T _thresh=0., int NumOfCols=4096, int NumOfRows=4096);
+                                T _thresh=0., FLENS_DEFAULT_INDEXTYPE NumOfCols=4096, FLENS_DEFAULT_INDEXTYPE NumOfRows=4096);
 
     T
     operator()(const Index1D &row_index, const Index1D &col_index);
@@ -75,7 +75,7 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Primal,R,CDF> {
 
     void
     toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow, const IndexSet<Index1D>& LambdaCol,
-                        SparseMatrixT &A_flens, int J=-1);
+                        SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J=-1);
 
     void
     toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow, const IndexSet<Index1D>& LambdaCol,
@@ -83,7 +83,7 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Primal,R,CDF> {
 
 
     Coefficients<Lexicographical,T,Index1D>
-    apply(const Coefficients<Lexicographical,T,Index1D> &v, int k=0, int J=-1000);
+    apply(const Coefficients<Lexicographical,T,Index1D> &v, FLENS_DEFAULT_INDEXTYPE k=0, FLENS_DEFAULT_INDEXTYPE J=-1000);
 
     void
     apply(const Coefficients<Lexicographical,T,Index1D> &v, T eps,
@@ -93,7 +93,7 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Primal,R,CDF> {
     apply(const Coefficients<Lexicographical,T,Index1D> &v, T eps,
           const IndexSet<Index1D> &Lambda, Coefficients<Lexicographical,T,Index1D> &ret);
 
-    int
+    FLENS_DEFAULT_INDEXTYPE
     findK(const Coefficients<AbsoluteValue,T,Index1D> &v, T eps);
 
     void
@@ -135,7 +135,7 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Orthogonal,Domain,Multi> {
                       Compression1D, NoPreconditioner1D>                      DataLaplace1D;
 
     AdaptiveHelmholtzOperatorOptimized1D(const MWBasis1D &_basis, T _c, T _thresh=0.,
-                                int NumOfCols=4096, int NumOfRows=4096);
+                                FLENS_DEFAULT_INDEXTYPE NumOfCols=4096, FLENS_DEFAULT_INDEXTYPE NumOfRows=4096);
 
     T
     operator()(const Index1D &row_index, const Index1D &col_index);
@@ -149,14 +149,14 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Orthogonal,Domain,Multi> {
 
     void
     toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow, const IndexSet<Index1D>& LambdaCol,
-                        SparseMatrixT &A_flens, int J=-1);
+                        SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J=-1);
 
     void
     toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow, const IndexSet<Index1D>& LambdaCol,
                         SparseMatrixT &A_flens, T eps);
 
     Coefficients<Lexicographical,T,Index1D>
-    apply(const Coefficients<Lexicographical,T,Index1D> &v, int k=0, int J=-1000);
+    apply(const Coefficients<Lexicographical,T,Index1D> &v, FLENS_DEFAULT_INDEXTYPE k=0, FLENS_DEFAULT_INDEXTYPE J=-1000);
 
     void
     apply(const Coefficients<Lexicographical,T,Index1D> &v, T eps,
@@ -166,7 +166,7 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Orthogonal,Domain,Multi> {
     apply(const Coefficients<Lexicographical,T,Index1D> &v, T eps,
           const IndexSet<Index1D> &Lambda, Coefficients<Lexicographical,T,Index1D> &ret);
 
-    int
+    FLENS_DEFAULT_INDEXTYPE
     findK(const Coefficients<AbsoluteValue,T,Index1D> &v, T eps);
 
     void
@@ -222,14 +222,14 @@ struct AdaptiveHelmholtzOperatorOptimized1D<T,Primal,Domain,SparseMulti>
 
     void
     toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow, const IndexSet<Index1D>& LambdaCol,
-                        SparseMatrixT &A_flens, int J=-1);
+                        SparseMatrixT &A_flens, FLENS_DEFAULT_INDEXTYPE J=-1);
 
     void
     toFlensSparseMatrix(const IndexSet<Index1D>& LambdaRow, const IndexSet<Index1D>& LambdaCol,
                         SparseMatrixT &A_flens, T eps);
 
     Coefficients<Lexicographical,T,Index1D>
-    apply(const Coefficients<Lexicographical,T,Index1D> &v, int k=0, int J=0);
+    apply(const Coefficients<Lexicographical,T,Index1D> &v, FLENS_DEFAULT_INDEXTYPE k=0, FLENS_DEFAULT_INDEXTYPE J=0);
 
     void
     apply(const Coefficients<Lexicographical,T,Index1D> &v, T eps,

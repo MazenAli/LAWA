@@ -9,10 +9,10 @@ IdentityOperator2D<T, Basis2D>::IdentityOperator2D(const Basis2D &_basis)
 
 template <typename T, typename Basis2D>
 T
-IdentityOperator2D<T, Basis2D>::operator()(XType row_xtype_x, int j1_x, long k1_x,
-                                           XType row_xtype_y, int j1_y, long k1_y,
-                                           XType col_xtype_x, int j2_x, long k2_x,
-                                           XType col_xtype_y, int j2_y, long k2_y) const
+IdentityOperator2D<T, Basis2D>::operator()(XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                                           XType row_xtype_y, FLENS_DEFAULT_INDEXTYPE j1_y, FLENS_DEFAULT_INDEXTYPE k1_y,
+                                           XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x,
+                                           XType col_xtype_y, FLENS_DEFAULT_INDEXTYPE j2_y, FLENS_DEFAULT_INDEXTYPE k2_y) const
 {   
     // (v1 * u1) * (v2 * u2)
     return integral_x(j1_x, k1_x, row_xtype_x, 0, j2_x, k2_x, col_xtype_x, 0) 

@@ -28,9 +28,9 @@ namespace flens {
 
 template <typename T>
 void
-jacobi(T **a, int n, T d[], T **v, int *nrot)
+jacobi(T **a, FLENS_DEFAULT_INDEXTYPE n, T d[], T **v, FLENS_DEFAULT_INDEXTYPE *nrot)
 {
-    int j, iq, ip,i;
+    FLENS_DEFAULT_INDEXTYPE j, iq, ip,i;
     T tresh, theta, tau, t, sm, s, h, g, c;
     
     std::vector<T> b(n+1);   // only 1..n needed!!!

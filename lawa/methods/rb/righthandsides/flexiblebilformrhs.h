@@ -48,7 +48,7 @@ public:
 
 	virtual
 	void
-	set_active_comp(int i);
+	set_active_comp(FLENS_DEFAULT_INDEXTYPE i);
 
 	virtual
 	void
@@ -63,7 +63,7 @@ public:
 protected:
 
     std::vector<LocalOperatorType*>& 				bilformvec;
-    std::vector<int> 								active_comp;
+    std::vector<FLENS_DEFAULT_INDEXTYPE> 								active_comp;
 
     Coefficients<Lexicographical,T,Index> const* 	active_u;
 

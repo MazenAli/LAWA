@@ -57,8 +57,8 @@ private:
 public:
     static mp_rnd_t        default_rnd;    
     static mp_prec_t    default_prec;    
-    static int            default_base;
-    static int            double_bits;
+    static FLENS_DEFAULT_INDEXTYPE            default_base;
+    static FLENS_DEFAULT_INDEXTYPE            double_bits;
 
 public:
     // Constructors && type conversion
@@ -71,12 +71,12 @@ public:
     mpreal(const mpz_t u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);    
     mpreal(const mpq_t u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);    
     mpreal(const double u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
-    mpreal(const long double u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
-    mpreal(const unsigned long int u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
-    mpreal(const unsigned int u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
-    mpreal(const long int u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
-    mpreal(const int u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
-    mpreal(const char* s, mp_prec_t prec = default_prec, int base = default_base, mp_rnd_t mode = default_rnd);
+    mpreal(const FLENS_DEFAULT_INDEXTYPE double u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
+    mpreal(const unsigned FLENS_DEFAULT_INDEXTYPE long u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
+    mpreal(const unsigned FLENS_DEFAULT_INDEXTYPE u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
+    mpreal(const FLENS_DEFAULT_INDEXTYPE long u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
+    mpreal(const FLENS_DEFAULT_INDEXTYPE u, mp_prec_t prec = default_prec, mp_rnd_t mode = default_rnd);
+    mpreal(const char* s, mp_prec_t prec = default_prec, FLENS_DEFAULT_INDEXTYPE base = default_base, mp_rnd_t mode = default_rnd);
 
     ~mpreal();                           
 
@@ -91,12 +91,12 @@ public:
     mpreal& operator=(const mpf_t v);
     mpreal& operator=(const mpz_t v);
     mpreal& operator=(const mpq_t v);
-    mpreal& operator=(const long double v);
+    mpreal& operator=(const FLENS_DEFAULT_INDEXTYPE double v);
     mpreal& operator=(const double v);        
-    mpreal& operator=(const unsigned long int v);
-    mpreal& operator=(const unsigned int v);
-    mpreal& operator=(const long int v);
-    mpreal& operator=(const int v);
+    mpreal& operator=(const unsigned FLENS_DEFAULT_INDEXTYPE long v);
+    mpreal& operator=(const unsigned FLENS_DEFAULT_INDEXTYPE v);
+    mpreal& operator=(const FLENS_DEFAULT_INDEXTYPE long v);
+    mpreal& operator=(const FLENS_DEFAULT_INDEXTYPE v);
     mpreal& operator=(const char* s);
 
     // +
@@ -104,73 +104,73 @@ public:
     mpreal& operator+=(const mpf_t v);
     mpreal& operator+=(const mpz_t v);
     mpreal& operator+=(const mpq_t v);
-    mpreal& operator+=(const long double u);
+    mpreal& operator+=(const FLENS_DEFAULT_INDEXTYPE double u);
     mpreal& operator+=(const double u);
-    mpreal& operator+=(const unsigned long int u);
-    mpreal& operator+=(const unsigned int u);
-    mpreal& operator+=(const long int u);
-    mpreal& operator+=(const int u);
+    mpreal& operator+=(const unsigned FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator+=(const unsigned FLENS_DEFAULT_INDEXTYPE u);
+    mpreal& operator+=(const FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator+=(const FLENS_DEFAULT_INDEXTYPE u);
     const mpreal operator+() const;
     mpreal& operator++ ();
-    const mpreal  operator++ (int); 
+    const mpreal  operator++ (FLENS_DEFAULT_INDEXTYPE); 
 
     // -
     mpreal& operator-=(const mpreal& v);
     mpreal& operator-=(const mpz_t v);
     mpreal& operator-=(const mpq_t v);
-    mpreal& operator-=(const long double u);
+    mpreal& operator-=(const FLENS_DEFAULT_INDEXTYPE double u);
     mpreal& operator-=(const double u);
-    mpreal& operator-=(const unsigned long int u);
-    mpreal& operator-=(const unsigned int u);
-    mpreal& operator-=(const long int u);
-    mpreal& operator-=(const int u);
+    mpreal& operator-=(const unsigned FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator-=(const unsigned FLENS_DEFAULT_INDEXTYPE u);
+    mpreal& operator-=(const FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator-=(const FLENS_DEFAULT_INDEXTYPE u);
     const mpreal operator-() const;
-    friend const mpreal operator-(const unsigned long int b, const mpreal& a);
-    friend const mpreal operator-(const unsigned int b, const mpreal& a);
-    friend const mpreal operator-(const long int b, const mpreal& a);
-    friend const mpreal operator-(const int b, const mpreal& a);
+    friend const mpreal operator-(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+    friend const mpreal operator-(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
+    friend const mpreal operator-(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+    friend const mpreal operator-(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
     friend const mpreal operator-(const double b, const mpreal& a);
     mpreal& operator-- ();    
-    const mpreal  operator-- (int);
+    const mpreal  operator-- (FLENS_DEFAULT_INDEXTYPE);
 
     // *
     mpreal& operator*=(const mpreal& v);
     mpreal& operator*=(const mpz_t v);
     mpreal& operator*=(const mpq_t v);
-    mpreal& operator*=(const long double v);
+    mpreal& operator*=(const FLENS_DEFAULT_INDEXTYPE double v);
     mpreal& operator*=(const double v);
-    mpreal& operator*=(const unsigned long int v);
-    mpreal& operator*=(const unsigned int v);
-    mpreal& operator*=(const long int v);
-    mpreal& operator*=(const int v);
+    mpreal& operator*=(const unsigned FLENS_DEFAULT_INDEXTYPE long v);
+    mpreal& operator*=(const unsigned FLENS_DEFAULT_INDEXTYPE v);
+    mpreal& operator*=(const FLENS_DEFAULT_INDEXTYPE long v);
+    mpreal& operator*=(const FLENS_DEFAULT_INDEXTYPE v);
     
     // /
     mpreal& operator/=(const mpreal& v);
     mpreal& operator/=(const mpz_t v);
     mpreal& operator/=(const mpq_t v);
-    mpreal& operator/=(const long double v);
+    mpreal& operator/=(const FLENS_DEFAULT_INDEXTYPE double v);
     mpreal& operator/=(const double v);
-    mpreal& operator/=(const unsigned long int v);
-    mpreal& operator/=(const unsigned int v);
-    mpreal& operator/=(const long int v);
-    mpreal& operator/=(const int v);
-    friend const mpreal operator/(const unsigned long int b, const mpreal& a);
-    friend const mpreal operator/(const unsigned int b, const mpreal& a);
-    friend const mpreal operator/(const long int b, const mpreal& a);
-    friend const mpreal operator/(const int b, const mpreal& a);
+    mpreal& operator/=(const unsigned FLENS_DEFAULT_INDEXTYPE long v);
+    mpreal& operator/=(const unsigned FLENS_DEFAULT_INDEXTYPE v);
+    mpreal& operator/=(const FLENS_DEFAULT_INDEXTYPE long v);
+    mpreal& operator/=(const FLENS_DEFAULT_INDEXTYPE v);
+    friend const mpreal operator/(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+    friend const mpreal operator/(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
+    friend const mpreal operator/(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+    friend const mpreal operator/(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
     friend const mpreal operator/(const double b, const mpreal& a);
 
     //<<= Fast Multiplication by 2^u
-    mpreal& operator<<=(const unsigned long int u);
-    mpreal& operator<<=(const unsigned int u);
-    mpreal& operator<<=(const long int u);
-    mpreal& operator<<=(const int u);
+    mpreal& operator<<=(const unsigned FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator<<=(const unsigned FLENS_DEFAULT_INDEXTYPE u);
+    mpreal& operator<<=(const FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator<<=(const FLENS_DEFAULT_INDEXTYPE u);
 
     //>>= Fast Division by 2^u
-    mpreal& operator>>=(const unsigned long int u);
-    mpreal& operator>>=(const unsigned int u);
-    mpreal& operator>>=(const long int u);
-    mpreal& operator>>=(const int u);
+    mpreal& operator>>=(const unsigned FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator>>=(const unsigned FLENS_DEFAULT_INDEXTYPE u);
+    mpreal& operator>>=(const FLENS_DEFAULT_INDEXTYPE long u);
+    mpreal& operator>>=(const FLENS_DEFAULT_INDEXTYPE u);
 
     // Boolean Operators
     friend bool operator >  (const mpreal& a, const mpreal& b);
@@ -181,36 +181,36 @@ public:
     friend bool operator != (const mpreal& a, const mpreal& b);
 
     // Type Conversion operators
-    operator int() const;
-    operator long double() const;
+    operator FLENS_DEFAULT_INDEXTYPE() const;
+    operator FLENS_DEFAULT_INDEXTYPE double() const;
     operator double() const;
     operator float() const;
-    operator unsigned long() const;
-    operator unsigned int() const;
-    operator long() const;
+    operator unsigned FLENS_DEFAULT_INDEXTYPE() const;
+    operator unsigned FLENS_DEFAULT_INDEXTYPE() const;
+    operator FLENS_DEFAULT_INDEXTYPE() const;
     operator std::string() const;
     operator mpfr_ptr();
 
     // Math Functions
     friend const mpreal sqr(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal sqrt(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal sqrt(const unsigned long int v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal sqrt(const unsigned FLENS_DEFAULT_INDEXTYPE long v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal cbrt(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal root(const mpreal& v, unsigned long int k, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal root(const mpreal& v, unsigned FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal pow(const mpreal& a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal pow(const mpreal& a, const mpz_t b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal pow(const mpreal& a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal pow(const mpreal& a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal pow(const unsigned long int a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal pow(const unsigned long int a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal pow(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal pow(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal fabs(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal abs(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal dim(const mpreal& a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal mul_2ui(const mpreal& v, unsigned long int k, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal mul_2si(const mpreal& v, long int k, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal div_2ui(const mpreal& v, unsigned long int k, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal div_2si(const mpreal& v, long int k, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend int cmpabs(const mpreal& a,const mpreal& b);
+    friend const mpreal mul_2ui(const mpreal& v, unsigned FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal mul_2si(const mpreal& v, FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal div_2ui(const mpreal& v, unsigned FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal div_2si(const mpreal& v, FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend FLENS_DEFAULT_INDEXTYPE cmpabs(const mpreal& a,const mpreal& b);
     
     friend const mpreal log  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal log2 (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
@@ -225,7 +225,7 @@ public:
     friend const mpreal sec(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal csc(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal cot(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend int sin_cos(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend FLENS_DEFAULT_INDEXTYPE sin_cos(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
     friend const mpreal acos  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal asin  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
@@ -241,33 +241,33 @@ public:
     friend const mpreal acosh  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal asinh  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal atanh  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal fac_ui (unsigned long int v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal fac_ui (unsigned FLENS_DEFAULT_INDEXTYPE long v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal log1p  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal expm1  (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal eint   (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
     friend const mpreal gamma (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal lngamma (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal lgamma (const mpreal& v, int *signp, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal lgamma (const mpreal& v, FLENS_DEFAULT_INDEXTYPE *signp, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal zeta (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal erf (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal erfc (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal _j0 (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd); 
     friend const mpreal _j1 (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd); 
-    friend const mpreal _jn (long n, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal _jn (FLENS_DEFAULT_INDEXTYPE n, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal _y0 (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal _y1 (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal _yn (long n, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd); 
+    friend const mpreal _yn (FLENS_DEFAULT_INDEXTYPE n, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd); 
     friend const mpreal fma (const mpreal& v1, const mpreal& v2, const mpreal& v3, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal fms (const mpreal& v1, const mpreal& v2, const mpreal& v3, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal agm (const mpreal& v1, const mpreal& v2, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal hypot (const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal sum (const mpreal tab[], unsigned long int n, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend int sgn(const mpreal& v); // -1 or +1
+    friend const mpreal sum (const mpreal tab[], unsigned FLENS_DEFAULT_INDEXTYPE long n, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend FLENS_DEFAULT_INDEXTYPE sgn(const mpreal& v); // -1 or +1
 
 // MPFR 2.4.0 Specifics
 #if (MPFR_VERSION >= MPFR_VERSION_NUM(2,4,0))
-    friend int sinh_cosh(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend FLENS_DEFAULT_INDEXTYPE sinh_cosh(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal li2(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal fmod (const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal rec_sqrt(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
@@ -304,7 +304,7 @@ public:
     friend const mpreal rint_trunc(const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal frac (const mpreal& v, mp_rnd_t rnd_mode = mpreal::default_rnd);
     friend const mpreal remainder (const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode = mpreal::default_rnd);
-    friend const mpreal remquo (long* q, const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode = mpreal::default_rnd);
+    friend const mpreal remquo (FLENS_DEFAULT_INDEXTYPE* q, const mpreal& x, const mpreal& y, mp_rnd_t rnd_mode = mpreal::default_rnd);
     
     // Miscellaneous Functions
     friend const mpreal nexttoward (const mpreal& x, const mpreal& y);
@@ -327,28 +327,28 @@ public:
     void        set_prec(mp_prec_t prec, mp_rnd_t rnd_mode = default_rnd);    // Change precision with rounding mode
     
     // Set mpreal to +-inf, NaN
-    void      set_inf(int sign = +1);    
+    void      set_inf(FLENS_DEFAULT_INDEXTYPE sign = +1);    
     void      set_nan();
 
     // sign = -1 or +1
-    void set_sign(int sign, mp_rnd_t rnd_mode = default_rnd);
+    void set_sign(FLENS_DEFAULT_INDEXTYPE sign, mp_rnd_t rnd_mode = default_rnd);
 
     //Exponent
     mp_exp_t get_exp();
-    int set_exp(mp_exp_t e);
-    int check_range (int t, mp_rnd_t rnd_mode = default_rnd);
-    int subnormalize (int t,mp_rnd_t rnd_mode = default_rnd);
+    FLENS_DEFAULT_INDEXTYPE set_exp(mp_exp_t e);
+    FLENS_DEFAULT_INDEXTYPE check_range (FLENS_DEFAULT_INDEXTYPE t, mp_rnd_t rnd_mode = default_rnd);
+    FLENS_DEFAULT_INDEXTYPE subnormalize (FLENS_DEFAULT_INDEXTYPE t,mp_rnd_t rnd_mode = default_rnd);
 
     // Inexact conversion from float
-    bool fits_in_bits(double x, int n);
+    bool fits_in_bits(double x, FLENS_DEFAULT_INDEXTYPE n);
 
     // Set/Get global properties
     static void            set_default_prec(mp_prec_t prec);
     static mp_prec_t    get_default_prec();
-    static void            set_default_base(int base);
-    static int            get_default_base();
-    static void            set_double_bits(int dbits);
-    static int            get_double_bits();
+    static void            set_default_base(FLENS_DEFAULT_INDEXTYPE base);
+    static FLENS_DEFAULT_INDEXTYPE            get_default_base();
+    static void            set_double_bits(FLENS_DEFAULT_INDEXTYPE dbits);
+    static FLENS_DEFAULT_INDEXTYPE            get_double_bits();
     static void            set_default_rnd(mp_rnd_t rnd_mode);
     static mp_rnd_t        get_default_rnd();
     static mp_exp_t get_emin (void);
@@ -357,13 +357,13 @@ public:
     static mp_exp_t get_emin_max (void);
     static mp_exp_t get_emax_min (void);
     static mp_exp_t get_emax_max (void);
-    static int set_emin (mp_exp_t exp);
-    static int set_emax (mp_exp_t exp);
+    static FLENS_DEFAULT_INDEXTYPE set_emin (mp_exp_t exp);
+    static FLENS_DEFAULT_INDEXTYPE set_emax (mp_exp_t exp);
 
     // Get/Set conversions
     // Convert mpreal to string with n significant digits in base b
     // n = 0 -> convert with the maximum available digits 
-    std::string to_string(size_t n = 0, int b = default_base, mp_rnd_t mode = default_rnd) const;
+    std::string to_string(size_t n = 0, FLENS_DEFAULT_INDEXTYPE b = default_base, mp_rnd_t mode = default_rnd) const;
     
     // Efficient swapping of two mpreal values
     friend void swap(mpreal& x, mpreal& y);
@@ -393,12 +393,12 @@ const mpreal operator+(const mpreal& a, const mpreal& b);
 // + Fast specialized addition - implemented through fast += operations
 const mpreal operator+(const mpreal& a, const mpz_t b);
 const mpreal operator+(const mpreal& a, const mpq_t b);
-const mpreal operator+(const mpreal& a, const long double b);
+const mpreal operator+(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 const mpreal operator+(const mpreal& a, const double b);
-const mpreal operator+(const mpreal& a, const unsigned long int b);
-const mpreal operator+(const mpreal& a, const unsigned int b);
-const mpreal operator+(const mpreal& a, const long int b);
-const mpreal operator+(const mpreal& a, const int b);
+const mpreal operator+(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator+(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+const mpreal operator+(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator+(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
 const mpreal operator+(const mpreal& a, const char* b);
 const mpreal operator+(const char* a, const mpreal& b);
 const std::string operator+(const mpreal& a, const std::string b);
@@ -406,12 +406,12 @@ const std::string operator+(const std::string a, const mpreal& b);
 
 const mpreal operator+(const mpz_t b, const mpreal& a);
 const mpreal operator+(const mpq_t b, const mpreal& a);
-const mpreal operator+(const long double b, const mpreal& a);
+const mpreal operator+(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a);
 const mpreal operator+(const double  b, const mpreal& a);
-const mpreal operator+(const unsigned long int b, const mpreal& a);
-const mpreal operator+(const unsigned int b, const mpreal& a);
-const mpreal operator+(const long int b, const mpreal& a);
-const mpreal operator+(const int b, const mpreal& a);
+const mpreal operator+(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+const mpreal operator+(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
+const mpreal operator+(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+const mpreal operator+(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
 
 //////////////////////////////////////////////////////////////////////////
 // - Subtraction
@@ -420,18 +420,18 @@ const mpreal operator-(const mpreal& a, const mpreal& b);
 // - Fast specialized subtraction - implemented through fast -= operations
 const mpreal operator-(const mpreal& a, const mpz_t b);
 const mpreal operator-(const mpreal& a, const mpq_t b);
-const mpreal operator-(const mpreal& a, const long double b);
+const mpreal operator-(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 const mpreal operator-(const mpreal& a, const double b);
-const mpreal operator-(const mpreal& a, const unsigned long int b);
-const mpreal operator-(const mpreal& a, const unsigned int b);
-const mpreal operator-(const mpreal& a, const long int b);
-const mpreal operator-(const mpreal& a, const int b);
+const mpreal operator-(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator-(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+const mpreal operator-(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator-(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
 const mpreal operator-(const mpreal& a, const char* b);
 const mpreal operator-(const char* a, const mpreal& b);
 
 const mpreal operator-(const mpz_t b, const mpreal& a);
 const mpreal operator-(const mpq_t b, const mpreal& a);
-const mpreal operator-(const long double b, const mpreal& a);
+const mpreal operator-(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a);
 //const mpreal operator-(const double  b, const mpreal& a);
 
 //////////////////////////////////////////////////////////////////////////
@@ -441,21 +441,21 @@ const mpreal operator*(const mpreal& a, const mpreal& b);
 // * Fast specialized multiplication - implemented through fast *= operations
 const mpreal operator*(const mpreal& a, const mpz_t b);
 const mpreal operator*(const mpreal& a, const mpq_t b);
-const mpreal operator*(const mpreal& a, const long double b);
+const mpreal operator*(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 const mpreal operator*(const mpreal& a, const double b);
-const mpreal operator*(const mpreal& a, const unsigned long int b);
-const mpreal operator*(const mpreal& a, const unsigned int b);
-const mpreal operator*(const mpreal& a, const long int b);
-const mpreal operator*(const mpreal& a, const int b);
+const mpreal operator*(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator*(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+const mpreal operator*(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator*(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
 
 const mpreal operator*(const mpz_t b, const mpreal& a);
 const mpreal operator*(const mpq_t b, const mpreal& a);
-const mpreal operator*(const long double b, const mpreal& a);
+const mpreal operator*(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a);
 const mpreal operator*(const double  b, const mpreal& a);
-const mpreal operator*(const unsigned long int b, const mpreal& a);
-const mpreal operator*(const unsigned int b, const mpreal& a);
-const mpreal operator*(const long int b, const mpreal& a);
-const mpreal operator*(const int b, const mpreal& a);
+const mpreal operator*(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+const mpreal operator*(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
+const mpreal operator*(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a);
+const mpreal operator*(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a);
 
 //////////////////////////////////////////////////////////////////////////
 // / Division
@@ -464,172 +464,172 @@ const mpreal operator/(const mpreal& a, const mpreal& b);
 // / Fast specialized division - implemented through fast /= operations
 const mpreal operator/(const mpreal& a, const mpz_t b);
 const mpreal operator/(const mpreal& a, const mpq_t b);
-const mpreal operator/(const mpreal& a, const long double b);
+const mpreal operator/(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 const mpreal operator/(const mpreal& a, const double b);
-const mpreal operator/(const mpreal& a, const unsigned long int b);
-const mpreal operator/(const mpreal& a, const unsigned int b);
-const mpreal operator/(const mpreal& a, const long int b);
-const mpreal operator/(const mpreal& a, const int b);
+const mpreal operator/(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator/(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+const mpreal operator/(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+const mpreal operator/(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
 
-const mpreal operator/(const long double b, const mpreal& a);
+const mpreal operator/(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a);
 
 //////////////////////////////////////////////////////////////////////////
 // Shifts operators - Multiplication/Division by a power of 2
-const mpreal operator<<(const mpreal& v, const unsigned long int k);
-const mpreal operator<<(const mpreal& v, const unsigned int k);
-const mpreal operator<<(const mpreal& v, const long int k);
-const mpreal operator<<(const mpreal& v, const int k);
+const mpreal operator<<(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE long k);
+const mpreal operator<<(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE k);
+const mpreal operator<<(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE long k);
+const mpreal operator<<(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE k);
 
-const mpreal operator>>(const mpreal& v, const unsigned long int k);
-const mpreal operator>>(const mpreal& v, const unsigned int k);
-const mpreal operator>>(const mpreal& v, const long int k);
-const mpreal operator>>(const mpreal& v, const int k);
+const mpreal operator>>(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE long k);
+const mpreal operator>>(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE k);
+const mpreal operator>>(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE long k);
+const mpreal operator>>(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE k);
 
 //////////////////////////////////////////////////////////////////////////
 // Boolean operators
-bool operator <  (const mpreal& a, const unsigned long int b);
-bool operator <  (const mpreal& a, const unsigned int b);
-bool operator <  (const mpreal& a, const long int b);
-bool operator <  (const mpreal& a, const int b);
-bool operator <  (const mpreal& a, const long double b);
+bool operator <  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+bool operator <  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+bool operator <  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+bool operator <  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
+bool operator <  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 bool operator <  (const mpreal& a, const double b);
 
-bool operator <  (const unsigned long int a,const mpreal& b);
-bool operator <  (const unsigned int a,        const mpreal& b);
-bool operator <  (const long int a,            const mpreal& b);
-bool operator <  (const int a,                const mpreal& b);
-bool operator <  (const long double a,        const mpreal& b);
+bool operator <  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b);
+bool operator <  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b);
+bool operator <  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b);
+bool operator <  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b);
+bool operator <  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b);
 bool operator <  (const double a,            const mpreal& b);
 
-bool operator >  (const mpreal& a, const unsigned long int b);
-bool operator >  (const mpreal& a, const unsigned int b);
-bool operator >  (const mpreal& a, const long int b);
-bool operator >  (const mpreal& a, const int b);
-bool operator >  (const mpreal& a, const long double b);
+bool operator >  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+bool operator >  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+bool operator >  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+bool operator >  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
+bool operator >  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 bool operator >  (const mpreal& a, const double b);
 
-bool operator >  (const unsigned long int a,const mpreal& b);
-bool operator >  (const unsigned int a,        const mpreal& b);
-bool operator >  (const long int a,            const mpreal& b);
-bool operator >  (const int a,                const mpreal& b);
-bool operator >  (const long double a,        const mpreal& b);
+bool operator >  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b);
+bool operator >  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b);
+bool operator >  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b);
+bool operator >  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b);
+bool operator >  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b);
 bool operator >  (const double a,            const mpreal& b);
 
-bool operator >=  (const mpreal& a, const unsigned long int b);
-bool operator >=  (const mpreal& a, const unsigned int b);
-bool operator >=  (const mpreal& a, const long int b);
-bool operator >=  (const mpreal& a, const int b);
-bool operator >=  (const mpreal& a, const long double b);
+bool operator >=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+bool operator >=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+bool operator >=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+bool operator >=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
+bool operator >=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 bool operator >=  (const mpreal& a, const double b);
 
-bool operator >=  (const unsigned long int a,const mpreal& b);
-bool operator >=  (const unsigned int a,        const mpreal& b);
-bool operator >=  (const long int a,            const mpreal& b);
-bool operator >=  (const int a,                const mpreal& b);
-bool operator >=  (const long double a,        const mpreal& b);
+bool operator >=  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b);
+bool operator >=  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b);
+bool operator >=  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b);
+bool operator >=  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b);
+bool operator >=  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b);
 bool operator >=  (const double a,            const mpreal& b);
 
-bool operator <=  (const mpreal& a, const unsigned long int b);
-bool operator <=  (const mpreal& a, const unsigned int b);
-bool operator <=  (const mpreal& a, const long int b);
-bool operator <=  (const mpreal& a, const int b);
-bool operator <=  (const mpreal& a, const long double b);
+bool operator <=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+bool operator <=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+bool operator <=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+bool operator <=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
+bool operator <=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 bool operator <=  (const mpreal& a, const double b);
 
-bool operator <=  (const unsigned long int a,const mpreal& b);
-bool operator <=  (const unsigned int a,        const mpreal& b);
-bool operator <=  (const long int a,            const mpreal& b);
-bool operator <=  (const int a,                const mpreal& b);
-bool operator <=  (const long double a,        const mpreal& b);
+bool operator <=  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b);
+bool operator <=  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b);
+bool operator <=  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b);
+bool operator <=  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b);
+bool operator <=  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b);
 bool operator <=  (const double a,            const mpreal& b);
 
-bool operator ==  (const mpreal& a, const unsigned long int b);
-bool operator ==  (const mpreal& a, const unsigned int b);
-bool operator ==  (const mpreal& a, const long int b);
-bool operator ==  (const mpreal& a, const int b);
-bool operator ==  (const mpreal& a, const long double b);
+bool operator ==  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+bool operator ==  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+bool operator ==  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+bool operator ==  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
+bool operator ==  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 bool operator ==  (const mpreal& a, const double b);
 
-bool operator ==  (const unsigned long int a,const mpreal& b);
-bool operator ==  (const unsigned int a,        const mpreal& b);
-bool operator ==  (const long int a,            const mpreal& b);
-bool operator ==  (const int a,                const mpreal& b);
-bool operator ==  (const long double a,        const mpreal& b);
+bool operator ==  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b);
+bool operator ==  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b);
+bool operator ==  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b);
+bool operator ==  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b);
+bool operator ==  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b);
 bool operator ==  (const double a,            const mpreal& b);
 
-bool operator !=  (const mpreal& a, const unsigned long int b);
-bool operator !=  (const mpreal& a, const unsigned int b);
-bool operator !=  (const mpreal& a, const long int b);
-bool operator !=  (const mpreal& a, const int b);
-bool operator !=  (const mpreal& a, const long double b);
+bool operator !=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b);
+bool operator !=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b);
+bool operator !=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b);
+bool operator !=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b);
+bool operator !=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b);
 bool operator !=  (const mpreal& a, const double b);
 
-bool operator !=  (const unsigned long int a,const mpreal& b);
-bool operator !=  (const unsigned int a,        const mpreal& b);
-bool operator !=  (const long int a,            const mpreal& b);
-bool operator !=  (const int a,                const mpreal& b);
-bool operator !=  (const long double a,        const mpreal& b);
+bool operator !=  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b);
+bool operator !=  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b);
+bool operator !=  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b);
+bool operator !=  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b);
+bool operator !=  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b);
 bool operator !=  (const double a,            const mpreal& b);
 
 //////////////////////////////////////////////////////////////////////////
 // sqrt
-const mpreal sqrt(const unsigned int v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal sqrt(const long int v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal sqrt(const int v, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal sqrt(const long double v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal sqrt(const unsigned FLENS_DEFAULT_INDEXTYPE v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal sqrt(const FLENS_DEFAULT_INDEXTYPE long v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal sqrt(const FLENS_DEFAULT_INDEXTYPE v, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal sqrt(const FLENS_DEFAULT_INDEXTYPE double v, mp_rnd_t rnd_mode = mpreal::default_rnd);
 const mpreal sqrt(const double v, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
 //////////////////////////////////////////////////////////////////////////
 // pow
-const mpreal pow(const mpreal& a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const mpreal& a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const mpreal& a, const long double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 const mpreal pow(const mpreal& a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
-const mpreal pow(const unsigned int a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long int a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const int a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long double a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 const mpreal pow(const double a, const mpreal& b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
-const mpreal pow(const unsigned long int a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned long int a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned long int a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned long int a, const long double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned long int a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
-const mpreal pow(const unsigned int a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned int a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned int a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned int a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned int a, const long double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const unsigned int a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
-const mpreal pow(const long int a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long int a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long int a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long int a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long int a, const long double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long int a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
-const mpreal pow(const int a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const int a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const int a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const int a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd); 
-const mpreal pow(const int a, const long double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const int a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd); 
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd); 
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd); 
 
-const mpreal pow(const long double a, const long double b, mp_rnd_t rnd_mode = mpreal::default_rnd);    
-const mpreal pow(const long double a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long double a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long double a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const long double a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode = mpreal::default_rnd);    
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
 const mpreal pow(const double a, const double b, mp_rnd_t rnd_mode = mpreal::default_rnd);    
-const mpreal pow(const double a, const unsigned long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const double a, const unsigned int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const double a, const long int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
-const mpreal pow(const double a, const int b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const double a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const double a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const double a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode = mpreal::default_rnd);
+const mpreal pow(const double a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode = mpreal::default_rnd);
 
 //////////////////////////////////////////////////////////////////////////
 // Implementation of inline functions
@@ -661,7 +661,7 @@ inline mpreal& mpreal::operator=(const mpq_t v)
     return *this;
 }
 
-inline mpreal& mpreal::operator=(const long double v)        
+inline mpreal& mpreal::operator=(const FLENS_DEFAULT_INDEXTYPE double v)        
 {    
     mpfr_set_ld(mp,v,default_rnd);
     return *this;
@@ -679,25 +679,25 @@ inline mpreal& mpreal::operator=(const double v)
     return *this;
 }
 
-inline mpreal& mpreal::operator=(const unsigned long int v)    
+inline mpreal& mpreal::operator=(const unsigned FLENS_DEFAULT_INDEXTYPE long v)    
 {    
     mpfr_set_ui(mp,v,default_rnd);    
     return *this;
 }
 
-inline mpreal& mpreal::operator=(const unsigned int v)        
+inline mpreal& mpreal::operator=(const unsigned FLENS_DEFAULT_INDEXTYPE v)        
 {    
     mpfr_set_ui(mp,v,default_rnd);    
     return *this;
 }
 
-inline mpreal& mpreal::operator=(const long int v)            
+inline mpreal& mpreal::operator=(const FLENS_DEFAULT_INDEXTYPE long v)            
 {    
     mpfr_set_si(mp,v,default_rnd);    
     return *this;
 }
 
-inline mpreal& mpreal::operator=(const int v)
+inline mpreal& mpreal::operator=(const FLENS_DEFAULT_INDEXTYPE v)
 {    
     mpfr_set_si(mp,v,default_rnd);    
     return *this;
@@ -729,7 +729,7 @@ inline mpreal& mpreal::operator+=(const mpq_t u)
     return *this;
 }
 
-inline mpreal& mpreal::operator+= (const long double u)
+inline mpreal& mpreal::operator+= (const FLENS_DEFAULT_INDEXTYPE double u)
 {
     return *this += mpreal(u);    
 }
@@ -744,25 +744,25 @@ inline mpreal& mpreal::operator+= (const double u)
 #endif
 }
 
-inline mpreal& mpreal::operator+=(const unsigned long int u)
+inline mpreal& mpreal::operator+=(const unsigned FLENS_DEFAULT_INDEXTYPE long u)
 {
     mpfr_add_ui(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator+=(const unsigned int u)
+inline mpreal& mpreal::operator+=(const unsigned FLENS_DEFAULT_INDEXTYPE u)
 {
     mpfr_add_ui(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator+=(const long int u)
+inline mpreal& mpreal::operator+=(const FLENS_DEFAULT_INDEXTYPE long u)
 {
     mpfr_add_si(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator+=(const int u)
+inline mpreal& mpreal::operator+=(const FLENS_DEFAULT_INDEXTYPE u)
 {
     mpfr_add_si(mp,mp,u,default_rnd);
     return *this;
@@ -811,7 +811,7 @@ inline const mpreal operator+(const mpreal& a, const mpq_t b)
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const mpreal& a, const long double b)
+inline const mpreal operator+(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return mpreal(a) += b;
 }
@@ -821,22 +821,22 @@ inline const mpreal operator+(const mpreal& a, const double b)
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const mpreal& a, const unsigned long int b)
+inline const mpreal operator+(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const mpreal& a, const unsigned int b)
+inline const mpreal operator+(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const mpreal& a, const long int b)
+inline const mpreal operator+(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const mpreal& a, const int b)
+inline const mpreal operator+(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) += b;
 }
@@ -851,7 +851,7 @@ inline const mpreal operator+(const mpq_t b, const mpreal& a)
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const long double b, const mpreal& a)
+inline const mpreal operator+(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a)
 {
     return mpreal(a) += b;
 }
@@ -861,22 +861,22 @@ inline const mpreal operator+(const double  b, const mpreal& a)
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const unsigned long int b, const mpreal& a)
+inline const mpreal operator+(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const unsigned int b, const mpreal& a)
+inline const mpreal operator+(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const long int b, const mpreal& a)
+inline const mpreal operator+(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     return mpreal(a) += b;
 }
 
-inline const mpreal operator+(const int b, const mpreal& a)
+inline const mpreal operator+(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     return mpreal(a) += b;
 }
@@ -887,7 +887,7 @@ inline mpreal& mpreal::operator++()
     return *this;
 }
 
-inline const mpreal mpreal::operator++ (int)
+inline const mpreal mpreal::operator++ (FLENS_DEFAULT_INDEXTYPE)
 {
     mpreal x(*this);
     *this += 1;
@@ -900,7 +900,7 @@ inline mpreal& mpreal::operator--()
     return *this;
 }
 
-inline const mpreal mpreal::operator-- (int)
+inline const mpreal mpreal::operator-- (FLENS_DEFAULT_INDEXTYPE)
 {
     mpreal x(*this);
     *this -= 1;
@@ -927,7 +927,7 @@ inline mpreal& mpreal::operator-=(const mpq_t v)
     return *this;
 }
 
-inline mpreal& mpreal::operator-=(const long double v)
+inline mpreal& mpreal::operator-=(const FLENS_DEFAULT_INDEXTYPE double v)
 {
     return *this -= mpreal(v);    
 }
@@ -942,25 +942,25 @@ inline mpreal& mpreal::operator-=(const double v)
 #endif
 }
 
-inline mpreal& mpreal::operator-=(const unsigned long int v)
+inline mpreal& mpreal::operator-=(const unsigned FLENS_DEFAULT_INDEXTYPE long v)
 {
     mpfr_sub_ui(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator-=(const unsigned int v)
+inline mpreal& mpreal::operator-=(const unsigned FLENS_DEFAULT_INDEXTYPE v)
 {
     mpfr_sub_ui(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator-=(const long int v)
+inline mpreal& mpreal::operator-=(const FLENS_DEFAULT_INDEXTYPE long v)
 {
     mpfr_sub_si(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator-=(const int v)
+inline mpreal& mpreal::operator-=(const FLENS_DEFAULT_INDEXTYPE v)
 {
     mpfr_sub_si(mp,mp,v,default_rnd);
     return *this;
@@ -990,7 +990,7 @@ inline const mpreal operator-(const mpreal& a, const mpq_t b)
     return mpreal(a) -= b;
 }
 
-inline const mpreal operator-(const mpreal& a, const long double b)
+inline const mpreal operator-(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return mpreal(a) -= b;
 }
@@ -1000,22 +1000,22 @@ inline const mpreal operator-(const mpreal& a, const double b)
     return mpreal(a) -= b;
 }
 
-inline const mpreal operator-(const mpreal& a, const unsigned long int b)
+inline const mpreal operator-(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) -= b;
 }
 
-inline const mpreal operator-(const mpreal& a, const unsigned int b)
+inline const mpreal operator-(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) -= b;
 }
 
-inline const mpreal operator-(const mpreal& a, const long int b)
+inline const mpreal operator-(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) -= b;
 }
 
-inline const mpreal operator-(const mpreal& a, const int b)
+inline const mpreal operator-(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) -= b;
 }
@@ -1030,7 +1030,7 @@ inline const mpreal operator-(const mpq_t b, const mpreal& a)
     return -(mpreal(a) -= b);
 }
 
-inline const mpreal operator-(const long double b, const mpreal& a)
+inline const mpreal operator-(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a)
 {
     return -(mpreal(a) -= b);
 }
@@ -1046,28 +1046,28 @@ inline const mpreal operator-(const double  b, const mpreal& a)
 #endif
 }
 
-inline const mpreal operator-(const unsigned long int b, const mpreal& a)
+inline const mpreal operator-(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_ui_sub(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator-(const unsigned int b, const mpreal& a)
+inline const mpreal operator-(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_ui_sub(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator-(const long int b, const mpreal& a)
+inline const mpreal operator-(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_si_sub(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator-(const int b, const mpreal& a)
+inline const mpreal operator-(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_si_sub(x.mp,b,a.mp,mpreal::default_rnd);
@@ -1104,7 +1104,7 @@ inline mpreal& mpreal::operator*=(const mpq_t v)
     return *this;
 }
 
-inline mpreal& mpreal::operator*=(const long double v)
+inline mpreal& mpreal::operator*=(const FLENS_DEFAULT_INDEXTYPE double v)
 {
     return *this *= mpreal(v);    
 }
@@ -1119,25 +1119,25 @@ inline mpreal& mpreal::operator*=(const double v)
 #endif
 }
 
-inline mpreal& mpreal::operator*=(const unsigned long int v)
+inline mpreal& mpreal::operator*=(const unsigned FLENS_DEFAULT_INDEXTYPE long v)
 {
     mpfr_mul_ui(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator*=(const unsigned int v)
+inline mpreal& mpreal::operator*=(const unsigned FLENS_DEFAULT_INDEXTYPE v)
 {
     mpfr_mul_ui(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator*=(const long int v)
+inline mpreal& mpreal::operator*=(const FLENS_DEFAULT_INDEXTYPE long v)
 {
     mpfr_mul_si(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator*=(const int v)
+inline mpreal& mpreal::operator*=(const FLENS_DEFAULT_INDEXTYPE v)
 {
     mpfr_mul_si(mp,mp,v,default_rnd);
     return *this;
@@ -1160,7 +1160,7 @@ inline const mpreal operator*(const mpreal& a, const mpq_t b)
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const mpreal& a, const long double b)
+inline const mpreal operator*(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return mpreal(a) *= b;
 }
@@ -1170,22 +1170,22 @@ inline const mpreal operator*(const mpreal& a, const double b)
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const mpreal& a, const unsigned long int b)
+inline const mpreal operator*(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const mpreal& a, const unsigned int b)
+inline const mpreal operator*(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const mpreal& a, const long int b)
+inline const mpreal operator*(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const mpreal& a, const int b)
+inline const mpreal operator*(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) *= b;
 }
@@ -1200,7 +1200,7 @@ inline const mpreal operator*(const mpq_t b, const mpreal& a)
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const long double b, const mpreal& a)
+inline const mpreal operator*(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a)
 {
     return mpreal(a) *= b;
 }
@@ -1210,22 +1210,22 @@ inline const mpreal operator*(const double  b, const mpreal& a)
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const unsigned long int b, const mpreal& a)
+inline const mpreal operator*(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const unsigned int b, const mpreal& a)
+inline const mpreal operator*(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const long int b, const mpreal& a)
+inline const mpreal operator*(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     return mpreal(a) *= b;
 }
 
-inline const mpreal operator*(const int b, const mpreal& a)
+inline const mpreal operator*(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     return mpreal(a) *= b;
 }
@@ -1250,7 +1250,7 @@ inline mpreal& mpreal::operator/=(const mpq_t v)
     return *this;
 }
 
-inline mpreal& mpreal::operator/=(const long double v)
+inline mpreal& mpreal::operator/=(const FLENS_DEFAULT_INDEXTYPE double v)
 {
     return *this /= mpreal(v);    
 }
@@ -1265,25 +1265,25 @@ inline mpreal& mpreal::operator/=(const double v)
 #endif
 }
 
-inline mpreal& mpreal::operator/=(const unsigned long int v)
+inline mpreal& mpreal::operator/=(const unsigned FLENS_DEFAULT_INDEXTYPE long v)
 {
     mpfr_div_ui(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator/=(const unsigned int v)
+inline mpreal& mpreal::operator/=(const unsigned FLENS_DEFAULT_INDEXTYPE v)
 {
     mpfr_div_ui(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator/=(const long int v)
+inline mpreal& mpreal::operator/=(const FLENS_DEFAULT_INDEXTYPE long v)
 {
     mpfr_div_si(mp,mp,v,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator/=(const int v)
+inline mpreal& mpreal::operator/=(const FLENS_DEFAULT_INDEXTYPE v)
 {
     mpfr_div_si(mp,mp,v,default_rnd);
     return *this;
@@ -1313,7 +1313,7 @@ inline const mpreal operator/(const mpreal& a, const mpq_t b)
     return mpreal(a) /= b;
 }
 
-inline const mpreal operator/(const mpreal& a, const long double b)
+inline const mpreal operator/(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return mpreal(a) /= b;
 }
@@ -1323,55 +1323,55 @@ inline const mpreal operator/(const mpreal& a, const double b)
     return mpreal(a) /= b;
 }
 
-inline const mpreal operator/(const mpreal& a, const unsigned long int b)
+inline const mpreal operator/(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) /= b;
 }
 
-inline const mpreal operator/(const mpreal& a, const unsigned int b)
+inline const mpreal operator/(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) /= b;
 }
 
-inline const mpreal operator/(const mpreal& a, const long int b)
+inline const mpreal operator/(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return mpreal(a) /= b;
 }
 
-inline const mpreal operator/(const mpreal& a, const int b)
+inline const mpreal operator/(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return mpreal(a) /= b;
 }
 
-inline const mpreal operator/(const unsigned long int b, const mpreal& a)
+inline const mpreal operator/(const unsigned FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_ui_div(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator/(const unsigned int b, const mpreal& a)
+inline const mpreal operator/(const unsigned FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_ui_div(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator/(const long int b, const mpreal& a)
+inline const mpreal operator/(const FLENS_DEFAULT_INDEXTYPE long b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_si_div(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator/(const int b, const mpreal& a)
+inline const mpreal operator/(const FLENS_DEFAULT_INDEXTYPE b, const mpreal& a)
 {
     mpreal x(a);
     mpfr_si_div(x.mp,b,a.mp,mpreal::default_rnd);
     return x;
 }
 
-inline const mpreal operator/(const long double b, const mpreal& a)
+inline const mpreal operator/(const FLENS_DEFAULT_INDEXTYPE double b, const mpreal& a)
 {
     mpreal x(b);
     return x/a;
@@ -1391,96 +1391,96 @@ inline const mpreal operator/(const double  b, const mpreal& a)
 
 //////////////////////////////////////////////////////////////////////////
 // Shifts operators - Multiplication/Division by power of 2
-inline mpreal& mpreal::operator<<=(const unsigned long int u)
+inline mpreal& mpreal::operator<<=(const unsigned FLENS_DEFAULT_INDEXTYPE long u)
 {
     mpfr_mul_2ui(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator<<=(const unsigned int u)
+inline mpreal& mpreal::operator<<=(const unsigned FLENS_DEFAULT_INDEXTYPE u)
 {
-    mpfr_mul_2ui(mp,mp,static_cast<unsigned long int>(u),default_rnd);
+    mpfr_mul_2ui(mp,mp,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(u),default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator<<=(const long int u)
+inline mpreal& mpreal::operator<<=(const FLENS_DEFAULT_INDEXTYPE long u)
 {
     mpfr_mul_2si(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator<<=(const int u)
+inline mpreal& mpreal::operator<<=(const FLENS_DEFAULT_INDEXTYPE u)
 {
-    mpfr_mul_2si(mp,mp,static_cast<long int>(u),default_rnd);
+    mpfr_mul_2si(mp,mp,static_cast<FLENS_DEFAULT_INDEXTYPE long>(u),default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator>>=(const unsigned long int u)
+inline mpreal& mpreal::operator>>=(const unsigned FLENS_DEFAULT_INDEXTYPE long u)
 {
     mpfr_div_2ui(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator>>=(const unsigned int u)
+inline mpreal& mpreal::operator>>=(const unsigned FLENS_DEFAULT_INDEXTYPE u)
 {
-    mpfr_div_2ui(mp,mp,static_cast<unsigned long int>(u),default_rnd);
+    mpfr_div_2ui(mp,mp,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(u),default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator>>=(const long int u)
+inline mpreal& mpreal::operator>>=(const FLENS_DEFAULT_INDEXTYPE long u)
 {
     mpfr_div_2si(mp,mp,u,default_rnd);
     return *this;
 }
 
-inline mpreal& mpreal::operator>>=(const int u)
+inline mpreal& mpreal::operator>>=(const FLENS_DEFAULT_INDEXTYPE u)
 {
-    mpfr_div_2si(mp,mp,static_cast<long int>(u),default_rnd);
+    mpfr_div_2si(mp,mp,static_cast<FLENS_DEFAULT_INDEXTYPE long>(u),default_rnd);
     return *this;
 }
 
-inline const mpreal operator<<(const mpreal& v, const unsigned long int k)
+inline const mpreal operator<<(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE long k)
 {
     return mul_2ui(v,k);
 }
 
-inline const mpreal operator<<(const mpreal& v, const unsigned int k)
+inline const mpreal operator<<(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE k)
 {
-    return mul_2ui(v,static_cast<unsigned long int>(k));
+    return mul_2ui(v,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(k));
 }
 
-inline const mpreal operator<<(const mpreal& v, const long int k)
+inline const mpreal operator<<(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE long k)
 {
     return mul_2si(v,k);
 }
 
-inline const mpreal operator<<(const mpreal& v, const int k)
+inline const mpreal operator<<(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE k)
 {
-    return mul_2si(v,static_cast<long int>(k));
+    return mul_2si(v,static_cast<FLENS_DEFAULT_INDEXTYPE long>(k));
 }
 
-inline const mpreal operator>>(const mpreal& v, const unsigned long int k)
+inline const mpreal operator>>(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE long k)
 {
     return div_2ui(v,k);
 }
 
-inline const mpreal operator>>(const mpreal& v, const long int k)
+inline const mpreal operator>>(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE long k)
 {
     return div_2si(v,k);
 }
 
-inline const mpreal operator>>(const mpreal& v, const unsigned int k)
+inline const mpreal operator>>(const mpreal& v, const unsigned FLENS_DEFAULT_INDEXTYPE k)
 {
-    return div_2ui(v,static_cast<unsigned long int>(k));
+    return div_2ui(v,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(k));
 }
 
-inline const mpreal operator>>(const mpreal& v, const int k)
+inline const mpreal operator>>(const mpreal& v, const FLENS_DEFAULT_INDEXTYPE k)
 {
-    return div_2si(v,static_cast<long int>(k));
+    return div_2si(v,static_cast<FLENS_DEFAULT_INDEXTYPE long>(k));
 }
 
 // mul_2ui
-inline const mpreal mul_2ui(const mpreal& v, unsigned long int k, mp_rnd_t rnd_mode)
+inline const mpreal mul_2ui(const mpreal& v, unsigned FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_mul_2ui(x.mp,v.mp,k,rnd_mode);
@@ -1488,21 +1488,21 @@ inline const mpreal mul_2ui(const mpreal& v, unsigned long int k, mp_rnd_t rnd_m
 }
 
 // mul_2si
-inline const mpreal mul_2si(const mpreal& v, long int k, mp_rnd_t rnd_mode)
+inline const mpreal mul_2si(const mpreal& v, FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_mul_2si(x.mp,v.mp,k,rnd_mode);
     return x;
 }
 
-inline const mpreal div_2ui(const mpreal& v, unsigned long int k, mp_rnd_t rnd_mode)
+inline const mpreal div_2ui(const mpreal& v, unsigned FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_div_2ui(x.mp,v.mp,k,rnd_mode);
     return x;
 }
 
-inline const mpreal div_2si(const mpreal& v, long int k, mp_rnd_t rnd_mode)
+inline const mpreal div_2si(const mpreal& v, FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_div_2si(x.mp,v.mp,k,rnd_mode);
@@ -1516,27 +1516,27 @@ inline bool operator > (const mpreal& a, const mpreal& b)
     return (mpfr_greater_p(a.mp,b.mp)!=0);
 }
 
-inline bool operator >  (const mpreal& a, const unsigned long int b)
+inline bool operator >  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a>mpreal(b);
 }
 
-inline bool operator >  (const mpreal& a, const unsigned int b)
+inline bool operator >  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return a>mpreal(b);
 }
 
-inline bool operator >  (const mpreal& a, const long int b)
+inline bool operator >  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a>mpreal(b);
 }
 
-inline bool operator >  (const mpreal& a, const int b)
+inline bool operator >  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return a>mpreal(b);
 }
 
-inline bool operator >  (const mpreal& a, const long double b)
+inline bool operator >  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return a>mpreal(b);
 }
@@ -1546,27 +1546,27 @@ inline bool operator >  (const mpreal& a, const double b)
     return a>mpreal(b);
 }
 
-inline bool operator >  (const unsigned long int a,    const mpreal& b)
+inline bool operator >  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,    const mpreal& b)
 {
     return mpreal(a)>b;
 }
 
-inline bool operator >  (const unsigned int a,        const mpreal& b)
+inline bool operator >  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b)
 {
     return mpreal(a)>b;
 }
 
-inline bool operator >  (const long int a,            const mpreal& b)
+inline bool operator >  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b)
 {
     return mpreal(a)>b;
 }
 
-inline bool operator >  (const int a,                const mpreal& b)
+inline bool operator >  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b)
 {
     return mpreal(a)>b;
 }
 
-inline bool operator >  (const long double a,        const mpreal& b)
+inline bool operator >  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b)
 {
     return mpreal(a)>b;
 }
@@ -1581,27 +1581,27 @@ inline bool operator >= (const mpreal& a, const mpreal& b)
     return (mpfr_greaterequal_p(a.mp,b.mp)!=0);
 }
 
-inline bool operator >=  (const mpreal& a, const unsigned long int b)
+inline bool operator >=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a>=mpreal(b);
 }
 
-inline bool operator >=  (const mpreal& a, const unsigned int b)
+inline bool operator >=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return a>=mpreal(b);
 }
 
-inline bool operator >=  (const mpreal& a, const long int b)
+inline bool operator >=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a>=mpreal(b);
 }
 
-inline bool operator >=  (const mpreal& a, const int b)
+inline bool operator >=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return a>=mpreal(b);
 }
 
-inline bool operator >=  (const mpreal& a, const long double b)
+inline bool operator >=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return a>=mpreal(b);
 }
@@ -1611,27 +1611,27 @@ inline bool operator >=  (const mpreal& a, const double b)
     return a>=mpreal(b);
 }
 
-inline bool operator >=  (const unsigned long int a,const mpreal& b)
+inline bool operator >=  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b)
 {
     return mpreal(a)>=b;
 }
 
-inline bool operator >=  (const unsigned int a,        const mpreal& b)
+inline bool operator >=  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b)
 {
     return mpreal(a)>=b;
 }
 
-inline bool operator >=  (const long int a,            const mpreal& b)
+inline bool operator >=  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b)
 {
     return mpreal(a)>=b;
 }
 
-inline bool operator >=  (const int a,                const mpreal& b)
+inline bool operator >=  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b)
 {
     return mpreal(a)>=b;
 }
 
-inline bool operator >=  (const long double a,        const mpreal& b)
+inline bool operator >=  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b)
 {
     return mpreal(a)>=b;
 }
@@ -1646,27 +1646,27 @@ inline bool operator <  (const mpreal& a, const mpreal& b)
     return (mpfr_less_p(a.mp,b.mp)!=0);
 }
 
-inline bool operator <  (const mpreal& a, const unsigned long int b)
+inline bool operator <  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a<mpreal(b);
 }
 
-inline bool operator <  (const mpreal& a, const unsigned int b)
+inline bool operator <  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return a<mpreal(b);
 }
 
-inline bool operator <  (const mpreal& a, const long int b)
+inline bool operator <  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a<mpreal(b);
 }
 
-inline bool operator <  (const mpreal& a, const int b)
+inline bool operator <  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return a<mpreal(b);
 }
 
-inline bool operator <  (const mpreal& a, const long double b)
+inline bool operator <  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return a<mpreal(b);
 }
@@ -1676,27 +1676,27 @@ inline bool operator <  (const mpreal& a, const double b)
     return a<mpreal(b);
 }
 
-inline bool operator <  (const unsigned long int a,    const mpreal& b)
+inline bool operator <  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,    const mpreal& b)
 {
     return mpreal(a)<b;
 }
 
-inline bool operator <  (const unsigned int a,const mpreal& b)
+inline bool operator <  (const unsigned FLENS_DEFAULT_INDEXTYPE a,const mpreal& b)
 {
     return mpreal(a)<b;
 }
 
-inline bool operator <  (const long int a,const mpreal& b)
+inline bool operator <  (const FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b)
 {
     return mpreal(a)<b;
 }
 
-inline bool operator <  (const int a,const mpreal& b)
+inline bool operator <  (const FLENS_DEFAULT_INDEXTYPE a,const mpreal& b)
 {
     return mpreal(a)<b;
 }
 
-inline bool operator <  (const long double a,const mpreal& b)
+inline bool operator <  (const FLENS_DEFAULT_INDEXTYPE double a,const mpreal& b)
 {
     return mpreal(a)<b;
 }
@@ -1711,27 +1711,27 @@ inline bool operator <= (const mpreal& a, const mpreal& b)
     return (mpfr_lessequal_p(a.mp,b.mp)!=0);
 }
 
-inline bool operator <=  (const mpreal& a, const unsigned long int b)
+inline bool operator <=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a<=mpreal(b);
 }
 
-inline bool operator <=  (const mpreal& a, const unsigned int b)
+inline bool operator <=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return a<=mpreal(b);
 }
 
-inline bool operator <=  (const mpreal& a, const long int b)
+inline bool operator <=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a<=mpreal(b);
 }
 
-inline bool operator <=  (const mpreal& a, const int b)
+inline bool operator <=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return a<=mpreal(b);
 }
 
-inline bool operator <=  (const mpreal& a, const long double b)
+inline bool operator <=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return a<=mpreal(b);
 }
@@ -1741,27 +1741,27 @@ inline bool operator <=  (const mpreal& a, const double b)
     return a<=mpreal(b);
 }
 
-inline bool operator <=  (const unsigned long int a,const mpreal& b)
+inline bool operator <=  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b)
 {
     return mpreal(a)<=b;
 }
 
-inline bool operator <=  (const unsigned int a,        const mpreal& b)
+inline bool operator <=  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b)
 {
     return mpreal(a)<=b;
 }
 
-inline bool operator <=  (const long int a,            const mpreal& b)
+inline bool operator <=  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b)
 {
     return mpreal(a)<=b;
 }
 
-inline bool operator <=  (const int a,                const mpreal& b)
+inline bool operator <=  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b)
 {
     return mpreal(a)<=b;
 }
 
-inline bool operator <=  (const long double a,        const mpreal& b)
+inline bool operator <=  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b)
 {
     return mpreal(a)<=b;
 }
@@ -1776,27 +1776,27 @@ inline bool operator == (const mpreal& a, const mpreal& b)
     return (mpfr_equal_p(a.mp,b.mp)!=0);
 }
 
-inline bool operator ==  (const mpreal& a, const unsigned long int b)
+inline bool operator ==  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a==mpreal(b);
 }
 
-inline bool operator ==  (const mpreal& a, const unsigned int b)
+inline bool operator ==  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return a==mpreal(b);
 }
 
-inline bool operator ==  (const mpreal& a, const long int b)
+inline bool operator ==  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a==mpreal(b);
 }
 
-inline bool operator ==  (const mpreal& a, const int b)
+inline bool operator ==  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return a==mpreal(b);
 }
 
-inline bool operator ==  (const mpreal& a, const long double b)
+inline bool operator ==  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return a==mpreal(b);
 }
@@ -1806,27 +1806,27 @@ inline bool operator ==  (const mpreal& a, const double b)
     return a==mpreal(b);
 }
 
-inline bool operator ==  (const unsigned long int a,const mpreal& b)
+inline bool operator ==  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b)
 {
     return mpreal(a)==b;
 }
 
-inline bool operator ==  (const unsigned int a,        const mpreal& b)
+inline bool operator ==  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b)
 {
     return mpreal(a)==b;
 }
 
-inline bool operator ==  (const long int a,            const mpreal& b)
+inline bool operator ==  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b)
 {
     return mpreal(a)==b;
 }
 
-inline bool operator ==  (const int a,                const mpreal& b)
+inline bool operator ==  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b)
 {
     return mpreal(a)==b;
 }
 
-inline bool operator ==  (const long double a,        const mpreal& b)
+inline bool operator ==  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b)
 {
     return mpreal(a)==b;
 }
@@ -1841,27 +1841,27 @@ inline bool operator != (const mpreal& a, const mpreal& b)
     return (mpfr_lessgreater_p(a.mp,b.mp)!=0);
 }
 
-inline bool operator !=  (const mpreal& a, const unsigned long int b)
+inline bool operator !=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a!=mpreal(b);
 }
 
-inline bool operator !=  (const mpreal& a, const unsigned int b)
+inline bool operator !=  (const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b)
 {
     return a!=mpreal(b);
 }
 
-inline bool operator !=  (const mpreal& a, const long int b)
+inline bool operator !=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b)
 {
     return a!=mpreal(b);
 }
 
-inline bool operator !=  (const mpreal& a, const int b)
+inline bool operator !=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b)
 {
     return a!=mpreal(b);
 }
 
-inline bool operator !=  (const mpreal& a, const long double b)
+inline bool operator !=  (const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b)
 {
     return a!=mpreal(b);
 }
@@ -1871,27 +1871,27 @@ inline bool operator !=  (const mpreal& a, const double b)
     return a!=mpreal(b);
 }
 
-inline bool operator !=  (const unsigned long int a,const mpreal& b)
+inline bool operator !=  (const unsigned FLENS_DEFAULT_INDEXTYPE long a,const mpreal& b)
 {
     return mpreal(a)!=b;
 }
 
-inline bool operator !=  (const unsigned int a,        const mpreal& b)
+inline bool operator !=  (const unsigned FLENS_DEFAULT_INDEXTYPE a,        const mpreal& b)
 {
     return mpreal(a)!=b;
 }
 
-inline bool operator !=  (const long int a,            const mpreal& b)
+inline bool operator !=  (const FLENS_DEFAULT_INDEXTYPE long a,            const mpreal& b)
 {
     return mpreal(a)!=b;
 }
 
-inline bool operator !=  (const int a,                const mpreal& b)
+inline bool operator !=  (const FLENS_DEFAULT_INDEXTYPE a,                const mpreal& b)
 {
     return mpreal(a)!=b;
 }
 
-inline bool operator !=  (const long double a,        const mpreal& b)
+inline bool operator !=  (const FLENS_DEFAULT_INDEXTYPE double a,        const mpreal& b)
 {
     return mpreal(a)!=b;
 }
@@ -1938,28 +1938,28 @@ inline mpreal::operator float() const
     return (float)mpfr_get_d(mp,default_rnd);
 }
 
-inline mpreal::operator long double() const
+inline mpreal::operator FLENS_DEFAULT_INDEXTYPE double() const
 {
     return mpfr_get_ld(mp,default_rnd);
 }
 
-inline mpreal::operator unsigned long() const
+inline mpreal::operator unsigned FLENS_DEFAULT_INDEXTYPE() const
 {
     return mpfr_get_ui(mp,default_rnd);    
 }
 
-inline mpreal::operator unsigned int() const
+inline mpreal::operator unsigned FLENS_DEFAULT_INDEXTYPE() const
 {
     return mpfr_get_ui(mp,default_rnd);    
 }
 
-inline mpreal::operator int() const
+inline mpreal::operator FLENS_DEFAULT_INDEXTYPE() const
 {
     return mpfr_get_si(mp,default_rnd);    
 }
 
 
-inline mpreal::operator long() const
+inline mpreal::operator FLENS_DEFAULT_INDEXTYPE() const
 {
     return mpfr_get_si(mp,default_rnd);    
 }
@@ -1976,13 +1976,13 @@ inline mpreal::operator mpfr_ptr()
 
 //////////////////////////////////////////////////////////////////////////
 // Set/Get number properties
-inline int sgn(const mpreal& v)
+inline FLENS_DEFAULT_INDEXTYPE sgn(const mpreal& v)
 {
-    int r = mpfr_signbit(v.mp);
+    FLENS_DEFAULT_INDEXTYPE r = mpfr_signbit(v.mp);
     return (r>0?-1:1);
 }
 
-inline void mpreal::set_sign(int sign, mp_rnd_t rnd_mode)
+inline void mpreal::set_sign(FLENS_DEFAULT_INDEXTYPE sign, mp_rnd_t rnd_mode)
 {
     mpfr_setsign(mp,mp,(sign<0?1:0),rnd_mode);
 }
@@ -1997,7 +1997,7 @@ inline void mpreal::set_prec(mp_prec_t prec, mp_rnd_t rnd_mode)
     mpfr_prec_round(mp,prec,rnd_mode);
 }
 
-inline void mpreal::set_inf(int sign) 
+inline void mpreal::set_inf(FLENS_DEFAULT_INDEXTYPE sign) 
 { 
     mpfr_set_inf(mp,sign);
 }    
@@ -2012,7 +2012,7 @@ inline mp_exp_t mpreal::get_exp ()
     return mpfr_get_exp(mp);
 }
 
-inline int mpreal::set_exp (mp_exp_t e)
+inline FLENS_DEFAULT_INDEXTYPE mpreal::set_exp (mp_exp_t e)
 {
     return mpfr_set_exp(mp,e);
 }
@@ -2044,12 +2044,12 @@ inline const mpreal modf(const mpreal& v, mpreal& n)
     return frac;
 }
 
-inline int mpreal::check_range (int t, mp_rnd_t rnd_mode)
+inline FLENS_DEFAULT_INDEXTYPE mpreal::check_range (FLENS_DEFAULT_INDEXTYPE t, mp_rnd_t rnd_mode)
 {
     return mpfr_check_range(mp,t,rnd_mode);
 }
 
-inline int mpreal::subnormalize (int t,mp_rnd_t rnd_mode)
+inline FLENS_DEFAULT_INDEXTYPE mpreal::subnormalize (FLENS_DEFAULT_INDEXTYPE t,mp_rnd_t rnd_mode)
 {
     return mpfr_subnormalize(mp,t,rnd_mode);
 }
@@ -2059,7 +2059,7 @@ inline mp_exp_t mpreal::get_emin (void)
     return mpfr_get_emin();
 }
 
-inline int mpreal::set_emin (mp_exp_t exp)
+inline FLENS_DEFAULT_INDEXTYPE mpreal::set_emin (mp_exp_t exp)
 {
     return mpfr_set_emin(exp);
 }
@@ -2069,7 +2069,7 @@ inline mp_exp_t mpreal::get_emax (void)
     return mpfr_get_emax();
 }
 
-inline int mpreal::set_emax (mp_exp_t exp)
+inline FLENS_DEFAULT_INDEXTYPE mpreal::set_emax (mp_exp_t exp)
 {
     return mpfr_set_emax(exp);
 }
@@ -2111,31 +2111,31 @@ inline const mpreal sqrt(const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal sqrt(const unsigned long int v, mp_rnd_t rnd_mode)
+inline const mpreal sqrt(const unsigned FLENS_DEFAULT_INDEXTYPE long v, mp_rnd_t rnd_mode)
 {
     mpreal x;
     mpfr_sqrt_ui(x.mp,v,rnd_mode);
     return x;
 }
 
-inline const mpreal sqrt(const unsigned int v, mp_rnd_t rnd_mode)
+inline const mpreal sqrt(const unsigned FLENS_DEFAULT_INDEXTYPE v, mp_rnd_t rnd_mode)
 {
-    return sqrt(static_cast<unsigned long int>(v),rnd_mode);
+    return sqrt(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(v),rnd_mode);
 }
 
-inline const mpreal sqrt(const long int v, mp_rnd_t rnd_mode)
+inline const mpreal sqrt(const FLENS_DEFAULT_INDEXTYPE long v, mp_rnd_t rnd_mode)
 {
-    if (v>=0)    return sqrt(static_cast<unsigned long int>(v),rnd_mode);
+    if (v>=0)    return sqrt(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(v),rnd_mode);
     else        return mpreal(); // NaN  
 }
 
-inline const mpreal sqrt(const int v, mp_rnd_t rnd_mode)
+inline const mpreal sqrt(const FLENS_DEFAULT_INDEXTYPE v, mp_rnd_t rnd_mode)
 {
-    if (v>=0)    return sqrt(static_cast<unsigned long int>(v),rnd_mode);
+    if (v>=0)    return sqrt(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(v),rnd_mode);
     else        return mpreal(); // NaN
 }
 
-inline const mpreal sqrt(const long double v, mp_rnd_t rnd_mode)
+inline const mpreal sqrt(const FLENS_DEFAULT_INDEXTYPE double v, mp_rnd_t rnd_mode)
 {
     return sqrt(mpreal(v),rnd_mode);
 }
@@ -2152,7 +2152,7 @@ inline const mpreal cbrt(const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal root(const mpreal& v, unsigned long int k, mp_rnd_t rnd_mode)
+inline const mpreal root(const mpreal& v, unsigned FLENS_DEFAULT_INDEXTYPE long k, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_root(x.mp,x.mp,k,rnd_mode);
@@ -2180,7 +2180,7 @@ inline const mpreal dim(const mpreal& a, const mpreal& b, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline int cmpabs(const mpreal& a,const mpreal& b)
+inline FLENS_DEFAULT_INDEXTYPE cmpabs(const mpreal& a,const mpreal& b)
 {
     return mpfr_cmpabs(a.mp,b.mp);
 }
@@ -2269,7 +2269,7 @@ inline const mpreal cot(const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline int sin_cos(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode)
+inline FLENS_DEFAULT_INDEXTYPE sin_cos(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode)
 {
     return mpfr_sin_cos(s.mp,c.mp,v.mp,rnd_mode);
 }
@@ -2373,7 +2373,7 @@ inline const mpreal atanh  (const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal fac_ui (unsigned long int v, mp_rnd_t rnd_mode)
+inline const mpreal fac_ui (unsigned FLENS_DEFAULT_INDEXTYPE long v, mp_rnd_t rnd_mode)
 {
     mpreal x;
     mpfr_fac_ui(x.mp,v,rnd_mode);
@@ -2415,7 +2415,7 @@ inline const mpreal lngamma (const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal lgamma (const mpreal& v, int *signp, mp_rnd_t rnd_mode)
+inline const mpreal lgamma (const mpreal& v, FLENS_DEFAULT_INDEXTYPE *signp, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_lgamma(x.mp,signp,v.mp,rnd_mode);
@@ -2457,7 +2457,7 @@ inline const mpreal _j1 (const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal _jn (long n, const mpreal& v, mp_rnd_t rnd_mode)
+inline const mpreal _jn (FLENS_DEFAULT_INDEXTYPE n, const mpreal& v, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_jn(x.mp,n,v.mp,rnd_mode);
@@ -2478,7 +2478,7 @@ inline const mpreal _y1 (const mpreal& v, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal _yn (long n, const mpreal& v, mp_rnd_t rnd_mode)
+inline const mpreal _yn (FLENS_DEFAULT_INDEXTYPE n, const mpreal& v, mp_rnd_t rnd_mode)
 {
     mpreal x(v);
     mpfr_yn(x.mp,n,v.mp,rnd_mode);
@@ -2489,7 +2489,7 @@ inline const mpreal _yn (long n, const mpreal& v, mp_rnd_t rnd_mode)
 // MPFR 2.4.0 Specifics
 #if (MPFR_VERSION >= MPFR_VERSION_NUM(2,4,0))
 
-inline int sinh_cosh(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode)
+inline FLENS_DEFAULT_INDEXTYPE sinh_cosh(mpreal& s, mpreal& c, const mpreal& v, mp_rnd_t rnd_mode)
 {
     return mpfr_sinh_cosh(s.mp,c.mp,v.mp,rnd_mode);
 }
@@ -2701,12 +2701,12 @@ inline mp_prec_t mpreal::get_default_prec()
     return mpfr_get_default_prec();
 }
 
-inline void mpreal::set_default_base(int base)
+inline void mpreal::set_default_base(FLENS_DEFAULT_INDEXTYPE base)
 { 
     default_base = base;
 }
 
-inline int mpreal::get_default_base()
+inline FLENS_DEFAULT_INDEXTYPE mpreal::get_default_base()
 { 
     return default_base;
 }
@@ -2722,19 +2722,19 @@ inline mp_rnd_t mpreal::get_default_rnd()
     return mpfr_get_default_rounding_mode();
 }
 
-inline void mpreal::set_double_bits(int dbits)
+inline void mpreal::set_double_bits(FLENS_DEFAULT_INDEXTYPE dbits)
 { 
     double_bits = dbits;
 }
 
-inline int mpreal::get_double_bits()
+inline FLENS_DEFAULT_INDEXTYPE mpreal::get_double_bits()
 { 
     return double_bits;
 }
 
-inline bool mpreal::fits_in_bits(double x, int n)
+inline bool mpreal::fits_in_bits(double x, FLENS_DEFAULT_INDEXTYPE n)
 {   
-    int i;
+    FLENS_DEFAULT_INDEXTYPE i;
     double t;
     return IsInf(x) || (std::modf ( std::ldexp ( std::frexp ( x, &i ), n ), &t ) == 0.0);
 }
@@ -2753,31 +2753,31 @@ inline const mpreal pow(const mpreal& a, const mpz_t b, mp_rnd_t rnd_mode)
     return x;
 }
 
-inline const mpreal pow(const mpreal& a, const unsigned long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     mpreal x(a);
     mpfr_pow_ui(x.mp,x.mp,b,rnd_mode);
     return x;
 }
 
-inline const mpreal pow(const mpreal& a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const mpreal& a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(a,static_cast<unsigned long int>(b),rnd_mode);
+    return pow(a,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode);
 }
 
-inline const mpreal pow(const mpreal& a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     mpreal x(a);
     mpfr_pow_si(x.mp,x.mp,b,rnd_mode);
     return x;
 }
 
-inline const mpreal pow(const mpreal& a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(a,static_cast<long int>(b),rnd_mode);
+    return pow(a,static_cast<FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode);
 }
 
-inline const mpreal pow(const mpreal& a, const long double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const mpreal& a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode)
 {
     return pow(a,mpreal(b),rnd_mode);
 }
@@ -2787,31 +2787,31 @@ inline const mpreal pow(const mpreal& a, const double b, mp_rnd_t rnd_mode)
     return pow(a,mpreal(b),rnd_mode);
 }
 
-inline const mpreal pow(const unsigned long int a, const mpreal& b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const mpreal& b, mp_rnd_t rnd_mode)
 {
     mpreal x(a);
     mpfr_ui_pow(x.mp,a,b.mp,rnd_mode);
     return x;
 }
 
-inline const mpreal pow(const unsigned int a, const mpreal& b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const mpreal& b, mp_rnd_t rnd_mode)
 {
-    return pow(static_cast<unsigned long int>(a),b,rnd_mode);
+    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),b,rnd_mode);
 }
 
-inline const mpreal pow(const long int a, const mpreal& b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const mpreal& b, mp_rnd_t rnd_mode)
 {
-    if (a>=0)     return pow(static_cast<unsigned long int>(a),b,rnd_mode);
+    if (a>=0)     return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),b,rnd_mode);
     else        return pow(mpreal(a),b,rnd_mode);
 }
 
-inline const mpreal pow(const int a, const mpreal& b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const mpreal& b, mp_rnd_t rnd_mode)
 {
-    if (a>=0)     return pow(static_cast<unsigned long int>(a),b,rnd_mode);
+    if (a>=0)     return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),b,rnd_mode);
     else        return pow(mpreal(a),b,rnd_mode);
 }
 
-inline const mpreal pow(const long double a, const mpreal& b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const mpreal& b, mp_rnd_t rnd_mode)
 {
     return pow(mpreal(a),b,rnd_mode);
 }
@@ -2821,192 +2821,192 @@ inline const mpreal pow(const double a, const mpreal& b, mp_rnd_t rnd_mode)
     return pow(mpreal(a),b,rnd_mode);
 }
 
-// pow unsigned long int
-inline const mpreal pow(const unsigned long int a, const unsigned long int b, mp_rnd_t rnd_mode)
+// pow unsigned FLENS_DEFAULT_INDEXTYPE long
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     mpreal x(a);
     mpfr_ui_pow_ui(x.mp,a,b,rnd_mode);
     return x;
 }
 
-inline const mpreal pow(const unsigned long int a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(a,static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
+    return pow(a,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
 }
 
-inline const mpreal pow(const unsigned long int a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
-    if(b>0)    return pow(a,static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
+    if(b>0)    return pow(a,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
     else    return pow(a,mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-inline const mpreal pow(const unsigned long int a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    if(b>0)    return pow(a,static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
+    if(b>0)    return pow(a,static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
     else    return pow(a,mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-inline const mpreal pow(const unsigned long int a, const long double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode)
 {
     return pow(a,mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-inline const mpreal pow(const unsigned long int a, const double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE long a, const double b, mp_rnd_t rnd_mode)
 {
     return pow(a,mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-// pow unsigned int
-inline const mpreal pow(const unsigned int a, const unsigned long int b, mp_rnd_t rnd_mode)
+// pow unsigned FLENS_DEFAULT_INDEXTYPE
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
-    return pow(static_cast<unsigned long int>(a),b,rnd_mode); //mpfr_ui_pow_ui
+    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),b,rnd_mode); //mpfr_ui_pow_ui
 }
 
-inline const mpreal pow(const unsigned int a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
+    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
 }
 
-inline const mpreal pow(const unsigned int a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
-    if(b>0)    return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
-    else    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    if(b>0)    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
+    else    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-inline const mpreal pow(const unsigned int a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    if(b>0)    return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
-    else    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    if(b>0)    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
+    else    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-inline const mpreal pow(const unsigned int a, const long double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode)
 {
-    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-inline const mpreal pow(const unsigned int a, const double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const unsigned FLENS_DEFAULT_INDEXTYPE a, const double b, mp_rnd_t rnd_mode)
 {
-    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
 }
 
-// pow long int
-inline const mpreal pow(const long int a, const unsigned long int b, mp_rnd_t rnd_mode)
+// pow FLENS_DEFAULT_INDEXTYPE long
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
-    if (a>0) return pow(static_cast<unsigned long int>(a),b,rnd_mode); //mpfr_ui_pow_ui
+    if (a>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),b,rnd_mode); //mpfr_ui_pow_ui
     else     return pow(mpreal(a),b,rnd_mode); //mpfr_pow_ui
 }
 
-inline const mpreal pow(const long int a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    if (a>0) return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode);  //mpfr_ui_pow_ui
-    else     return pow(mpreal(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_pow_ui
+    if (a>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode);  //mpfr_ui_pow_ui
+    else     return pow(mpreal(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_pow_ui
 }
 
-inline const mpreal pow(const long int a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     if (a>0)
     {
-        if(b>0) return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
-        else    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+        if(b>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
+        else    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     }else{
         return pow(mpreal(a),b,rnd_mode); // mpfr_pow_si
     }
 }
 
-inline const mpreal pow(const long int a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
     if (a>0)
     {
-        if(b>0) return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
-        else    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+        if(b>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
+        else    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     }else{
-        return pow(mpreal(a),static_cast<long int>(b),rnd_mode); // mpfr_pow_si
+        return pow(mpreal(a),static_cast<FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); // mpfr_pow_si
     }
 }
 
-inline const mpreal pow(const long int a, const long double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode)
 {
-    if (a>=0)     return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    if (a>=0)     return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     else        return pow(mpreal(a),mpreal(b),rnd_mode); //mpfr_pow
 }
 
-inline const mpreal pow(const long int a, const double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE long a, const double b, mp_rnd_t rnd_mode)
 {
-    if (a>=0)     return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    if (a>=0)     return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     else        return pow(mpreal(a),mpreal(b),rnd_mode); //mpfr_pow
 }
 
-// pow int
-inline const mpreal pow(const int a, const unsigned long int b, mp_rnd_t rnd_mode)
+// pow FLENS_DEFAULT_INDEXTYPE
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
-    if (a>0) return pow(static_cast<unsigned long int>(a),b,rnd_mode); //mpfr_ui_pow_ui
+    if (a>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),b,rnd_mode); //mpfr_ui_pow_ui
     else     return pow(mpreal(a),b,rnd_mode); //mpfr_pow_ui
 }
 
-inline const mpreal pow(const int a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    if (a>0) return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode);  //mpfr_ui_pow_ui
-    else     return pow(mpreal(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_pow_ui
+    if (a>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode);  //mpfr_ui_pow_ui
+    else     return pow(mpreal(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_pow_ui
 }
 
-inline const mpreal pow(const int a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     if (a>0)
     {
-        if(b>0) return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
-        else    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+        if(b>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
+        else    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     }else{
         return pow(mpreal(a),b,rnd_mode); // mpfr_pow_si
     }
 }
 
-inline const mpreal pow(const int a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
     if (a>0)
     {
-        if(b>0) return pow(static_cast<unsigned long int>(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_ui_pow_ui
-        else    return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+        if(b>0) return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_ui_pow_ui
+        else    return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     }else{
-        return pow(mpreal(a),static_cast<long int>(b),rnd_mode); // mpfr_pow_si
+        return pow(mpreal(a),static_cast<FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); // mpfr_pow_si
     }
 }
 
-inline const mpreal pow(const int a, const long double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode)
 {
-    if (a>=0)     return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    if (a>=0)     return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     else        return pow(mpreal(a),mpreal(b),rnd_mode); //mpfr_pow
 }
 
-inline const mpreal pow(const int a, const double b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE a, const double b, mp_rnd_t rnd_mode)
 {
-    if (a>=0)     return pow(static_cast<unsigned long int>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
+    if (a>=0)     return pow(static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(a),mpreal(b),rnd_mode); //mpfr_ui_pow
     else        return pow(mpreal(a),mpreal(b),rnd_mode); //mpfr_pow
 }
 
-// pow long double 
-inline const mpreal pow(const long double a, const long double b, mp_rnd_t rnd_mode)
+// pow FLENS_DEFAULT_INDEXTYPE double 
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const FLENS_DEFAULT_INDEXTYPE double b, mp_rnd_t rnd_mode)
 {
     return pow(mpreal(a),mpreal(b),rnd_mode);
 }
 
-inline const mpreal pow(const long double a, const unsigned long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     return pow(mpreal(a),b,rnd_mode); //mpfr_pow_ui
 }
 
-inline const mpreal pow(const long double a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(mpreal(a),static_cast<unsigned long int>(b),rnd_mode); //mpfr_pow_ui
+    return pow(mpreal(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); //mpfr_pow_ui
 }
 
-inline const mpreal pow(const long double a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     return pow(mpreal(a),b,rnd_mode); // mpfr_pow_si
 }
 
-inline const mpreal pow(const long double a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const FLENS_DEFAULT_INDEXTYPE double a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(mpreal(a),static_cast<long int>(b),rnd_mode); // mpfr_pow_si
+    return pow(mpreal(a),static_cast<FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); // mpfr_pow_si
 }
 
 inline const mpreal pow(const double a, const double b, mp_rnd_t rnd_mode)
@@ -3014,24 +3014,24 @@ inline const mpreal pow(const double a, const double b, mp_rnd_t rnd_mode)
     return pow(mpreal(a),mpreal(b),rnd_mode);
 }
 
-inline const mpreal pow(const double a, const unsigned long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const double a, const unsigned FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     return pow(mpreal(a),b,rnd_mode); // mpfr_pow_ui
 }
 
-inline const mpreal pow(const double a, const unsigned int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const double a, const unsigned FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(mpreal(a),static_cast<unsigned long int>(b),rnd_mode); // mpfr_pow_ui
+    return pow(mpreal(a),static_cast<unsigned FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); // mpfr_pow_ui
 }
 
-inline const mpreal pow(const double a, const long int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const double a, const FLENS_DEFAULT_INDEXTYPE long b, mp_rnd_t rnd_mode)
 {
     return pow(mpreal(a),b,rnd_mode); // mpfr_pow_si
 }
 
-inline const mpreal pow(const double a, const int b, mp_rnd_t rnd_mode)
+inline const mpreal pow(const double a, const FLENS_DEFAULT_INDEXTYPE b, mp_rnd_t rnd_mode)
 {
-    return pow(mpreal(a),static_cast<long int>(b),rnd_mode); // mpfr_pow_si
+    return pow(mpreal(a),static_cast<FLENS_DEFAULT_INDEXTYPE long>(b),rnd_mode); // mpfr_pow_si
 }
 }
 

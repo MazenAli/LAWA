@@ -50,12 +50,12 @@ class WeightedPDEOperator1D_PG{
 
         WeightedPDEOperator1D_PG(const TrialBasis& _trialbasis, const TestBasis& _testbasis, Function<T> &_reaction_f,
                                  Function<T> &_convection_f, Function<T>& _diffusion_f,
-                                 int order=10, bool _reactionIsZero=false, bool _convectionIsZero=false,
+                                 FLENS_DEFAULT_INDEXTYPE order=10, bool _reactionIsZero=false, bool _convectionIsZero=false,
                                  bool _diffusionIsZero=false);
 
         T
-        operator()(XType xtype1, int j1, long k1,
-                   XType xtype2, int j2, long k2) const;
+        operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                   XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
 
         T
         operator()(const Index1D &row_index, const Index1D &col_index) const;

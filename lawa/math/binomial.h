@@ -23,8 +23,8 @@
 
 namespace lawa {
 
-long
-binomial(int n, int k);
+FLENS_DEFAULT_INDEXTYPE
+binomial(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k);
 
 } // namespace lawa
 

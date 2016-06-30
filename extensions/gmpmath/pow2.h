@@ -27,11 +27,11 @@ namespace lawa {
 
 template <typename T>
     typename GMPReal<T>::Type
-    pow2i(int expo);
+    pow2i(FLENS_DEFAULT_INDEXTYPE expo);
 
 template <typename T>
     typename GMPReal<T>::Type
-    pow2ih(int expo);
+    pow2ih(FLENS_DEFAULT_INDEXTYPE expo);
 
 } // namespace lawa
 

@@ -15,6 +15,26 @@ AffineLocalOperator<Index,LocalOperatorType,ParamType>::set_param(ParamType& mu)
 	thetas.set_param(mu);
 }
 
+
+template <typename Index, typename LocalOperatorType, typename ParamType>
+typename AffineLocalOperator<Index,LocalOperatorType,ParamType>::T
+AffineLocalOperator<Index,LocalOperatorType,ParamType>::operator()
+                                            (const Index& row,
+                                             const Index& col) const
+{
+    T ret = 0.;
+    for (size_t i=0; i<thetas.size(); ++i) {
+        T temp = 0.;
+        for (size_t j=0; j<this->localops[i]->size(); ++j) {
+            temp += this->localops[i]->get_localops()[j]->operator()(row, col);
+        }
+        ret += thetas.eval(i);
+    }
+    return ret;
+}
+
+
+
 template <typename Index, typename LocalOperatorType, typename ParamType>
 void
 AffineLocalOperator<Index,LocalOperatorType,ParamType>::eval(const Coefficients<Lexicographical,T,Index> &v,

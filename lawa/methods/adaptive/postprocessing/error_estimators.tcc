@@ -75,7 +75,7 @@ postprocessing_H1(SOLVER& Solver, MA_H &A_H1, RHS_H &F_H1, T H1norm, const char*
     Coefficients<Lexicographical,T,Index> u;
     std::ofstream file(filename);
 
-    for (int i=0; i<int(Solver.solutions.size()); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)(Solver.solutions.size()); ++i) {
         u = Solver.solutions[i];
         T ErrorH1Norm = computeErrorInH1Norm(A_H1, F_H1, u, H1norm);
         file      << supp(u).size() << " " << Solver.linsolve_iterations[i] << " "

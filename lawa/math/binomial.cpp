@@ -22,8 +22,8 @@
 
 namespace lawa {
 
-long
-binomial(int n, int k)
+FLENS_DEFAULT_INDEXTYPE
+binomial(FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k)
 {
     if (k>n) {
         return 0;
@@ -34,12 +34,12 @@ binomial(int n, int k)
     if (k==0) {
         return 1;
     }
-    long res = 1;
-    for (int i=k+1; i<=n; ++i) {
+    FLENS_DEFAULT_INDEXTYPE res = 1;
+    for (FLENS_DEFAULT_INDEXTYPE i=k+1; i<=n; ++i) {
         res *= i;
     }
-    long den = 1;
-    for (int i=2; i<=n-k; ++i) {
+    FLENS_DEFAULT_INDEXTYPE den = 1;
+    for (FLENS_DEFAULT_INDEXTYPE i=2; i<=n-k; ++i) {
         den *= i;
     }
     assert((1.*res)/den == res/den);

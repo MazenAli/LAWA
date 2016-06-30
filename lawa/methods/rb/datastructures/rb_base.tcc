@@ -5,6 +5,7 @@
 #include <cassert>
 #include <lawa/methods/adaptive/datastructures/coefficients.h>
 #include <lawa/methods/adaptive/algorithms/sample.h>
+#include <chrono>
 
 namespace lawa {
 
@@ -23,6 +24,27 @@ n_bf()
 {
 	return rb_basisfunctions.size();
 }
+
+
+template <typename RB_Model, typename TruthModel, typename DataType,
+          typename ParamType, typename _IndexSet>
+          void
+RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
+set_tol(double tol_)
+{
+    tol = tol_;
+}
+
+
+template <typename RB_Model, typename TruthModel, typename DataType,
+          typename ParamType, typename _IndexSet>
+          void
+RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
+set_mw(bool _IsMW)
+{
+    IsMW = _IsMW;
+}
+
 
 template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
@@ -162,10 +184,17 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 	//------------------------------------------------//
 	//      F Riesz representors
 	//------------------------------------------------//
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    std::chrono::duration<double>                      elapsed;
 	if(N == 0){
 		// In order to be able to calculate empty error bounds,
 		// we have to calculate the Riesz Representors for F
+        start   = std::chrono::system_clock::now();
 		calculate_Riesz_RHS_information();
+        end     = std::chrono::system_clock::now();
+        elapsed = end-start;
+        std::cout << "Time for computing RHS information " << elapsed.count()
+                  << "s\n";
 	}
 
 	//================================================//
@@ -174,9 +203,7 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 
 	ParamType current_param = Xi_train[0];
 	T max_error = 0;
-	bool repeated_iteration = false;
-	long double init_tol = rb_truth.access_solver().access_params().tol;
-    std::vector<std::pair<ParamType, unsigned int>> repeated_snaps;
+    std::vector<std::pair<ParamType, unsigned FLENS_DEFAULT_INDEXTYPE>> repeated_snaps;
 	do {
 
 		if(greedy_params.verbose){
@@ -194,7 +221,13 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 		//  Find Parameter with maximum error (estimator)
 		//------------------------------------------------//
 		T error_est;
-		max_error = find_max_errest(N, Xi_train, current_param, truth_sols);
+
+        start     = std::chrono::system_clock::now();
+        max_error = find_max_errest(N, Xi_train, current_param, truth_sols);
+        end       = std::chrono::system_clock::now();
+        elapsed   = end-start;
+        std::cout << "Time for computing next mu " << elapsed.count()
+                  << "s\n";
         if (max_error <= greedy_params.tol) {
             std::cout << "Greedy tolerance reached\n";
             std::cout << "Greedy error     : " << max_error << std::endl;
@@ -274,7 +307,12 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
                 }
             }
 
+            start   = std::chrono::system_clock::now();
             u = rb_truth.get_truth_solution(current_param);
+            end     = std::chrono::system_clock::now();
+            elapsed = end-start;
+            std::cout << "Time for computing snapshot " << elapsed.count()
+                      << "s\n";
         }
 
 		//------------------------------------------------//
@@ -283,7 +321,7 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 
         std::string snap_folder = greedy_params.trainingdata_folder + "/snap";
         mkdir(greedy_params.trainingdata_folder.c_str(), 0777);
-        write_snapshot(u, snap_folder, (int)N+1);
+        write_snapshot(u, snap_folder, (FLENS_DEFAULT_INDEXTYPE)N+1);
 		add_to_basis(u);
 		N++;
 
@@ -316,7 +354,7 @@ train_Greedy(std::vector<ParamType>& Xi_train, std::size_t N)
 
 			// Write Basis Functions
 			std::string bf_folder = greedy_params.trainingdata_folder + "/bf";
-			write_basisfunctions(bf_folder, (int)N);
+			write_basisfunctions(bf_folder, (FLENS_DEFAULT_INDEXTYPE)N);
 
 			// Write Riesz Representors
 			std::string repr_folder = greedy_params.trainingdata_folder + "/representors";
@@ -351,10 +389,10 @@ reconstruct_u_N(typename RB_Model::DenseVectorT u, std::size_t N)
 {
 	assert(N <= n_bf());
 	assert(u.length() > 0);
-	assert(u.length() >= (int)N);
+	assert(u.length() >= (FLENS_DEFAULT_INDEXTYPE)N);
 
 	DataType u_full;
-	for (unsigned int i = 1; i <= N; ++i) {
+	for (unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= N; ++i) {
 		u_full +=  u(i) * rb_basisfunctions[i-1];
 	}
 
@@ -370,10 +408,10 @@ reconstruct_u_N(typename RB_Model::DenseVectorT u, std::vector<std::size_t> indi
     size_t N = u.length();
 	assert(N <= n_bf());
 	assert(u.length() > 0);
-	assert(u.length() >= (int)N);
+	assert(u.length() >= (FLENS_DEFAULT_INDEXTYPE)N);
 
 	DataType u_full;
-	for (unsigned int i = 1; i <= N; ++i) {
+	for (unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= N; ++i) {
 		u_full +=  u(i) * rb_basisfunctions[indices[i-1]];
 	}
 
@@ -387,7 +425,7 @@ RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
 reconstruct_res_repr_N(typename RB_Model::DenseVectorT u, std::size_t N, ParamType& mu)
 {
 	assert(N <= n_bf());
-	assert(u.length() >= (int)N);
+	assert(u.length() >= (FLENS_DEFAULT_INDEXTYPE)N);
 
 
 	DataType res_full;
@@ -477,7 +515,7 @@ generate_uniform_paramset(ParamType min_param, ParamType max_param, intArrayType
         }
         Xi_train.push_back(new_mu);
 
-        for(int i = pdim-1; ; --i){
+        for(FLENS_DEFAULT_INDEXTYPE i = pdim-1; ; --i){
         	if(i<0){
         		return Xi_train;
         	}
@@ -544,9 +582,14 @@ add_to_basis(const DataType& u)
 
 
 	add_to_RB_structures(new_bf);
-
-	calculate_Riesz_LHS_information(new_bf);
-
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    std::chrono::duration<double> elapsed;
+    start   = std::chrono::system_clock::now();
+    calculate_Riesz_LHS_information(new_bf);
+    end     = std::chrono::system_clock::now();
+    elapsed = end-start;
+    std::cout << "Time for computing LHS information " << elapsed.count()
+                  << "s\n";
 }
 
 template <typename RB_Model, typename TruthModel, typename DataType,
@@ -574,7 +617,7 @@ add_to_RB_structures(const DataType& bf)
     	// "Pad" RB_A_matrices with zeros to new size
     	std::size_t n;
 		if (first_bf == true) {
-			rb_system.RB_A_matrices[q_a].engine().resize(1, 1);
+			rb_system.RB_A_matrices[q_a].engine().resize((FLENS_DEFAULT_INDEXTYPE)1, (FLENS_DEFAULT_INDEXTYPE)1);
 			n = 1;
 		}
 		else {
@@ -583,7 +626,7 @@ add_to_RB_structures(const DataType& bf)
 			rb_system.RB_A_matrices[q_a](tmp.rows(), tmp.cols()) = tmp;
 
 			n = rb_system.RB_A_matrices[q_a].numRows();
-			for(unsigned int i = 1; i <= n; ++i) {
+			for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= n; ++i) {
 				rb_system.RB_A_matrices[q_a](i, n) = 0.;
 				rb_system.RB_A_matrices[q_a](n, i) = 0.;
 			}
@@ -591,10 +634,10 @@ add_to_RB_structures(const DataType& bf)
 		}
 
 		// Compute new entries (one column, one row)
-        for (unsigned int i = 1; i <= n; ++i) {
+        for (unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= n; ++i) {
         	rb_system.RB_A_matrices[q_a](n,i) = rb_truth.lhs_u_u(q_a, bf, rb_basisfunctions[i-1]);
         }
-        for (unsigned int i = 1; i < n; ++i) {
+        for (unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i < n; ++i) {
         	rb_system.RB_A_matrices[q_a](i,n) = rb_truth.lhs_u_u(q_a, rb_basisfunctions[i-1], bf);
         }
 
@@ -615,7 +658,7 @@ add_to_RB_structures(const DataType& bf)
     	// Add one zero entry to RB_F_vectors
     	std::size_t n;
     	if (first_bf == true) {
-    		rb_system.RB_F_vectors[q_f].engine().resize(1);
+    		rb_system.RB_F_vectors[q_f].engine().resize((FLENS_DEFAULT_INDEXTYPE)1);
     		n = 1;
     	}
     	else {
@@ -639,7 +682,7 @@ add_to_RB_structures(const DataType& bf)
 
     std::size_t n;
     if (rb_system.RB_inner_product.numRows()==0) {
-        rb_system.RB_inner_product.engine().resize(1, 1);
+        rb_system.RB_inner_product.engine().resize((FLENS_DEFAULT_INDEXTYPE)1, (FLENS_DEFAULT_INDEXTYPE)1);
         n=1;
     }
     else {
@@ -647,13 +690,13 @@ add_to_RB_structures(const DataType& bf)
     	rb_system.RB_inner_product.engine().resize(tmp.numRows()+1, tmp.numCols()+1);
     	rb_system. RB_inner_product(tmp.rows(), tmp.cols()) = tmp;
     	n = rb_system. RB_inner_product.numRows();
-        for(unsigned int i = 1; i <= n; ++i) {
+        for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= n; ++i) {
         	rb_system.RB_inner_product(i, n) = 0.;
         	rb_system.RB_inner_product(n, i) = 0.;
         }
     }
 
-    for (unsigned int i = 1; i <= n; ++i) {
+    for (unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= n; ++i) {
     	rb_system.RB_inner_product(n, i) = rb_truth.innprod_Y_u_u(bf, rb_basisfunctions[i-1]);
 		rb_system.RB_inner_product(i, n) = rb_system.RB_inner_product(n,i);
     }
@@ -673,7 +716,8 @@ calculate_Riesz_RHS_information()
     calc_wav_RHS();
 
     std::size_t Qf = this->rb_system.Q_f();
-    this->rb_system.F_F_representor_norms.engine().resize((int) Qf, (int) Qf);
+    this->rb_system.F_F_representor_norms.engine().resize((FLENS_DEFAULT_INDEXTYPE) Qf,
+                                                           (FLENS_DEFAULT_INDEXTYPE) Qf);
     for(std::size_t qf1 = 1; qf1 <= Qf; ++qf1) {
         for (std::size_t qf2 = qf1; qf2 <= Qf; ++qf2) {
 
@@ -710,7 +754,7 @@ calc_wav_RHS()
         F.set_active_comp(i);
         sample_f(basis, Lambda, F, P,
                  this->F_representors[i],
-                 tol, true);
+                 tol, IsMW);
         this->total += this->F_representors[i].size();
     }
 
@@ -726,7 +770,7 @@ void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
 calculate_Riesz_LHS_information(const DataType& bf)
 {
-    int N = this->rb_basisfunctions.size();
+    FLENS_DEFAULT_INDEXTYPE N = this->rb_basisfunctions.size();
     if (greedy_params.verbose) {
         std::cout << "Current N=" << N << std::endl;
     }
@@ -734,7 +778,7 @@ calculate_Riesz_LHS_information(const DataType& bf)
 
     // Update the Riesz Representor Norms A x A
     std::size_t Qa = this->rb_system.Q_a();
-    for(int n1 = 0; n1 < N; ++n1) {
+    for(FLENS_DEFAULT_INDEXTYPE n1 = 0; n1 < N; ++n1) {
         typename RB_Model::FullColMatrixT A_n1_N(Qa, Qa);
         for(std::size_t qa1 = 1; qa1 <= Qa; ++qa1) {
             for(std::size_t qa2 = qa1; qa2 <= Qa; ++qa2) {
@@ -791,9 +835,11 @@ calc_wav_LHS(const DataType& bf)
     auto& P     = this->rb_truth.access_solver().get_testprec();
     auto& basis = this->rb_truth.access_solver().get_testbasis();
 
+    auto _Lambda = supp(bf);
+
     for (std::size_t i=0; i<Qa; ++i) {
-        sample_Au(basis, Lambda, (*A[i]), P, bf, temp[i],
-                  tol, true);
+        sample_Au(basis, _Lambda, (*A[i]), P, bf, temp[i],
+                  tol, IsMW);
         // Because Kristina
         for (auto& lambda : temp[i]) {
             lambda.second *= -1.;
@@ -826,6 +872,7 @@ find_max_errest(std::size_t N, std::vector<ParamType>& Xi_train, ParamType& curr
         case weak:
         {
             error_est = rb_system.get_errorbound(u_N,mu);
+            break;
         }
         case strong:
         {
@@ -863,6 +910,12 @@ find_max_errest(std::size_t N, std::vector<ParamType>& Xi_train, ParamType& curr
                 filename  << ".txt";
                 saveCoeffVector2D(res_repr, rb_truth.get_testbasis(), filename.str().c_str());
             }
+            break;
+        }
+        case strong_adaptive:
+        {
+            /* Nothing, implementation artifact */
+            break;
         }
         }
 
@@ -929,7 +982,7 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-write_basisfunctions(const std::string& directory_name, int nb){
+write_basisfunctions(const std::string& directory_name, FLENS_DEFAULT_INDEXTYPE nb){
 
 	if(rb_system.rb_params.verbose){
 		std::cout << "=====>  Writing RB BasisFunctions to file " << std::endl << std::endl;
@@ -970,7 +1023,7 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-write_snapshot(DataType& u, const std::string& directory_name, int nb){
+write_snapshot(DataType& u, const std::string& directory_name, FLENS_DEFAULT_INDEXTYPE nb){
 
 	if(rb_system.rb_params.verbose){
 		std::cout << "=====>  Writing RB snapshots to file " << std::endl << std::endl;
@@ -1010,9 +1063,9 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-read_basisfunctions(const std::string& directory_name, int nb){
+read_basisfunctions(const std::string& directory_name, FLENS_DEFAULT_INDEXTYPE nb){
 
-	unsigned int n_bf;
+	unsigned FLENS_DEFAULT_INDEXTYPE n_bf;
 	if(nb < 0){
 		std::string n_bf_filename = directory_name + "/n_bf.txt";
 
@@ -1032,7 +1085,7 @@ read_basisfunctions(const std::string& directory_name, int nb){
 
 
 	rb_basisfunctions.clear();
-	for(unsigned int i = 1; i <= n_bf; ++i){
+	for(unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= n_bf; ++i){
 		std::stringstream filename;
 		filename << directory_name << "/bf_" << i << ".txt";
 
@@ -1050,7 +1103,7 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-write_rieszrepresentors(const std::string& directory_name, int nb)
+write_rieszrepresentors(const std::string& directory_name, FLENS_DEFAULT_INDEXTYPE nb)
 {
 	// Make a directory to store all the data files
 	if(mkdir(directory_name.c_str(), 0777) == -1)
@@ -1093,7 +1146,7 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-read_rieszrepresentors(const std::string& directory_name, int nb)
+read_rieszrepresentors(const std::string& directory_name, FLENS_DEFAULT_INDEXTYPE nb)
 {
 
 	F_representors.clear();
@@ -1143,7 +1196,7 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-read_greedy_info(const char* filename, int nb){
+read_greedy_info(const char* filename, FLENS_DEFAULT_INDEXTYPE nb){
 	greedy_info.read(filename, rb_system.Q_f(), rb_system.Q_a(), nb);
 }
 
@@ -1151,7 +1204,7 @@ template <typename RB_Model, typename TruthModel, typename DataType,
           typename ParamType, typename _IndexSet>
 void
 RB_Base<RB_Model,TruthModel, DataType, ParamType, _IndexSet>::
-read_repr_accuracies(const char* filename, int Nmax){
+read_repr_accuracies(const char* filename, FLENS_DEFAULT_INDEXTYPE Nmax){
 	greedy_info.read_repr_accuracies(filename, rb_system.Q_f(), rb_system.Q_a(), Nmax);
     eps_F_representors = *(greedy_info.accuracies_f_reprs.end()-1);
     eps_A_representors = *(greedy_info.accuracies_a_reprs.end()-1);
@@ -1272,8 +1325,8 @@ calc_rb_data()
 
     // RB_InnerProduct
     this->rb_system.RB_inner_product.resize(n_bf, n_bf);
-    for (unsigned int i = 1; i <= n_bf; ++i) {
-        for (unsigned int j = i; j <= n_bf; ++j) {
+    for (unsigned FLENS_DEFAULT_INDEXTYPE i = 1; i <= n_bf; ++i) {
+        for (unsigned FLENS_DEFAULT_INDEXTYPE j = i; j <= n_bf; ++j) {
             this->rb_system.RB_inner_product(i, j) = this->rb_truth.innprod_Y_u_u(this->rb_basisfunctions[i-1],
                                                                             this->rb_basisfunctions[j-1]);
             this->rb_system.RB_inner_product(j, i) = this->rb_system.RB_inner_product(i,j);

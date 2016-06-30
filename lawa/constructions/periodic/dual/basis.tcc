@@ -22,14 +22,14 @@
 namespace lawa {
 
 template <typename T>
-Basis<T,Dual,Periodic,CDF>::Basis(int _d, int _d_, int j)
+Basis<T,Dual,Periodic,CDF>::Basis(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j)
     : d(_d), d_(_d_), j0(j), mra(d,d_,j), mra_(d,d_,j), 
       psi_(d,d_), M1_(psi_), _j(j)
 {
 }
 
 template <typename T>
-int
+FLENS_DEFAULT_INDEXTYPE
 Basis<T,Dual,Periodic,CDF>::level() const
 {
     return _j;
@@ -37,7 +37,7 @@ Basis<T,Dual,Periodic,CDF>::level() const
 
 template <typename T>
 void
-Basis<T,Dual,Periodic,CDF>::setLevel(int j) const
+Basis<T,Dual,Periodic,CDF>::setLevel(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
     _j = j;
@@ -55,8 +55,8 @@ Basis<T,Dual,Periodic,CDF>::generator(XType xtype) const
 }
 
 template <typename T>
-int
-Basis<T,Dual,Periodic,CDF>::cardJ_(int j) const
+FLENS_DEFAULT_INDEXTYPE
+Basis<T,Dual,Periodic,CDF>::cardJ_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
 
@@ -64,12 +64,12 @@ Basis<T,Dual,Periodic,CDF>::cardJ_(int j) const
 }
 
 template <typename T>
-flens::Range<int>
-Basis<T,Dual,Periodic,CDF>::rangeJ_(int j) const
+flens::Range<FLENS_DEFAULT_INDEXTYPE>
+Basis<T,Dual,Periodic,CDF>::rangeJ_(FLENS_DEFAULT_INDEXTYPE j) const
 {
     assert(j>=j0);
 
-    return flens::Range<int>(0,pow2i<T>(j)-1);
+    return flens::Range<FLENS_DEFAULT_INDEXTYPE>(0,pow2i<T>(j)-1);
 }
 
 } // namespace lawa

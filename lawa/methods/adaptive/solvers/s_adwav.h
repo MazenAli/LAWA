@@ -34,33 +34,33 @@ template <typename T, typename Index, typename Basis, typename MA, typename RHS>
 class S_ADWAV {
     public:
         S_ADWAV(const Basis &basis, MA &A, RHS &F, T contraction, T start_threshTol,
-                T _linTol=1e-6, T _resTol=1e-4, int _NumOfIterations=10, int _MaxItsPerThreshTol=5,
-                T _eps=1e-2, int _MaxSizeLambda = 400, T _resStopTol=0.1,
-                std::vector<int> _Jmaxvec = std::vector<int>(0));
+                T _linTol=1e-6, T _resTol=1e-4, FLENS_DEFAULT_INDEXTYPE _NumOfIterations=10, FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol=5,
+                T _eps=1e-2, FLENS_DEFAULT_INDEXTYPE _MaxSizeLambda = 400, T _resStopTol=0.1,
+                std::vector<FLENS_DEFAULT_INDEXTYPE> _Jmaxvec = std::vector<FLENS_DEFAULT_INDEXTYPE>(0));
 
         //solver for symmetric elliptic problems
         void solve(const IndexSet<Index> &Initial_Lambda, const char *linsolvertype,
-                   const char *filename, int assemble_matrix=2, T H1norm=0.);
+                   const char *filename, FLENS_DEFAULT_INDEXTYPE assemble_matrix=2, T H1norm=0.);
         //solver for symmetric elliptic problems
-        void solve_cg(const IndexSet<Index> &Initial_Lambda, int assemble_matrix=1, T H1norm=0.);
+        void solve_cg(const IndexSet<Index> &Initial_Lambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix=1, T H1norm=0.);
         //solver for symmetric elliptic problems without B-Splines
-        void solve_cg_WO_XBSpline(const IndexSet<Index> &Initial_Lambda, int assemble_matrix=1, T H1norm=0.);
+        void solve_cg_WO_XBSpline(const IndexSet<Index> &Initial_Lambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix=1, T H1norm=0.);
         //solver for elliptic problems
-        void solve_gmres(const IndexSet<Index> &Initial_Lambda, int assemble_matrix=1);
-        void solve_gmresm(const IndexSet<Index> &Initial_Lambda, int assemble_matrix=1);
+        void solve_gmres(const IndexSet<Index> &Initial_Lambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix=1);
+        void solve_gmresm(const IndexSet<Index> &Initial_Lambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix=1);
         //solver for indefinite problems
-        void solve_cgls(const IndexSet<Index> &Initial_Lambda, int assemble_matrix=1);
+        void solve_cgls(const IndexSet<Index> &Initial_Lambda, FLENS_DEFAULT_INDEXTYPE assemble_matrix=1);
         
         void
         set_parameters(T _contraction, T _threshTol, T _linTol=1e-6, T _resTol=1e-4, 
-                       int _NumOfIterations=10, int _MaxItsPerThreshTol=5, T _eps=1e-2, 
-                       int _MaxSizeLambda = 400, T _resStopTol=0.1, 
-                       std::vector<int> _Jmaxvec = std::vector<int>(0));
+                       FLENS_DEFAULT_INDEXTYPE _NumOfIterations=10, FLENS_DEFAULT_INDEXTYPE _MaxItsPerThreshTol=5, T _eps=1e-2, 
+                       FLENS_DEFAULT_INDEXTYPE _MaxSizeLambda = 400, T _resStopTol=0.1, 
+                       std::vector<FLENS_DEFAULT_INDEXTYPE> _Jmaxvec = std::vector<FLENS_DEFAULT_INDEXTYPE>(0));
         void
         get_parameters(T& _contraction, T& _threshTol, T& _linTol, T& _resTol, 
-                       int& _NumOfIterations, int& _MaxItsPerThreshTol, T& _eps, 
-                       int& _MaxSizeLambda, T& _resStopTol,
-                       std::vector<int>& _Jmaxvec);
+                       FLENS_DEFAULT_INDEXTYPE& _NumOfIterations, FLENS_DEFAULT_INDEXTYPE& _MaxItsPerThreshTol, T& _eps, 
+                       FLENS_DEFAULT_INDEXTYPE& _MaxSizeLambda, T& _resStopTol,
+                       std::vector<FLENS_DEFAULT_INDEXTYPE>& _Jmaxvec);
     
         std::vector<Coefficients<Lexicographical,T,Index> > solutions;
         std::vector<T>               residuals;
@@ -76,12 +76,12 @@ class S_ADWAV {
         MA &A;
         RHS &F;
         T contraction, threshTol, linTol, resTol;
-        int NumOfIterations; 
-        int MaxItsPerThreshTol;
+        FLENS_DEFAULT_INDEXTYPE NumOfIterations; 
+        FLENS_DEFAULT_INDEXTYPE MaxItsPerThreshTol;
         T eps;
-        int MaxSizeLambda;
+        FLENS_DEFAULT_INDEXTYPE MaxSizeLambda;
         T resStopTol;
-        std::vector<int> Jmaxvec;
+        std::vector<FLENS_DEFAULT_INDEXTYPE> Jmaxvec;
 
 };
 

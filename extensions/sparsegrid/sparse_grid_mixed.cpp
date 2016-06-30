@@ -10,9 +10,9 @@ namespace webbur
 {
 //****************************************************************************80
 
-void sparse_grid_mixed_index ( int dim_num, int level_max, int rule[], 
-  int /*point_num*/, int /*point_total_num*/, int sparse_unique_index[],
-  int sparse_order[], int sparse_index[] )
+void sparse_grid_mixed_index ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
+  FLENS_DEFAULT_INDEXTYPE /*point_num*/, FLENS_DEFAULT_INDEXTYPE /*point_total_num*/, FLENS_DEFAULT_INDEXTYPE sparse_unique_index[],
+  FLENS_DEFAULT_INDEXTYPE sparse_order[], FLENS_DEFAULT_INDEXTYPE sparse_index[] )
 
 //****************************************************************************80
 //
@@ -61,11 +61,11 @@ void sparse_grid_mixed_index ( int dim_num, int level_max, int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -83,35 +83,35 @@ void sparse_grid_mixed_index ( int dim_num, int level_max, int rule[],
 //    15, "F2_ME", Fejer Type 2 Moderate Exponential, Closed Fully Nested.
 //    16, "GP_ME", Gauss Patterson Moderate Exponential, Closed Fully Nested.
 //
-//    Input, int POINT_NUM, the number of unique points 
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of unique points 
 //    in the grid. 
 //
-//    Input, int POINT_TOTAL_NUM, the total number of points in the grid.
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_TOTAL_NUM, the total number of points in the grid.
 //
-//    Input, int SPARSE_UNIQUE_INDEX[POINT_TOTAL_NUM], associates each
+//    Input, FLENS_DEFAULT_INDEXTYPE SPARSE_UNIQUE_INDEX[POINT_TOTAL_NUM], associates each
 //    point in the grid with its unique representative.
 //
-//    Output, int SPARSE_ORDER[DIM_NUM*POINT_NUM], lists, 
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_ORDER[DIM_NUM*POINT_NUM], lists, 
 //    for each point, the order of the 1D rules used in the grid that 
 //    generated it.
 //
-//    Output, int SPARSE_INDEX[DIM_NUM*POINT_NUM)] lists, for 
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_INDEX[DIM_NUM*POINT_NUM)] lists, for 
 //    each point, its index in each of the 1D rules in the grid that generated 
 //    it.  The indices are 1-based.
 //
 {
-  int dim;
-  int h;
-  int level;
-  int *level_1d;
-  int level_min;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
+  FLENS_DEFAULT_INDEXTYPE level_min;
   bool more_grids;
   bool more_points;
-  int *order_1d;
-  int point_count;
-  int *point_index;
-  int point_unique;
-  int t;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE point_count;
+  FLENS_DEFAULT_INDEXTYPE *point_index;
+  FLENS_DEFAULT_INDEXTYPE point_unique;
+  FLENS_DEFAULT_INDEXTYPE t;
 //
 //  Special cases.
 //
@@ -134,9 +134,9 @@ void sparse_grid_mixed_index ( int dim_num, int level_max, int rule[],
 //
 //  The outer loop generates values of LEVEL.
 //
-  level_1d = new int[dim_num];
-  order_1d = new int[dim_num];
-  point_index = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  point_index = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   level_min = webbur::i4_max ( 0, level_max + 1 - dim_num );
 
@@ -195,9 +195,9 @@ void sparse_grid_mixed_index ( int dim_num, int level_max, int rule[],
 }
 //****************************************************************************80
 
-void sparse_grid_mixed_point ( int dim_num, int level_max, int rule[], 
-  double alpha[], double beta[], int point_num, int sparse_order[], 
-  int sparse_index[], double sparse_point[] )
+void sparse_grid_mixed_point ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
+  double alpha[], double beta[], FLENS_DEFAULT_INDEXTYPE point_num, FLENS_DEFAULT_INDEXTYPE sparse_order[], 
+  FLENS_DEFAULT_INDEXTYPE sparse_index[], double sparse_point[] )
 
 //****************************************************************************80
 //
@@ -241,12 +241,12 @@ void sparse_grid_mixed_point ( int dim_num, int level_max, int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, controls the size of the final
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, controls the size of the final
 //    sparse grid.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -268,23 +268,23 @@ void sparse_grid_mixed_point ( int dim_num, int level_max, int rule[],
 //    Generalized Gauss Hermite, Generalized Gauss Laguerre, 
 //    and Gauss Jacobi rules.
 //
-//    Input, int POINT_NUM, the number of points in the grid,
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of points in the grid,
 //    as determined by SPARSE_GRID_MIXED_SIZE.
 //
-//    Input, int SPARSE_ORDER[DIM_NUM*POINT_NUM], lists, for each point,
+//    Input, FLENS_DEFAULT_INDEXTYPE SPARSE_ORDER[DIM_NUM*POINT_NUM], lists, for each point,
 //    the order of the 1D rules used in the grid that generated it.
 //
-//    Input, int SPARSE_INDEX[DIM_NUM*POINT_NUM], lists, for each point,
+//    Input, FLENS_DEFAULT_INDEXTYPE SPARSE_INDEX[DIM_NUM*POINT_NUM], lists, for each point,
 //    its index in each of the 1D rules in the grid that generated it.
 //    The indices are 1-based.
 //
 //    Output, double SPARSE_POINT[DIM_NUM*POINT_NUM], the points.
 //
 {
-  int dim;
-  int level;
-  int order;
-  int point;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE order;
+  FLENS_DEFAULT_INDEXTYPE point;
   double *points;
 
   for ( point = 0; point < point_num; point++ )
@@ -412,7 +412,7 @@ void sparse_grid_mixed_point ( int dim_num, int level_max, int rule[],
 }
 //****************************************************************************80
 
-int sparse_grid_mixed_size ( int dim_num, int level_max, int rule[], 
+FLENS_DEFAULT_INDEXTYPE sparse_grid_mixed_size ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
   double alpha[], double beta[], double tol )
 
 //****************************************************************************80
@@ -455,11 +455,11 @@ int sparse_grid_mixed_size ( int dim_num, int level_max, int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -483,28 +483,28 @@ int sparse_grid_mixed_size ( int dim_num, int level_max, int rule[],
 //
 //    Input, double TOL, a tolerance for point equality.
 //
-//    Output, int SPARSE_GRID_MIXED_SIZE, the number of unique points.
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_MIXED_SIZE, the number of unique points.
 //
 {
-  int dim;
-  int h;
-  int level;
-  int *level_1d;
-  int level_min;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
+  FLENS_DEFAULT_INDEXTYPE level_min;
   bool more_grids;
   bool more_points;
-  int order;
-  int *order_1d;
-  int point;
-  int *point_index;
-  int point_num;
-  int point_total_num;
-  int point_total_num2;
+  FLENS_DEFAULT_INDEXTYPE order;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE point;
+  FLENS_DEFAULT_INDEXTYPE *point_index;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE point_total_num;
+  FLENS_DEFAULT_INDEXTYPE point_total_num2;
   double *points;
-  int *sparse_total_index;
-  int *sparse_total_order;
+  FLENS_DEFAULT_INDEXTYPE *sparse_total_index;
+  FLENS_DEFAULT_INDEXTYPE *sparse_total_order;
   double *sparse_total_point;
-  int t;
+  FLENS_DEFAULT_INDEXTYPE t;
 //
 //  Special cases.
 //
@@ -528,16 +528,16 @@ int sparse_grid_mixed_size ( int dim_num, int level_max, int rule[],
 //  Generate SPARSE_TOTAL_ORDER and SPARSE_TOTAL_INDEX arrays for the TOTAL 
 //  set of points.
 //
-  sparse_total_order = new int[dim_num*point_total_num];
-  sparse_total_index = new int[dim_num*point_total_num];
+  sparse_total_order = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_total_num];
+  sparse_total_index = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_total_num];
 
   point_total_num2 = 0;
 //
 //  The outer loop generates values of LEVEL.
 //
-  level_1d = new int[dim_num];
-  order_1d = new int[dim_num];
-  point_index = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  point_index = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   level_min = webbur::i4_max ( 0, level_max + 1 - dim_num );
 
@@ -732,7 +732,7 @@ int sparse_grid_mixed_size ( int dim_num, int level_max, int rule[],
 }
 //****************************************************************************80
 
-int sparse_grid_mixed_size_total ( int dim_num, int level_max, int rule[] )
+FLENS_DEFAULT_INDEXTYPE sparse_grid_mixed_size_total ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[] )
 
 //****************************************************************************80
 //
@@ -778,11 +778,11 @@ int sparse_grid_mixed_size_total ( int dim_num, int level_max, int rule[] )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -800,18 +800,18 @@ int sparse_grid_mixed_size_total ( int dim_num, int level_max, int rule[] )
 //    15, "F2_ME", Fejer Type 2 Moderate Exponential, Closed Fully Nested.
 //    16, "GP_ME", Gauss Patterson Moderate Exponential, Closed Fully Nested.
 //
-//    Output, int SPARSE_GRID_MIXED_SIZE_TOTAL, the number of points 
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE_GRID_MIXED_SIZE_TOTAL, the number of points 
 //    including repetitions.
 //
 {
-  int h;
-  int level;
-  int *level_1d;
-  int level_min;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
+  FLENS_DEFAULT_INDEXTYPE level_min;
   bool more_grids;
-  int *order_1d;
-  int point_total_num;
-  int t;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE point_total_num;
+  FLENS_DEFAULT_INDEXTYPE t;
 //
 //  Special case.
 //
@@ -823,8 +823,8 @@ int sparse_grid_mixed_size_total ( int dim_num, int level_max, int rule[] )
 
   point_total_num = 0;
 
-  level_1d = new int[dim_num];
-  order_1d = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 //
 //  The outer loop generates values of LEVEL.
 //
@@ -862,9 +862,9 @@ int sparse_grid_mixed_size_total ( int dim_num, int level_max, int rule[] )
 }
 //****************************************************************************80
 
-void sparse_grid_mixed_unique_index ( int dim_num, int level_max, int rule[], 
-  double alpha[], double beta[], double tol, int point_num, int point_total_num, 
-  int sparse_unique_index[] )
+void sparse_grid_mixed_unique_index ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
+  double alpha[], double beta[], double tol, FLENS_DEFAULT_INDEXTYPE point_num, FLENS_DEFAULT_INDEXTYPE point_total_num, 
+  FLENS_DEFAULT_INDEXTYPE sparse_unique_index[] )
 
 //****************************************************************************80
 //
@@ -914,11 +914,11 @@ void sparse_grid_mixed_unique_index ( int dim_num, int level_max, int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -942,35 +942,35 @@ void sparse_grid_mixed_unique_index ( int dim_num, int level_max, int rule[],
 //
 //    Input, double TOL, a tolerance for point equality.
 //
-//    Input, int POINT_NUM, the number of unique points 
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of unique points 
 //    in the grid. 
 //
-//    Input, int POINT_TOTAL_NUM, the total number of points 
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_TOTAL_NUM, the total number of points 
 //    in the grid. 
 //
-//    Output, int SPARSE UNIQUE_INDEX[POINT_TOTAL_NUM], lists, 
+//    Output, FLENS_DEFAULT_INDEXTYPE SPARSE UNIQUE_INDEX[POINT_TOTAL_NUM], lists, 
 //    for each (nonunique) point, the corresponding index of the same point in 
 //    the unique listing.
 //
 {
-  int dim;
-  int h;
-  int level;
-  int *level_1d;
-  int level_min;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
+  FLENS_DEFAULT_INDEXTYPE level_min;
   bool more_grids;
   bool more_points;
-  int order;
-  int *order_1d;
-  int point;
-  int *point_index;
-  int point_total_num2;
+  FLENS_DEFAULT_INDEXTYPE order;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE point;
+  FLENS_DEFAULT_INDEXTYPE *point_index;
+  FLENS_DEFAULT_INDEXTYPE point_total_num2;
   double *points;
-  int *sparse_total_index;
-  int *sparse_total_order;
+  FLENS_DEFAULT_INDEXTYPE *sparse_total_index;
+  FLENS_DEFAULT_INDEXTYPE *sparse_total_order;
   double *sparse_total_point;
-  int t;
-  int *undx;
+  FLENS_DEFAULT_INDEXTYPE t;
+  FLENS_DEFAULT_INDEXTYPE *undx;
 //
 //  Special cases.
 //
@@ -993,16 +993,16 @@ void sparse_grid_mixed_unique_index ( int dim_num, int level_max, int rule[],
 //  Generate SPARSE_TOTAL_ORDER and SPARSE_TOTAL_INDEX arrays for the TOTAL 
 //  set of points.
 //
-  sparse_total_order = new int[dim_num*point_total_num];
-  sparse_total_index = new int[dim_num*point_total_num];
+  sparse_total_order = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_total_num];
+  sparse_total_index = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_total_num];
 
   point_total_num2 = 0;
 //
 //  The outer loop generates values of LEVEL.
 //
-  level_1d = new int[dim_num];
-  order_1d = new int[dim_num];
-  point_index = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  point_index = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   level_min = webbur::i4_max ( 0, level_max + 1 - dim_num );
 
@@ -1183,7 +1183,7 @@ void sparse_grid_mixed_unique_index ( int dim_num, int level_max, int rule[],
 //  Now determine the mapping from nonunique points to unique points.
 //  We can't really use the UNDX output right now.
 //
-  undx = new int[point_num];
+  undx = new FLENS_DEFAULT_INDEXTYPE[point_num];
 
   webbur::r8col_undex ( dim_num, point_total_num, sparse_total_point, 
     point_num, tol, undx, sparse_unique_index );
@@ -1197,9 +1197,9 @@ void sparse_grid_mixed_unique_index ( int dim_num, int level_max, int rule[],
 }
 //****************************************************************************80
 
-void sparse_grid_mixed_weight ( int dim_num, int level_max, int rule[], 
-  double alpha[], double beta[], int point_num, int /*point_total_num*/, 
-  int sparse_unique_index[], double sparse_weight[] )
+void sparse_grid_mixed_weight ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
+  double alpha[], double beta[], FLENS_DEFAULT_INDEXTYPE point_num, FLENS_DEFAULT_INDEXTYPE /*point_total_num*/, 
+  FLENS_DEFAULT_INDEXTYPE sparse_unique_index[], double sparse_weight[] )
 
 //****************************************************************************80
 //
@@ -1233,11 +1233,11 @@ void sparse_grid_mixed_weight ( int dim_num, int level_max, int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL_MAX, the maximum value of LEVEL.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL_MAX, the maximum value of LEVEL.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -1259,13 +1259,13 @@ void sparse_grid_mixed_weight ( int dim_num, int level_max, int rule[],
 //    Generalized Gauss Hermite, Generalized Gauss Laguerre, 
 //    and Gauss Jacobi rules.
 //
-//    Input, int POINT_NUM, the number of unique points 
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of unique points 
 //    in the grid. 
 //
-//    Input, int POINT_TOTAL_NUM, the total number of points 
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_TOTAL_NUM, the total number of points 
 //    in the grid. 
 //
-//    Input, int SPARSE UNIQUE_INDEX[POINT_TOTAL_NUM], lists, 
+//    Input, FLENS_DEFAULT_INDEXTYPE SPARSE UNIQUE_INDEX[POINT_TOTAL_NUM], lists, 
 //    for each (nonunique) point, the corresponding index of the same point in 
 //    the unique listing.
 //
@@ -1275,21 +1275,21 @@ void sparse_grid_mixed_weight ( int dim_num, int level_max, int rule[],
 {
   double coeff;
   double *grid_weight;
-  int h;
-  int level;
-  int *level_1d;
-  int level_min;
+  FLENS_DEFAULT_INDEXTYPE h;
+  FLENS_DEFAULT_INDEXTYPE level;
+  FLENS_DEFAULT_INDEXTYPE *level_1d;
+  FLENS_DEFAULT_INDEXTYPE level_min;
   bool more_grids;
-  int order;
-  int *order_1d;
-  int order_nd;
-  int point;
-  int point_total;
-  int point_unique;
-  int t;
+  FLENS_DEFAULT_INDEXTYPE order;
+  FLENS_DEFAULT_INDEXTYPE *order_1d;
+  FLENS_DEFAULT_INDEXTYPE order_nd;
+  FLENS_DEFAULT_INDEXTYPE point;
+  FLENS_DEFAULT_INDEXTYPE point_total;
+  FLENS_DEFAULT_INDEXTYPE point_unique;
+  FLENS_DEFAULT_INDEXTYPE t;
 
-  level_1d = new int[dim_num];
-  order_1d = new int[dim_num];
+  level_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
+  order_1d = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   for ( point = 0; point < point_num; point++ )
   {
@@ -1367,8 +1367,8 @@ void sparse_grid_mixed_weight ( int dim_num, int level_max, int rule[],
 }
 //****************************************************************************80
 
-void sparse_grid_mixed_write ( int dim_num, int rule[], double alpha[],
-  double beta[], int point_num, double sparse_weight[], double sparse_point[],
+void sparse_grid_mixed_write ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE rule[], double alpha[],
+  double beta[], FLENS_DEFAULT_INDEXTYPE point_num, double sparse_weight[], double sparse_point[],
   std::string file_name )
 
 //****************************************************************************80
@@ -1412,9 +1412,9 @@ void sparse_grid_mixed_write ( int dim_num, int rule[], double alpha[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -1436,7 +1436,7 @@ void sparse_grid_mixed_write ( int dim_num, int rule[], double alpha[],
 //    Generalized Gauss Hermite, Generalized Gauss Laguerre, 
 //    and Gauss Jacobi rules.
 //
-//    Input, int POINT_NUM, the number of unique points 
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of unique points 
 //    in the grid. 
 //
 //    Input, double SPARSE_WEIGHT[POINT_NUM], the weights.
@@ -1446,7 +1446,7 @@ void sparse_grid_mixed_write ( int dim_num, int rule[], double alpha[],
 //    Input, string FILE_NAME, the main part of the file name.
 //
 {
-  int dim;
+  FLENS_DEFAULT_INDEXTYPE dim;
   std::string file_name_a;
   std::string file_name_b;
   std::string file_name_r;

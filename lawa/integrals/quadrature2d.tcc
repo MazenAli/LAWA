@@ -37,7 +37,7 @@ Quadrature2D<SparseGridGP,_Integral2D>::operator()(double ax, double bx, double 
     }
 
     T result = 0.;
-    for (int i=1; i<=_weights.numRows(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_weights.numRows(); ++i) {
         T x1 = 0.5*( (bx-ax)*_knots(i,1) + (bx+ax));
         T x2 = 0.5*( (by-ay)*_knots(i,2) + (by+ay));
         result += _weights(i,1) * _integral.integrand(x1,x2);
@@ -48,7 +48,7 @@ Quadrature2D<SparseGridGP,_Integral2D>::operator()(double ax, double bx, double 
 
 template <typename _Integral2D>
 void
-Quadrature2D<SparseGridGP,_Integral2D>::setOrder(int order)
+Quadrature2D<SparseGridGP,_Integral2D>::setOrder(FLENS_DEFAULT_INDEXTYPE order)
 {
     _level = ceil(log2(order+1));
     std::cerr << "Quadrature2D<SparseGridGP,_Integral2D>: setting level = " << _level << std::endl;
@@ -57,7 +57,7 @@ Quadrature2D<SparseGridGP,_Integral2D>::setOrder(int order)
 
 template <typename _Integral2D>
 void
-Quadrature2D<SparseGridGP,_Integral2D>::setLevel(int level)
+Quadrature2D<SparseGridGP,_Integral2D>::setLevel(FLENS_DEFAULT_INDEXTYPE level)
 {
     _level = level;
     _initSparseGrid();
@@ -76,18 +76,18 @@ template <typename _Integral2D>
 void
 Quadrature2D<SparseGridGP,_Integral2D>::_initSparseGrid()
 {
-    int dim_num = 2;
-    int rule[2] = {3,3};     //3 = identifier for GP in libsparsegrid
+    FLENS_DEFAULT_INDEXTYPE dim_num = 2;
+    FLENS_DEFAULT_INDEXTYPE rule[2] = {3,3};     //3 = identifier for GP in libsparsegrid
     T alpha[2]  = {0.,0.}; //weight function = 1
     T beta[2]   = {0.,0.}; //weight function = 1
-    int max_level = _level-1;
+    FLENS_DEFAULT_INDEXTYPE max_level = _level-1;
     T tol = 1e-16;
-    int point_num;
-    int point_total_num;
-    int *sparse_index;
-    int *sparse_order;
+    FLENS_DEFAULT_INDEXTYPE point_num;
+    FLENS_DEFAULT_INDEXTYPE point_total_num;
+    FLENS_DEFAULT_INDEXTYPE *sparse_index;
+    FLENS_DEFAULT_INDEXTYPE *sparse_order;
     double *sparse_point;
-    int *sparse_unique_index;
+    FLENS_DEFAULT_INDEXTYPE *sparse_unique_index;
     double *sparse_weight;
 
     point_total_num = webbur::sparse_grid_mixed_size_total ( dim_num, max_level, rule );
@@ -97,13 +97,13 @@ Quadrature2D<SparseGridGP,_Integral2D>::_initSparseGrid()
 
     numGridPoints = point_num;
 
-    sparse_unique_index = new int[point_total_num];
+    sparse_unique_index = new FLENS_DEFAULT_INDEXTYPE[point_total_num];
 
     webbur::sparse_grid_mixed_unique_index ( dim_num, max_level, rule, alpha, beta,
                                   tol, point_num, point_total_num, sparse_unique_index );
 
-    sparse_order = new int[dim_num*point_num];
-    sparse_index = new int[dim_num*point_num];
+    sparse_order = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_num];
+    sparse_index = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_num];
 
     webbur::sparse_grid_mixed_index ( dim_num, max_level, rule, point_num,
                     point_total_num, sparse_unique_index, sparse_order, sparse_index );
@@ -120,10 +120,10 @@ Quadrature2D<SparseGridGP,_Integral2D>::_initSparseGrid()
                        point_num, point_total_num, sparse_unique_index, sparse_weight );
 
     _knots.engine().resize(point_num, dim_num);
-    _weights.engine().resize(point_num, 1);
+    _weights.engine().resize(point_num, (FLENS_DEFAULT_INDEXTYPE) 1);
 
-    for (int j = 0; j < point_num; j++ ) {
-        for (int dim = 0; dim < dim_num; dim++ ) {
+    for (FLENS_DEFAULT_INDEXTYPE j = 0; j < point_num; j++ ) {
+        for (FLENS_DEFAULT_INDEXTYPE dim = 0; dim < dim_num; dim++ ) {
             _knots(j+1,dim+1) = sparse_point[dim+j*dim_num];
             _weights(j+1,1)   = sparse_weight[j];
         }
@@ -153,7 +153,7 @@ Quadrature2D<FullGridGL,_Integral2D>::operator()(T ax, T bx, T ay, T by) const
   //std::cout << "            (jy, ky, ey, derivy) = " << _integral.jy << ", "<< _integral.ky <<", "<< _integral.ey <<", "<< _integral.derivy << std::endl;
     if ((ax == bx) || (ay == by))   return 0.;
     T result = 0.;
-    for (int i=1; i<=_weights.numRows(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=_weights.numRows(); ++i) {
         T x1 = 0.5*( (bx-ax)*_knots(i,1) + (bx+ax));
         T x2 = 0.5*( (by-ay)*_knots(i,2) + (by+ay));
         result += _weights(i,1) * _integral.integrand(x1,x2);
@@ -166,7 +166,7 @@ Quadrature2D<FullGridGL,_Integral2D>::operator()(T ax, T bx, T ay, T by) const
 
 template <typename _Integral2D>
 void
-Quadrature2D<FullGridGL,_Integral2D>::setOrder(int order)
+Quadrature2D<FullGridGL,_Integral2D>::setOrder(FLENS_DEFAULT_INDEXTYPE order)
 {
     _order = order;
     _initFullGrid();
@@ -181,17 +181,17 @@ Quadrature2D<FullGridGL,_Integral2D>::_initFullGrid()
     T eps = Const<T>::EQUALITY_EPS;
     T x1 = -1,
       x2 =  1;
-    for (int k=1; k<=_order; ++k) {
-       int     m = (k+1)/2;
+    for (FLENS_DEFAULT_INDEXTYPE k=1; k<=_order; ++k) {
+       FLENS_DEFAULT_INDEXTYPE     m = (k+1)/2;
        T xm = 0.5 * (x2+x1),
          xl = 0.5 * (x2-x1);
-       for (int i=1; i<=m; ++i) {
+       for (FLENS_DEFAULT_INDEXTYPE i=1; i<=m; ++i) {
            T z = cos(M_PI*(i-0.25)/(k+0.5)),
              z1, pp;
            do {
                T p1 = 1.0,
                  p2 = 2.0;
-               for (int j=1; j<=k; ++j) {
+               for (FLENS_DEFAULT_INDEXTYPE j=1; j<=k; ++j) {
                    T p3 = p2;
                      p2 = p1;
                      p1 = ((2.0*j-1.0)*z*p2-(j-1.0)*p3)/j;
@@ -209,9 +209,9 @@ Quadrature2D<FullGridGL,_Integral2D>::_initFullGrid()
     _knots.engine().resize(_order*_order, 2);
     _weights.engine().resize(_order*_order, 1);
 
-    int count=1;
-    for (int i = 1; i <= _order; ++i) {
-        for (int j = 1; j <= _order; ++j) {
+    FLENS_DEFAULT_INDEXTYPE count=1;
+    for (FLENS_DEFAULT_INDEXTYPE i = 1; i <= _order; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE j = 1; j <= _order; ++j) {
             _knots(count,1)   = _knots1d(_order,i);
             _knots(count,2)   = _knots1d(_order,j);
             _weights(count,1) = _weights1d(_order,i)*_weights1d(_order,j);
@@ -272,7 +272,7 @@ Quadrature2D<FullGridGL_localOrder,_Integral2D>::operator()(T ax, T bx, T ay, T 
 
 template <typename _Integral2D>
 void
-Quadrature2D<FullGridGL_localOrder,_Integral2D>::setOrder(int order)
+Quadrature2D<FullGridGL_localOrder,_Integral2D>::setOrder(FLENS_DEFAULT_INDEXTYPE order)
 {
     lowOrder = order;
     quadrature_lowOrder.setOrder(lowOrder);
@@ -299,7 +299,7 @@ Quadrature2D<FullGridGL_localOrder,_Integral2D>::set_refindtol(T _tol)
 
 template <typename _Integral2D>
 void
-Quadrature2D<FullGridGL_localOrder,_Integral2D>::set_lowOrder(int _lowOrder)
+Quadrature2D<FullGridGL_localOrder,_Integral2D>::set_lowOrder(FLENS_DEFAULT_INDEXTYPE _lowOrder)
 {
   lowOrder = _lowOrder;
   quadrature_lowOrder.setOrder(lowOrder);
@@ -309,7 +309,7 @@ Quadrature2D<FullGridGL_localOrder,_Integral2D>::set_lowOrder(int _lowOrder)
 
 template <typename _Integral2D>
 void
-Quadrature2D<FullGridGL_localOrder,_Integral2D>::set_highOrder(int _highOrder)
+Quadrature2D<FullGridGL_localOrder,_Integral2D>::set_highOrder(FLENS_DEFAULT_INDEXTYPE _highOrder)
 {
   highOrder = _highOrder;
   quadrature_highOrder.setOrder(highOrder);
@@ -320,7 +320,7 @@ template <typename _Integral2D>
 bool
 Quadrature2D<FullGridGL_localOrder,_Integral2D>::ref_indicator(T at, T bt, T ax, T bx) const{
   T h = (bt - at)/10.;
-  for(int i = 0; i <= 10; ++i){
+  for(FLENS_DEFAULT_INDEXTYPE i = 0; i <= 10; ++i){
     //std::cout << "Refinement Indicator: X-Interval = [" << ax << ", " << bx << "], t = " 
     //      << at + i*h << ", c(t) = " << refindfct(at + i*h) << std::endl;
     if( (refindfct(at + i*h) + refindtol > ax) && (refindfct(at + i*h) - refindtol < bx) ){

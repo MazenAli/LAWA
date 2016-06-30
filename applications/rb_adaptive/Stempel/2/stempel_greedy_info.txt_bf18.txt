@@ -1,0 +1,4 @@
+# It Res SizeLambda SizeTestRes CG_Its
+0 0.00865572 33 91 9
+1 0.00504198 49 184 5
+2 0.00309629 83 356 7

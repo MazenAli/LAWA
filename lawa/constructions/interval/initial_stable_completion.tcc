@@ -34,10 +34,10 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
     typedef flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > FullColMatrix;
 
     const flens::RefinementMatrix<T,Interval,ConsPrimal> &M0 = mra.M0;
-    const int d = mra.d;
-    const int d_ = mra_.d_;
-    const int j = ((d==2) && ((d_==2)||(d_==4))) ? mra_.min_j0+1 : mra_.min_j0;
-    const int l1 = mra.l1, l2 = mra.l2;
+    const FLENS_DEFAULT_INDEXTYPE d = mra.d;
+    const FLENS_DEFAULT_INDEXTYPE d_ = mra_.d_;
+    const FLENS_DEFAULT_INDEXTYPE j = ((d==2) && ((d_==2)||(d_==4))) ? mra_.min_j0+1 : mra_.min_j0;
+    const FLENS_DEFAULT_INDEXTYPE l1 = mra.l1, l2 = mra.l2;
     M0.setLevel(j);
 
     
@@ -45,7 +45,7 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
     FullColMatrix MM[20];
     MRA<T,Primal,Interval,ConsPrimal> _mra(mra.d, j); // TODO BE ELIMINATED!!!!!!!!!!!!!!!!!!!!
     densify(cxxblas::NoTrans, _mra.M0, MM[0], 1,1);
-    const int size = MM[0].numRows();
+    const FLENS_DEFAULT_INDEXTYPE size = MM[0].numRows();
     
     FullColMatrix H(size,size);
     FullColMatrix HInv(size,size);
@@ -54,11 +54,11 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
     HInv.diag(0) = 1;
 
     if (d&1) {
-        for (int i=0; i<=(d-1)/2-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<=(d-1)/2-1; ++i) {
             FullColMatrix Hi(size,size);
             Hi.diag(0) = 1;
-            for (int p=1; p<=size; ++p) {
-                for (int q=1; q<=size; ++q) {
+            for (FLENS_DEFAULT_INDEXTYPE p=1; p<=size; ++p) {
+                for (FLENS_DEFAULT_INDEXTYPE q=1; q<=size; ++q) {
                     if ((p==q+1) && ((p&1)==(i&1)) && (i<p) && (p<size-d+i+2)) {
                         Hi(p,q) = -MM[i](p,(p+i)/2) / MM[i](p-1,(p+i)/2);
                     }
@@ -68,8 +68,8 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
                 }
             }
             FullColMatrix HiInv(size,size);
-            for (int p=1; p<=size; ++p) {
-                for (int q=1; q<=size; ++q) {
+            for (FLENS_DEFAULT_INDEXTYPE p=1; p<=size; ++p) {
+                for (FLENS_DEFAULT_INDEXTYPE q=1; q<=size; ++q) {
                     if (p==q) {
                         if (((p&1)==(i&1)) && (p>1)) {
                             HiInv(p,q) = 1 / (1 - Hi(p-1,p)*Hi(p,p-1));
@@ -95,8 +95,8 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
             Hi.engine().fill(0);
         }
 
-        for (int p=F.firstRow(); p<=F.lastRow(); ++p) {
-            for (int q=F.firstCol(); q<=F.lastCol(); ++q) {
+        for (FLENS_DEFAULT_INDEXTYPE p=F.firstRow(); p<=F.lastRow(); ++p) {
+            for (FLENS_DEFAULT_INDEXTYPE q=F.firstCol(); q<=F.lastCol(); ++q) {
                 if ((p==2*q-1+(d-1)/2) && (q<=pow2i<T>(j-1))) {
                     F(p,q) = MM[(d-1)/2](p+1,q+(d-1)/2);
                 }
@@ -116,11 +116,11 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
     }
 
     if ((d&1)==0) {
-        for (int i=0; i<=d/2-1; ++i) {
+        for (FLENS_DEFAULT_INDEXTYPE i=0; i<=d/2-1; ++i) {
             FullColMatrix Hi(size,size);
             Hi.diag(0) = 1;
-            for (int p=1; p<=size; ++p) {
-                for (int q=1; q<=size; ++q) {
+            for (FLENS_DEFAULT_INDEXTYPE p=1; p<=size; ++p) {
+                for (FLENS_DEFAULT_INDEXTYPE q=1; q<=size; ++q) {
                     if ((p==q+1) && ((p&1)==(i&1)) && (i<p) && (p<=size-d+i+1)) {
                         Hi(p,q) = -MM[i](p,(p+i)/2) / MM[i](p-1,(p+i)/2);
                     }
@@ -141,8 +141,8 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
             Hi.engine().fill(0);
         }
         
-        for (int p=F.firstRow(); p<=F.lastRow(); ++p) {
-            for (int q=F.firstCol(); q<=F.lastCol(); ++q) {
+        for (FLENS_DEFAULT_INDEXTYPE p=F.firstRow(); p<=F.lastRow(); ++p) {
+            for (FLENS_DEFAULT_INDEXTYPE q=F.firstCol(); q<=F.lastCol(); ++q) {
                 if (p==2*q-1+d/2) {
                     F(p,q) = 1.;
                 }
@@ -155,7 +155,7 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
     //--- M1
     FullColMatrix Mj1Tmp, Mj1initial;
     flens::blas::mm(cxxblas::NoTrans,cxxblas::NoTrans, 1., HInv, F, 0., Mj1Tmp);
-    Mj1initial = Mj1Tmp(_(Mj1Tmp.firstRow()+mra_._bc(0), 
+    Mj1initial = Mj1Tmp(_(Mj1Tmp.firstRow()+mra_._bc(0),
                           Mj1Tmp.lastRow()-mra_._bc(1)), _ );
 
     FullColMatrix Mj0, Mj0_;
@@ -173,7 +173,7 @@ initial_stable_completion(const MRA<T,Primal,Interval,ConsPrimal> &mra,
                      pow2i<T>(j+1)+l2-l1-1-mra_._bc(0)-mra_._bc(1));
     Mj( _ , _(1,M0.numCols())) = Mj0;
     Mj( _ , _(M0.numCols()+1, Mj.lastCol())) = M1;
-    flens::DenseVector<flens::Array<int> > p(Mj.numRows());
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > p(Mj.numRows());
     FullColMatrix MjInv, MjInvTmp = Mj, TransTmp2;
     
     MjInv = inv(Mj);

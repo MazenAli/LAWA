@@ -37,15 +37,15 @@ class BlockAssembler1D
 
         template <typename BilinearForm>
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> >
-        assembleStiffnessMatrixBlock(BilinearForm& a, int i1, int i2, T tol = 10e-15);
+        assembleStiffnessMatrixBlock(BilinearForm& a, FLENS_DEFAULT_INDEXTYPE i1, FLENS_DEFAULT_INDEXTYPE i2, T tol = 10e-15);
 
         template <typename BilinearForm>
         flens::DenseVector<flens::Array<T> >
-        assembleStiffnessMatrixBlockDiagonal(BilinearForm& a, int i, T tol = 10e-15);
+        assembleStiffnessMatrixBlockDiagonal(BilinearForm& a, FLENS_DEFAULT_INDEXTYPE i, T tol = 10e-15);
 
         template <typename RHSIntegral>
         flens::DenseVector<flens::Array<T> >
-        assembleRHSBlock(RHSIntegral& rhs, int i);
+        assembleRHSBlock(RHSIntegral& rhs, FLENS_DEFAULT_INDEXTYPE i);
 
 
 };

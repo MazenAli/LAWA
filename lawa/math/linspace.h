@@ -27,7 +27,7 @@ namespace lawa {
 
 template <typename T>
     flens::DenseVector<flens::Array<T> >
-    linspace(T from, T to, int numTicks);
+    linspace(T from, T to, FLENS_DEFAULT_INDEXTYPE numTicks);
 
 } // namespace lawa
 

@@ -44,26 +44,26 @@ class BSpline<_T,Orthogonal,Interval,MultiRefinement>
         ~BSpline();
 
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
 
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
         flens::DenseVector<flens::Array<long double> > *
-        getRefinement(int j, long k, int &refinement_j, long &refinement_k_first,
-        		long &split, long &refinement_k_restart) const;
+        getRefinement(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE &refinement_j, FLENS_DEFAULT_INDEXTYPE &refinement_k_first,
+        		FLENS_DEFAULT_INDEXTYPE &split, FLENS_DEFAULT_INDEXTYPE &refinement_k_restart) const;
 
-        int
-        getRefinementLevel(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        getRefinementLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
         const MRA<T,Orthogonal,Interval,MultiRefinement> &mra;
-        const unsigned int d;
+        const unsigned FLENS_DEFAULT_INDEXTYPE d;
         T initialticsize;
 };
 

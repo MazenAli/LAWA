@@ -41,7 +41,7 @@ operator()(const IndexSet<Index> &indexset)
 
 template <typename Index, typename LocalOperatorType>
 void
-FlexibleBilformRhs<Index,LocalOperatorType>::set_active_comp(int i)
+FlexibleBilformRhs<Index,LocalOperatorType>::set_active_comp(FLENS_DEFAULT_INDEXTYPE i)
 {
 	if(i < 0){
 		active_comp.resize(bilformvec.size());

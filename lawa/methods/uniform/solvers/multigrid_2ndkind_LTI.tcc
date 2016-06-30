@@ -3,7 +3,7 @@ namespace lawa{
 template<typename T, typename PrimalBasis, typename DualBasis, typename BilinearForm, typename RHSIntegral>
 MultiGrid_2ndKind_LTI<T, PrimalBasis, DualBasis, BilinearForm, RHSIntegral>::
 MultiGrid_2ndKind_LTI(PrimalBasis& _b, DualBasis& _b_, BilinearForm& a, RHSIntegral& rhs, T theta,
-                  T deltaT, int timesteps, int minLevel)
+                  T deltaT, FLENS_DEFAULT_INDEXTYPE timesteps, FLENS_DEFAULT_INDEXTYPE minLevel)
     : b(_b), b_(_b_), full_theta(theta, b, a, rhs), full_ts(full_theta, deltaT, timesteps, 0),
       hom_theta(theta, b, a, hom_rhs), hom_ts(hom_theta, deltaT, timesteps, 0),
       fp(hom_ts), mg_smoother(this), mg_solver(this), mg(b, b_, mg_smoother, mg_solver, 1, 0, minLevel)
@@ -13,10 +13,10 @@ MultiGrid_2ndKind_LTI(PrimalBasis& _b, DualBasis& _b_, BilinearForm& a, RHSInteg
 template<typename T, typename PrimalBasis, typename DualBasis, typename BilinearForm, typename RHSIntegral>
 flens::DenseVector<flens::Array<T> > 
 MultiGrid_2ndKind_LTI<T, PrimalBasis, DualBasis, BilinearForm, RHSIntegral>::
-solve(flens::DenseVector<flens::Array<T> >& u0, int maxLevel)
+solve(flens::DenseVector<flens::Array<T> >& u0, FLENS_DEFAULT_INDEXTYPE maxLevel)
 {
     flens::DenseVector<flens::Array<T> > u(u0), zeros;
-    for(int i = mg.getMinLevel() + 1; i <= maxLevel; ++i){
+    for(FLENS_DEFAULT_INDEXTYPE i = mg.getMinLevel() + 1; i <= maxLevel; ++i){
         flens::DenseVector<flens::Array<T> > u_prol;
         flens::DenseVector<flens::Array<T> > u_long(b_.mra_.rangeI_(i));
         u_long(b.mra.rangeI(i-1)) = u;
@@ -62,8 +62,8 @@ flens::DenseVector<flens::Array<T> >
 MultiGrid_2ndKind_LTI<T, PrimalBasis, DualBasis, BilinearForm, RHSIntegral>::MG_2ndKind_Solver::
 solve(flens::DenseVector<flens::Array<T> > u0, flens::DenseVector<flens::Array<T> > f)
 {
-    int steps = mg_ptr->hom_ts.getSteps();
-    int deltaT = mg_ptr->hom_ts.getDeltaT();
+    FLENS_DEFAULT_INDEXTYPE steps = mg_ptr->hom_ts.getSteps();
+    FLENS_DEFAULT_INDEXTYPE deltaT = mg_ptr->hom_ts.getDeltaT();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > fmatrix(u0.length(), steps);
     
     

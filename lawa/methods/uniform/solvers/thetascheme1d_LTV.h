@@ -39,21 +39,21 @@ class ThetaScheme1D_LTV
         ThetaScheme1D_LTV(const T _theta, const Basis& _basis, const BilinearForm& _a, RHSIntegral& _rhs);
     
         flens::DenseVector<flens::Array<T> > 
-        solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, int level);
+        solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, FLENS_DEFAULT_INDEXTYPE level);
         
         flens::DenseVector<flens::Array<T> > 
         solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, 
-              flens::DenseVector<flens::Array<T> > f, int level);
+              flens::DenseVector<flens::Array<T> > f, FLENS_DEFAULT_INDEXTYPE level);
         
         void
         setRHS(RHSIntegral& _rhs);
         
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > 
-        getLHSMatrix(T time_old, T time_new, int level);
+        getLHSMatrix(T time_old, T time_new, FLENS_DEFAULT_INDEXTYPE level);
                            
         // Adaptive Erweiterung: Timestep in jedem Lösungsschritt neu setzen,
         //flens::DenseVector<flens::Array<T> > 
-        //solve(T time, flens::DenseVector<flens::Array<T> > u_init, int level, T timestep);
+        //solve(T time, flens::DenseVector<flens::Array<T> > u_init, FLENS_DEFAULT_INDEXTYPE level, T timestep);
         
         
     private:
@@ -69,8 +69,8 @@ class ThetaScheme1D_LTV
                                    const BilinearForm& _a);
                 
                 T 
-                operator()(XType xtype1, int j1, int k1,
-                           XType xtype2, int j2, int k2) const;
+                operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
 
                 
                 void setTimes(T t1, T t2){ time_old = t1;
@@ -90,8 +90,8 @@ class ThetaScheme1D_LTV
                                    const BilinearForm& _a);
                 
                 T 
-                operator()(XType xtype1, int j1, int k1,
-                           XType xtype2, int j2, int k2) const;
+                operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
                 
                 void setTimes(T t1, T t2){ time_old = t1;
                                            time_new = t2;}            
@@ -109,7 +109,7 @@ class ThetaScheme1D_LTV
                 Operator_RHSVector(const ThetaScheme1D_LTV<T, Basis, BilinearForm, RHSIntegral>* _scheme, 
                                    RHSIntegral& _rhs);
                 
-                T operator()(XType xtype, int j, int k) const;
+                T operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
                 
                 void setTimes(T t1, T t2){ time_old = t1;
                                            time_new = t2;}

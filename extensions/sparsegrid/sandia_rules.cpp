@@ -10,7 +10,7 @@ namespace webbur
 {
 //****************************************************************************80
 
-void binary_vector_next ( int n, int bvec[] )
+void binary_vector_next ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE bvec[] )
 
 //****************************************************************************80
 //
@@ -68,13 +68,13 @@ void binary_vector_next ( int n, int bvec[] )
 //
 //  Parameters:
 //
-//    Input, int N, the dimension of the vectors.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the dimension of the vectors.
 //
-//    Input/output, int BVEC[N], on output, the successor 
+//    Input/output, FLENS_DEFAULT_INDEXTYPE BVEC[N], on output, the successor 
 //    to the input vector.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   for ( i = 0; i < n; i++ )
   {  
@@ -92,7 +92,7 @@ void binary_vector_next ( int n, int bvec[] )
 }
 //****************************************************************************80
 
-void chebyshev1_compute ( int n, double x[], double w[] )
+void chebyshev1_compute ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -133,7 +133,7 @@ void chebyshev1_compute ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
@@ -141,7 +141,7 @@ void chebyshev1_compute ( int n, double x[], double w[] )
 //    Output, double W[N], the weights.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -170,7 +170,7 @@ void chebyshev1_compute ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void chebyshev1_compute_np ( int n, int /*np*/, double /*p*/[], double x[], 
+void chebyshev1_compute_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -212,10 +212,10 @@ void chebyshev1_compute_np ( int n, int /*np*/, double /*p*/[], double x[],
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -230,7 +230,7 @@ void chebyshev1_compute_np ( int n, int /*np*/, double /*p*/[], double x[],
 }
 //****************************************************************************80
 
-void chebyshev1_compute_points ( int n, double x[] )
+void chebyshev1_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -261,13 +261,13 @@ void chebyshev1_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -292,7 +292,7 @@ void chebyshev1_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void chebyshev1_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
+void chebyshev1_compute_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -323,10 +323,10 @@ void chebyshev1_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -339,7 +339,7 @@ void chebyshev1_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[
 }
 //****************************************************************************80
 
-void chebyshev1_compute_weights ( int n, double w[] )
+void chebyshev1_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -370,13 +370,13 @@ void chebyshev1_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double W[N], the weights.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -396,7 +396,7 @@ void chebyshev1_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void chebyshev1_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
+void chebyshev1_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -427,10 +427,10 @@ void chebyshev1_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -443,7 +443,7 @@ void chebyshev1_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w
 }
 //****************************************************************************80
 
-double chebyshev1_integral ( int expon )
+double chebyshev1_integral ( FLENS_DEFAULT_INDEXTYPE expon )
 
 //****************************************************************************80
 //
@@ -471,14 +471,14 @@ double chebyshev1_integral ( int expon )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent.
 //
 //    Output, double CHEBYSHEV1_INTEGRAL, the value of the exact integral.
 //
 {
   double bot;
   double exact;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
   double top;
 //
@@ -505,7 +505,7 @@ double chebyshev1_integral ( int expon )
 }
 //****************************************************************************80
 
-void chebyshev2_compute ( int n, double x[], double w[] )
+void chebyshev2_compute ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -546,7 +546,7 @@ void chebyshev2_compute ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
@@ -555,7 +555,7 @@ void chebyshev2_compute ( int n, double x[], double w[] )
 //
 {
   double angle;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -582,7 +582,7 @@ void chebyshev2_compute ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void chebyshev2_compute_np ( int n, int /*np*/, double /*p*/[], double x[], 
+void chebyshev2_compute_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -624,10 +624,10 @@ void chebyshev2_compute_np ( int n, int /*np*/, double /*p*/[], double x[],
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -642,7 +642,7 @@ void chebyshev2_compute_np ( int n, int /*np*/, double /*p*/[], double x[],
 }
 //****************************************************************************80
 
-void chebyshev2_compute_points ( int n, double x[] )
+void chebyshev2_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -673,14 +673,14 @@ void chebyshev2_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
 //
 {
   double angle;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -706,7 +706,7 @@ void chebyshev2_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void chebyshev2_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
+void chebyshev2_compute_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -737,10 +737,10 @@ void chebyshev2_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -753,7 +753,7 @@ void chebyshev2_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[
 }
 //****************************************************************************80
 
-void chebyshev2_compute_weights ( int n, double w[] )
+void chebyshev2_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -784,14 +784,14 @@ void chebyshev2_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double W[N], the weights.
 //
 {
   double angle;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -812,7 +812,7 @@ void chebyshev2_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void chebyshev2_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
+void chebyshev2_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -843,10 +843,10 @@ void chebyshev2_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -859,7 +859,7 @@ void chebyshev2_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w
 }
 //****************************************************************************80
 
-double chebyshev2_integral ( int expon )
+double chebyshev2_integral ( FLENS_DEFAULT_INDEXTYPE expon )
 
 //****************************************************************************80
 //
@@ -887,14 +887,14 @@ double chebyshev2_integral ( int expon )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent.
 //
 //    Output, double CHEBYSHEV2_INTEGRAL, the value of the exact integral.
 //
 {
   double bot;
   double exact;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
   double top;
 //
@@ -922,7 +922,7 @@ double chebyshev2_integral ( int expon )
 }
 //****************************************************************************80
 
-void clenshaw_curtis_compute ( int n, double x[], double w[] )
+void clenshaw_curtis_compute ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -954,7 +954,7 @@ void clenshaw_curtis_compute ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
@@ -963,8 +963,8 @@ void clenshaw_curtis_compute ( int n, double x[], double w[] )
 //
 {
   double b;
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   double pi = 3.141592653589793;
   double theta;
 
@@ -1028,7 +1028,7 @@ void clenshaw_curtis_compute ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void clenshaw_curtis_compute_np ( int n, int /*np*/, double /*p*/[], double x[], 
+void clenshaw_curtis_compute_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -1061,10 +1061,10 @@ void clenshaw_curtis_compute_np ( int n, int /*np*/, double /*p*/[], double x[],
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -1079,7 +1079,7 @@ void clenshaw_curtis_compute_np ( int n, int /*np*/, double /*p*/[], double x[],
 }
 //****************************************************************************80
 
-void clenshaw_curtis_compute_points ( int n, double x[] )
+void clenshaw_curtis_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -1107,12 +1107,12 @@ void clenshaw_curtis_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double X[N], the abscissas.
 //
 {
-  int index;
+  FLENS_DEFAULT_INDEXTYPE index;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -1144,7 +1144,7 @@ void clenshaw_curtis_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void clenshaw_curtis_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
+void clenshaw_curtis_compute_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -1172,9 +1172,9 @@ void clenshaw_curtis_compute_points_np ( int n, int /*np*/, double /*p*/[], doub
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -1187,7 +1187,7 @@ void clenshaw_curtis_compute_points_np ( int n, int /*np*/, double /*p*/[], doub
 }
 //****************************************************************************80
 
-void clenshaw_curtis_compute_weights ( int n, double w[] )
+void clenshaw_curtis_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -1220,14 +1220,14 @@ void clenshaw_curtis_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double W[N], the weights.
 //
 {
   double b;
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   double pi = 3.141592653589793;
   double theta;
 
@@ -1277,7 +1277,7 @@ void clenshaw_curtis_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void clenshaw_curtis_compute_weights_np ( int n, int /*np*/, double /*p*/[], 
+void clenshaw_curtis_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], 
   double w[] )
 
 //****************************************************************************80
@@ -1311,9 +1311,9 @@ void clenshaw_curtis_compute_weights_np ( int n, int /*np*/, double /*p*/[],
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -1326,7 +1326,7 @@ void clenshaw_curtis_compute_weights_np ( int n, int /*np*/, double /*p*/[],
 }
 //****************************************************************************80
 
-void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
+void comp_next ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k, FLENS_DEFAULT_INDEXTYPE a[], bool *more, FLENS_DEFAULT_INDEXTYPE *h, FLENS_DEFAULT_INDEXTYPE *t )
 
 //****************************************************************************80
 //
@@ -1419,11 +1419,11 @@ void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
 //
 //  Parameters:
 //
-//    Input, int N, the integer whose compositions are desired.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the integer whose compositions are desired.
 //
-//    Input, int K, the number of parts in the composition.
+//    Input, FLENS_DEFAULT_INDEXTYPE K, the number of parts in the composition.
 //
-//    Input/output, int A[K], the parts of the composition.
+//    Input/output, FLENS_DEFAULT_INDEXTYPE A[K], the parts of the composition.
 //
 //    Input/output, bool *MORE.
 //    Set MORE = FALSE on first call.  It will be reset to TRUE on return
@@ -1431,12 +1431,12 @@ void comp_next ( int n, int k, int a[], bool *more, int *h, int *t )
 //    MORE is set to FALSE when the last composition has been computed
 //    and returned.
 //
-//    Input/output, int *H, *T, two internal parameters needed for the
+//    Input/output, FLENS_DEFAULT_INDEXTYPE *H, *T, two internal parameters needed for the
 //    computation.  The user should allocate space for these in the calling
 //    program, include them in the calling sequence, but never alter them!
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   if ( !( *more ) )
   {
@@ -1500,7 +1500,7 @@ double cpu_time ( )
 }
 //****************************************************************************80
 
-void fejer2_compute ( int n, double x[], double w[] )
+void fejer2_compute ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -1528,7 +1528,7 @@ void fejer2_compute ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
@@ -1536,8 +1536,8 @@ void fejer2_compute ( int n, double x[], double w[] )
 //    Output, double W[N], the weights.
 //
 {
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   double p;
   double pi = 3.141592653589793;
   double theta;
@@ -1597,7 +1597,7 @@ void fejer2_compute ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void fejer2_compute_np ( int n, int /*np*/, double /*p*/[], double x[], double w[] )
+void fejer2_compute_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -1625,10 +1625,10 @@ void fejer2_compute_np ( int n, int /*np*/, double /*p*/[], double x[], double w
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -1643,7 +1643,7 @@ void fejer2_compute_np ( int n, int /*np*/, double /*p*/[], double x[], double w
 }
 //****************************************************************************80
 
-void fejer2_compute_points ( int n, double x[] )
+void fejer2_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -1671,13 +1671,13 @@ void fejer2_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double pi = 3.141592653589793;
 
   if ( n < 1 )
@@ -1707,7 +1707,7 @@ void fejer2_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void fejer2_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
+void fejer2_compute_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -1735,10 +1735,10 @@ void fejer2_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -1751,7 +1751,7 @@ void fejer2_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
 }
 //****************************************************************************80
 
-void fejer2_compute_weights ( int n, double w[] )
+void fejer2_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -1796,13 +1796,13 @@ void fejer2_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double W[N], the weights.
 //
 {
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   double p;
   double pi = 3.141592653589793;
   double theta;
@@ -1849,7 +1849,7 @@ void fejer2_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void fejer2_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
+void fejer2_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -1894,9 +1894,9 @@ void fejer2_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -1909,7 +1909,7 @@ void fejer2_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
 }
 //****************************************************************************80
 
-void gegenbauer_compute ( int order, double alpha, double x[], double w[] )
+void gegenbauer_compute ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -1951,7 +1951,7 @@ void gegenbauer_compute ( int order, double alpha, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double ALPHA, the exponent of (1-X^2).  -1.0 < ALPHA is required.
@@ -1966,7 +1966,7 @@ void gegenbauer_compute ( int order, double alpha, double x[], double w[] )
   double cc;
   double delta;
   double dp2;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p1;
   double prod;
   double r1;
@@ -2121,7 +2121,7 @@ void gegenbauer_compute ( int order, double alpha, double x[], double w[] )
 }
 //****************************************************************************80
 
-void gegenbauer_compute_np ( int order, int /*np*/, double p[], double x[], 
+void gegenbauer_compute_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -2164,10 +2164,10 @@ void gegenbauer_compute_np ( int order, int /*np*/, double p[], double x[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA = the exponent of (1-X^2).  -1.0 < ALPHA is required.
@@ -2187,7 +2187,7 @@ void gegenbauer_compute_np ( int order, int /*np*/, double p[], double x[],
 }
 //****************************************************************************80
 
-void gegenbauer_compute_points ( int order, double alpha, double x[] )
+void gegenbauer_compute_points ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double x[] )
 
 //****************************************************************************80
 //
@@ -2216,7 +2216,7 @@ void gegenbauer_compute_points ( int order, double alpha, double x[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double ALPHA, the exponent of (1-X^2).  -1.0 < ALPHA is required.
@@ -2236,7 +2236,7 @@ void gegenbauer_compute_points ( int order, double alpha, double x[] )
 }
 //****************************************************************************80
 
-void gegenbauer_compute_points_np ( int order, int /*np*/, double p[], double x[] )
+void gegenbauer_compute_points_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[] )
 
 //****************************************************************************80
 //
@@ -2265,10 +2265,10 @@ void gegenbauer_compute_points_np ( int order, int /*np*/, double p[], double x[
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA = the exponent of (1-X^2).  -1.0 < ALPHA is required.
@@ -2286,7 +2286,7 @@ void gegenbauer_compute_points_np ( int order, int /*np*/, double p[], double x[
 }
 //****************************************************************************80
 
-void gegenbauer_compute_weights ( int order, double alpha, double w[] )
+void gegenbauer_compute_weights ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double w[] )
 
 //****************************************************************************80
 //
@@ -2315,7 +2315,7 @@ void gegenbauer_compute_weights ( int order, double alpha, double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double ALPHA, the exponent of (1-X^2).  -1.0 < ALPHA is required.
@@ -2335,7 +2335,7 @@ void gegenbauer_compute_weights ( int order, double alpha, double w[] )
 }
 //****************************************************************************80
 
-void gegenbauer_compute_weights_np ( int order, int /*np*/, double p[], double w[] )
+void gegenbauer_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double w[] )
 
 //****************************************************************************80
 //
@@ -2364,7 +2364,7 @@ void gegenbauer_compute_weights_np ( int order, int /*np*/, double p[], double w
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double P[1], contains parameters.
@@ -2383,7 +2383,7 @@ void gegenbauer_compute_weights_np ( int order, int /*np*/, double p[], double w
 }
 //****************************************************************************80
 
-double gegenbauer_integral ( int expon, double alpha )
+double gegenbauer_integral ( FLENS_DEFAULT_INDEXTYPE expon, double alpha )
 
 //****************************************************************************80
 //
@@ -2409,7 +2409,7 @@ double gegenbauer_integral ( int expon, double alpha )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent.
 //
 //    Input, double ALPHA, the exponent of (1-X^2) in the weight factor.
 //
@@ -2448,7 +2448,7 @@ double gegenbauer_integral ( int expon, double alpha )
 //****************************************************************************80
 
 void gegenbauer_recur ( double *p2, double *dp2, double *p1, double x, 
-  int order, double /*alpha*/, double c[] )
+  FLENS_DEFAULT_INDEXTYPE order, double /*alpha*/, double c[] )
 
 //****************************************************************************80
 //
@@ -2485,7 +2485,7 @@ void gegenbauer_recur ( double *p2, double *dp2, double *p1, double x,
 //
 //    Input, double X, the point at which polynomials are evaluated.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double ALPHA, the exponents of (1-X^2).
 //
@@ -2494,7 +2494,7 @@ void gegenbauer_recur ( double *p2, double *dp2, double *p1, double x,
 {
   double dp0;
   double dp1;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p0;
 
   *p1 = 1.0;
@@ -2518,7 +2518,7 @@ void gegenbauer_recur ( double *p2, double *dp2, double *p1, double x,
 }
 //****************************************************************************80
 
-void gegenbauer_root ( double *x, int order, double alpha, double *dp2, 
+void gegenbauer_root ( double *x, FLENS_DEFAULT_INDEXTYPE order, double alpha, double *dp2, 
   double *p1, double c[] )
 
 //****************************************************************************80
@@ -2551,7 +2551,7 @@ void gegenbauer_root ( double *x, int order, double alpha, double *dp2,
 //    Input/output, double *X, the approximate root, which
 //    should be improved on output.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double ALPHA, the exponents of (1-X^2).
 //
@@ -2565,8 +2565,8 @@ void gegenbauer_root ( double *x, int order, double alpha, double *dp2,
   double d;
   double eps;
   double p2;
-  int step;
-  int step_max = 10;
+  FLENS_DEFAULT_INDEXTYPE step;
+  FLENS_DEFAULT_INDEXTYPE step_max = 10;
 
   eps = webbur::r8_epsilon ( );
 
@@ -2586,7 +2586,7 @@ void gegenbauer_root ( double *x, int order, double alpha, double *dp2,
 }
 //****************************************************************************80
 
-void gen_hermite_compute ( int order, double alpha, double x[], double w[] )
+void gen_hermite_compute ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -2623,7 +2623,7 @@ void gen_hermite_compute ( int order, double alpha, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double ALPHA, the exponent of the X factor.
@@ -2636,8 +2636,8 @@ void gen_hermite_compute ( int order, double alpha, double x[], double w[] )
 {
   double alpha_laguerre;
   double arg;
-  int i;
-  int order_laguerre;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE order_laguerre;
   double *w_laguerre;
   double *x_laguerre;
 
@@ -2728,7 +2728,7 @@ void gen_hermite_compute ( int order, double alpha, double x[], double w[] )
 }
 //****************************************************************************80
 
-void gen_hermite_compute_np ( int order, int /*np*/, double p[], double x[], 
+void gen_hermite_compute_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -2766,10 +2766,10 @@ void gen_hermite_compute_np ( int order, int /*np*/, double p[], double x[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA, the exponent of the X factor. -1.0 < ALPHA.
@@ -2789,7 +2789,7 @@ void gen_hermite_compute_np ( int order, int /*np*/, double p[], double x[],
 }
 //****************************************************************************80
 
-void gen_hermite_compute_points ( int order, double alpha, double x[] )
+void gen_hermite_compute_points ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double x[] )
 
 //****************************************************************************80
 //
@@ -2811,7 +2811,7 @@ void gen_hermite_compute_points ( int order, double alpha, double x[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Input, double ALPHA, the exponent of the X factor.
 //    -1.0 < ALPHA.
@@ -2831,7 +2831,7 @@ void gen_hermite_compute_points ( int order, double alpha, double x[] )
 }
 //****************************************************************************80
 
-void gen_hermite_compute_points_np ( int order, int /*np*/, double p[], double x[] )
+void gen_hermite_compute_points_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[] )
 
 //****************************************************************************80
 //
@@ -2853,9 +2853,9 @@ void gen_hermite_compute_points_np ( int order, int /*np*/, double p[], double x
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA, the exponent of the X factor. -1.0 < ALPHA.
@@ -2873,7 +2873,7 @@ void gen_hermite_compute_points_np ( int order, int /*np*/, double p[], double x
 }
 //****************************************************************************80
 
-void gen_hermite_compute_weights ( int order, double alpha, double w[] )
+void gen_hermite_compute_weights ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double w[] )
 
 //****************************************************************************80
 //
@@ -2895,7 +2895,7 @@ void gen_hermite_compute_weights ( int order, double alpha, double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Input, double ALPHA, the exponent of the X factor.
 //    -1.0 < ALPHA.
@@ -2915,7 +2915,7 @@ void gen_hermite_compute_weights ( int order, double alpha, double w[] )
 }
 //****************************************************************************80
 
-void gen_hermite_compute_weights_np ( int order, int /*np*/, double p[], 
+void gen_hermite_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], 
   double w[] )
 
 //****************************************************************************80
@@ -2938,9 +2938,9 @@ void gen_hermite_compute_weights_np ( int order, int /*np*/, double p[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA, the exponent of the X factor. -1.0 < ALPHA.
@@ -2958,7 +2958,7 @@ void gen_hermite_compute_weights_np ( int order, int /*np*/, double p[],
 }
 //****************************************************************************80
 
-double gen_hermite_integral ( int expon, double alpha )
+double gen_hermite_integral ( FLENS_DEFAULT_INDEXTYPE expon, double alpha )
 
 //****************************************************************************80
 //
@@ -2984,7 +2984,7 @@ double gen_hermite_integral ( int expon, double alpha )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent of the monomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent of the monomial.
 //    0 <= EXPON.
 //
 //    Input, double ALPHA, the exponent of |X| in the weight function.
@@ -3018,7 +3018,7 @@ double gen_hermite_integral ( int expon, double alpha )
 }
 //****************************************************************************80
 
-void gen_laguerre_compute ( int order, double alpha, double x[], double w[] )
+void gen_laguerre_compute ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -3085,7 +3085,7 @@ void gen_laguerre_compute ( int order, double alpha, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double ALPHA, the exponent of the X factor.
@@ -3101,7 +3101,7 @@ void gen_laguerre_compute ( int order, double alpha, double x[], double w[] )
   double *c;
   double cc;
   double dp2;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p1;
   double prod;
   double r1;
@@ -3183,7 +3183,7 @@ void gen_laguerre_compute ( int order, double alpha, double x[], double w[] )
 }
 //****************************************************************************80
 
-void gen_laguerre_compute_np ( int order, int /*np*/, double p[], double x[], 
+void gen_laguerre_compute_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -3251,7 +3251,7 @@ void gen_laguerre_compute_np ( int order, int /*np*/, double p[], double x[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double P[1], contains parameters.
@@ -3274,7 +3274,7 @@ void gen_laguerre_compute_np ( int order, int /*np*/, double p[], double x[],
 }
 //****************************************************************************80
 
-void gen_laguerre_compute_points ( int order, double alpha, double x[] )
+void gen_laguerre_compute_points ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double x[] )
 
 //****************************************************************************80
 //
@@ -3296,7 +3296,7 @@ void gen_laguerre_compute_points ( int order, double alpha, double x[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Input, double ALPHA, the exponent of the X factor.
 //    Set ALPHA = 0.0 for the simplest rule.
@@ -3317,7 +3317,7 @@ void gen_laguerre_compute_points ( int order, double alpha, double x[] )
 }
 //****************************************************************************80
 
-void gen_laguerre_compute_points_np ( int order, int /*np*/, double p[], 
+void gen_laguerre_compute_points_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], 
   double x[] )
 
 //****************************************************************************80
@@ -3340,9 +3340,9 @@ void gen_laguerre_compute_points_np ( int order, int /*np*/, double p[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA, the exponent of the X factor.
@@ -3362,7 +3362,7 @@ void gen_laguerre_compute_points_np ( int order, int /*np*/, double p[],
 }
 //****************************************************************************80
 
-void gen_laguerre_compute_weights ( int order, double alpha, double w[] )
+void gen_laguerre_compute_weights ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double w[] )
 
 //****************************************************************************80
 //
@@ -3384,7 +3384,7 @@ void gen_laguerre_compute_weights ( int order, double alpha, double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Input, double ALPHA, the exponent of the X factor.
 //    Set ALPHA = 0.0 for the simplest rule.
@@ -3405,7 +3405,7 @@ void gen_laguerre_compute_weights ( int order, double alpha, double w[] )
 }
 //****************************************************************************80
 
-void gen_laguerre_compute_weights_np ( int order, int /*np*/, double p[], 
+void gen_laguerre_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], 
   double w[] )
 
 //****************************************************************************80
@@ -3428,9 +3428,9 @@ void gen_laguerre_compute_weights_np ( int order, int /*np*/, double p[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], contains parameters.
 //    P[0] = ALPHA, the exponent of the X factor.
@@ -3450,7 +3450,7 @@ void gen_laguerre_compute_weights_np ( int order, int /*np*/, double p[],
 }
 //****************************************************************************80
 
-double gen_laguerre_integral ( int expon, double alpha )
+double gen_laguerre_integral ( FLENS_DEFAULT_INDEXTYPE expon, double alpha )
 
 //****************************************************************************80
 //
@@ -3476,7 +3476,7 @@ double gen_laguerre_integral ( int expon, double alpha )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent of the monomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent of the monomial.
 //    0 <= EXPON.
 //
 //    Input, double ALPHA, the exponent of X in the weight function.
@@ -3496,7 +3496,7 @@ double gen_laguerre_integral ( int expon, double alpha )
 //****************************************************************************80
 
 void gen_laguerre_recur ( double *p2, double *dp2, double *p1, double x, 
-  int order, double alpha, double b[], double c[] )
+  FLENS_DEFAULT_INDEXTYPE order, double alpha, double b[], double c[] )
 
 //****************************************************************************80
 //
@@ -3534,7 +3534,7 @@ void gen_laguerre_recur ( double *p2, double *dp2, double *p1, double x,
 //
 //    Input, double X, the point at which polynomials are evaluated.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double ALPHA, the exponent of the X factor in the
 //    integrand.
@@ -3544,7 +3544,7 @@ void gen_laguerre_recur ( double *p2, double *dp2, double *p1, double x,
 {
   double dp0;
   double dp1;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p0;
 
   *p1 = 1.0;
@@ -3569,7 +3569,7 @@ void gen_laguerre_recur ( double *p2, double *dp2, double *p1, double x,
 }
 //****************************************************************************80
 
-void gen_laguerre_root ( double *x, int order, double alpha, double *dp2, 
+void gen_laguerre_root ( double *x, FLENS_DEFAULT_INDEXTYPE order, double alpha, double *dp2, 
   double *p1, double b[], double c[] )
 
 //****************************************************************************80
@@ -3603,7 +3603,7 @@ void gen_laguerre_root ( double *x, int order, double alpha, double *dp2,
 //    Input/output, double *X, the approximate root, which
 //    should be improved on output.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double ALPHA, the exponent of the X factor.
 //
@@ -3617,8 +3617,8 @@ void gen_laguerre_root ( double *x, int order, double alpha, double *dp2,
   double d;
   double eps;
   double p2;
-  int step;
-  int step_max = 10;
+  FLENS_DEFAULT_INDEXTYPE step;
+  FLENS_DEFAULT_INDEXTYPE step_max = 10;
 
   eps = webbur::r8_epsilon ( );
 
@@ -3638,7 +3638,7 @@ void gen_laguerre_root ( double *x, int order, double alpha, double *dp2,
 }
 //****************************************************************************80
 
-void hermite_compute ( int order, double x[], double w[] )
+void hermite_compute ( FLENS_DEFAULT_INDEXTYPE order, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -3680,7 +3680,7 @@ void hermite_compute ( int order, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Output, double X[ORDER], the abscissas.
@@ -3690,7 +3690,7 @@ void hermite_compute ( int order, double x[], double w[] )
 {
   double cc;
   double dp2;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p1;
   double s;
   double temp;
@@ -3759,7 +3759,7 @@ void hermite_compute ( int order, double x[], double w[] )
 }
 //****************************************************************************80
 
-void hermite_compute_np ( int order, int /*np*/, double /*p*/[], double x[], 
+void hermite_compute_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -3802,10 +3802,10 @@ void hermite_compute_np ( int order, int /*np*/, double /*p*/[], double x[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -3820,7 +3820,7 @@ void hermite_compute_np ( int order, int /*np*/, double /*p*/[], double x[],
 }
 //****************************************************************************80
 
-void hermite_compute_points ( int order, double x[] )
+void hermite_compute_points ( FLENS_DEFAULT_INDEXTYPE order, double x[] )
 
 //****************************************************************************80
 //
@@ -3842,7 +3842,7 @@ void hermite_compute_points ( int order, double x[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Output, double X[ORDER], the abscissas.
 //
@@ -3859,7 +3859,7 @@ void hermite_compute_points ( int order, double x[] )
 }
 //****************************************************************************80
 
-void hermite_compute_points_np ( int order, int /*np*/, double /*p*/[], double x[] )
+void hermite_compute_points_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -3881,9 +3881,9 @@ void hermite_compute_points_np ( int order, int /*np*/, double /*p*/[], double x
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -3896,7 +3896,7 @@ void hermite_compute_points_np ( int order, int /*np*/, double /*p*/[], double x
 }
 //****************************************************************************80
 
-void hermite_compute_weights ( int order, double w[] )
+void hermite_compute_weights ( FLENS_DEFAULT_INDEXTYPE order, double w[] )
 
 //****************************************************************************80
 //
@@ -3918,7 +3918,7 @@ void hermite_compute_weights ( int order, double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Output, double W[ORDER], the weights.
 //
@@ -3935,7 +3935,7 @@ void hermite_compute_weights ( int order, double w[] )
 }
 //****************************************************************************80
 
-void hermite_compute_weights_np ( int order, int /*np*/, double /*p*/[], double w[] )
+void hermite_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -3957,9 +3957,9 @@ void hermite_compute_weights_np ( int order, int /*np*/, double /*p*/[], double 
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -3972,7 +3972,7 @@ void hermite_compute_weights_np ( int order, int /*np*/, double /*p*/[], double 
 }
 //****************************************************************************80
 
-void hermite_genz_keister_lookup ( int n, double x[], double w[] )
+void hermite_genz_keister_lookup ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -4029,7 +4029,7 @@ void hermite_genz_keister_lookup ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be 1, 3, 9, 19, or 35.
 //
 //    Output, double X[N], the abscissas.
@@ -4044,7 +4044,7 @@ void hermite_genz_keister_lookup ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void hermite_genz_keister_lookup_points ( int n, double x[] )
+void hermite_genz_keister_lookup_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -4101,7 +4101,7 @@ void hermite_genz_keister_lookup_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be 1, 3, 9, 19, or 35.
 //
 //    Output, double X[N], the abscissas.
@@ -4201,7 +4201,7 @@ void hermite_genz_keister_lookup_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void hermite_genz_keister_lookup_points_np ( int n, int /*np*/, double /*p*/[], 
+void hermite_genz_keister_lookup_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], 
   double x[] )
 
 //****************************************************************************80
@@ -4259,10 +4259,10 @@ void hermite_genz_keister_lookup_points_np ( int n, int /*np*/, double /*p*/[],
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be 1, 3, 9, 19, or 35.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -4275,7 +4275,7 @@ void hermite_genz_keister_lookup_points_np ( int n, int /*np*/, double /*p*/[],
 }
 //****************************************************************************80
 
-void hermite_genz_keister_lookup_weights ( int n, double w[] )
+void hermite_genz_keister_lookup_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -4332,7 +4332,7 @@ void hermite_genz_keister_lookup_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be 1, 3, 9, 19, or 35.
 //
 //    Output, double W[N], the weights.
@@ -4432,7 +4432,7 @@ void hermite_genz_keister_lookup_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void hermite_genz_keister_lookup_weights_np ( int n, int /*np*/, double /*p*/[], 
+void hermite_genz_keister_lookup_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], 
   double w[] )
 
 //****************************************************************************80
@@ -4490,10 +4490,10 @@ void hermite_genz_keister_lookup_weights_np ( int n, int /*np*/, double /*p*/[],
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be 1, 3, 9, 19, or 35.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -4506,7 +4506,7 @@ void hermite_genz_keister_lookup_weights_np ( int n, int /*np*/, double /*p*/[],
 }
 //****************************************************************************80
 
-double hermite_integral ( int n )
+double hermite_integral ( FLENS_DEFAULT_INDEXTYPE n )
 
 //****************************************************************************80
 //
@@ -4536,7 +4536,7 @@ double hermite_integral ( int n )
 //
 //  Parameters:
 //
-//    Input, int N, the order of the integral.  
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order of the integral.  
 //    0 <= N.
 //
 //    Output, double VALUE, the value of the integral.
@@ -4563,7 +4563,7 @@ double hermite_integral ( int n )
 }
 //****************************************************************************80
 
-void hermite_lookup ( int n, double x[], double w[] )
+void hermite_lookup ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -4618,7 +4618,7 @@ void hermite_lookup ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 20.
 //
 //    Output, double X[N], the abscissas.
@@ -4634,7 +4634,7 @@ void hermite_lookup ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void hermite_lookup_points ( int n, double x[] )
+void hermite_lookup_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -4704,7 +4704,7 @@ void hermite_lookup_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 20.
 //
 //    Output, double X[N], the abscissas.
@@ -4993,7 +4993,7 @@ void hermite_lookup_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void hermite_lookup_weights ( int n, double w[] )
+void hermite_lookup_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -5063,7 +5063,7 @@ void hermite_lookup_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 20.
 //
 //    Output, double W[N], the weights.
@@ -5352,7 +5352,7 @@ void hermite_lookup_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void hermite_recur ( double *p2, double *dp2, double *p1, double x, int order )
+void hermite_recur ( double *p2, double *dp2, double *p1, double x, FLENS_DEFAULT_INDEXTYPE order )
 
 //****************************************************************************80
 //
@@ -5390,10 +5390,10 @@ void hermite_recur ( double *p2, double *dp2, double *p1, double x, int order )
 //
 //    Input, double X, the point at which polynomials are evaluated.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double dq0;
   double dq1;
   double dq2;
@@ -5427,7 +5427,7 @@ void hermite_recur ( double *p2, double *dp2, double *p1, double x, int order )
 }
 //****************************************************************************80
 
-void hermite_root ( double *x, int order, double *dp2, double *p1 )
+void hermite_root ( double *x, FLENS_DEFAULT_INDEXTYPE order, double *dp2, double *p1 )
 
 //****************************************************************************80
 //
@@ -5460,7 +5460,7 @@ void hermite_root ( double *x, int order, double *dp2, double *p1 )
 //    Input/output, double *X, the approximate root, which
 //    should be improved on output.
 //
-//    Input, int ORDER, the order of the Hermite polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the Hermite polynomial.
 //
 //    Output, double *DP2, the value of H'(ORDER)(X).
 //
@@ -5470,8 +5470,8 @@ void hermite_root ( double *x, int order, double *dp2, double *p1 )
   double d;
   double eps;
   double p2;
-  int step;
-  int step_max = 10;
+  FLENS_DEFAULT_INDEXTYPE step;
+  FLENS_DEFAULT_INDEXTYPE step_max = 10;
 
   eps = webbur::r8_epsilon ( );
 
@@ -5491,7 +5491,7 @@ void hermite_root ( double *x, int order, double *dp2, double *p1 )
 }
 //****************************************************************************80
 
-int i4_max ( int i1, int i2 )
+FLENS_DEFAULT_INDEXTYPE i4_max ( FLENS_DEFAULT_INDEXTYPE i1, FLENS_DEFAULT_INDEXTYPE i2 )
 
 //****************************************************************************80
 //
@@ -5513,12 +5513,12 @@ int i4_max ( int i1, int i2 )
 //
 //  Parameters:
 //
-//    Input, int I1, I2, are two integers to be compared.
+//    Input, FLENS_DEFAULT_INDEXTYPE I1, I2, are two integers to be compared.
 //
-//    Output, int I4_MAX, the larger of I1 and I2.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_MAX, the larger of I1 and I2.
 //
 {
-  int value;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( i2 < i1 )
   {
@@ -5532,7 +5532,7 @@ int i4_max ( int i1, int i2 )
 }
 //****************************************************************************80
 
-int i4_min ( int i1, int i2 )
+FLENS_DEFAULT_INDEXTYPE i4_min ( FLENS_DEFAULT_INDEXTYPE i1, FLENS_DEFAULT_INDEXTYPE i2 )
 
 //****************************************************************************80
 //
@@ -5554,12 +5554,12 @@ int i4_min ( int i1, int i2 )
 //
 //  Parameters:
 //
-//    Input, int I1, I2, two integers to be compared.
+//    Input, FLENS_DEFAULT_INDEXTYPE I1, I2, two integers to be compared.
 //
-//    Output, int I4_MIN, the smaller of I1 and I2.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_MIN, the smaller of I1 and I2.
 //
 {
-  int value;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( i1 < i2 )
   {
@@ -5573,7 +5573,7 @@ int i4_min ( int i1, int i2 )
 }
 //****************************************************************************80
 
-int i4_power ( int i, int j )
+FLENS_DEFAULT_INDEXTYPE i4_power ( FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE j )
 
 //****************************************************************************80
 //
@@ -5595,13 +5595,13 @@ int i4_power ( int i, int j )
 //
 //  Parameters:
 //
-//    Input, int I, J, the base and the power.  J should be nonnegative.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, J, the base and the power.  J should be nonnegative.
 //
-//    Output, int I4_POWER, the value of I^J.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4_POWER, the value of I^J.
 //
 {
-  int k;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE k;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   if ( j < 0 )
   {
@@ -5651,7 +5651,7 @@ int i4_power ( int i, int j )
 }
 //****************************************************************************80
 
-void i4mat_write ( std::string output_filename, int m, int n, int table[] )
+void i4mat_write ( std::string output_filename, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE table[] )
 
 //****************************************************************************80
 //
@@ -5675,15 +5675,15 @@ void i4mat_write ( std::string output_filename, int m, int n, int table[] )
 //
 //    Input, string OUTPUT_FILENAME, the output filename.
 //
-//    Input, int M, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the spatial dimension.
 //
-//    Input, int N, the number of points.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of points.
 //
-//    Input, int TABLE[M*N], the table data.
+//    Input, FLENS_DEFAULT_INDEXTYPE TABLE[M*N], the table data.
 //
 {
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   std::ofstream output;
 //
 //  Open the file.
@@ -5717,7 +5717,7 @@ void i4mat_write ( std::string output_filename, int m, int n, int table[] )
 }
 //****************************************************************************80
 
-int *i4vec_add_new ( int n, int a[], int b[] )
+FLENS_DEFAULT_INDEXTYPE *i4vec_add_new ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[], FLENS_DEFAULT_INDEXTYPE b[] )
 
 //****************************************************************************80
 //
@@ -5743,19 +5743,19 @@ int *i4vec_add_new ( int n, int a[], int b[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries.
 //
-//    Input, int A[N], the first vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE A[N], the first vector.
 //
-//    Input, int B[N], the second vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE B[N], the second vector.
 //
-//    Output, int I4VEC_ADD_NEW[N], the sum of the vectors.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4VEC_ADD_NEW[N], the sum of the vectors.
 //
 {
-  int *c;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE *c;
+  FLENS_DEFAULT_INDEXTYPE i;
 
-  c = new int[n];
+  c = new FLENS_DEFAULT_INDEXTYPE[n];
 
   for ( i = 0; i < n; i++ )
   {
@@ -5765,7 +5765,7 @@ int *i4vec_add_new ( int n, int a[], int b[] )
 }
 //****************************************************************************80
 
-bool i4vec_any_lt ( int n, int a[], int b[] )
+bool i4vec_any_lt ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[], FLENS_DEFAULT_INDEXTYPE b[] )
 
 //****************************************************************************80
 //
@@ -5791,17 +5791,17 @@ bool i4vec_any_lt ( int n, int a[], int b[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries.
 //
-//    Input, int A[N], the first vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE A[N], the first vector.
 //
-//    Input, int B[N], the second vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE B[N], the second vector.
 //
 //    Output, bool I4VEC_ANY_LT is TRUE if any entry
 //    of A is less than the corresponding entry of B.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   bool value;
 
   for ( i = 0; i < n; i++ )
@@ -5818,7 +5818,7 @@ bool i4vec_any_lt ( int n, int a[], int b[] )
 }
 //****************************************************************************80
 
-void i4vec_print ( int n, int a[], std::string title )
+void i4vec_print ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[], std::string title )
 
 //****************************************************************************80
 //
@@ -5844,14 +5844,14 @@ void i4vec_print ( int n, int a[], std::string title )
 //
 //  Parameters:
 //
-//    Input, int N, the number of components of the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of components of the vector.
 //
-//    Input, int A[N], the vector to be printed.
+//    Input, FLENS_DEFAULT_INDEXTYPE A[N], the vector to be printed.
 //
 //    Input, string TITLE, a title.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   std::cout << "\n";
   std::cout << title << "\n";
@@ -5865,7 +5865,7 @@ void i4vec_print ( int n, int a[], std::string title )
 }
 //****************************************************************************80
 
-int i4vec_product ( int n, int a[] )
+FLENS_DEFAULT_INDEXTYPE i4vec_product ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[] )
 
 //****************************************************************************80
 //
@@ -5901,15 +5901,15 @@ int i4vec_product ( int n, int a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Input, int A[N], the vector
+//    Input, FLENS_DEFAULT_INDEXTYPE A[N], the vector
 //
-//    Output, int I4VEC_PRODUCT, the product of the entries of A.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4VEC_PRODUCT, the product of the entries of A.
 //
 {
-  int i;
-  int product;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE product;
 
   product = 1;
   for ( i = 0; i < n; i++ )
@@ -5921,7 +5921,7 @@ int i4vec_product ( int n, int a[] )
 }
 //****************************************************************************80
 
-int i4vec_sum ( int n, int a[] )
+FLENS_DEFAULT_INDEXTYPE i4vec_sum ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[] )
 
 //****************************************************************************80
 //
@@ -5957,15 +5957,15 @@ int i4vec_sum ( int n, int a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Input, int A[N], the vector to be summed.
+//    Input, FLENS_DEFAULT_INDEXTYPE A[N], the vector to be summed.
 //
-//    Output, int I4VEC_SUM, the sum of the entries of A.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4VEC_SUM, the sum of the entries of A.
 //
 {
-  int i;
-  int sum;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE sum;
 
   sum = 0;
   for ( i = 0; i < n; i++ )
@@ -5977,7 +5977,7 @@ int i4vec_sum ( int n, int a[] )
 }
 //****************************************************************************80
 
-void i4vec_zero ( int n, int a[] )
+void i4vec_zero ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE a[] )
 
 //****************************************************************************80
 //
@@ -6003,12 +6003,12 @@ void i4vec_zero ( int n, int a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Output, int A[N], a vector of zeroes.
+//    Output, FLENS_DEFAULT_INDEXTYPE A[N], a vector of zeroes.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   for ( i = 0; i < n; i++ )
   {
@@ -6018,7 +6018,7 @@ void i4vec_zero ( int n, int a[] )
 }
 //****************************************************************************80
 
-int *i4vec_zero_new ( int n )
+FLENS_DEFAULT_INDEXTYPE *i4vec_zero_new ( FLENS_DEFAULT_INDEXTYPE n )
 
 //****************************************************************************80
 //
@@ -6044,15 +6044,15 @@ int *i4vec_zero_new ( int n )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Output, int I4VEC_ZERO_NEW[N], a vector of zeroes.
+//    Output, FLENS_DEFAULT_INDEXTYPE I4VEC_ZERO_NEW[N], a vector of zeroes.
 //
 {
-  int *a;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE *a;
+  FLENS_DEFAULT_INDEXTYPE i;
 
-  a = new int[n];
+  a = new FLENS_DEFAULT_INDEXTYPE[n];
 
   for ( i = 0; i < n; i++ )
   {
@@ -6062,7 +6062,7 @@ int *i4vec_zero_new ( int n )
 }
 //****************************************************************************80
 
-void jacobi_compute ( int order, double alpha, double beta, double x[], 
+void jacobi_compute ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double beta, double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -6106,7 +6106,7 @@ void jacobi_compute ( int order, double alpha, double beta, double x[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Input, double ALPHA, BETA, the exponents of (1-X) and
@@ -6125,7 +6125,7 @@ void jacobi_compute ( int order, double alpha, double beta, double x[],
   double cc;
   double delta;
   double dp2;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p1;
   double prod;
   double r1;
@@ -6306,7 +6306,7 @@ void jacobi_compute ( int order, double alpha, double beta, double x[],
 }
 //****************************************************************************80
 
-void jacobi_compute_np ( int order, int /*np*/, double p[], double x[], double w[] )
+void jacobi_compute_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -6349,10 +6349,10 @@ void jacobi_compute_np ( int order, int /*np*/, double p[], double x[], double w
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameter values.
 //    P[0] = ALPHA, the exponent of (1-X)
@@ -6376,7 +6376,7 @@ void jacobi_compute_np ( int order, int /*np*/, double p[], double x[], double w
 }
 //****************************************************************************80
 
-void jacobi_compute_points ( int order, double alpha, double beta, 
+void jacobi_compute_points ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double beta, 
   double x[] )
 
 //****************************************************************************80
@@ -6399,7 +6399,7 @@ void jacobi_compute_points ( int order, double alpha, double beta,
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Input, double ALPHA, BETA, the exponents of the (1-X) and (1+X) factors.
 //
@@ -6418,7 +6418,7 @@ void jacobi_compute_points ( int order, double alpha, double beta,
 }
 //****************************************************************************80
 
-void jacobi_compute_points_np ( int order, int /*np*/, double p[], double x[] )
+void jacobi_compute_points_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double x[] )
 
 //****************************************************************************80
 //
@@ -6440,9 +6440,9 @@ void jacobi_compute_points_np ( int order, int /*np*/, double p[], double x[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameter values.
 //    P[0] = ALPHA, the exponent of (1-X)
@@ -6464,7 +6464,7 @@ void jacobi_compute_points_np ( int order, int /*np*/, double p[], double x[] )
 }
 //****************************************************************************80
 
-void jacobi_compute_weights ( int order, double alpha, double beta, 
+void jacobi_compute_weights ( FLENS_DEFAULT_INDEXTYPE order, double alpha, double beta, 
   double w[] )
 
 //****************************************************************************80
@@ -6487,7 +6487,7 @@ void jacobi_compute_weights ( int order, double alpha, double beta,
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Input, double ALPHA, BETA, the exponents of the (1-X) and (1+X) factors.
 //
@@ -6506,7 +6506,7 @@ void jacobi_compute_weights ( int order, double alpha, double beta,
 }
 //****************************************************************************80
 
-void jacobi_compute_weights_np ( int order, int /*np*/, double p[], double w[] )
+void jacobi_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double p[], double w[] )
 
 //****************************************************************************80
 //
@@ -6528,9 +6528,9 @@ void jacobi_compute_weights_np ( int order, int /*np*/, double p[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameter values.
 //    P[0] = ALPHA, the exponent of (1-X)
@@ -6552,7 +6552,7 @@ void jacobi_compute_weights_np ( int order, int /*np*/, double p[], double w[] )
 }
 //****************************************************************************80
 
-double jacobi_integral ( int expon, double alpha, double beta )
+double jacobi_integral ( FLENS_DEFAULT_INDEXTYPE expon, double alpha, double beta )
 
 //****************************************************************************80
 //
@@ -6578,7 +6578,7 @@ double jacobi_integral ( int expon, double alpha, double beta )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent.
 //
 //    Input, double ALPHA, the exponent of (1-X) in the weight factor.
 //
@@ -6632,7 +6632,7 @@ double jacobi_integral ( int expon, double alpha, double beta )
 }
 //****************************************************************************80
 
-void jacobi_recur ( double *p2, double *dp2, double *p1, double x, int order, 
+void jacobi_recur ( double *p2, double *dp2, double *p1, double x, FLENS_DEFAULT_INDEXTYPE order, 
   double alpha, double beta, double b[], double c[] )
 
 //****************************************************************************80
@@ -6671,7 +6671,7 @@ void jacobi_recur ( double *p2, double *dp2, double *p1, double x, int order,
 //
 //    Input, double X, the point at which polynomials are evaluated.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double ALPHA, BETA, the exponents of (1-X) and
 //    (1+X) in the quadrature rule.
@@ -6681,7 +6681,7 @@ void jacobi_recur ( double *p2, double *dp2, double *p1, double x, int order,
 {
   double dp0;
   double dp1;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p0;
 
   *p1 = 1.0;
@@ -6705,7 +6705,7 @@ void jacobi_recur ( double *p2, double *dp2, double *p1, double x, int order,
 }
 //****************************************************************************80
 
-void jacobi_root ( double *x, int order, double alpha, double beta, 
+void jacobi_root ( double *x, FLENS_DEFAULT_INDEXTYPE order, double alpha, double beta, 
   double *dp2, double *p1, double b[], double c[] )
 
 //****************************************************************************80
@@ -6739,7 +6739,7 @@ void jacobi_root ( double *x, int order, double alpha, double beta,
 //    Input/output, double *X, the approximate root, which
 //    should be improved on output.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double ALPHA, BETA, the exponents of (1-X) and
 //    (1+X) in the quadrature rule.
@@ -6754,8 +6754,8 @@ void jacobi_root ( double *x, int order, double alpha, double beta,
   double d;
   double eps;
   double p2;
-  int step;
-  int step_max = 10;
+  FLENS_DEFAULT_INDEXTYPE step;
+  FLENS_DEFAULT_INDEXTYPE step_max = 10;
 
   eps = webbur::r8_epsilon ( );
 
@@ -6775,7 +6775,7 @@ void jacobi_root ( double *x, int order, double alpha, double beta,
 }
 //****************************************************************************80
 
-void laguerre_compute ( int order, double x[], double w[] )
+void laguerre_compute ( FLENS_DEFAULT_INDEXTYPE order, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -6823,7 +6823,7 @@ void laguerre_compute ( int order, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
 //    Output, double X[ORDER], the abscissas.
@@ -6834,8 +6834,8 @@ void laguerre_compute ( int order, double x[], double w[] )
   double *b;
   double *c;
   double dp2;
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   double p1;
   double prod;
   double r1;
@@ -6924,7 +6924,7 @@ void laguerre_compute ( int order, double x[], double w[] )
 }
 //****************************************************************************80
 
-void laguerre_compute_np ( int order, int /*np*/, double /*p*/[], double x[], 
+void laguerre_compute_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], 
   double w[] )
 
 //****************************************************************************80
@@ -6973,10 +6973,10 @@ void laguerre_compute_np ( int order, int /*np*/, double /*p*/[], double x[],
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //    1 <= ORDER.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -6991,7 +6991,7 @@ void laguerre_compute_np ( int order, int /*np*/, double /*p*/[], double x[],
 }
 //****************************************************************************80
 
-void laguerre_compute_points ( int order, double x[] )
+void laguerre_compute_points ( FLENS_DEFAULT_INDEXTYPE order, double x[] )
 
 //****************************************************************************80
 //
@@ -7013,7 +7013,7 @@ void laguerre_compute_points ( int order, double x[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Output, double X[ORDER], the abscissas.
 //
@@ -7030,7 +7030,7 @@ void laguerre_compute_points ( int order, double x[] )
 }
 //****************************************************************************80
 
-void laguerre_compute_points_np ( int order, int /*np*/, double /*p*/[], double x[] )
+void laguerre_compute_points_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -7052,9 +7052,9 @@ void laguerre_compute_points_np ( int order, int /*np*/, double /*p*/[], double 
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -7067,7 +7067,7 @@ void laguerre_compute_points_np ( int order, int /*np*/, double /*p*/[], double 
 }
 //****************************************************************************80
 
-void laguerre_compute_weights ( int order, double w[] )
+void laguerre_compute_weights ( FLENS_DEFAULT_INDEXTYPE order, double w[] )
 
 //****************************************************************************80
 //
@@ -7089,7 +7089,7 @@ void laguerre_compute_weights ( int order, double w[] )
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
 //    Output, double W[ORDER], the weights.
 //
@@ -7106,7 +7106,7 @@ void laguerre_compute_weights ( int order, double w[] )
 }
 //****************************************************************************80
 
-void laguerre_compute_weights_np ( int order, int /*np*/, double /*p*/[], double w[] )
+void laguerre_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE order, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -7128,9 +7128,9 @@ void laguerre_compute_weights_np ( int order, int /*np*/, double /*p*/[], double
 //
 //  Parameters:
 //
-//    Input, int ORDER, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -7143,7 +7143,7 @@ void laguerre_compute_weights_np ( int order, int /*np*/, double /*p*/[], double
 }
 //****************************************************************************80
 
-double laguerre_integral ( int expon )
+double laguerre_integral ( FLENS_DEFAULT_INDEXTYPE expon )
 
 //****************************************************************************80
 //
@@ -7171,7 +7171,7 @@ double laguerre_integral ( int expon )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent.
 //    0 <= EXPON.
 //
 //    Output, double EXACT, the value of the integral.
@@ -7185,7 +7185,7 @@ double laguerre_integral ( int expon )
 }
 //****************************************************************************80
 
-void laguerre_lookup ( int n, double x[], double w[] )
+void laguerre_lookup ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -7264,7 +7264,7 @@ void laguerre_lookup ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 20.
 //
 //    Output, double X[N], the abscissas.
@@ -7280,7 +7280,7 @@ void laguerre_lookup ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void laguerre_lookup_points ( int n, double x[] )
+void laguerre_lookup_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -7334,7 +7334,7 @@ void laguerre_lookup_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 20.
 //
 //    Output, double X[N], the abscissas.
@@ -7623,7 +7623,7 @@ void laguerre_lookup_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void laguerre_lookup_weights ( int n, double w[] )
+void laguerre_lookup_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -7677,7 +7677,7 @@ void laguerre_lookup_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 20.
 //
 //    Output, double W[N], the weights.
@@ -7967,7 +7967,7 @@ void laguerre_lookup_weights ( int n, double w[] )
 //****************************************************************************80
 
 void laguerre_recur ( double *p2, double *dp2, double *p1, double x, 
-  int order, double b[], double c[] )
+  FLENS_DEFAULT_INDEXTYPE order, double b[], double c[] )
 
 //****************************************************************************80
 //
@@ -8005,14 +8005,14 @@ void laguerre_recur ( double *p2, double *dp2, double *p1, double x,
 //
 //    Input, double X, the point at which polynomials are evaluated.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Input, double B[ORDER], C[ORDER], the recursion coefficients.
 //
 {
   double dp0;
   double dp1;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double p0;
 
   *p1 = 1.0;
@@ -8037,7 +8037,7 @@ void laguerre_recur ( double *p2, double *dp2, double *p1, double x,
 }
 //****************************************************************************80
 
-void laguerre_root ( double *x, int order, double *dp2, double *p1, 
+void laguerre_root ( double *x, FLENS_DEFAULT_INDEXTYPE order, double *dp2, double *p1, 
   double b[], double c[] )
 
 //****************************************************************************80
@@ -8071,7 +8071,7 @@ void laguerre_root ( double *x, int order, double *dp2, double *p1,
 //    Input/output, double *X, the approximate root, which
 //    should be improved on output.
 //
-//    Input, int ORDER, the order of the polynomial.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER, the order of the polynomial.
 //
 //    Output, double *DP2, the value of L'(ORDER)(X).
 //
@@ -8083,8 +8083,8 @@ void laguerre_root ( double *x, int order, double *dp2, double *p1,
   double d;
   double eps;
   double p2;
-  int step;
-  int step_max = 10;
+  FLENS_DEFAULT_INDEXTYPE step;
+  FLENS_DEFAULT_INDEXTYPE step_max = 10;
 
   eps = webbur::r8_epsilon ( );
 
@@ -8105,7 +8105,7 @@ void laguerre_root ( double *x, int order, double *dp2, double *p1,
 }
 //****************************************************************************80
 
-void legendre_compute ( int n, double x[], double w[] )
+void legendre_compute ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -8147,7 +8147,7 @@ void legendre_compute ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
 //    Output, double X[N], the abscissas.
@@ -8164,13 +8164,13 @@ void legendre_compute ( int n, double x[], double w[] )
   double e1;
   double fx;
   double h;
-  int i;
-  int iback;
-  int k;
-  int m;
-  int mp1mi;
-  int ncopy;
-  int nmove;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE iback;
+  FLENS_DEFAULT_INDEXTYPE k;
+  FLENS_DEFAULT_INDEXTYPE m;
+  FLENS_DEFAULT_INDEXTYPE mp1mi;
+  FLENS_DEFAULT_INDEXTYPE ncopy;
+  FLENS_DEFAULT_INDEXTYPE nmove;
   double p;
   double pi = 3.141592653589793;
   double pk;
@@ -8278,7 +8278,7 @@ void legendre_compute ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void legendre_compute_np ( int n, int /*np*/, double /*p*/[], double x[], double w[] )
+void legendre_compute_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -8320,10 +8320,10 @@ void legendre_compute_np ( int n, int /*np*/, double /*p*/[], double x[], double
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    1 <= N.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -8338,7 +8338,7 @@ void legendre_compute_np ( int n, int /*np*/, double /*p*/[], double x[], double
 }
 //****************************************************************************80
 
-void legendre_compute_points ( int n, double x[] )
+void legendre_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -8360,7 +8360,7 @@ void legendre_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double X[N], the abscissas.
 //
@@ -8377,7 +8377,7 @@ void legendre_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void legendre_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
+void legendre_compute_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -8399,9 +8399,9 @@ void legendre_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] 
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -8414,7 +8414,7 @@ void legendre_compute_points_np ( int n, int /*np*/, double /*p*/[], double x[] 
 }
 //****************************************************************************80
 
-void legendre_compute_weights ( int n, double w[] )
+void legendre_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -8436,7 +8436,7 @@ void legendre_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double W[N], the weights.
 //
@@ -8453,7 +8453,7 @@ void legendre_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void legendre_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
+void legendre_compute_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -8475,9 +8475,9 @@ void legendre_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[]
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -8490,7 +8490,7 @@ void legendre_compute_weights_np ( int n, int /*np*/, double /*p*/[], double w[]
 }
 //****************************************************************************80
 
-double legendre_integral ( int expon )
+double legendre_integral ( FLENS_DEFAULT_INDEXTYPE expon )
 
 //****************************************************************************80
 //
@@ -8518,7 +8518,7 @@ double legendre_integral ( int expon )
 //
 //  Parameters:
 //
-//    Input, int EXPON, the exponent.
+//    Input, FLENS_DEFAULT_INDEXTYPE EXPON, the exponent.
 //
 //    Output, double LEGENDRE_INTEGRAL, the value of the exact integral.
 //
@@ -8540,7 +8540,7 @@ double legendre_integral ( int expon )
 }
 //****************************************************************************80
 
-void legendre_lookup ( int n, double x[], double w[] )
+void legendre_lookup ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -8595,7 +8595,7 @@ void legendre_lookup ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 33.
 //
 //    Output, double X[N], the abscissas.
@@ -8611,7 +8611,7 @@ void legendre_lookup ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void legendre_lookup_points ( int n, double x[] )
+void legendre_lookup_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -8666,7 +8666,7 @@ void legendre_lookup_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 33.
 //
 //    Output, double X[N], the abscissas.
@@ -9344,7 +9344,7 @@ void legendre_lookup_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void legendre_lookup_weights ( int n, double w[] )
+void legendre_lookup_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -9399,7 +9399,7 @@ void legendre_lookup_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    N must be between 1 and 33.
 //
 //    Output, double W[N], the weights.
@@ -10077,8 +10077,8 @@ void legendre_lookup_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void level_growth_to_order ( int dim_num, int level[], int rule[], int growth[],
-  int order[] )
+void level_growth_to_order ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level[], FLENS_DEFAULT_INDEXTYPE rule[], FLENS_DEFAULT_INDEXTYPE growth[],
+  FLENS_DEFAULT_INDEXTYPE order[] )
 
 //****************************************************************************80
 //
@@ -10106,11 +10106,11 @@ void level_growth_to_order ( int dim_num, int level[], int rule[], int growth[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL[DIM_NUM], the 1D levels.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL[DIM_NUM], the 1D levels.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested.
 //     2, "F2",  Fejer Type 2, Open Fully Nested.
 //     3, "GP",  Gauss Patterson, Open Fully Nested.
@@ -10123,7 +10123,7 @@ void level_growth_to_order ( int dim_num, int level[], int rule[], int growth[],
 //    10, "GW",  Golub Welsch, (presumed) Open Non Nested.
 //    11, "HGK", Hermite Genz-Keister, Open Fully Nested.
 //
-//    Input, int GROWTH[DIM_NUM], the desired growth in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE GROWTH[DIM_NUM], the desired growth in each dimension.
 //    0, "DF", default growth associated with this quadrature rule;
 //    1, "SL", slow linear, L+1;
 //    2  "SO", slow linear odd, O=1+2((L+1)/2)
@@ -10132,15 +10132,15 @@ void level_growth_to_order ( int dim_num, int level[], int rule[], int growth[],
 //    5, "ME", moderate exponential;
 //    6, "FE", full exponential.
 //
-//    Output, int ORDER[DIM_NUM], the 1D orders (number of points).
+//    Output, FLENS_DEFAULT_INDEXTYPE ORDER[DIM_NUM], the 1D orders (number of points).
 //
 {
-  int dim;
-  int l;
-  int o = 0;
-  static int o_hgk[5] = { 1, 3, 9, 19, 35 };
-  int p;
-  static int p_hgk[5] = { 1, 5, 15, 29, 51 };
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE l;
+  FLENS_DEFAULT_INDEXTYPE o = 0;
+  static FLENS_DEFAULT_INDEXTYPE o_hgk[5] = { 1, 3, 9, 19, 35 };
+  FLENS_DEFAULT_INDEXTYPE p;
+  static FLENS_DEFAULT_INDEXTYPE p_hgk[5] = { 1, 5, 15, 29, 51 };
 //
 //  Check the input.
 //
@@ -10683,8 +10683,8 @@ void level_growth_to_order ( int dim_num, int level[], int rule[], int growth[],
 }
 //****************************************************************************80
 
-void level_to_order_default ( int dim_num, int level[], int rule[], 
-  int order[] )
+void level_to_order_default ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level[], FLENS_DEFAULT_INDEXTYPE rule[], 
+  FLENS_DEFAULT_INDEXTYPE order[] )
 
 //****************************************************************************80
 //
@@ -10722,11 +10722,11 @@ void level_to_order_default ( int dim_num, int level[], int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL[DIM_NUM], the 1D levels.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL[DIM_NUM], the 1D levels.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested rule.
 //     2, "F2",  Fejer Type 2, Open Fully Nested rule.
 //     3, "GP",  Gauss Patterson, Open Fully Nested rule.
@@ -10744,12 +10744,12 @@ void level_to_order_default ( int dim_num, int level[], int rule[],
 //    15, "F2_ME", Fejer Type 2 Moderate Exponential, Open Fully Nested rule.
 //    16, "GP_ME", Gauss Patterson Moderate Exponential, Open Fully Nested rule.
 //
-//    Output, int ORDER[DIM_NUM], the 1D orders (number of points).
+//    Output, FLENS_DEFAULT_INDEXTYPE ORDER[DIM_NUM], the 1D orders (number of points).
 //
 {
-  int dim;
-  int o;
-  int p;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE o;
+  FLENS_DEFAULT_INDEXTYPE p;
 
   for ( dim = 0; dim < dim_num; dim++ )
   {
@@ -10908,8 +10908,8 @@ void level_to_order_default ( int dim_num, int level[], int rule[],
 }
 //****************************************************************************80
 
-void level_to_order_exponential ( int dim_num, int level[], int rule[], 
-  int order[] )
+void level_to_order_exponential ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level[], FLENS_DEFAULT_INDEXTYPE rule[], 
+  FLENS_DEFAULT_INDEXTYPE order[] )
 
 //****************************************************************************80
 //
@@ -10948,11 +10948,11 @@ void level_to_order_exponential ( int dim_num, int level[], int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL[DIM_NUM], the 1D levels.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL[DIM_NUM], the 1D levels.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested rule.
 //     2, "F2",  Fejer Type 2, Open Fully Nested rule.
 //     3, "GP",  Gauss Patterson, Open Fully Nested rule.
@@ -10970,10 +10970,10 @@ void level_to_order_exponential ( int dim_num, int level[], int rule[],
 //    15, "F2_ME", Fejer Type 2 Moderate Exponential, Open Fully Nested rule.
 //    16, "GP_ME", Gauss Patterson Moderate Exponential, Open Fully Nested rule.
 //
-//    Output, int ORDER[DIM_NUM], the 1D orders (number of points).
+//    Output, FLENS_DEFAULT_INDEXTYPE ORDER[DIM_NUM], the 1D orders (number of points).
 //
 {
-  int dim;
+  FLENS_DEFAULT_INDEXTYPE dim;
 
   for ( dim = 0; dim < dim_num; dim++ )
   {
@@ -11083,8 +11083,8 @@ void level_to_order_exponential ( int dim_num, int level[], int rule[],
 }
 //****************************************************************************80
 
-void level_to_order_exponential_slow ( int dim_num, int level[], int rule[], 
-  int order[] )
+void level_to_order_exponential_slow ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level[], FLENS_DEFAULT_INDEXTYPE rule[], 
+  FLENS_DEFAULT_INDEXTYPE order[] )
 
 //****************************************************************************80
 //
@@ -11166,11 +11166,11 @@ void level_to_order_exponential_slow ( int dim_num, int level[], int rule[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL[DIM_NUM], the 1D levels.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL[DIM_NUM], the 1D levels.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested rule.
 //     2, "F2",  Fejer Type 2, Open Fully Nested rule.
 //     3, "GP",  Gauss Patterson, Open Fully Nested rule.
@@ -11188,12 +11188,12 @@ void level_to_order_exponential_slow ( int dim_num, int level[], int rule[],
 //    15, "F2_ME", Fejer Type 2 Moderate Exponential, Open Fully Nested rule.
 //    16, "GP_ME", Gauss Patterson Moderate Exponential, Open Fully Nested rule.
 //
-//    Output, int ORDER[DIM_NUM], the 1D orders (number of points).
+//    Output, FLENS_DEFAULT_INDEXTYPE ORDER[DIM_NUM], the 1D orders (number of points).
 //
 {
-  int dim;
-  int o;
-  int p;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE o;
+  FLENS_DEFAULT_INDEXTYPE p;
 
   for ( dim = 0; dim < dim_num; dim++ )
   {
@@ -11256,8 +11256,8 @@ void level_to_order_exponential_slow ( int dim_num, int level[], int rule[],
 }
 //****************************************************************************80
 
-void level_to_order_linear ( int dim_num, int level[], int /*rule*/[], 
-  int order[] )
+void level_to_order_linear ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level[], FLENS_DEFAULT_INDEXTYPE /*rule*/[], 
+  FLENS_DEFAULT_INDEXTYPE order[] )
 
 //****************************************************************************80
 //
@@ -11287,11 +11287,11 @@ void level_to_order_linear ( int dim_num, int level[], int /*rule*/[],
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int LEVEL[DIM_NUM], the 1D levels.
+//    Input, FLENS_DEFAULT_INDEXTYPE LEVEL[DIM_NUM], the 1D levels.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested rule.
 //     2, "F2",  Fejer Type 2, Open Fully Nested rule.
 //     3, "GP",  Gauss Patterson, Open Fully Nested rule.
@@ -11309,10 +11309,10 @@ void level_to_order_linear ( int dim_num, int level[], int /*rule*/[],
 //    15, "F2_ME", Fejer Type 2 Moderate Exponential, Open Fully Nested rule.
 //    16, "GP_ME", Gauss Patterson Moderate Exponential, Open Fully Nested rule.
 //
-//    Output, int ORDER[DIM_NUM], the 1D orders (number of points).
+//    Output, FLENS_DEFAULT_INDEXTYPE ORDER[DIM_NUM], the 1D orders (number of points).
 //
 {
-  int dim;
+  FLENS_DEFAULT_INDEXTYPE dim;
 
   for ( dim = 0; dim < dim_num; dim++ )
   {
@@ -11335,7 +11335,7 @@ void level_to_order_linear ( int dim_num, int level[], int /*rule*/[],
 }
 //****************************************************************************80
 
-void nc_compute ( int n, double x_min, double x_max, double x[], double w[] )
+void nc_compute ( FLENS_DEFAULT_INDEXTYPE n, double x_min, double x_max, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -11371,7 +11371,7 @@ void nc_compute ( int n, double x_min, double x_max, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Input, double X_MIN, X_MAX, the endpoints of the interval.
 //
@@ -11381,9 +11381,9 @@ void nc_compute ( int n, double x_min, double x_max, double x[], double w[] )
 //
 {
   double *d;
-  int i;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
   double yvala;
   double yvalb;
 
@@ -11442,7 +11442,7 @@ void nc_compute ( int n, double x_min, double x_max, double x[], double w[] )
 }
 //****************************************************************************80
 
-void ncc_compute_points ( int n, double x[] )
+void ncc_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -11464,12 +11464,12 @@ void ncc_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double X[N], the abscissas.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double x_max = 1.0;
   double x_min = -1.0;
 
@@ -11490,7 +11490,7 @@ void ncc_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void ncc_compute_weights ( int n, double w[] )
+void ncc_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -11512,12 +11512,12 @@ void ncc_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double W[N], the weights.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double *x;
   double x_max = 1.0;
   double x_min = -1.0;
@@ -11544,7 +11544,7 @@ void ncc_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void nco_compute_points ( int n, double x[] )
+void nco_compute_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -11566,12 +11566,12 @@ void nco_compute_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double X[N], the abscissas.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double x_max = 1.0;
   double x_min = -1.0;
 
@@ -11586,7 +11586,7 @@ void nco_compute_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void nco_compute_weights ( int n, double w[] )
+void nco_compute_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -11608,7 +11608,7 @@ void nco_compute_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //
 //    Output, double W[N], the weights.
 //
@@ -11629,7 +11629,7 @@ void nco_compute_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void patterson_lookup ( int n, double x[], double w[] )
+void patterson_lookup ( FLENS_DEFAULT_INDEXTYPE n, double x[], double w[] )
 
 //****************************************************************************80
 //
@@ -11670,7 +11670,7 @@ void patterson_lookup ( int n, double x[], double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    Legal values are 1, 3, 7, 15, 31, 63, 127 and 255.
 //
 //    Output, double X[N], the abscissas.
@@ -11685,7 +11685,7 @@ void patterson_lookup ( int n, double x[], double w[] )
 }
 //****************************************************************************80
 
-void patterson_lookup_points ( int n, double x[] )
+void patterson_lookup_points ( FLENS_DEFAULT_INDEXTYPE n, double x[] )
 
 //****************************************************************************80
 //
@@ -11726,7 +11726,7 @@ void patterson_lookup_points ( int n, double x[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    Legal values are 1, 3, 7, 15, 31, 63, 127 and 255.
 //
 //    Output, double X[N], the abscissas.
@@ -12302,7 +12302,7 @@ void patterson_lookup_points ( int n, double x[] )
 }
 //****************************************************************************80
 
-void patterson_lookup_points_np ( int n, int /*np*/, double /*p*/[], double x[] )
+void patterson_lookup_points_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double x[] )
 
 //****************************************************************************80
 //
@@ -12343,10 +12343,10 @@ void patterson_lookup_points_np ( int n, int /*np*/, double /*p*/[], double x[] 
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    Legal values are 1, 3, 7, 15, 31, 63, 127 and 255.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -12359,7 +12359,7 @@ void patterson_lookup_points_np ( int n, int /*np*/, double /*p*/[], double x[] 
 }
 //****************************************************************************80
 
-void patterson_lookup_weights ( int n, double w[] )
+void patterson_lookup_weights ( FLENS_DEFAULT_INDEXTYPE n, double w[] )
 
 //****************************************************************************80
 //
@@ -12402,7 +12402,7 @@ void patterson_lookup_weights ( int n, double w[] )
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    Legal values are 1, 3, 7, 15, 31, 63, 127 or 255.
 //
 //    Output, double W[N], the weights.
@@ -12978,7 +12978,7 @@ void patterson_lookup_weights ( int n, double w[] )
 }
 //****************************************************************************80
 
-void patterson_lookup_weights_np ( int n, int /*np*/, double /*p*/[], double w[] )
+void patterson_lookup_weights_np ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE /*np*/, double /*p*/[], double w[] )
 
 //****************************************************************************80
 //
@@ -13021,10 +13021,10 @@ void patterson_lookup_weights_np ( int n, int /*np*/, double /*p*/[], double w[]
 //
 //  Parameters:
 //
-//    Input, int N, the order.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the order.
 //    Legal values are 1, 3, 7, 15, 31, 63 or 127.
 //
-//    Input, int NP, the number of parameters.
+//    Input, FLENS_DEFAULT_INDEXTYPE NP, the number of parameters.
 //
 //    Input, double P[NP], parameters which are not needed by this function.
 //
@@ -13037,8 +13037,8 @@ void patterson_lookup_weights_np ( int n, int /*np*/, double /*p*/[], double w[]
 }
 //****************************************************************************80
 
-int point_radial_tol_unique_count ( int m, int n, double a[], double tol, 
-  int *seed )
+FLENS_DEFAULT_INDEXTYPE point_radial_tol_unique_count ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], double tol, 
+  FLENS_DEFAULT_INDEXTYPE *seed )
 
 //****************************************************************************80
 //
@@ -13073,30 +13073,30 @@ int point_radial_tol_unique_count ( int m, int n, double a[], double tol,
 //
 //  Parameters:
 //
-//    Input, int M, the number of rows.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the number of rows.
 //
-//    Input, int N, the number of columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of columns.
 //
 //    Input, double A[M*N], the array of N columns of data.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Input/output, int *SEED, a seed for the random
+//    Input/output, FLENS_DEFAULT_INDEXTYPE *SEED, a seed for the random
 //    number generator.
 //
-//    Output, int POINT_RADIAL_TOL_UNIQUE_COUNT, the number of tolerably
+//    Output, FLENS_DEFAULT_INDEXTYPE POINT_RADIAL_TOL_UNIQUE_COUNT, the number of tolerably
 //    unique points.
 //
 {
   double dist;
-  int hi;
-  int i;
-  int *indx;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE hi;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
   double *r;
   bool *unique;
-  int unique_num;
+  FLENS_DEFAULT_INDEXTYPE unique_num;
   double *w;
   double w_sum;
   double *z;
@@ -13211,8 +13211,8 @@ int point_radial_tol_unique_count ( int m, int n, double a[], double tol,
 }
 //****************************************************************************80
 
-int point_radial_tol_unique_index ( int m, int n, double a[], double tol, 
-  int *seed, int undx[], int xdnu[] )
+FLENS_DEFAULT_INDEXTYPE point_radial_tol_unique_index ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], double tol, 
+  FLENS_DEFAULT_INDEXTYPE *seed, FLENS_DEFAULT_INDEXTYPE undx[], FLENS_DEFAULT_INDEXTYPE xdnu[] )
 
 //****************************************************************************80
 //
@@ -13245,36 +13245,36 @@ int point_radial_tol_unique_index ( int m, int n, double a[], double tol,
 //
 //  Parameters:
 //
-//    Input, int M, the number of rows.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the number of rows.
 //
-//    Input, int N, the number of columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of columns.
 //
 //    Input, double A[M*N], the array of N columns of data.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Input/output, int SEED, a seed for the random
+//    Input/output, FLENS_DEFAULT_INDEXTYPE SEED, a seed for the random
 //    number generator.
 //
-//    Output, int UNDX[UNIQUE_NUM], the index, in A, of the 
+//    Output, FLENS_DEFAULT_INDEXTYPE UNDX[UNIQUE_NUM], the index, in A, of the 
 //    tolerably unique points.
 //
-//    Output, int XDNU[N], the index, in UNDX, of the 
+//    Output, FLENS_DEFAULT_INDEXTYPE XDNU[N], the index, in UNDX, of the 
 //    tolerably unique point that "represents" this point.
 //
-//    Output, int POINT_RADIAL_TOL_UNIQUE_INDEX, the number of tolerably
+//    Output, FLENS_DEFAULT_INDEXTYPE POINT_RADIAL_TOL_UNIQUE_INDEX, the number of tolerably
 //    unique points.
 //
 {
   double dist;
-  int hi;
-  int i;
-  int *indx;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE hi;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
   double *r;
   bool *unique;
-  int unique_num;
+  FLENS_DEFAULT_INDEXTYPE unique_num;
   double *w;
   double w_sum;
   double *z;
@@ -13392,8 +13392,8 @@ int point_radial_tol_unique_index ( int m, int n, double a[], double tol,
 }
 //****************************************************************************80
 
-void point_unique_index ( int m, int n, double a[], int /*unique_num*/, int undx[], 
-  int xdnu[] )
+void point_unique_index ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], FLENS_DEFAULT_INDEXTYPE /*unique_num*/, FLENS_DEFAULT_INDEXTYPE undx[], 
+  FLENS_DEFAULT_INDEXTYPE xdnu[] )
 
 //****************************************************************************80
 //
@@ -13477,26 +13477,26 @@ void point_unique_index ( int m, int n, double a[], int /*unique_num*/, int undx
 //
 //  Parameters:
 //
-//    Input, int M, the dimension of the data values.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the dimension of the data values.
 //
-//    Input, int N, the number of data values,
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of data values,
 //
 //    Input, double A[M*N], the data values.
 //
-//    Input, int UNIQUE_NUM, the number of unique values in A.
+//    Input, FLENS_DEFAULT_INDEXTYPE UNIQUE_NUM, the number of unique values in A.
 //    This value is only required for languages in which the size of
 //    UNDX must be known in advance.
 //
-//    Output, int UNDX[UNIQUE_NUM], the UNDX vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE UNDX[UNIQUE_NUM], the UNDX vector.
 //
-//    Output, int XDNU[N], the XDNU vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE XDNU[N], the XDNU vector.
 //
 {
   double diff;
-  int i;
-  int *indx;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
 //
 //  Implicitly sort the array.
 //
@@ -13532,8 +13532,8 @@ void point_unique_index ( int m, int n, double a[], int /*unique_num*/, int undx
 }
 //****************************************************************************80
 
-void product_mixed_weight ( int dim_num, int order_1d[], int order_nd, 
-  int rule[], double alpha[], double beta[], double weight_nd[] )
+void product_mixed_weight ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE order_1d[], FLENS_DEFAULT_INDEXTYPE order_nd, 
+  FLENS_DEFAULT_INDEXTYPE rule[], double alpha[], double beta[], double weight_nd[] )
 
 //****************************************************************************80
 //
@@ -13562,13 +13562,13 @@ void product_mixed_weight ( int dim_num, int order_1d[], int order_nd,
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int ORDER_1D[DIM_NUM], the order of the 1D rules.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER_1D[DIM_NUM], the order of the 1D rules.
 //
-//    Input, int ORDER_ND, the order of the product rule.
+//    Input, FLENS_DEFAULT_INDEXTYPE ORDER_ND, the order of the product rule.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested rule.
 //     2, "F2",  Fejer Type 2, Open Fully Nested rule.
 //     3, "GP",  Gauss Patterson, Open Fully Nested rule.
@@ -13593,8 +13593,8 @@ void product_mixed_weight ( int dim_num, int order_1d[], int order_nd,
 //    Output, double WEIGHT_ND[ORDER_ND], the product rule weights.
 //
 {
-  int dim;
-  int i;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE i;
   double *weight_1d;
 
   for ( i = 0; i < order_nd; i++ )
@@ -13778,7 +13778,7 @@ double r8_ceiling ( double x )
 {
   double value;
 
-  value = ( int ) x;
+  value = ( FLENS_DEFAULT_INDEXTYPE ) x;
 
   if ( value < x )
   {
@@ -13789,7 +13789,7 @@ double r8_ceiling ( double x )
 }
 //****************************************************************************80
 
-double r8_choose ( int n, int k )
+double r8_choose ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE k )
 
 //****************************************************************************80
 //
@@ -13828,16 +13828,16 @@ double r8_choose ( int n, int k )
 //
 //  Parameters:
 //
-//    Input, int N, K, the values of N and K.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, K, the values of N and K.
 //
 //    Output, double R8_CHOOSE, the number of combinations of N
 //    things taken K at a time.
 //
 {
-  int i;
-  int mn;
-  int mx;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE mn;
+  FLENS_DEFAULT_INDEXTYPE mx;
+  FLENS_DEFAULT_INDEXTYPE value;
 
   mn = webbur::i4_min ( k, n - k );
 
@@ -13911,7 +13911,7 @@ double r8_epsilon ( )
 }
 //****************************************************************************80
 
-double r8_factorial ( int n )
+double r8_factorial ( FLENS_DEFAULT_INDEXTYPE n )
 
 //****************************************************************************80
 //
@@ -13937,13 +13937,13 @@ double r8_factorial ( int n )
 //
 //  Parameters:
 //
-//    Input, int N, the argument of the factorial function.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the argument of the factorial function.
 //    If N is less than 1, the function value is returned as 1.
 //
 //    Output, double R8_FACTORIAL, the factorial function.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double value;
 
   value = 1.0;
@@ -13957,7 +13957,7 @@ double r8_factorial ( int n )
 }
 //****************************************************************************80
 
-double r8_factorial2 ( int n )
+double r8_factorial2 ( FLENS_DEFAULT_INDEXTYPE n )
 
 //****************************************************************************80
 //
@@ -14000,13 +14000,13 @@ double r8_factorial2 ( int n )
 //
 //  Parameters:
 //
-//    Input, int N, the argument of the double factorial 
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the argument of the double factorial 
 //    function.  If N is less than 1, R8_FACTORIAL2 is returned as 1.0.
 //
 //    Output, double R8_FACTORIAL2, the double factorial function.
 //
 {
-  int n_copy;
+  FLENS_DEFAULT_INDEXTYPE n_copy;
   double value;
 
   value = 1.0;
@@ -14074,7 +14074,7 @@ double r8_floor ( double x )
 {
   double value;
 
-  value = ( int ) x;
+  value = ( FLENS_DEFAULT_INDEXTYPE ) x;
 
   if ( x < value )
   {
@@ -14152,8 +14152,8 @@ double r8_gamma ( double x )
     5.7083835261E-03 };
   double eps = 2.22E-16;
   double fact;
-  int i;
-  int n;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE n;
   double one = 1.0;
   double p[8] = {
   -1.71618513886549492533811E+00,
@@ -14201,12 +14201,12 @@ double r8_gamma ( double x )
   if ( y <= 0.0 )
   {
     y = - x;
-    y1 = ( double ) ( int ) ( y );
+    y1 = ( double ) ( FLENS_DEFAULT_INDEXTYPE ) ( y );
     res = y - y1;
 
     if ( res != 0.0 )
     {
-      if ( y1 != ( double ) ( int ) ( y1 * 0.5 ) * two )
+      if ( y1 != ( double ) ( FLENS_DEFAULT_INDEXTYPE ) ( y1 * 0.5 ) * two )
       {
         parity = true;
       }
@@ -14257,7 +14257,7 @@ double r8_gamma ( double x )
 //
     else
     {
-      n = ( int ) ( y ) - 1;
+      n = ( FLENS_DEFAULT_INDEXTYPE ) ( y ) - 1;
       y = y - ( double ) ( n );
       z = y - one;
     }
@@ -14454,16 +14454,16 @@ double r8_hyper_2f1 ( double a, double b, double c, double x )
   double gm;
   double hf;
   double hw;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
   bool l0;
   bool l1;
   bool l2;
   bool l3;
   bool l4;
   bool l5;
-  int m;
-  int nm;
+  FLENS_DEFAULT_INDEXTYPE m;
+  FLENS_DEFAULT_INDEXTYPE nm;
   double pa;
   double pb;
   double pi = 3.141592653589793;
@@ -14477,12 +14477,12 @@ double r8_hyper_2f1 ( double a, double b, double c, double x )
   double sp0;
   double x1;
 
-  l0 = ( c == ( int ) ( c ) ) && ( c < 0.0 );
+  l0 = ( c == ( FLENS_DEFAULT_INDEXTYPE ) ( c ) ) && ( c < 0.0 );
   l1 = ( 1.0 - x < 1.0E-15 ) && ( c - a - b <= 0.0 );
-  l2 = ( a == ( int ) ( a ) ) && ( a < 0.0 );
-  l3 = ( b == ( int ) ( b ) ) && ( b < 0.0 );
-  l4 = ( c - a == ( int ) ( c - a ) ) && ( c - a <= 0.0 );
-  l5 = ( c - b == ( int ) ( c - b ) ) && ( c - b <= 0.0 );
+  l2 = ( a == ( FLENS_DEFAULT_INDEXTYPE ) ( a ) ) && ( a < 0.0 );
+  l3 = ( b == ( FLENS_DEFAULT_INDEXTYPE ) ( b ) ) && ( b < 0.0 );
+  l4 = ( c - a == ( FLENS_DEFAULT_INDEXTYPE ) ( c - a ) ) && ( c - a <= 0.0 );
+  l5 = ( c - b == ( FLENS_DEFAULT_INDEXTYPE ) ( c - b ) ) && ( c - b <= 0.0 );
 
   if ( l0 )
   {
@@ -14543,12 +14543,12 @@ double r8_hyper_2f1 ( double a, double b, double c, double x )
   {
     if ( l2 )
     {
-      nm = ( int ) ( webbur::r8_abs ( a ) );
+      nm = ( FLENS_DEFAULT_INDEXTYPE ) ( webbur::r8_abs ( a ) );
     }
 
     if ( l3 )
     {
-      nm = ( int ) ( webbur::r8_abs ( b ) );
+      nm = ( FLENS_DEFAULT_INDEXTYPE ) ( webbur::r8_abs ( b ) );
     }
 
     hf = 1.0;
@@ -14567,12 +14567,12 @@ double r8_hyper_2f1 ( double a, double b, double c, double x )
   {
     if ( l4 )
     {
-      nm = ( int ) ( webbur::r8_abs ( c - a ) );
+      nm = ( FLENS_DEFAULT_INDEXTYPE ) ( webbur::r8_abs ( c - a ) );
     }
 
     if ( l5 )
     {
-      nm = ( int ) ( webbur::r8_abs ( c - b ) );
+      nm = ( FLENS_DEFAULT_INDEXTYPE ) ( webbur::r8_abs ( c - b ) );
     }
 
     hf = 1.0;
@@ -14606,9 +14606,9 @@ double r8_hyper_2f1 ( double a, double b, double c, double x )
   {
     gm = 0.0;
 
-    if ( webbur::r8_abs ( c - a - b - ( int ) ( c - a - b ) ) < 1.0E-15 )
+    if ( webbur::r8_abs ( c - a - b - ( FLENS_DEFAULT_INDEXTYPE ) ( c - a - b ) ) < 1.0E-15 )
     {
-      m = ( int ) ( c - a - b );
+      m = ( FLENS_DEFAULT_INDEXTYPE ) ( c - a - b );
       ga = webbur::r8_gamma ( a );
       gb = webbur::r8_gamma ( b );
       gc = webbur::r8_gamma ( c );
@@ -14911,7 +14911,7 @@ double r8_min ( double x, double y )
 }
 //****************************************************************************80
 
-double r8_mop ( int i )
+double r8_mop ( FLENS_DEFAULT_INDEXTYPE i )
 
 //****************************************************************************80
 //
@@ -14937,7 +14937,7 @@ double r8_mop ( int i )
 //
 //  Parameters:
 //
-//    Input, int I, the power of -1.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, the power of -1.
 //
 //    Output, double R8_MOP, the I-th power of -1.
 //
@@ -15010,9 +15010,9 @@ double r8_psi ( double xx )
 {
   double aug;
   double den;
-  int i;
-  int n;
-  int nq;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE n;
+  FLENS_DEFAULT_INDEXTYPE nq;
   double one = 1.0;
   double p1[9] = { 
    4.5104681245762934160E-03, 
@@ -15108,8 +15108,8 @@ double r8_psi ( double xx )
         sgn = - piov4;
       }
 
-      w = w - ( double ) ( ( int ) ( w ) );
-      nq = ( int ) ( w * 4.0 );
+      w = w - ( double ) ( ( FLENS_DEFAULT_INDEXTYPE ) ( w ) );
+      nq = ( FLENS_DEFAULT_INDEXTYPE ) ( w * 4.0 );
       w = 4.0 * ( w - ( double ) ( nq ) * 0.25 );
 //
 //  W is now related to the fractional part of 4.0 * X.
@@ -15198,7 +15198,7 @@ double r8_psi ( double xx )
 }
 //****************************************************************************80
 
-int r8col_compare ( int m, int n, double a[], int i, int j )
+FLENS_DEFAULT_INDEXTYPE r8col_compare ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], FLENS_DEFAULT_INDEXTYPE i, FLENS_DEFAULT_INDEXTYPE j )
 
 //****************************************************************************80
 //
@@ -15240,21 +15240,21 @@ int r8col_compare ( int m, int n, double a[], int i, int j )
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input, double A[M*N], the M by N array.
 //
-//    Input, int I, J, the columns to be compared.
+//    Input, FLENS_DEFAULT_INDEXTYPE I, J, the columns to be compared.
 //    I and J must be between 1 and N.
 //
-//    Output, int R8COL_COMPARE, the results of the comparison:
+//    Output, FLENS_DEFAULT_INDEXTYPE R8COL_COMPARE, the results of the comparison:
 //    -1, column I < column J,
 //     0, column I = column J,
 //    +1, column J < column I.
 //
 {
-  int k;
-  int value;
+  FLENS_DEFAULT_INDEXTYPE k;
+  FLENS_DEFAULT_INDEXTYPE value;
 //
 //  Check.
 //
@@ -15304,7 +15304,7 @@ int r8col_compare ( int m, int n, double a[], int i, int j )
 }
 //****************************************************************************80
 
-void r8col_sort_heap_a ( int m, int n, double a[] )
+void r8col_sort_heap_a ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[] )
 
 //****************************************************************************80
 //
@@ -15341,17 +15341,17 @@ void r8col_sort_heap_a ( int m, int n, double a[] )
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input/output, double A[M*N].
 //    On input, the array of N columns of M-vectors.
 //    On output, the columns of A have been sorted in lexicographic order.
 //
 {
-  int i;
-  int indx;
-  int isgn;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE indx;
+  FLENS_DEFAULT_INDEXTYPE isgn;
+  FLENS_DEFAULT_INDEXTYPE j;
 
   if ( m <= 0 )
   {
@@ -15399,7 +15399,7 @@ void r8col_sort_heap_a ( int m, int n, double a[] )
 }
 //****************************************************************************80
 
-int *r8col_sort_heap_index_a ( int m, int n, double a[] )
+FLENS_DEFAULT_INDEXTYPE *r8col_sort_heap_index_a ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[] )
 
 //****************************************************************************80
 //
@@ -15441,32 +15441,32 @@ int *r8col_sort_heap_index_a ( int m, int n, double a[] )
 //
 //  Parameters:
 //
-//    Input, int M, the number of rows in each column of A.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the number of rows in each column of A.
 //
-//    Input, int N, the number of columns in A.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of columns in A.
 //
 //    Input, double A[M*N], the array.
 //
-//    Output, int R8COL_SORT_HEAP_INDEX_A[N], contains the sort index.  The
+//    Output, FLENS_DEFAULT_INDEXTYPE R8COL_SORT_HEAP_INDEX_A[N], contains the sort index.  The
 //    I-th column of the sorted array is A(*,INDX(I)).
 //
 {
   double *column;
-  int i;
-  int *indx;
-  int indxt;
-  int ir;
-  int isgn;
-  int j;
-  int k;
-  int l;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE indxt;
+  FLENS_DEFAULT_INDEXTYPE ir;
+  FLENS_DEFAULT_INDEXTYPE isgn;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
+  FLENS_DEFAULT_INDEXTYPE l;
 
   if ( n < 1 )
   {
     return NULL;
   }
 
-  indx = new int[n];
+  indx = new FLENS_DEFAULT_INDEXTYPE[n];
 
   for ( i = 0; i < n; i++ )
   {
@@ -15547,7 +15547,7 @@ int *r8col_sort_heap_index_a ( int m, int n, double a[] )
 }
 //****************************************************************************80
 
-int r8col_sorted_unique_count ( int m, int n, double a[], double tol )
+FLENS_DEFAULT_INDEXTYPE r8col_sorted_unique_count ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], double tol )
 
 //****************************************************************************80
 //
@@ -15588,21 +15588,21 @@ int r8col_sorted_unique_count ( int m, int n, double a[], double tol )
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input, double A[M*N], a sorted array, containing
 //    N columns of data.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Output, int R8COL_SORTED_UNIQUE_COUNT, the number of unique columns.
+//    Output, FLENS_DEFAULT_INDEXTYPE R8COL_SORTED_UNIQUE_COUNT, the number of unique columns.
 //
 {
   double diff;
-  int i;
-  int j1;
-  int j2;
-  int unique_num;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j1;
+  FLENS_DEFAULT_INDEXTYPE j2;
+  FLENS_DEFAULT_INDEXTYPE unique_num;
 
   unique_num = 0;
 
@@ -15632,7 +15632,7 @@ int r8col_sorted_unique_count ( int m, int n, double a[], double tol )
 }
 //****************************************************************************80
 
-void r8col_swap ( int m, int n, double a[], int j1, int j2 )
+void r8col_swap ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE j2 )
 
 //****************************************************************************80
 //
@@ -15677,15 +15677,15 @@ void r8col_swap ( int m, int n, double a[], int j1, int j2 )
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input/output, double A[M*N], the M by N array.
 //
-//    Input, int J1, J2, the columns to be swapped.
+//    Input, FLENS_DEFAULT_INDEXTYPE J1, J2, the columns to be swapped.
 //    These columns are 1-based.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double temp;
 
   if ( j1 < 1 || n < j1 || j2 < 1 || n < j2 )
@@ -15715,8 +15715,8 @@ void r8col_swap ( int m, int n, double a[], int j1, int j2 )
 }
 //****************************************************************************80
 
-void r8col_tol_undex ( int m, int n, double a[], int /*unique_num*/, double tol, 
-  int undx[], int xdnu[] )
+void r8col_tol_undex ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], FLENS_DEFAULT_INDEXTYPE /*unique_num*/, double tol, 
+  FLENS_DEFAULT_INDEXTYPE undx[], FLENS_DEFAULT_INDEXTYPE xdnu[] )
 
 //****************************************************************************80
 //
@@ -15800,29 +15800,29 @@ void r8col_tol_undex ( int m, int n, double a[], int /*unique_num*/, double tol,
 //
 //  Parameters:
 //
-//    Input, int M, the dimension of the data values.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the dimension of the data values.
 //
-//    Input, int N, the number of data values,
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of data values,
 //
 //    Input, double A[M*N], the data values.
 //
-//    Input, int UNIQUE_NUM, the number of unique values in A.
+//    Input, FLENS_DEFAULT_INDEXTYPE UNIQUE_NUM, the number of unique values in A.
 //    This value is only required for languages in which the size of
 //    UNDX must be known in advance.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Output, int UNDX[UNIQUE_NUM], the UNDX vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE UNDX[UNIQUE_NUM], the UNDX vector.
 //
-//    Output, int XDNU[N], the XDNU vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE XDNU[N], the XDNU vector.
 //
 {
   double diff;
-  int i;
-  int i2;
-  int *indx;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE i2;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
   bool unique;
 //
 //  Implicitly sort the array.
@@ -15878,7 +15878,7 @@ void r8col_tol_undex ( int m, int n, double a[], int /*unique_num*/, double tol,
 }
 //****************************************************************************80
 
-int r8col_tol_unique_count ( int m, int n, double a[], double tol )
+FLENS_DEFAULT_INDEXTYPE r8col_tol_unique_count ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], double tol )
 
 //****************************************************************************80
 //
@@ -15919,25 +15919,25 @@ int r8col_tol_unique_count ( int m, int n, double a[], double tol )
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input, double A[M*N], the array of N columns of data.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Output, int R8COL_TOL_UNIQUE_COUNT, the number of unique columns.
+//    Output, FLENS_DEFAULT_INDEXTYPE R8COL_TOL_UNIQUE_COUNT, the number of unique columns.
 //
 {
   double diff;
-  int i;
-  int i2;
-  int *indx;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE i2;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
   bool unique;
-  int *undx;
+  FLENS_DEFAULT_INDEXTYPE *undx;
 
-  undx = new int[n];
+  undx = new FLENS_DEFAULT_INDEXTYPE[n];
 //
 //  Implicitly sort the array.
 //
@@ -15992,8 +15992,8 @@ int r8col_tol_unique_count ( int m, int n, double a[], double tol )
 }
 //****************************************************************************80
 
-void r8col_undex ( int x_dim, int x_num, double x_val[], int /*x_unique_num*/, 
-  double tol, int undx[], int xdnu[] )
+void r8col_undex ( FLENS_DEFAULT_INDEXTYPE x_dim, FLENS_DEFAULT_INDEXTYPE x_num, double x_val[], FLENS_DEFAULT_INDEXTYPE /*x_unique_num*/, 
+  double tol, FLENS_DEFAULT_INDEXTYPE undx[], FLENS_DEFAULT_INDEXTYPE xdnu[] )
 
 //****************************************************************************80
 //
@@ -16077,30 +16077,30 @@ void r8col_undex ( int x_dim, int x_num, double x_val[], int /*x_unique_num*/,
 //
 //  Parameters:
 //
-//    Input, int X_DIM, the dimension of the data values.
+//    Input, FLENS_DEFAULT_INDEXTYPE X_DIM, the dimension of the data values.
 //    (the number of rows in the R8COL).
 //
-//    Input, int X_NUM, the number of data values,
+//    Input, FLENS_DEFAULT_INDEXTYPE X_NUM, the number of data values,
 //    (the number of columns in the R8COL).
 //
 //    Input, double X_VAL[X_DIM*X_NUM], the data values.
 //
-//    Input, int X_UNIQUE_NUM, the number of unique values in X_VAL.
+//    Input, FLENS_DEFAULT_INDEXTYPE X_UNIQUE_NUM, the number of unique values in X_VAL.
 //    This value is only required for languages in which the size of
 //    UNDX must be known in advance.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Output, int UNDX[X_UNIQUE_NUM], the UNDX vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE UNDX[X_UNIQUE_NUM], the UNDX vector.
 //
-//    Output, int XDNU[X_NUM], the XDNU vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE XDNU[X_NUM], the XDNU vector.
 //
 {
   double diff;
-  int i;
-  int *indx;
-  int j;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
 //
 //  Implicitly sort the array.
 //
@@ -16136,8 +16136,8 @@ void r8col_undex ( int x_dim, int x_num, double x_val[], int /*x_unique_num*/,
 }
 //****************************************************************************80
 
-void r8col_unique_index ( int m, int n, double a[], double tol, 
-  int unique_index[] )
+void r8col_unique_index ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], double tol, 
+  FLENS_DEFAULT_INDEXTYPE unique_index[] )
 
 //****************************************************************************80
 //
@@ -16172,21 +16172,21 @@ void r8col_unique_index ( int m, int n, double a[], double tol,
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns of A.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns of A.
 //    The length of an "element" of A, and the number of "elements".
 //
 //    Input, double A[M*N], the array.
 //
 //    Input, double TOL, a tolerance for equality.
 //
-//    Output, int UNIQUE_INDEX[N], the unique index.
+//    Output, FLENS_DEFAULT_INDEXTYPE UNIQUE_INDEX[N], the unique index.
 //
 {
   double diff;
-  int i;
-  int j1;
-  int j2;
-  int unique_num;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j1;
+  FLENS_DEFAULT_INDEXTYPE j2;
+  FLENS_DEFAULT_INDEXTYPE unique_num;
 
   for ( j1 = 0; j1 < n; j1++ )
   {
@@ -16220,7 +16220,7 @@ void r8col_unique_index ( int m, int n, double a[], double tol,
 }
 //****************************************************************************80
 
-void r8mat_transpose_print ( int m, int n, double a[], std::string title )
+void r8mat_transpose_print ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], std::string title )
 
 //****************************************************************************80
 //
@@ -16247,7 +16247,7 @@ void r8mat_transpose_print ( int m, int n, double a[], std::string title )
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input, double A[M*N], an M by N matrix to be printed.
 //
@@ -16260,8 +16260,8 @@ void r8mat_transpose_print ( int m, int n, double a[], std::string title )
 }
 //****************************************************************************80
 
-void r8mat_transpose_print_some ( int m, int n, double a[], int ilo, int jlo, 
-  int ihi, int jhi, std::string title )
+void r8mat_transpose_print_some ( FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double a[], FLENS_DEFAULT_INDEXTYPE ilo, FLENS_DEFAULT_INDEXTYPE jlo, 
+  FLENS_DEFAULT_INDEXTYPE ihi, FLENS_DEFAULT_INDEXTYPE jhi, std::string title )
 
 //****************************************************************************80
 //
@@ -16288,27 +16288,27 @@ void r8mat_transpose_print_some ( int m, int n, double a[], int ilo, int jlo,
 //
 //  Parameters:
 //
-//    Input, int M, N, the number of rows and columns.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, N, the number of rows and columns.
 //
 //    Input, double A[M*N], an M by N matrix to be printed.
 //
-//    Input, int ILO, JLO, the first row and column to print.
+//    Input, FLENS_DEFAULT_INDEXTYPE ILO, JLO, the first row and column to print.
 //
-//    Input, int IHI, JHI, the last row and column to print.
+//    Input, FLENS_DEFAULT_INDEXTYPE IHI, JHI, the last row and column to print.
 //
 //    Input, string TITLE, a title.
 //
 {
 # define INCX 5
 
-  int i;
-  int i2;
-  int i2hi;
-  int i2lo;
-  int inc;
-  int j;
-  int j2hi;
-  int j2lo;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE i2;
+  FLENS_DEFAULT_INDEXTYPE i2hi;
+  FLENS_DEFAULT_INDEXTYPE i2lo;
+  FLENS_DEFAULT_INDEXTYPE inc;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE j2hi;
+  FLENS_DEFAULT_INDEXTYPE j2lo;
 
   std::cout << "\n";
   std::cout << title << "\n";
@@ -16351,7 +16351,7 @@ void r8mat_transpose_print_some ( int m, int n, double a[], int ilo, int jlo,
 }
 //****************************************************************************80
 
-void r8mat_write ( std::string output_filename, int m, int n, double table[] )
+void r8mat_write ( std::string output_filename, FLENS_DEFAULT_INDEXTYPE m, FLENS_DEFAULT_INDEXTYPE n, double table[] )
 
 //****************************************************************************80
 //
@@ -16375,15 +16375,15 @@ void r8mat_write ( std::string output_filename, int m, int n, double table[] )
 //
 //    Input, string OUTPUT_FILENAME, the output filename.
 //
-//    Input, int M, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE M, the spatial dimension.
 //
-//    Input, int N, the number of points.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of points.
 //
 //    Input, double TABLE[M*N], the table data.
 //
 {
-  int i;
-  int j;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
   std::ofstream output;
 //
 //  Open the file.
@@ -16417,7 +16417,7 @@ void r8mat_write ( std::string output_filename, int m, int n, double table[] )
 }
 //****************************************************************************80
 
-int r8vec_compare ( int n, double a[], double b[] )
+FLENS_DEFAULT_INDEXTYPE r8vec_compare ( FLENS_DEFAULT_INDEXTYPE n, double a[], double b[] )
 
 //****************************************************************************80
 //
@@ -16456,18 +16456,18 @@ int r8vec_compare ( int n, double a[], double b[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vectors.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vectors.
 //
 //    Input, double A[N], B[N], the vectors to be compared.
 //
-//    Output, int R8VEC_COMPARE, the results of the comparison:
+//    Output, FLENS_DEFAULT_INDEXTYPE R8VEC_COMPARE, the results of the comparison:
 //    -1, A is lexicographically less than B,
 //     0, A is equal to B,
 //    +1, A is lexicographically greater than B.
 //
 {
-  int isgn;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE isgn;
+  FLENS_DEFAULT_INDEXTYPE k;
 
   isgn = 0;
 
@@ -16488,7 +16488,7 @@ int r8vec_compare ( int n, double a[], double b[] )
 }
 //****************************************************************************80
 
-void r8vec_copy ( int n, double a1[], double a2[] )
+void r8vec_copy ( FLENS_DEFAULT_INDEXTYPE n, double a1[], double a2[] )
 
 //****************************************************************************80
 //
@@ -16510,14 +16510,14 @@ void r8vec_copy ( int n, double a1[], double a2[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vectors.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vectors.
 //
 //    Input, double A1[N], the vector to be copied.
 //
 //    Output, double A2[N], the copy of A1.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   for ( i = 0; i < n; i++ )
   {
@@ -16527,7 +16527,7 @@ void r8vec_copy ( int n, double a1[], double a2[] )
 }
 //****************************************************************************80
 
-double r8vec_diff_norm_li ( int n, double a[], double b[] )
+double r8vec_diff_norm_li ( FLENS_DEFAULT_INDEXTYPE n, double a[], double b[] )
 
 //****************************************************************************80
 //
@@ -16557,14 +16557,14 @@ double r8vec_diff_norm_li ( int n, double a[], double b[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in A.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in A.
 //
 //    Input, double A[N], B[N], the vectors.
 //
 //    Output, double R8VEC_DIFF_NORM_LI, the L-oo norm of A - B.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double value;
 
   value = 0.0;
@@ -16577,8 +16577,8 @@ double r8vec_diff_norm_li ( int n, double a[], double b[] )
 }
 //****************************************************************************80
 
-void r8vec_direct_product2 ( int factor_index, int factor_order, 
-  double factor_value[], int /*factor_num*/, int point_num, double w[] )
+void r8vec_direct_product2 ( FLENS_DEFAULT_INDEXTYPE factor_index, FLENS_DEFAULT_INDEXTYPE factor_order, 
+  double factor_value[], FLENS_DEFAULT_INDEXTYPE /*factor_num*/, FLENS_DEFAULT_INDEXTYPE point_num, double w[] )
 
 //****************************************************************************80
 //
@@ -16674,17 +16674,17 @@ void r8vec_direct_product2 ( int factor_index, int factor_order,
 //
 //  Parameters:
 //
-//    Input, int FACTOR_INDEX, the index of the factor being processed.
+//    Input, FLENS_DEFAULT_INDEXTYPE FACTOR_INDEX, the index of the factor being processed.
 //    The first factor processed must be factor 0.
 //
-//    Input, int FACTOR_ORDER, the order of the factor.
+//    Input, FLENS_DEFAULT_INDEXTYPE FACTOR_ORDER, the order of the factor.
 //
 //    Input, double FACTOR_VALUE[FACTOR_ORDER], the factor values for
 //    factor FACTOR_INDEX.
 //
-//    Input, int FACTOR_NUM, the number of factors.
+//    Input, FLENS_DEFAULT_INDEXTYPE FACTOR_NUM, the number of factors.
 //
-//    Input, int POINT_NUM, the number of elements in the direct product.
+//    Input, FLENS_DEFAULT_INDEXTYPE POINT_NUM, the number of elements in the direct product.
 //
 //    Input/output, double W[POINT_NUM], the elements of the
 //    direct product, which are built up gradually.  
@@ -16701,13 +16701,13 @@ void r8vec_direct_product2 ( int factor_index, int factor_order,
 //    Local, integer REP, the number of blocks of values to set.
 //
 {
-  static int contig = 0;
-  int i;
-  int j;
-  int k;
-  static int rep = 0;
-  static int skip = 0;
-  int start;
+  static FLENS_DEFAULT_INDEXTYPE contig = 0;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE k;
+  static FLENS_DEFAULT_INDEXTYPE rep = 0;
+  static FLENS_DEFAULT_INDEXTYPE skip = 0;
+  FLENS_DEFAULT_INDEXTYPE start;
 
   if ( factor_index == 0 )
   {
@@ -16743,7 +16743,7 @@ void r8vec_direct_product2 ( int factor_index, int factor_order,
 }
 //****************************************************************************80
 
-double r8vec_dot_product ( int n, double a1[], double a2[] )
+double r8vec_dot_product ( FLENS_DEFAULT_INDEXTYPE n, double a1[], double a2[] )
 
 //****************************************************************************80
 //
@@ -16769,14 +16769,14 @@ double r8vec_dot_product ( int n, double a1[], double a2[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vectors.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vectors.
 //
 //    Input, double A1[N], A2[N], the two vectors to be considered.
 //
 //    Output, double R8VEC_DOT_PRODUCT, the dot product of the vectors.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double value;
 
   value = 0.0;
@@ -16788,7 +16788,7 @@ double r8vec_dot_product ( int n, double a1[], double a2[] )
 }
 //****************************************************************************80
 
-double r8vec_i4vec_dot_product ( int n, double r8vec[], int i4vec[] )
+double r8vec_i4vec_dot_product ( FLENS_DEFAULT_INDEXTYPE n, double r8vec[], FLENS_DEFAULT_INDEXTYPE i4vec[] )
 
 //****************************************************************************80
 //
@@ -16816,16 +16816,16 @@ double r8vec_i4vec_dot_product ( int n, double r8vec[], int i4vec[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vectors.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vectors.
 //
 //    Input, double R8VEC[N], the first vector.
 //
-//    Input, int I4VEC[N], the second vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE I4VEC[N], the second vector.
 //
 //    Output, double R8VEC_I4VEC_DOT_PRODUCT, the dot product of the vectors.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double value;
 
   value = 0.0;
@@ -16837,7 +16837,7 @@ double r8vec_i4vec_dot_product ( int n, double r8vec[], int i4vec[] )
 }
 //****************************************************************************80
 
-double r8vec_min ( int n, double r8vec[] )
+double r8vec_min ( FLENS_DEFAULT_INDEXTYPE n, double r8vec[] )
 
 //****************************************************************************80
 //
@@ -16863,14 +16863,14 @@ double r8vec_min ( int n, double r8vec[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the array.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the array.
 //
 //    Input, double R8VEC[N], the array to be checked.
 //
 //    Output, double R8VEC_MIN, the value of the minimum element.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double value;
 
   value = r8vec[0];
@@ -16886,7 +16886,7 @@ double r8vec_min ( int n, double r8vec[] )
 }
 //****************************************************************************80
 
-double r8vec_min_pos ( int n, double a[] )
+double r8vec_min_pos ( FLENS_DEFAULT_INDEXTYPE n, double a[] )
 
 //****************************************************************************80
 //
@@ -16912,7 +16912,7 @@ double r8vec_min_pos ( int n, double a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries.
 //
 //    Input, double A[N], the array.
 //
@@ -16920,7 +16920,7 @@ double r8vec_min_pos ( int n, double a[] )
 //    or R8_HUGE if no entry is positive.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double r8_huge = 1.0E+30;
   double value;
 
@@ -16940,7 +16940,7 @@ double r8vec_min_pos ( int n, double a[] )
 }
 //****************************************************************************80
 
-void r8vec_print ( int n, double a[], std::string title )
+void r8vec_print ( FLENS_DEFAULT_INDEXTYPE n, double a[], std::string title )
 
 //****************************************************************************80
 //
@@ -16966,14 +16966,14 @@ void r8vec_print ( int n, double a[], std::string title )
 //
 //  Parameters:
 //
-//    Input, int N, the number of components of the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of components of the vector.
 //
 //    Input, double A[N], the vector to be printed.
 //
 //    Input, string TITLE, a title.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   std::cout << "\n";
   std::cout << title << "\n";
@@ -16988,7 +16988,7 @@ void r8vec_print ( int n, double a[], std::string title )
 }
 //****************************************************************************80
 
-int *r8vec_sort_heap_index_a ( int n, double a[] )
+FLENS_DEFAULT_INDEXTYPE *r8vec_sort_heap_index_a ( FLENS_DEFAULT_INDEXTYPE n, double a[] )
 
 //****************************************************************************80
 //
@@ -17032,28 +17032,28 @@ int *r8vec_sort_heap_index_a ( int n, double a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the array.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the array.
 //
 //    Input, double A[N], an array to be index-sorted.
 //
-//    Output, int R8VEC_SORT_HEAP_INDEX_A[N], contains the sort index.  The
+//    Output, FLENS_DEFAULT_INDEXTYPE R8VEC_SORT_HEAP_INDEX_A[N], contains the sort index.  The
 //    I-th element of the sorted array is A(INDX(I)).
 //
 {
   double aval;
-  int i;
-  int *indx;
-  int indxt;
-  int ir;
-  int j;
-  int l;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE *indx;
+  FLENS_DEFAULT_INDEXTYPE indxt;
+  FLENS_DEFAULT_INDEXTYPE ir;
+  FLENS_DEFAULT_INDEXTYPE j;
+  FLENS_DEFAULT_INDEXTYPE l;
 
   if ( n < 1 )
   {
     return NULL;
   }
 
-  indx = new int[n];
+  indx = new FLENS_DEFAULT_INDEXTYPE[n];
 
   for ( i = 0; i < n; i++ )
   {
@@ -17122,7 +17122,7 @@ int *r8vec_sort_heap_index_a ( int n, double a[] )
 }
 //****************************************************************************80
 
-double r8vec_sum ( int n, double a[] )
+double r8vec_sum ( FLENS_DEFAULT_INDEXTYPE n, double a[] )
 
 //****************************************************************************80
 //
@@ -17148,14 +17148,14 @@ double r8vec_sum ( int n, double a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
 //    Input, double A[N], the vector.
 //
 //    Output, double R8VEC_SUM, the sum of the vector.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
   double value;
 
   value = 0.0;
@@ -17168,7 +17168,7 @@ double r8vec_sum ( int n, double a[] )
 }
 //****************************************************************************80
 
-void r8vec_uniform_01 ( int n, int *seed, double r[] )
+void r8vec_uniform_01 ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE *seed, double r[] )
 
 //****************************************************************************80
 //
@@ -17229,16 +17229,16 @@ void r8vec_uniform_01 ( int n, int *seed, double r[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Input/output, int *SEED, a seed for the random number generator.
+//    Input/output, FLENS_DEFAULT_INDEXTYPE *SEED, a seed for the random number generator.
 //
 //    Output, double R[N], the vector of pseudorandom values.
 //
 {
-  int i;
-  int i4_huge = 2147483647;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE i4_huge = 2147483647;
+  FLENS_DEFAULT_INDEXTYPE k;
 
   if ( *seed == 0 )
   {
@@ -17266,7 +17266,7 @@ void r8vec_uniform_01 ( int n, int *seed, double r[] )
 }
 //****************************************************************************80
 
-double *r8vec_uniform_01_new ( int n, int *seed )
+double *r8vec_uniform_01_new ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE *seed )
 
 //****************************************************************************80
 //
@@ -17327,16 +17327,16 @@ double *r8vec_uniform_01_new ( int n, int *seed )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
-//    Input/output, int *SEED, a seed for the random number generator.
+//    Input/output, FLENS_DEFAULT_INDEXTYPE *SEED, a seed for the random number generator.
 //
 //    Output, double R8VEC_UNIFORM_01_NEW[N], the vector of pseudorandom values.
 //
 {
-  int i;
-  int i4_huge = 2147483647;
-  int k;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE i4_huge = 2147483647;
+  FLENS_DEFAULT_INDEXTYPE k;
   double *r;
 
   if ( *seed == 0 )
@@ -17367,7 +17367,7 @@ double *r8vec_uniform_01_new ( int n, int *seed )
 }
 //****************************************************************************80
 
-void r8vec_zero ( int n, double a[] )
+void r8vec_zero ( FLENS_DEFAULT_INDEXTYPE n, double a[] )
 
 //****************************************************************************80
 //
@@ -17393,12 +17393,12 @@ void r8vec_zero ( int n, double a[] )
 //
 //  Parameters:
 //
-//    Input, int N, the number of entries in the vector.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the number of entries in the vector.
 //
 //    Output, double A[N], a vector of zeroes.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   for ( i = 0; i < n; i++ )
   {
@@ -17408,7 +17408,7 @@ void r8vec_zero ( int n, double a[] )
 }
 //****************************************************************************80
 
-void sort_heap_external ( int n, int *indx, int *i, int *j, int isgn )
+void sort_heap_external ( FLENS_DEFAULT_INDEXTYPE n, FLENS_DEFAULT_INDEXTYPE *indx, FLENS_DEFAULT_INDEXTYPE *i, FLENS_DEFAULT_INDEXTYPE *j, FLENS_DEFAULT_INDEXTYPE isgn )
 
 //****************************************************************************80
 //
@@ -17448,9 +17448,9 @@ void sort_heap_external ( int n, int *indx, int *i, int *j, int isgn )
 //
 //  Parameters:
 //
-//    Input, int N, the length of the input list.
+//    Input, FLENS_DEFAULT_INDEXTYPE N, the length of the input list.
 //
-//    Input/output, int *INDX.
+//    Input/output, FLENS_DEFAULT_INDEXTYPE *INDX.
 //    The user must set INDX to 0 before the first call.
 //    On return,
 //      if INDX is greater than 0, the user must interchange
@@ -17460,22 +17460,22 @@ void sort_heap_external ( int n, int *indx, int *i, int *j, int isgn )
 //      precede J, and a positive value otherwise.
 //      If INDX is 0, the sorting is done.
 //
-//    Output, int *I, *J.  On return with INDX positive,
+//    Output, FLENS_DEFAULT_INDEXTYPE *I, *J.  On return with INDX positive,
 //    elements I and J of the user's list should be
 //    interchanged.  On return with INDX negative, elements I
 //    and J are to be compared by the user.
 //
-//    Input, int ISGN. On return with INDX negative, the
+//    Input, FLENS_DEFAULT_INDEXTYPE ISGN. On return with INDX negative, the
 //    user should compare elements I and J of the list.  If
 //    item I is to precede item J, set ISGN negative,
 //    otherwise set ISGN positive.
 //
 {
-  static int i_save = 0;
-  static int j_save = 0;
-  static int k = 0;
-  static int k1 = 0;
-  static int n1 = 0;
+  static FLENS_DEFAULT_INDEXTYPE i_save = 0;
+  static FLENS_DEFAULT_INDEXTYPE j_save = 0;
+  static FLENS_DEFAULT_INDEXTYPE k = 0;
+  static FLENS_DEFAULT_INDEXTYPE k1 = 0;
+  static FLENS_DEFAULT_INDEXTYPE n1 = 0;
 //
 //  INDX = 0: This is the first call.
 //
@@ -17639,7 +17639,7 @@ void timestamp ( )
 }
 //****************************************************************************80
 
-void vec_colex_next3 ( int dim_num, int base[], int a[], bool *more )
+void vec_colex_next3 ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE base[], FLENS_DEFAULT_INDEXTYPE a[], bool *more )
 
 //****************************************************************************80
 //
@@ -17695,12 +17695,12 @@ void vec_colex_next3 ( int dim_num, int base[], int a[], bool *more )
 //
 //  Parameters:
 //
-//    Input, int DIM_NUM, the spatial dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE DIM_NUM, the spatial dimension.
 //
-//    Input, int BASE[DIM_NUM], the bases to be used in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE BASE[DIM_NUM], the bases to be used in each dimension.
 //    In dimension I, entries will range from 1 to BASE[I].
 //
-//    Output, int A[DIM_NUM], the next vector.
+//    Output, FLENS_DEFAULT_INDEXTYPE A[DIM_NUM], the next vector.
 //
 //    Input/output, bool *MORE.  Set this variable false before
 //    the first call.  On return, MORE is TRUE if another vector has
@@ -17708,7 +17708,7 @@ void vec_colex_next3 ( int dim_num, int base[], int a[], bool *more )
 //    vector and stop calling the routine.
 //
 {
-  int i;
+  FLENS_DEFAULT_INDEXTYPE i;
 
   if ( !( *more ) )
   {

@@ -39,21 +39,21 @@ class MRA<_T,Orthogonal,R,MultiRefinement>
         typedef BasisFunction<T,Orthogonal,R,MultiRefinement>   BasisFunctionType;
         typedef BSpline<T,Orthogonal,R,MultiRefinement>         BSplineType;
 
-        MRA(int d, int j);
+        MRA(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE j);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const int d;
-        const int j0;          // minimal used(!) level.
+        const FLENS_DEFAULT_INDEXTYPE d;
+        const FLENS_DEFAULT_INDEXTYPE j0;          // minimal used(!) level.
 
         BSpline<T,Orthogonal,R,MultiRefinement> phi;
 
     private:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 
 };
 

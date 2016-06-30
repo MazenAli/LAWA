@@ -34,7 +34,7 @@ struct TensorBasis2D
     const FirstBasis &first;
     const SecondBasis &second;
 
-    const int d;
+    const FLENS_DEFAULT_INDEXTYPE d;
 };
 
 } // namespace lawa

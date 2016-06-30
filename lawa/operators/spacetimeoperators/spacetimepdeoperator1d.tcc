@@ -12,10 +12,10 @@ SpaceTimePDEOperator1D<T, Basis>::SpaceTimePDEOperator1D(const Basis& _basis, co
     
 template <typename T, typename Basis>      
 T
-SpaceTimePDEOperator1D<T, Basis>::operator()(XType row_xtype_t, int j1_t, long k1_t,
-                                             XType row_xtype_x, int j1_x, long k1_x,
-                                             XType col_xtype_t, int j2_t, long k2_t,
-                                             XType col_xtype_x, int j2_x, long k2_x) const
+SpaceTimePDEOperator1D<T, Basis>::operator()(XType row_xtype_t, FLENS_DEFAULT_INDEXTYPE j1_t, FLENS_DEFAULT_INDEXTYPE k1_t,
+                                             XType row_xtype_x, FLENS_DEFAULT_INDEXTYPE j1_x, FLENS_DEFAULT_INDEXTYPE k1_x,
+                                             XType col_xtype_t, FLENS_DEFAULT_INDEXTYPE j2_t, FLENS_DEFAULT_INDEXTYPE k2_t,
+                                             XType col_xtype_x, FLENS_DEFAULT_INDEXTYPE j2_x, FLENS_DEFAULT_INDEXTYPE k2_x) const
 {
     T val_t =    integral_t(j1_t, k1_t, row_xtype_t, 0, j2_t, k2_t, col_xtype_t, 0);
     T d_val_t =  integral_t(j1_t, k1_t, row_xtype_t, 0, j2_t, k2_t, col_xtype_t, 1);
@@ -32,8 +32,8 @@ SpaceTimePDEOperator1D<T, Basis>::operator()(XType row_xtype_t, int j1_t, long k
 
 template <typename T, typename Basis>  
 T
-SpaceTimePDEOperator1D<T, Basis>::operator()(XType xtype_t, int j_t, long k_t,
-                                             XType xtype_x, int j_x, long k_x) const
+SpaceTimePDEOperator1D<T, Basis>::operator()(XType xtype_t, FLENS_DEFAULT_INDEXTYPE j_t, FLENS_DEFAULT_INDEXTYPE k_t,
+                                             XType xtype_x, FLENS_DEFAULT_INDEXTYPE j_x, FLENS_DEFAULT_INDEXTYPE k_x) const
 {
     return operator()(xtype_t, j_t, k_t, xtype_x, j_x, k_x, 
                       xtype_t, j_t, k_t, xtype_x, j_x, k_x);

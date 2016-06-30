@@ -6,7 +6,7 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::UniformTensorMatrix
                                                        (const UniformBasis2D &basis,
                                                         const S1_x &s1_x, const S1_y &s1_y,
                                                         const S2_x &s2_x, const S2_y &s2_y,
-                                                        const int Jx, const int Jy)
+                                                        const FLENS_DEFAULT_INDEXTYPE Jx, const FLENS_DEFAULT_INDEXTYPE Jy)
     : _basis(basis),
       _s1_x(s1_x), _s1_y(s1_y), _s2_x(s2_x), _s2_y(s2_y),
       _Jx(Jx), _Jy(Jy),
@@ -17,7 +17,7 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::UniformTensorMatrix
 
 template<typename T, typename UniformBasis2D, typename S1_x, typename S1_y,
        typename S2_x, typename S2_y>
-int
+FLENS_DEFAULT_INDEXTYPE
 UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::numRows() const
 {
     return _basis.second.mra.cardI(_Jy)*_basis.first.mra.cardI(_Jx);
@@ -25,7 +25,7 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::numRows() const
 
 template<typename T, typename UniformBasis2D, typename S1_x, typename S1_y,
        typename S2_x, typename S2_y>
-int
+FLENS_DEFAULT_INDEXTYPE
 UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::numCols() const
 {
     return _basis.second.mra.cardI(_Jy)*_basis.first.mra.cardI(_Jx);
@@ -38,23 +38,23 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::getIndexSet() const
 {
     IndexSet<Index2D> Lambda;
 
-    for (int k_x=_basis.first.mra.rangeI(_basis.first.j0).firstIndex(); k_x<=_basis.first.mra.rangeI(_basis.first.j0).lastIndex(); ++k_x) {
-        for (int k_y=_basis.second.mra.rangeI(_basis.second.j0).firstIndex(); k_y<=_basis.second.mra.rangeI(_basis.second.j0).lastIndex(); ++k_y) {
+    for (FLENS_DEFAULT_INDEXTYPE k_x=_basis.first.mra.rangeI(_basis.first.j0).firstIndex(); k_x<=_basis.first.mra.rangeI(_basis.first.j0).lastIndex(); ++k_x) {
+        for (FLENS_DEFAULT_INDEXTYPE k_y=_basis.second.mra.rangeI(_basis.second.j0).firstIndex(); k_y<=_basis.second.mra.rangeI(_basis.second.j0).lastIndex(); ++k_y) {
             Lambda.insert(Index2D(Index1D(_basis.first.j0,k_x,XBSpline),Index1D(_basis.second.j0,k_y,XBSpline)));
         }
-        for (int j_y=_basis.second.j0; j_y<=_Jy-1; ++j_y) {
-            for (int k_y=_basis.second.rangeJ(j_y).firstIndex(); k_y<=_basis.second.rangeJ(j_y).lastIndex(); ++k_y) {
+        for (FLENS_DEFAULT_INDEXTYPE j_y=_basis.second.j0; j_y<=_Jy-1; ++j_y) {
+            for (FLENS_DEFAULT_INDEXTYPE k_y=_basis.second.rangeJ(j_y).firstIndex(); k_y<=_basis.second.rangeJ(j_y).lastIndex(); ++k_y) {
                 Lambda.insert(Index2D(Index1D(_basis.first.j0,k_x,XBSpline),Index1D(j_y,k_y,XWavelet)));
             }
         }
     }
-    for (int j_x=_basis.first.j0; j_x<=_Jx-1; ++j_x) {
-        for (int k_x=_basis.first.rangeJ(j_x).firstIndex(); k_x<=_basis.first.rangeJ(j_x).lastIndex(); ++k_x) {
-            for (int k_y=_basis.second.mra.rangeI(_basis.second.j0).firstIndex(); k_y<=_basis.second.mra.rangeI(_basis.second.j0).lastIndex(); ++k_y) {
+    for (FLENS_DEFAULT_INDEXTYPE j_x=_basis.first.j0; j_x<=_Jx-1; ++j_x) {
+        for (FLENS_DEFAULT_INDEXTYPE k_x=_basis.first.rangeJ(j_x).firstIndex(); k_x<=_basis.first.rangeJ(j_x).lastIndex(); ++k_x) {
+            for (FLENS_DEFAULT_INDEXTYPE k_y=_basis.second.mra.rangeI(_basis.second.j0).firstIndex(); k_y<=_basis.second.mra.rangeI(_basis.second.j0).lastIndex(); ++k_y) {
                 Lambda.insert(Index2D(Index1D(j_x,k_x,XWavelet),Index1D(_basis.second.j0,k_y,XBSpline)));
             }
-            for (int j_y=_basis.second.j0; j_y<=_Jy-1; ++j_y) {
-                for (int k_y=_basis.second.rangeJ(j_y).firstIndex(); k_y<=_basis.second.rangeJ(j_y).lastIndex(); ++k_y) {
+            for (FLENS_DEFAULT_INDEXTYPE j_y=_basis.second.j0; j_y<=_Jy-1; ++j_y) {
+                for (FLENS_DEFAULT_INDEXTYPE k_y=_basis.second.rangeJ(j_y).firstIndex(); k_y<=_basis.second.rangeJ(j_y).lastIndex(); ++k_y) {
                     Lambda.insert(Index2D(Index1D(j_x,k_x,XWavelet),Index1D(j_y,k_y,XWavelet)));
                 }
             }
@@ -78,18 +78,18 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::operator*(const Den
     }
 
     DenseMatrixT V(_basis.second.mra.cardI(_Jy), _basis.first.mra.cardI(_Jx));
-    for (int j=1; j<=_basis.first.mra.cardI(_Jx); ++j) {
-        int firstIndex=(j-1)*_basis.second.mra.cardI(_Jy)+1;
-        int lastIndex =    j*_basis.second.mra.cardI(_Jy);
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_basis.first.mra.cardI(_Jx); ++j) {
+        FLENS_DEFAULT_INDEXTYPE firstIndex=(j-1)*_basis.second.mra.cardI(_Jy)+1;
+        FLENS_DEFAULT_INDEXTYPE lastIndex =    j*_basis.second.mra.cardI(_Jy);
         V(_,j) = v(_(firstIndex,lastIndex));
     }
 
     DenseMatrixT Ret = this->operator*(V);
 
     DenseVectorT ret(_basis.second.mra.cardI(_Jy) * _basis.first.mra.cardI(_Jx));
-    for (int j=1; j<=_basis.first.mra.cardI(_Jx); ++j) {
-        int firstIndex=(j-1)*_basis.second.mra.cardI(_Jy)+1;
-        int lastIndex =    j*_basis.second.mra.cardI(_Jy);
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=_basis.first.mra.cardI(_Jx); ++j) {
+        FLENS_DEFAULT_INDEXTYPE firstIndex=(j-1)*_basis.second.mra.cardI(_Jy)+1;
+        FLENS_DEFAULT_INDEXTYPE lastIndex =    j*_basis.second.mra.cardI(_Jy);
         ret(_(firstIndex,lastIndex)) = Ret(_,j);
     }
     //time.stop();
@@ -121,11 +121,11 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::operator*(const Den
         std::cerr << "UniformTensorMatrix2D: Dimension mismatch!" << std::endl;
         exit(1);
     }
-    for (int j=1; j<=V.numCols(); ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=V.numCols(); ++j) {
         DenseVectorT tmp = _M_s1_y*V(_,j);
         ret(_,j) = tmp;
     }
-    for (int i=1; i<=ret.numRows(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=ret.numRows(); ++i) {
         DenseVectorT v=ret(i,_);
         DenseVectorT tmp = _M_s1_x*v;
         ret(i,_) = tmp;
@@ -133,12 +133,12 @@ UniformTensorMatrix2D<T,UniformBasis2D,S1_x,S1_y,S2_x,S2_y>::operator*(const Den
 
 
     DenseMatrixT intermed(_basis.second.mra.cardI(_Jy), _basis.first.mra.cardI(_Jx));
-    for (int j=1; j<=V.numCols(); ++j) {
+    for (FLENS_DEFAULT_INDEXTYPE j=1; j<=V.numCols(); ++j) {
         DenseVectorT tmp = _M_s2_y*V(_,j);
         intermed(_,j) = tmp;
     }
 
-    for (int i=1; i<=intermed.numRows(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=intermed.numRows(); ++i) {
         DenseVectorT v=intermed(i,_);
         DenseVectorT tmp = _M_s2_x*v;
         ret(i,_) += tmp;

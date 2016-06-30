@@ -39,26 +39,26 @@ class MRA<_T,Dual,Periodic,CDF>
         typedef BasisFunction<T,Dual,Periodic,CDF> BasisFunctionType;
         typedef BSpline<T,Dual,Periodic,CDF> BSplineType;
 
-        MRA(int _d, int _d_, int j=0);
+        MRA(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_, FLENS_DEFAULT_INDEXTYPE j=0);
 
-        int
+        FLENS_DEFAULT_INDEXTYPE
         level() const;
 
         void
-        setLevel(int j) const;
+        setLevel(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        int
-        cardI_(int j) const;
+        FLENS_DEFAULT_INDEXTYPE
+        cardI_(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        flens::Range<int>
-        rangeI_(int j) const;
+        flens::Range<FLENS_DEFAULT_INDEXTYPE>
+        rangeI_(FLENS_DEFAULT_INDEXTYPE j) const;
 
-        const int d, d_, j0;
+        const FLENS_DEFAULT_INDEXTYPE d, d_, j0;
         BSpline<T,Dual,Periodic,CDF> phi_;
         flens::RefinementMatrix<T,Periodic,CDF> M0_;
         
     protected:
-        mutable int _j;
+        mutable FLENS_DEFAULT_INDEXTYPE _j;
 };
 
 } // namespace lawa

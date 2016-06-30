@@ -29,7 +29,7 @@ BSpline<T,Dual,Interval,Dijkema>::BSpline(const MRA<T,Dual,Interval,Dijkema> &_m
 
 template <typename T>
 T
-BSpline<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Dual,Interval,Dijkema>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(j>=mra_.j0);
     assert(k>=mra_.rangeI_(j).firstIndex());
@@ -45,8 +45,8 @@ BSpline<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short 
     //      (d,d_)=(3,5) at the right boundary.
     if (k<=mra_.rangeI_L().lastIndex()) {
         T value = 0.0;
-        int l = -mra_.phi_R.a_.lastIndex()+1;
-        for (int r=mra_.R_Left.firstRow(); r<=mra_.R_Left.lastRow(); ++r, ++l) {
+        FLENS_DEFAULT_INDEXTYPE l = -mra_.phi_R.a_.lastIndex()+1;
+        for (FLENS_DEFAULT_INDEXTYPE r=mra_.R_Left.firstRow(); r<=mra_.R_Left.lastRow(); ++r, ++l) {
             //std::cerr << "Left: k = " << k << ", l = " << l  << ": " << mra_.R_Left(r,k)<< std::endl;
             value += mra_.R_Left(r,k) * mra_.phi_R(x,j,l);
         }
@@ -57,8 +57,8 @@ BSpline<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short 
     if (k>=mra_.rangeI_R(j).firstIndex()) {
         k -= mra_.rangeI_R(j).firstIndex()-1;
         T value = 0.0;
-        int l = pow2i<T>(j)-mra_.phi_R.a_.lastIndex()+1;
-        for (int r=mra_.R_Right.firstRow(); r<=mra_.R_Right.lastRow(); ++r, ++l) {
+        FLENS_DEFAULT_INDEXTYPE l = pow2i<T>(j)-mra_.phi_R.a_.lastIndex()+1;
+        for (FLENS_DEFAULT_INDEXTYPE r=mra_.R_Right.firstRow(); r<=mra_.R_Right.lastRow(); ++r, ++l) {
             //std::cerr << "Right: k = " << k << ", l = " << l  << ": " << mra_.R_Right(r,k) << std::endl;
             value += mra_.R_Right(r,k) * mra_.phi_R(x,j,l);
         }
@@ -70,7 +70,7 @@ BSpline<T,Dual,Interval,Dijkema>::operator()(T x, int j, long k, unsigned short 
 
 template <typename T>
 Support<T>
-BSpline<T,Dual,Interval,Dijkema>::support(int j, long k) const
+BSpline<T,Dual,Interval,Dijkema>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     if (k<=mra_.rangeI_L().lastIndex()) {
         return Support<T>(0.,pow2i<T>(-j)*(mra_.phi_R.a_.length()-2));

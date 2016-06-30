@@ -37,10 +37,10 @@ class TimedepSeparableRHS1D
         IntegralF<Gauss, Basis1D>  integralf;
                 
     public:
-        TimedepSeparableRHS1D(const Basis1D& _basis, const SeparableFunction2D<T>& _F, int order);
+        TimedepSeparableRHS1D(const Basis1D& _basis, const SeparableFunction2D<T>& _F, FLENS_DEFAULT_INDEXTYPE order);
                
         T
-        operator()(T t, XType xtype, int j, long k) const;
+        operator()(T t, XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
                            
         T
         operator()(T t, const Index1D &index) const;
@@ -58,7 +58,7 @@ public:
     SumOfTimedepRHS1D(const TimedepRHS &rhs1, const TimedepRHS &rhs2);
     
     T
-    operator()(T t, XType xtype, int j, long k) const;
+    operator()(T t, XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
     
     T
     operator()(T t, const Index1D &index) const;

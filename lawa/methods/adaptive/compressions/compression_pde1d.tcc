@@ -25,13 +25,13 @@ CompressionPDE1D<T,Basis>::setParameters(const IndexSet<Index1D> &LambdaRow)
 template <typename T, typename Basis>
 IndexSet<Index1D>
 CompressionPDE1D<T,Basis>::SparsityPattern(const Index1D &lambda_col,
-                                           const IndexSet<Index1D> &LambdaRow, int J)
+                                           const IndexSet<Index1D> &LambdaRow, FLENS_DEFAULT_INDEXTYPE J)
 {
     typedef typename IndexSet<Index1D>::const_iterator set1d_const_it;
 
     IndexSet<Index1D> LambdaRowSparse;
-    int s = std::max(abs(lambda_col.j-jmin),abs(lambda_col.j-jmax));
-    s = std::max(s,int(s_tilde));
+    FLENS_DEFAULT_INDEXTYPE s = std::max(abs(lambda_col.j-jmin),abs(lambda_col.j-jmax));
+    s = std::max(s,(FLENS_DEFAULT_INDEXTYPE)(s_tilde));
     if (J!=-1) s = std::min(s,J);
     //Compression level J>s_tilde as indices corresponding to level differences
     //larger than s_tilde cannot appear in LambdaRow

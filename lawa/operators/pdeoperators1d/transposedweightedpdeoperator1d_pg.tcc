@@ -6,7 +6,7 @@ TransposedWeightedPDEOperator1D_PG(const TrialBasis& _trialbasis, const TestBasi
                       Function<T>& _reaction_f,
                       Function<T>& _convection_f,
                       Function<T>& _diffusion_f,
-                      int order, bool _reactionIsZero,
+                      FLENS_DEFAULT_INDEXTYPE order, bool _reactionIsZero,
                       bool _convectionIsZero, bool _diffusionIsZero)
     : trialbasis(_trialbasis), testbasis(_testbasis),
       reaction_f(_reaction_f), convection_f(_convection_f), diffusion_f(_diffusion_f),
@@ -23,8 +23,8 @@ TransposedWeightedPDEOperator1D_PG(const TrialBasis& _trialbasis, const TestBasi
 // Here: first = row_index in TrialBasis, second = col_index in TestBasis
 template <typename T, typename TrialBasis, typename TestBasis>
 T
-TransposedWeightedPDEOperator1D_PG<T, TrialBasis, TestBasis>::operator()(XType xtype1, int j1, long k1,
-                                            		    	   	   	   	 XType xtype2, int j2, long k2) const
+TransposedWeightedPDEOperator1D_PG<T, TrialBasis, TestBasis>::operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                                            		    	   	   	   	 XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const
 {
     // diffusion * v_x *  u_x + convection * v * u_x + reaction * v * u
     T val_reaction    = reactionIsZero   ? 0. : reaction_integral(  j2,k2,xtype2,0, j1,k1,xtype1,0);

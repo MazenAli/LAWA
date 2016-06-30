@@ -39,10 +39,10 @@ class MultiGrid_2ndKind_LTI{
     public: 
         
         MultiGrid_2ndKind_LTI(PrimalBasis& _b, DualBasis& _b_, BilinearForm& a, RHSIntegral& rhs, 
-                          T theta, T deltaT, int timesteps, int minLevel);
+                          T theta, T deltaT, FLENS_DEFAULT_INDEXTYPE timesteps, FLENS_DEFAULT_INDEXTYPE minLevel);
         
         flens::DenseVector<flens::Array<T> > 
-        solve(flens::DenseVector<flens::Array<T> >& u0, int maxLevel);
+        solve(flens::DenseVector<flens::Array<T> >& u0, FLENS_DEFAULT_INDEXTYPE maxLevel);
     
     private:
         
@@ -72,7 +72,7 @@ class MultiGrid_2ndKind_LTI{
                 flens::DenseVector<flens::Array<T> > 
                 solve(flens::DenseVector<flens::Array<T> > u, flens::DenseVector<flens::Array<T> > f);  
                 
-                void setLevel(int level){ mg_ptr->hom_ts.setLevel(level);}
+                void setLevel(FLENS_DEFAULT_INDEXTYPE level){ mg_ptr->hom_ts.setLevel(level);}
                 
                 flens::DenseVector<flens::Array<T> >
                 getResiduum(flens::DenseVector<flens::Array<T> >& u,flens::DenseVector<flens::Array<T> >& f)
@@ -89,7 +89,7 @@ class MultiGrid_2ndKind_LTI{
                 flens::DenseVector<flens::Array<T> > 
                 solve(flens::DenseVector<flens::Array<T> > u, flens::DenseVector<flens::Array<T> > f);  
                 
-                void setLevel(int level){ mg_ptr->fp.setLevel(level);}
+                void setLevel(FLENS_DEFAULT_INDEXTYPE level){ mg_ptr->fp.setLevel(level);}
         };
         
         friend class MG_2ndKind_Smoother;

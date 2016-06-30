@@ -37,7 +37,7 @@ namespace lawa{
  *      use_pcg          : standard linear solver is gmres (false), otherwise cg (true)
  *      assemble_tol     : only save matrix entries with values > assemble_tol (absolute values)
  *      lintol           : solve linear system with accuracy lintol
- *      eta              : use weighted L2-scalar product \int w(x) v(x) e^{-2eta|x|} dx
+ *      eta              : use weighted L2-scalar product \FLENS_DEFAULT_INDEXTYPE w(x) v(x) e^{-2eta|x|} dx
  *      R1, R2           : use wavelets defined on [-R1, R2].
  *      order            : quadrature order for weighted L2-scalar product.
  */
@@ -59,21 +59,21 @@ class ThetaScheme1D_LTI
                           T _assembletol=10e-15, T _lintol=10e-15);
     
         flens::DenseVector<flens::Array<T> > 
-        solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, int level);
+        solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, FLENS_DEFAULT_INDEXTYPE level);
         
         flens::DenseVector<flens::Array<T> > 
         solve(T time_old, T time_new, flens::DenseVector<flens::Array<T> > u_init, 
-              flens::DenseVector<flens::Array<T> > f, int level);
+              flens::DenseVector<flens::Array<T> > f, FLENS_DEFAULT_INDEXTYPE level);
         
         void
         setRHS(RHSIntegral& _rhs);
         
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > 
-        getLHSMatrix(int level);                         
+        getLHSMatrix(FLENS_DEFAULT_INDEXTYPE level);                         
         
         // Adaptive Erweiterung: Timestep in jedem Lösungsschritt neu setzen,
         //flens::DenseVector<flens::Array<T> > 
-        //solve(T time, flens::DenseVector<flens::Array<T> > u_init, int level, T timestep);
+        //solve(T time, flens::DenseVector<flens::Array<T> > u_init, FLENS_DEFAULT_INDEXTYPE level, T timestep);
         
         
     private:
@@ -90,8 +90,8 @@ class ThetaScheme1D_LTI
                                    const BilinearForm& _a);
                 
                 T 
-                operator()(XType xtype1, int j1, int k1,
-                           XType xtype2, int j2, int k2) const;
+                operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;
                            
                 void setTimes(T t1, T t2){ time_old = t1;
                                            time_new = t2;}
@@ -112,8 +112,8 @@ class ThetaScheme1D_LTI
                                    const BilinearForm& _a);
                 
                 T 
-                operator()(XType xtype1, int j1, int k1,
-                           XType xtype2, int j2, int k2) const;         
+                operator()(XType xtype1, FLENS_DEFAULT_INDEXTYPE j1, FLENS_DEFAULT_INDEXTYPE k1,
+                           XType xtype2, FLENS_DEFAULT_INDEXTYPE j2, FLENS_DEFAULT_INDEXTYPE k2) const;         
                        
                 void setTimes(T t1, T t2){ time_old = t1;
                                            time_new = t2;}            
@@ -132,7 +132,7 @@ class ThetaScheme1D_LTI
                                                            L2ScalarProduct>* _scheme,
                                    RHSIntegral& _rhs);
                 
-                T operator()(XType xtype, int j, int k) const;
+                T operator()(XType xtype, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
                 
                 void setTimes(T t1, T t2){ time_old = t1;
                                            time_new = t2;}
@@ -164,7 +164,7 @@ class ThetaScheme1D_LTI
         
         DiagonalMatrixPreconditioner1D<T, Basis, Operator_LHSMatrix> prec;
         
-        int currentLevel;
+        FLENS_DEFAULT_INDEXTYPE currentLevel;
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > lhsmatrix;
         flens::SparseGeMatrix<flens::extensions::CRS<T,flens::CRS_General> > rhsmatrix;
         flens::DiagonalMatrix<T>                                 P;

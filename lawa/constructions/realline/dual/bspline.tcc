@@ -27,10 +27,10 @@ namespace lawa {
 
 template <typename T>
     flens::DenseVector<flens::Array<T> >
-    _bspline_mask(int d, int d_);
+    _bspline_mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_);
 
 template <typename T>
-BSpline<T,Dual,R,CDF>::BSpline(int _d, int _d_)
+BSpline<T,Dual,R,CDF>::BSpline(FLENS_DEFAULT_INDEXTYPE _d, FLENS_DEFAULT_INDEXTYPE _d_)
     : d(_d), d_(_d_), mu(d&1),
       l1_(.5*(-d+mu)-d_+1), l2_(.5*(d+mu)+d_-1),
       a_(_bspline_mask<T>(d,d_))
@@ -47,15 +47,15 @@ BSpline<T,Dual,R,CDF>::~BSpline()
 
 template <typename T>
 T
-BSpline<T,Dual,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) const
+BSpline<T,Dual,R,CDF>::operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const
 {
     assert(deriv==0);
     
-    int resolution = Param<BSpline<T,Dual,R,CDF> >::resolution;
+    FLENS_DEFAULT_INDEXTYPE resolution = Param<BSpline<T,Dual,R,CDF> >::resolution;
     // we precompute values for dual B-spline on first call ...
     static flens::DenseVector<flens::Array<T> > values;
-    static int storedD = 0, storedD_ = 0;
-    static int storedResolution = resolution;
+    static FLENS_DEFAULT_INDEXTYPE storedD = 0, storedD_ = 0;
+    static FLENS_DEFAULT_INDEXTYPE storedResolution = resolution;
     Support<T> supp = support(j,k);
     if (!inner(x,supp)) {
         return 0;
@@ -83,7 +83,7 @@ BSpline<T,Dual,R,CDF>::operator()(T x, int j, long k, unsigned short deriv) cons
 
 template <typename T>
 Support<T>
-BSpline<T,Dual,R,CDF>::support(int j, long k) const
+BSpline<T,Dual,R,CDF>::support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const
 {
     return pow2i<T>(-j) * Support<T>(l1_+k, l2_+k);
 }
@@ -101,7 +101,7 @@ BSpline<T,Dual,R,CDF>::mask() const
 
 template <typename T>
 BSpline<T,Dual,R,CDF>
-N_(int d, int d_)
+N_(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     return BSpline<T,Dual,R,CDF>(d,d_);
 }
@@ -853,13 +853,13 @@ N_10_10()
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-_calculate_bspline_mask(int d, int d_)
+_calculate_bspline_mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     assert(d>=0);
     assert(d_>=d);
     assert((d+d_)%2==0);
 
-    int kappa = d & 1;
+    FLENS_DEFAULT_INDEXTYPE kappa = d & 1;
     flens::DenseVector<flens::Array<T> > res(flens::_(-(d-kappa)/2-d_+1, (d+kappa)/2+d_-1));
 
     Polynomial<T> u, uh1(1), uh2(1), uh2a, uh3(1);
@@ -877,13 +877,13 @@ _calculate_bspline_mask(int d, int d_)
 
     uh2a(0) = 1.;    // uh2a = 1.;
 
-    int k = (d+d_)/2;
-    for (int i=0; i<k; ++i) {
+    FLENS_DEFAULT_INDEXTYPE k = (d+d_)/2;
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<k; ++i) {
         u += (binomial(k-1+i, i) / std::pow(-4.,i)) * pow(uh1, k-1-i) * uh2a;
         uh2a = uh2a * uh2;
     }
     u = pow(uh3, d_) * (pow2i<T>(1-d_)*u);
-    for (int i=res.firstIndex(); i<=res.lastIndex(); ++i) {
+    for (FLENS_DEFAULT_INDEXTYPE i=res.firstIndex(); i<=res.lastIndex(); ++i) {
         res(i) = u(i-res.firstIndex());
     }
     return res;
@@ -892,7 +892,7 @@ _calculate_bspline_mask(int d, int d_)
 
 template <typename T>
 flens::DenseVector<flens::Array<T> >
-_bspline_mask(int d, int d_)
+_bspline_mask(FLENS_DEFAULT_INDEXTYPE d, FLENS_DEFAULT_INDEXTYPE d_)
 {
     assert(d_>=d);
     assert((d+d_)%2==0);

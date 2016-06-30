@@ -44,19 +44,19 @@ class BSpline<_T,Primal,Interval,SparseMulti>
         ~BSpline();
 
         T
-        operator()(T x, int j, long k, unsigned short deriv) const;
+        operator()(T x, FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k, unsigned short deriv) const;
 
         Support<T>
-        support(int j, long k) const;
+        support(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         flens::DenseVector<flens::Array<T> >
-        singularSupport(int j, long k) const;
+        singularSupport(FLENS_DEFAULT_INDEXTYPE j, FLENS_DEFAULT_INDEXTYPE k) const;
 
         T
-        tic(int j) const;
+        tic(FLENS_DEFAULT_INDEXTYPE j) const;
 
         const MRA<T,Primal,Interval,SparseMulti> &mra;
-        const unsigned int d;
+        const unsigned FLENS_DEFAULT_INDEXTYPE d;
 };
 
 } // namespace lawa

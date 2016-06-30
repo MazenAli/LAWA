@@ -8,16 +8,16 @@
 
 using namespace std;
 
-int main ( int argc, char *argv[] );
+FLENS_DEFAULT_INDEXTYPE main ( FLENS_DEFAULT_INDEXTYPE argc, char *argv[] );
 char ch_cap ( char ch );
-int rule_string_to_index ( string rule_string );
+FLENS_DEFAULT_INDEXTYPE rule_string_to_index ( string rule_string );
 bool s_eqi ( string s1, string s2 );
-void sparse_grid_mixed_dataset_handle ( int dim_num, int level_max, int rule[], 
+void sparse_grid_mixed_dataset_handle ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
   double alpha[], double beta[], double tol, std::string file_name );
 
 //****************************************************************************80
 
-int main ( int argc, char *argv[] )
+FLENS_DEFAULT_INDEXTYPE main ( FLENS_DEFAULT_INDEXTYPE argc, char *argv[] )
 
 //****************************************************************************80
 //
@@ -69,14 +69,14 @@ int main ( int argc, char *argv[] )
   double alpha_1d;
   double *beta;
   double beta_1d;
-  int dim;
-  int dim_inc;
-  int dim_index;
-  int dim_num;
+  FLENS_DEFAULT_INDEXTYPE dim;
+  FLENS_DEFAULT_INDEXTYPE dim_inc;
+  FLENS_DEFAULT_INDEXTYPE dim_index;
+  FLENS_DEFAULT_INDEXTYPE dim_num;
   string file_name;
-  int level_max;
-  int *rule;
-  int rule_1d;
+  FLENS_DEFAULT_INDEXTYPE level_max;
+  FLENS_DEFAULT_INDEXTYPE *rule;
+  FLENS_DEFAULT_INDEXTYPE rule_1d;
   string rule_string;
   double tol;
 
@@ -148,7 +148,7 @@ int main ( int argc, char *argv[] )
 //
   alpha = new double[dim_num];
   beta = new double[dim_num];
-  rule = new int[dim_num];
+  rule = new FLENS_DEFAULT_INDEXTYPE[dim_num];
 
   dim_index = 0;
 
@@ -271,7 +271,7 @@ char ch_cap ( char ch )
 }
 //***************************************************************************80
 
-int rule_string_to_index ( string rule_string )
+FLENS_DEFAULT_INDEXTYPE rule_string_to_index ( string rule_string )
 
 //***************************************************************************80
 //
@@ -311,10 +311,10 @@ int rule_string_to_index ( string rule_string )
 //
 //    Input, string RULE_STRING, a string.
 //
-//    Output, int RULE_STRING_TO_INDEX, the rule index.
+//    Output, FLENS_DEFAULT_INDEXTYPE RULE_STRING_TO_INDEX, the rule index.
 //
 {
-  int rule_1d;
+  FLENS_DEFAULT_INDEXTYPE rule_1d;
 
   if ( s_eqi ( rule_string, "CC" ) )
   {
@@ -407,10 +407,10 @@ bool s_eqi ( string s1, string s2 )
 //    Output, bool S_EQI, is true if the strings are equal. 
 //
 {
-  int i;
-  int nchar;
-  int s1_length;
-  int s2_length;
+  FLENS_DEFAULT_INDEXTYPE i;
+  FLENS_DEFAULT_INDEXTYPE nchar;
+  FLENS_DEFAULT_INDEXTYPE s1_length;
+  FLENS_DEFAULT_INDEXTYPE s2_length;
 
   s1_length = s1.length ( );
   s2_length = s2.length ( );
@@ -463,7 +463,7 @@ bool s_eqi ( string s1, string s2 )
 }
 //***************************************************************************80
 
-void sparse_grid_mixed_dataset_handle ( int dim_num, int level_max, int rule[], 
+void sparse_grid_mixed_dataset_handle ( FLENS_DEFAULT_INDEXTYPE dim_num, FLENS_DEFAULT_INDEXTYPE level_max, FLENS_DEFAULT_INDEXTYPE rule[], 
   double alpha[], double beta[], double tol, std::string file_name )
 
 //***************************************************************************80
@@ -490,7 +490,7 @@ void sparse_grid_mixed_dataset_handle ( int dim_num, int level_max, int rule[],
 //
 //    Input, integer LEVEL_MAX, the level that defines the grid.
 //
-//    Input, int RULE[DIM_NUM], the rule in each dimension.
+//    Input, FLENS_DEFAULT_INDEXTYPE RULE[DIM_NUM], the rule in each dimension.
 //     1, "CC",  Clenshaw Curtis, Closed Fully Nested rule.
 //     2, "F2",  Fejer Type 2, Open Fully Nested rule.
 //     3, "GP",  Gauss Patterson, Open Fully Nested rule.
@@ -515,12 +515,12 @@ void sparse_grid_mixed_dataset_handle ( int dim_num, int level_max, int rule[],
 //    output files.
 //
 {
-  int point_num;
-  int point_total_num;
-  int *sparse_index;
-  int *sparse_order;
+  FLENS_DEFAULT_INDEXTYPE point_num;
+  FLENS_DEFAULT_INDEXTYPE point_total_num;
+  FLENS_DEFAULT_INDEXTYPE *sparse_index;
+  FLENS_DEFAULT_INDEXTYPE *sparse_order;
   double *sparse_point;
-  int *sparse_unique_index;
+  FLENS_DEFAULT_INDEXTYPE *sparse_unique_index;
   double *sparse_weight;
 //
 //  Compute necessary data.
@@ -530,13 +530,13 @@ void sparse_grid_mixed_dataset_handle ( int dim_num, int level_max, int rule[],
   point_num = webbur::sparse_grid_mixed_size ( dim_num, level_max, rule, alpha, 
     beta, tol );
 
-  sparse_unique_index = new int[point_total_num];
+  sparse_unique_index = new FLENS_DEFAULT_INDEXTYPE[point_total_num];
 
   webbur::sparse_grid_mixed_unique_index ( dim_num, level_max, rule, alpha, beta,
     tol, point_num, point_total_num, sparse_unique_index );
 
-  sparse_order = new int[dim_num*point_num];
-  sparse_index = new int[dim_num*point_num];
+  sparse_order = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_num];
+  sparse_index = new FLENS_DEFAULT_INDEXTYPE[dim_num*point_num];
 
   webbur::sparse_grid_mixed_index ( dim_num, level_max, rule, point_num, 
     point_total_num, sparse_unique_index, sparse_order, sparse_index );

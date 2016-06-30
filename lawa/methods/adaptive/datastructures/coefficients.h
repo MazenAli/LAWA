@@ -177,12 +177,12 @@ FillWithZeros(const IndexSet<Index> &Lambda, Coefficients<Lexicographical,T,Inde
 template <typename T>
 void
 getLevelInfo(const Coefficients<Lexicographical,T,Index2D> &Lambda, Index2D &maxIndex,
-             Index2D &maxWaveletIndex, int *jmax, int &arrayLength);
+             Index2D &maxWaveletIndex, FLENS_DEFAULT_INDEXTYPE *jmax, FLENS_DEFAULT_INDEXTYPE &arrayLength);
 
 template <typename T>
 void
 getLevelInfo(const Coefficients<Lexicographical,T,Index3D> &Lambda, Index3D &maxIndex,
-             Index3D &maxWaveletIndex, int *jmax, int &arrayLength);
+             Index3D &maxWaveletIndex, FLENS_DEFAULT_INDEXTYPE *jmax, FLENS_DEFAULT_INDEXTYPE &arrayLength);
 
 template <typename T, typename Index>
 void
@@ -222,11 +222,11 @@ struct Coefficients<Bucket,T,Index>
     void
     bucketsort(const Coefficients<Lexicographical,T,Index> &_coeff, T eps);
 
-    int
-    addBucketToIndexSet(IndexSet<Index> &Lambda, int bucketnumber);
+    FLENS_DEFAULT_INDEXTYPE
+    addBucketToIndexSet(IndexSet<Index> &Lambda, FLENS_DEFAULT_INDEXTYPE bucketnumber);
 
     void
-    addBucketToCoefficients(Coefficients<Lexicographical,T,Index> &coeff, int bucketnumber);
+    addBucketToCoefficients(Coefficients<Lexicographical,T,Index> &coeff, FLENS_DEFAULT_INDEXTYPE bucketnumber);
 
 
     T supremumnorm;
@@ -262,7 +262,7 @@ struct Coefficients<AbsoluteValue,T,Index> : std::multimap<T,Index,lt<AbsoluteVa
     norm(T tau=2.0) const;
 
     T
-    l2bestnterm(int n) const;
+    l2bestnterm(FLENS_DEFAULT_INDEXTYPE n) const;
 
     T
     wtauNorm(T tau) const;
