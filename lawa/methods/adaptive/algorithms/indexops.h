@@ -3,6 +3,7 @@
 
 #include <lawa/methods/adaptive/datastructures/index.h>
 #include <lawa/methods/adaptive/datastructures/indexset.h>
+#include <lawa/methods/adaptive/datastructures/htcoefficients.h>
 
 namespace lawa
 {
@@ -20,6 +21,13 @@ maptoint(const Index1D& index, const Basis& basis);
 template <typename Index, typename Basis>
 unsigned FLENS_DEFAULT_INDEXTYPE
 maxintind(const IndexSet<Index>& indexset, const Basis& basis);
+
+
+template <typename Index, typename T, typename Basis>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const IndexSet<Index>& indexset,
+              const int dim,
+              HTCoefficients<T, Basis>& u);
 
 
 template <typename Index, typename Basis>

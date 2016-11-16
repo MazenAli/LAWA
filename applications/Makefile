@@ -1,4 +1,4 @@
-SUBDIRS := rb_adaptive ls_awgm
+SUBDIRS := rb_adaptive ls_awgm ht_awgm
 
 all:
 	$(SILENT) for i in $(SUBDIRS); \

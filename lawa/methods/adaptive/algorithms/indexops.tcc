@@ -63,6 +63,22 @@ maxintind(const IndexSet<Index>& indexset, const Basis& basis)
 }
 
 
+template <typename Index, typename T, typename Basis>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const IndexSet<Index>& indexset,
+              const int dim,
+              HTCoefficients<T, Basis>& u)
+{
+    unsigned FLENS_DEFAULT_INDEXTYPE max = 0;
+    for (const auto& it : indexset) {
+        unsigned FLENS_DEFAULT_INDEXTYPE idx = u.map()(it, dim);
+        max = (idx>max) ? idx : max;
+    }
+
+    return max;
+}
+
+
 template <typename Index, typename Basis>
 Index
 maptowav(const unsigned FLENS_DEFAULT_INDEXTYPE, const Basis&)

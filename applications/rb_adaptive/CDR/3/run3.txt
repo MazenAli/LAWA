@@ -9860,3 +9860,331 @@ Primal : 1.706790434208e-05
        CGLS Iteration 349: current error NE 9.438322100733e-06, Au-f 1.498776351834e-04
        CGLS Iteration 350: current error NE 9.436706142784e-06, Au-f 1.498559057584e-04
        CGLS Iteration 351: current error NE 9.410530313975e-06, Au-f 1.498342951850e-04
+       CGLS Iteration 352: current error NE 9.391597267653e-06, Au-f 1.498127683590e-04
+       CGLS Iteration 353: current error NE 9.380693023412e-06, Au-f 1.497912129465e-04
+       CGLS Iteration 354: current error NE 9.363495427332e-06, Au-f 1.497696986827e-04
+       CGLS Iteration 355: current error NE 9.375363599330e-06, Au-f 1.497482575707e-04
+       CGLS Iteration 356: current error NE 9.360200186362e-06, Au-f 1.497267939765e-04
+       CGLS Iteration 357: current error NE 9.324543593811e-06, Au-f 1.497054795906e-04
+       CGLS Iteration 358: current error NE 9.294661823484e-06, Au-f 1.496842655246e-04
+       CGLS Iteration 359: current error NE 9.284144627349e-06, Au-f 1.496631697361e-04
+       CGLS Iteration 360: current error NE 9.282310911231e-06, Au-f 1.496420753867e-04
+       CGLS Iteration 361: current error NE 9.245046887581e-06, Au-f 1.496210781885e-04
+       CGLS Iteration 362: current error NE 9.241683534595e-06, Au-f 1.496002970431e-04
+       CGLS Iteration 363: current error NE 9.258527566870e-06, Au-f 1.495794106743e-04
+       CGLS Iteration 364: current error NE 9.190795761459e-06, Au-f 1.495585757495e-04
+       CGLS Iteration 365: current error NE 9.221306002200e-06, Au-f 1.495379294458e-04
+       CGLS Iteration 366: current error NE 9.190063753781e-06, Au-f 1.495171407468e-04
+       CGLS Iteration 367: current error NE 9.166120026617e-06, Au-f 1.494965810516e-04
+       CGLS Iteration 368: current error NE 9.198944881386e-06, Au-f 1.494759226125e-04
+       CGLS Iteration 369: current error NE 9.158811618857e-06, Au-f 1.494553317547e-04
+       CGLS Iteration 370: current error NE 9.126510620322e-06, Au-f 1.494348503929e-04
+       CGLS Iteration 371: current error NE 9.125428393345e-06, Au-f 1.494143942155e-04
+       CGLS Iteration 372: current error NE 9.101192026732e-06, Au-f 1.493940100074e-04
+       CGLS Iteration 373: current error NE 9.081626042494e-06, Au-f 1.493738660460e-04
+       CGLS Iteration 374: current error NE 9.059927027345e-06, Au-f 1.493537173383e-04
+       CGLS Iteration 375: current error NE 9.050606507834e-06, Au-f 1.493336700577e-04
+       CGLS Iteration 376: current error NE 9.014795505153e-06, Au-f 1.493136550778e-04
+       CGLS Iteration 377: current error NE 8.980510345616e-06, Au-f 1.492938632410e-04
+       CGLS Iteration 378: current error NE 8.967024514618e-06, Au-f 1.492741384074e-04
+       CGLS Iteration 379: current error NE 8.962809094703e-06, Au-f 1.492544705532e-04
+       CGLS Iteration 380: current error NE 8.939415836760e-06, Au-f 1.492348360109e-04
+       CGLS Iteration 381: current error NE 8.902570017003e-06, Au-f 1.492153231992e-04
+       CGLS Iteration 382: current error NE 8.892847529263e-06, Au-f 1.491959192026e-04
+       CGLS Iteration 383: current error NE 8.867897667237e-06, Au-f 1.491766097307e-04
+       CGLS Iteration 384: current error NE 8.839561897031e-06, Au-f 1.491574428543e-04
+       CGLS Iteration 385: current error NE 8.772129268603e-06, Au-f 1.491384063211e-04
+       CGLS Iteration 386: current error NE 8.769464443952e-06, Au-f 1.491195134430e-04
+       CGLS Iteration 387: current error NE 8.736298317571e-06, Au-f 1.491006723869e-04
+       CGLS Iteration 388: current error NE 8.730583458875e-06, Au-f 1.490819753216e-04
+       CGLS Iteration 389: current error NE 8.711440991012e-06, Au-f 1.490633030362e-04
+       CGLS Iteration 390: current error NE 8.652000795803e-06, Au-f 1.490448162587e-04
+       CGLS Iteration 391: current error NE 8.620462031249e-06, Au-f 1.490265393655e-04
+       CGLS Iteration 392: current error NE 8.630337208449e-06, Au-f 1.490082808503e-04
+       CGLS Iteration 393: current error NE 8.581252469858e-06, Au-f 1.489901009458e-04
+       CGLS Iteration 394: current error NE 8.566432527109e-06, Au-f 1.489720916912e-04
+       CGLS Iteration 395: current error NE 8.543787191794e-06, Au-f 1.489540675742e-04
+       CGLS Iteration 396: current error NE 8.503963559784e-06, Au-f 1.489362337975e-04
+       CGLS Iteration 397: current error NE 8.487196590409e-06, Au-f 1.489185303473e-04
+       CGLS Iteration 398: current error NE 8.482103155016e-06, Au-f 1.489008601872e-04
+       CGLS Iteration 399: current error NE 8.428303515310e-06, Au-f 1.488832870412e-04
+       CGLS Iteration 400: current error NE 8.433626027764e-06, Au-f 1.488658307637e-04
+       CGLS Iteration 401: current error NE 8.390626321257e-06, Au-f 1.488484379802e-04
+       CGLS Iteration 402: current error NE 8.356521016741e-06, Au-f 1.488312296913e-04
+       CGLS Iteration 403: current error NE 8.335963738795e-06, Au-f 1.488140777795e-04
+       CGLS Iteration 404: current error NE 8.293475488352e-06, Au-f 1.487970714745e-04
+       CGLS Iteration 405: current error NE 8.278579190641e-06, Au-f 1.487802088775e-04
+       CGLS Iteration 406: current error NE 8.244072613468e-06, Au-f 1.487634173102e-04
+       CGLS Iteration 407: current error NE 8.225489201103e-06, Au-f 1.487467688869e-04
+       CGLS Iteration 408: current error NE 8.194973893832e-06, Au-f 1.487301997361e-04
+       CGLS Iteration 409: current error NE 8.143144806110e-06, Au-f 1.487138494184e-04
+       CGLS Iteration 410: current error NE 8.137018666788e-06, Au-f 1.486975305787e-04
+       CGLS Iteration 411: current error NE 8.097655863559e-06, Au-f 1.486812740709e-04
+       CGLS Iteration 412: current error NE 8.075908829114e-06, Au-f 1.486651993395e-04
+       CGLS Iteration 413: current error NE 8.053703681804e-06, Au-f 1.486491969597e-04
+       CGLS Iteration 414: current error NE 8.018209813216e-06, Au-f 1.486333238760e-04
+       CGLS Iteration 415: current error NE 7.971744102484e-06, Au-f 1.486176295857e-04
+       CGLS Iteration 416: current error NE 7.960830990091e-06, Au-f 1.486020063824e-04
+       CGLS Iteration 417: current error NE 7.929556696865e-06, Au-f 1.485864834899e-04
+       CGLS Iteration 418: current error NE 7.898336387748e-06, Au-f 1.485711391718e-04
+       CGLS Iteration 419: current error NE 7.891599220619e-06, Au-f 1.485557674732e-04
+       CGLS Iteration 420: current error NE 7.859959438005e-06, Au-f 1.485404865034e-04
+       CGLS Iteration 421: current error NE 7.825788316787e-06, Au-f 1.485253896516e-04
+       CGLS Iteration 422: current error NE 7.824043551258e-06, Au-f 1.485102651049e-04
+       CGLS Iteration 423: current error NE 7.781729170296e-06, Au-f 1.484952165704e-04
+       CGLS Iteration 424: current error NE 7.744161752538e-06, Au-f 1.484803628160e-04
+       CGLS Iteration 425: current error NE 7.740235864871e-06, Au-f 1.484655679104e-04
+       CGLS Iteration 426: current error NE 7.707961338907e-06, Au-f 1.484508185964e-04
+       CGLS Iteration 427: current error NE 7.684978597668e-06, Au-f 1.484362364366e-04
+       CGLS Iteration 428: current error NE 7.661746528235e-06, Au-f 1.484218068644e-04
+       CGLS Iteration 429: current error NE 7.623556660213e-06, Au-f 1.484074121796e-04
+       CGLS Iteration 430: current error NE 7.623641635833e-06, Au-f 1.483930643094e-04
+       CGLS Iteration 431: current error NE 7.598480362039e-06, Au-f 1.483787386797e-04
+       CGLS Iteration 432: current error NE 7.578598496916e-06, Au-f 1.483645620737e-04
+       CGLS Iteration 433: current error NE 7.576448761403e-06, Au-f 1.483504033601e-04
+       CGLS Iteration 434: current error NE 7.536480722500e-06, Au-f 1.483363103452e-04
+       CGLS Iteration 435: current error NE 7.515888287899e-06, Au-f 1.483224021830e-04
+       CGLS Iteration 436: current error NE 7.525810600573e-06, Au-f 1.483084341890e-04
+       CGLS Iteration 437: current error NE 7.483377237889e-06, Au-f 1.482945134628e-04
+       CGLS Iteration 438: current error NE 7.469776920053e-06, Au-f 1.482807376398e-04
+       CGLS Iteration 439: current error NE 7.448110827055e-06, Au-f 1.482669927593e-04
+       CGLS Iteration 440: current error NE 7.426053144630e-06, Au-f 1.482533726288e-04
+       CGLS Iteration 441: current error NE 7.435119854511e-06, Au-f 1.482397606498e-04
+       CGLS Iteration 442: current error NE 7.404249801122e-06, Au-f 1.482261722484e-04
+       CGLS Iteration 443: current error NE 7.396812788995e-06, Au-f 1.482126443929e-04
+       CGLS Iteration 444: current error NE 7.372493183920e-06, Au-f 1.481991407495e-04
+       CGLS Iteration 445: current error NE 7.355135755652e-06, Au-f 1.481857601653e-04
+       CGLS Iteration 446: current error NE 7.366430518348e-06, Au-f 1.481724084362e-04
+       CGLS Iteration 447: current error NE 7.335552887384e-06, Au-f 1.481590348885e-04
+       CGLS Iteration 448: current error NE 7.308871588192e-06, Au-f 1.481458345535e-04
+       CGLS Iteration 449: current error NE 7.333565932208e-06, Au-f 1.481325767696e-04
+       CGLS Iteration 450: current error NE 7.297547274124e-06, Au-f 1.481192832517e-04
+       CGLS Iteration 451: current error NE 7.297680610330e-06, Au-f 1.481061401125e-04
+       CGLS Iteration 452: current error NE 7.319946882538e-06, Au-f 1.480929887287e-04
+       CGLS Iteration 453: current error NE 7.304362933823e-06, Au-f 1.480798326776e-04
+       CGLS Iteration 454: current error NE 7.278278816010e-06, Au-f 1.480666886440e-04
+       CGLS Iteration 455: current error NE 7.274215896472e-06, Au-f 1.480535728410e-04
+       CGLS Iteration 456: current error NE 7.273763204300e-06, Au-f 1.480404965479e-04
+       CGLS Iteration 457: current error NE 7.259084800633e-06, Au-f 1.480274413406e-04
+       CGLS Iteration 458: current error NE 7.266535738723e-06, Au-f 1.480143717295e-04
+       CGLS Iteration 459: current error NE 7.274962616669e-06, Au-f 1.480012614693e-04
+       CGLS Iteration 460: current error NE 7.254388559556e-06, Au-f 1.479882510670e-04
+       CGLS Iteration 461: current error NE 7.266476815403e-06, Au-f 1.479752920474e-04
+       CGLS Iteration 462: current error NE 7.280452193066e-06, Au-f 1.479622250338e-04
+       CGLS Iteration 463: current error NE 7.284828758113e-06, Au-f 1.479491330556e-04
+       CGLS Iteration 464: current error NE 7.267810478321e-06, Au-f 1.479360596835e-04
+       CGLS Iteration 465: current error NE 7.261885314521e-06, Au-f 1.479230437967e-04
+       CGLS Iteration 466: current error NE 7.259447774068e-06, Au-f 1.479099616266e-04
+       CGLS Iteration 467: current error NE 7.273747208304e-06, Au-f 1.478968932249e-04
+       CGLS Iteration 468: current error NE 7.274808101300e-06, Au-f 1.478837536478e-04
+       CGLS Iteration 469: current error NE 7.268032893639e-06, Au-f 1.478706757636e-04
+       CGLS Iteration 470: current error NE 7.285421605092e-06, Au-f 1.478575764592e-04
+       CGLS Iteration 471: current error NE 7.294532775914e-06, Au-f 1.478444318471e-04
+       CGLS Iteration 472: current error NE 7.313904040018e-06, Au-f 1.478312302054e-04
+       CGLS Iteration 473: current error NE 7.320443020553e-06, Au-f 1.478179824494e-04
+       CGLS Iteration 474: current error NE 7.310391819711e-06, Au-f 1.478047609972e-04
+       CGLS Iteration 475: current error NE 7.329786876256e-06, Au-f 1.477914875406e-04
+       CGLS Iteration 476: current error NE 7.347672703726e-06, Au-f 1.477781462629e-04
+       CGLS Iteration 477: current error NE 7.355669896508e-06, Au-f 1.477647820908e-04
+       CGLS Iteration 478: current error NE 7.350710586962e-06, Au-f 1.477513603363e-04
+       CGLS Iteration 479: current error NE 7.383652595583e-06, Au-f 1.477379594415e-04
+       CGLS Iteration 480: current error NE 7.408571045013e-06, Au-f 1.477244442896e-04
+       CGLS Iteration 481: current error NE 7.384426269313e-06, Au-f 1.477109266802e-04
+       CGLS Iteration 482: current error NE 7.421909304803e-06, Au-f 1.476973663045e-04
+       CGLS Iteration 483: current error NE 7.437373978613e-06, Au-f 1.476836607966e-04
+       CGLS Iteration 484: current error NE 7.457199931782e-06, Au-f 1.476699641355e-04
+       CGLS Iteration 485: current error NE 7.467402433609e-06, Au-f 1.476561164103e-04
+       CGLS Iteration 486: current error NE 7.490760452831e-06, Au-f 1.476422548786e-04
+       CGLS Iteration 487: current error NE 7.512345645500e-06, Au-f 1.476283253201e-04
+       CGLS Iteration 488: current error NE 7.518801185701e-06, Au-f 1.476143382368e-04
+       CGLS Iteration 489: current error NE 7.558843801221e-06, Au-f 1.476002627563e-04
+       CGLS Iteration 490: current error NE 7.585307189144e-06, Au-f 1.475860935715e-04
+       CGLS Iteration 491: current error NE 7.576342563858e-06, Au-f 1.475718330990e-04
+       CGLS Iteration 492: current error NE 7.615545814783e-06, Au-f 1.475574955428e-04
+       CGLS Iteration 493: current error NE 7.645728820298e-06, Au-f 1.475430560256e-04
+       CGLS Iteration 494: current error NE 7.663590027895e-06, Au-f 1.475285341056e-04
+       CGLS Iteration 495: current error NE 7.705620128355e-06, Au-f 1.475139379879e-04
+       CGLS Iteration 496: current error NE 7.729527365045e-06, Au-f 1.474991793535e-04
+       CGLS Iteration 497: current error NE 7.735155013825e-06, Au-f 1.474844285267e-04
+       CGLS Iteration 498: current error NE 7.785772113325e-06, Au-f 1.474694024506e-04
+       CGLS Iteration 499: current error NE 7.772375052613e-06, Au-f 1.474543264779e-04
+       CGLS Iteration 500: current error NE 7.849920879136e-06, Au-f 1.474392010808e-04
+   --- Approximate Residual ---
+       U_leafs:        922159              
+       Residual Au-f:  1.474559707026e-04   (on 24107424 indizes)
+       Residual NE  :  1.127074005248e-05   (on  8329952 indizes)
+   --- Computing next index set ---
+       Threshbound:         1.295716446019e-09
+       ||P_{Lambda}r ||_2:  7.849920879136e-06
+       alpha*Residual_NE:   1.014366604723e-05
+          Bucket 0: L2-norm 4.01445e-07
+          Bucket 1: L2-norm 3.07849e-07
+          Bucket 2: L2-norm 4.02923e-07
+          Bucket 3: L2-norm 4.27564e-07
+          Bucket 4: L2-norm 5.29312e-07
+          Bucket 5: L2-norm 5.97896e-07
+          Bucket 6: L2-norm 8.5252e-07
+          Bucket 7: L2-norm 1.39887e-06
+          Bucket 8: L2-norm 2.23757e-06
+          Bucket 9: L2-norm 3.15445e-06
+          Bucket 10: L2-norm 3.63917e-06
+          Bucket 11: L2-norm 3.37733e-06
+       LambdaTrial:  raw extension   2795432
+                     multitree ext.  1199056
+                     total size      2950818
+       LambdaTest:   total size     13054538
+
+******** Iteration 15
+   Current size of LambdaTrial  2950818
+   Current size of LambdaTest  13054538
+
+   --- Starting CGLS with tolerance 1.127074005248e-06 ---
+       CGLS Iteration 0  : current error NE 8.702359749301e-06, Au-f 1.474354374971e-04
+       CGLS Iteration 1  : current error NE 8.391530170576e-06, Au-f 1.474181675583e-04
+       CGLS Iteration 2  : current error NE 7.079488331159e-06, Au-f 1.474027397389e-04
+       CGLS Iteration 3  : current error NE 6.603332859349e-06, Au-f 1.473921545174e-04
+       CGLS Iteration 4  : current error NE 6.277584319251e-06, Au-f 1.473816760345e-04
+       CGLS Iteration 5  : current error NE 5.973588708951e-06, Au-f 1.473729335967e-04
+       CGLS Iteration 6  : current error NE 5.915965873291e-06, Au-f 1.473642398571e-04
+       CGLS Iteration 7  : current error NE 5.714669358567e-06, Au-f 1.473560982991e-04
+       CGLS Iteration 8  : current error NE 5.670278660649e-06, Au-f 1.473483272194e-04
+       CGLS Iteration 9  : current error NE 5.656168050722e-06, Au-f 1.473404813145e-04
+       CGLS Iteration 10 : current error NE 5.532695019010e-06, Au-f 1.473330317434e-04
+       CGLS Iteration 11 : current error NE 5.585941190818e-06, Au-f 1.473255155356e-04
+       CGLS Iteration 12 : current error NE 5.476856946578e-06, Au-f 1.473181948310e-04
+       CGLS Iteration 13 : current error NE 5.481172094359e-06, Au-f 1.473108647644e-04
+       CGLS Iteration 14 : current error NE 5.413650366819e-06, Au-f 1.473038063631e-04
+       CGLS Iteration 15 : current error NE 5.350405005702e-06, Au-f 1.472967800048e-04
+       CGLS Iteration 16 : current error NE 5.361787558958e-06, Au-f 1.472899583085e-04
+       CGLS Iteration 17 : current error NE 5.259382463531e-06, Au-f 1.472831696173e-04
+       CGLS Iteration 18 : current error NE 5.254121275447e-06, Au-f 1.472764264242e-04
+       CGLS Iteration 19 : current error NE 5.262411830607e-06, Au-f 1.472698299319e-04
+       CGLS Iteration 20 : current error NE 5.236387630152e-06, Au-f 1.472631643056e-04
+       CGLS Iteration 21 : current error NE 5.252241372993e-06, Au-f 1.472565619178e-04
+       CGLS Iteration 22 : current error NE 5.260784745186e-06, Au-f 1.472498683344e-04
+       CGLS Iteration 23 : current error NE 5.295151476803e-06, Au-f 1.472432221427e-04
+       CGLS Iteration 24 : current error NE 5.296761566486e-06, Au-f 1.472364034154e-04
+       CGLS Iteration 25 : current error NE 5.306243703543e-06, Au-f 1.472296536865e-04
+       CGLS Iteration 26 : current error NE 5.321187338491e-06, Au-f 1.472227775875e-04
+       CGLS Iteration 27 : current error NE 5.307127046710e-06, Au-f 1.472160505349e-04
+       CGLS Iteration 28 : current error NE 5.383344947227e-06, Au-f 1.472091086780e-04
+       CGLS Iteration 29 : current error NE 5.307548358287e-06, Au-f 1.472022320421e-04
+       CGLS Iteration 30 : current error NE 5.433122757740e-06, Au-f 1.471953088914e-04
+       CGLS Iteration 31 : current error NE 5.383375685389e-06, Au-f 1.471881845688e-04
+       CGLS Iteration 32 : current error NE 5.477794570064e-06, Au-f 1.471811705738e-04
+       CGLS Iteration 33 : current error NE 5.491747507090e-06, Au-f 1.471737590052e-04
+       CGLS Iteration 34 : current error NE 5.519188316259e-06, Au-f 1.471665093880e-04
+       CGLS Iteration 35 : current error NE 5.598335717601e-06, Au-f 1.471589547851e-04
+       CGLS Iteration 36 : current error NE 5.599091685927e-06, Au-f 1.471514405706e-04
+       CGLS Iteration 37 : current error NE 5.671394422556e-06, Au-f 1.471437331652e-04
+       CGLS Iteration 38 : current error NE 5.682994333146e-06, Au-f 1.471359657798e-04
+       CGLS Iteration 39 : current error NE 5.724966501306e-06, Au-f 1.471281027196e-04
+       CGLS Iteration 40 : current error NE 5.763316178848e-06, Au-f 1.471201280247e-04
+       CGLS Iteration 41 : current error NE 5.801465577863e-06, Au-f 1.471120547414e-04
+       CGLS Iteration 42 : current error NE 5.868165898582e-06, Au-f 1.471038831382e-04
+       CGLS Iteration 43 : current error NE 5.886970196199e-06, Au-f 1.470954786003e-04
+       CGLS Iteration 44 : current error NE 5.925957290365e-06, Au-f 1.470871193779e-04
+       CGLS Iteration 45 : current error NE 5.993227173838e-06, Au-f 1.470784958573e-04
+       CGLS Iteration 46 : current error NE 6.006464183426e-06, Au-f 1.470698732447e-04
+       CGLS Iteration 47 : current error NE 6.103414627648e-06, Au-f 1.470610127260e-04
+       CGLS Iteration 48 : current error NE 6.095626529516e-06, Au-f 1.470520445212e-04
+       CGLS Iteration 49 : current error NE 6.167220790973e-06, Au-f 1.470429586538e-04
+       CGLS Iteration 50 : current error NE 6.183896764279e-06, Au-f 1.470337811653e-04
+       CGLS Iteration 51 : current error NE 6.245191353066e-06, Au-f 1.470244420044e-04
+       CGLS Iteration 52 : current error NE 6.269761295022e-06, Au-f 1.470150078015e-04
+       CGLS Iteration 53 : current error NE 6.333540593690e-06, Au-f 1.470054125106e-04
+       CGLS Iteration 54 : current error NE 6.350946149713e-06, Au-f 1.469957131914e-04
+       CGLS Iteration 55 : current error NE 6.401471137638e-06, Au-f 1.469858757010e-04
+       CGLS Iteration 56 : current error NE 6.413834554086e-06, Au-f 1.469759713975e-04
+       CGLS Iteration 57 : current error NE 6.485848042446e-06, Au-f 1.469658885122e-04
+       CGLS Iteration 58 : current error NE 6.483362691975e-06, Au-f 1.469557370239e-04
+       CGLS Iteration 59 : current error NE 6.545760750963e-06, Au-f 1.469454546620e-04
+       CGLS Iteration 60 : current error NE 6.534952427577e-06, Au-f 1.469350575299e-04
+       CGLS Iteration 61 : current error NE 6.605095283507e-06, Au-f 1.469246403523e-04
+       CGLS Iteration 62 : current error NE 6.616380523719e-06, Au-f 1.469140226705e-04
+       CGLS Iteration 63 : current error NE 6.642739300433e-06, Au-f 1.469034368146e-04
+       CGLS Iteration 64 : current error NE 6.670107669693e-06, Au-f 1.468926466956e-04
+       CGLS Iteration 65 : current error NE 6.700497848975e-06, Au-f 1.468818329135e-04
+       CGLS Iteration 66 : current error NE 6.721332508523e-06, Au-f 1.468709068693e-04
+       CGLS Iteration 67 : current error NE 6.751463209474e-06, Au-f 1.468599513076e-04
+       CGLS Iteration 68 : current error NE 6.782068989333e-06, Au-f 1.468488233700e-04
+       CGLS Iteration 69 : current error NE 6.806522614000e-06, Au-f 1.468376467990e-04
+       CGLS Iteration 70 : current error NE 6.833760817491e-06, Au-f 1.468263294617e-04
+       CGLS Iteration 71 : current error NE 6.863715472503e-06, Au-f 1.468150211213e-04
+       CGLS Iteration 72 : current error NE 6.897324812775e-06, Au-f 1.468035440144e-04
+       CGLS Iteration 73 : current error NE 6.905024668697e-06, Au-f 1.467920296755e-04
+       CGLS Iteration 74 : current error NE 6.954098183453e-06, Au-f 1.467803949419e-04
+       CGLS Iteration 75 : current error NE 6.938199756192e-06, Au-f 1.467687558540e-04
+       CGLS Iteration 76 : current error NE 6.985364167696e-06, Au-f 1.467570432376e-04
+       CGLS Iteration 77 : current error NE 6.983175388811e-06, Au-f 1.467452668526e-04
+       CGLS Iteration 78 : current error NE 7.024914886415e-06, Au-f 1.467334189424e-04
+       CGLS Iteration 79 : current error NE 7.013389268734e-06, Au-f 1.467214926908e-04
+       CGLS Iteration 80 : current error NE 7.047019862435e-06, Au-f 1.467095494967e-04
+       CGLS Iteration 81 : current error NE 7.074280942939e-06, Au-f 1.466974622946e-04
+       CGLS Iteration 82 : current error NE 7.080880758256e-06, Au-f 1.466853787271e-04
+       CGLS Iteration 83 : current error NE 7.087141003480e-06, Au-f 1.466732684164e-04
+       CGLS Iteration 84 : current error NE 7.128712382151e-06, Au-f 1.466609982978e-04
+       CGLS Iteration 85 : current error NE 7.123410653683e-06, Au-f 1.466486636112e-04
+       CGLS Iteration 86 : current error NE 7.153958317549e-06, Au-f 1.466363228454e-04
+       CGLS Iteration 87 : current error NE 7.141522016084e-06, Au-f 1.466238914305e-04
+       CGLS Iteration 88 : current error NE 7.148991429836e-06, Au-f 1.466115355655e-04
+       CGLS Iteration 89 : current error NE 7.188708931036e-06, Au-f 1.465990097679e-04
+       CGLS Iteration 90 : current error NE 7.178745560738e-06, Au-f 1.465864778714e-04
+       CGLS Iteration 91 : current error NE 7.204907157227e-06, Au-f 1.465739143781e-04
+       CGLS Iteration 92 : current error NE 7.231797841845e-06, Au-f 1.465612369073e-04
+       CGLS Iteration 93 : current error NE 7.215837454702e-06, Au-f 1.465485618159e-04
+       CGLS Iteration 94 : current error NE 7.271131217568e-06, Au-f 1.465358353461e-04
+       CGLS Iteration 95 : current error NE 7.260939920073e-06, Au-f 1.465229366001e-04
+       CGLS Iteration 96 : current error NE 7.274467443032e-06, Au-f 1.465101581146e-04
+       CGLS Iteration 97 : current error NE 7.319280850495e-06, Au-f 1.464971545918e-04
+       CGLS Iteration 98 : current error NE 7.300518371094e-06, Au-f 1.464841559070e-04
+       CGLS Iteration 99 : current error NE 7.349153279561e-06, Au-f 1.464710961905e-04
+       CGLS Iteration 100: current error NE 7.338878867343e-06, Au-f 1.464579548103e-04
+       CGLS Iteration 101: current error NE 7.387039386778e-06, Au-f 1.464448116045e-04
+       CGLS Iteration 102: current error NE 7.399964099712e-06, Au-f 1.464314325762e-04
+       CGLS Iteration 103: current error NE 7.394928729407e-06, Au-f 1.464181571616e-04
+       CGLS Iteration 104: current error NE 7.465357378128e-06, Au-f 1.464047346978e-04
+       CGLS Iteration 105: current error NE 7.454319125826e-06, Au-f 1.463912405170e-04
+       CGLS Iteration 106: current error NE 7.509502650781e-06, Au-f 1.463777078148e-04
+       CGLS Iteration 107: current error NE 7.521424959219e-06, Au-f 1.463639891470e-04
+       CGLS Iteration 108: current error NE 7.532573113748e-06, Au-f 1.463503434004e-04
+       CGLS Iteration 109: current error NE 7.577030252835e-06, Au-f 1.463364956145e-04
+       CGLS Iteration 110: current error NE 7.577468514951e-06, Au-f 1.463226132290e-04
+       CGLS Iteration 111: current error NE 7.626443819991e-06, Au-f 1.463086025126e-04
+       CGLS Iteration 112: current error NE 7.616747794077e-06, Au-f 1.462945094017e-04
+       CGLS Iteration 113: current error NE 7.675070899560e-06, Au-f 1.462803726492e-04
+       CGLS Iteration 114: current error NE 7.672943838169e-06, Au-f 1.462660513994e-04
+       CGLS Iteration 115: current error NE 7.696371850951e-06, Au-f 1.462517548430e-04
+       CGLS Iteration 116: current error NE 7.730422331309e-06, Au-f 1.462372951803e-04
+       CGLS Iteration 117: current error NE 7.748386397922e-06, Au-f 1.462227163021e-04
+       CGLS Iteration 118: current error NE 7.766447193942e-06, Au-f 1.462080746090e-04
+       CGLS Iteration 119: current error NE 7.822573832605e-06, Au-f 1.461933118112e-04
+       CGLS Iteration 120: current error NE 7.817192602501e-06, Au-f 1.461783960722e-04
+       CGLS Iteration 121: current error NE 7.836750532406e-06, Au-f 1.461635688940e-04
+       CGLS Iteration 122: current error NE 7.885150934112e-06, Au-f 1.461484373482e-04
+       CGLS Iteration 123: current error NE 7.884640502291e-06, Au-f 1.461332829644e-04
+       CGLS Iteration 124: current error NE 7.913122537307e-06, Au-f 1.461180951967e-04
+       CGLS Iteration 125: current error NE 7.945160101770e-06, Au-f 1.461027474008e-04
+       CGLS Iteration 126: current error NE 7.936964983074e-06, Au-f 1.460873196322e-04
+       CGLS Iteration 127: current error NE 7.993489309803e-06, Au-f 1.460719369415e-04
+       CGLS Iteration 128: current error NE 8.013411039017e-06, Au-f 1.460562603065e-04
+       CGLS Iteration 129: current error NE 8.004742861055e-06, Au-f 1.460407205261e-04
+       CGLS Iteration 130: current error NE 8.081254850000e-06, Au-f 1.460248928282e-04
+       CGLS Iteration 131: current error NE 8.046990026073e-06, Au-f 1.460090961235e-04
+       CGLS Iteration 132: current error NE 8.129338108865e-06, Au-f 1.459932198101e-04
+       CGLS Iteration 133: current error NE 8.113954809076e-06, Au-f 1.459771455502e-04
+       CGLS Iteration 134: current error NE 8.147921071524e-06, Au-f 1.459611016754e-04
+       CGLS Iteration 135: current error NE 8.152338591703e-06, Au-f 1.459449356614e-04
+       CGLS Iteration 136: current error NE 8.181215108343e-06, Au-f 1.459287141066e-04
+       CGLS Iteration 137: current error NE 8.205558960808e-06, Au-f 1.459122520452e-04
+       CGLS Iteration 138: current error NE 8.213318755988e-06, Au-f 1.458958662143e-04
+       CGLS Iteration 139: current error NE 8.244989788022e-06, Au-f 1.458793684079e-04
+       CGLS Iteration 140: current error NE 8.268732778992e-06, Au-f 1.458627005966e-04
+       CGLS Iteration 141: current error NE 8.273262125658e-06, Au-f 1.458460888896e-04
+       CGLS Iteration 142: current error NE 8.330706120994e-06, Au-f 1.458293148536e-04
+       CGLS Iteration 143: current error NE 8.310685964204e-06, Au-f 1.458124353102e-04
+       CGLS Iteration 144: current error NE 8.355594150189e-06, Au-f 1.457955429704e-04
+       CGLS Iteration 145: current error NE 8.365315302126e-06, Au-f 1.457784982355e-04
+       CGLS Iteration 146: current error NE 8.384270907595e-06, Au-f 1.457613804059e-04
+       CGLS Iteration 147: current error NE 8.389680323819e-06, Au-f 1.457441381526e-04
+       CGLS Iteration 148: current error NE 8.412483722189e-06, Au-f 1.457269591052e-04

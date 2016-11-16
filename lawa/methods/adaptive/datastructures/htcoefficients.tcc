@@ -5,6 +5,7 @@
 #include <flens/flens.cxx>
 #include <cassert>
 #include <cstddef>
+#include <limits>
 
 namespace lawa
 {
@@ -12,20 +13,27 @@ namespace lawa
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>::HTCoefficients():
     httree(),
-    basis_(nullptr){}
+    basis_(nullptr),
+    map_(nullptr){}
 
 
 template <typename T, typename Basis>
-HTCoefficients<T, Basis>::HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const Basis& _basis):
+HTCoefficients<T, Basis>::HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d,
+                                         const Basis& _basis,
+                                         Maptype& _map):
     httree(d),
-    basis_(&_basis){}
+    basis_(&_basis),
+    map_(&_map){}
 
 
 template <typename T, typename Basis>
-HTCoefficients<T, Basis>::HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const double split,
-                                         const Basis& _basis):
+HTCoefficients<T, Basis>::HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d,
+                                         const double split,
+                                         const Basis& _basis,
+                                         Maptype& _map):
     httree(d, split),
-    basis_(&_basis){}
+    basis_(&_basis),
+    map_(&_map){}
 
 
 template <typename T, typename Basis>
@@ -70,6 +78,24 @@ HTCoefficients<T, Basis>::basis() const
 
 
 template <typename T, typename Basis>
+const typename HTCoefficients<T, Basis>::Maptype&
+HTCoefficients<T, Basis>::map() const
+{
+    assert(map_);
+    return *map_;
+}
+
+
+template <typename T, typename Basis>
+typename HTCoefficients<T, Basis>::Maptype&
+HTCoefficients<T, Basis>::map()
+{
+    assert(map_);
+    return *map_;
+}
+
+
+template <typename T, typename Basis>
 void
 HTCoefficients<T, Basis>::orthogonalize()
 {
@@ -106,7 +132,7 @@ HTCoefficients<T, Basis>::truncate(double eps)
 
 template <typename T, typename Basis>
 T
-HTCoefficients<T, Basis>::eval(const IndexD& index) const
+HTCoefficients<T, Basis>::eval(const IndexD& index)
 {
     assert(index.dim()==(unsigned) dim());
 
@@ -114,7 +140,7 @@ HTCoefficients<T, Basis>::eval(const IndexD& index) const
 
     IDX idx(dim());
     for (FLENS_DEFAULT_INDEXTYPE i=1; i<=dim(); ++i) {
-        idx[i-1] = maptoint(index(i), basis());
+        idx[i-1] = map()(index(i), i);
     }
 
     return httree.evaluate(idx);
@@ -123,14 +149,14 @@ HTCoefficients<T, Basis>::eval(const IndexD& index) const
 
 template <typename T, typename Basis>
 T
-HTCoefficients<T, Basis>::eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim) const
+HTCoefficients<T, Basis>::eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim)
 {
     assert(index.dim()==(unsigned) dim());
 
     htucker::DimensionIndex                 idx(dim());
     flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> >  intindex(dim());
     for (FLENS_DEFAULT_INDEXTYPE i=1; i<=dim(); ++i) {
-        intindex(i) = maptoint(index(i), basis());
+        intindex(i) = map()(index(i), i);
     }
     idx.setValue(intindex);
 
@@ -140,7 +166,7 @@ HTCoefficients<T, Basis>::eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYP
 
 template <typename T, typename Basis>
 T
-HTCoefficients<T, Basis>::operator()(const IndexD& index) const
+HTCoefficients<T, Basis>::operator()(const IndexD& index)
 {
     assert(index.dim()==(unsigned) dim());
     return eval(index);
@@ -150,7 +176,7 @@ HTCoefficients<T, Basis>::operator()(const IndexD& index) const
 template <typename T, typename Basis>
 T
 HTCoefficients<T, Basis>::operator()(const IndexD& index,
-                                     const FLENS_DEFAULT_INDEXTYPE vardim) const
+                                     const FLENS_DEFAULT_INDEXTYPE vardim)
 {
     assert(index.dim()==(unsigned) dim());
     return eval(index, vardim);

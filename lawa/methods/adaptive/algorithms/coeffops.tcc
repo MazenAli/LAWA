@@ -48,6 +48,22 @@ setCoefficients(SepCoefficients<S, T, Index>& coeffs,
 }
 
 
+template <SortingCriterion S, typename T, typename Index>
+void
+addCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                const typename SepCoefficients<S, T, Index>
+                ::size_type i,
+                const typename SepCoefficients<S, T, Index>::
+                size_type j,
+                const typename SepCoefficients<S, T, Index>
+                ::Coeff& coeff)
+{
+    assert(i>=1 && i<=coeffs.rank());
+    assert(j>=1 && j<=coeffs.dim());
+    coeffs.getCoefficients(i, j) += coeff;
+}
+
+
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
 genCoefficients(SepCoefficients<S, T, Index>& coeffs,
@@ -92,6 +108,32 @@ genCoefficients(SepCoefficients<S, T, Index>& coeffs,
 }
 
 
+template <SortingCriterion S, typename T, typename Index, typename Basis>
+void
+genAddCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                   const SeparableRHSD<T, Basis>& rhs,
+                   const std::vector<IndexSet<Index>>& indexset)
+{
+    assert(coeffs.rank()==rhs.rank());
+    assert(coeffs.dim()==rhs.dim());
+    assert(indexset.size()==coeffs.rank()*coeffs.dim() ||
+           indexset.size()==coeffs.dim());
+    typedef typename SepCoefficients<S, T, Index>::size_type size_type;
+
+    for (size_type i=1; i<=coeffs.rank(); ++i) {
+        for (size_type j=1; j<=coeffs.dim(); ++j) {
+            if (indexset.size()==coeffs.rank()*coeffs.dim()) {
+                addCoefficients(coeffs, i, j, rhs(i, j,
+                                indexset[(j-1)*coeffs.rank()+(i-1)]));
+            } else {
+                addCoefficients(coeffs, i, j, rhs(i, j,
+                                indexset[j-1]));
+            }
+        }
+    }
+}
+
+
 template <SortingCriterion S, typename T, typename Index>
 std::ostream& operator<<(std::ostream& s,
                          const SepCoefficients<S, T, Index>& coeffs)
@@ -123,6 +165,22 @@ maxintind(const Coefficients<S, T, Index>& coeffs, const Basis& basis)
 }
 
 
+template <SortingCriterion S, typename T, typename Index, typename Basis>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const Coefficients<S, T, Index>& coeffs,
+              const int dim,
+              HTCoefficients<T, Basis>& u)
+{
+    unsigned FLENS_DEFAULT_INDEXTYPE max = 0;
+    for (const auto& it : coeffs) {
+        unsigned FLENS_DEFAULT_INDEXTYPE idx = u.map()(it.first, dim);
+        max = (idx>max) ? idx : max;
+    }
+
+    return max;
+}
+
+
 template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 set(HTCoefficients<T, Basis>& tree,
@@ -142,14 +200,14 @@ set(HTCoefficients<T, Basis>& tree,
     for (size_type j=1; j<=cp.dim(); ++j) {
         unsigned FLENS_DEFAULT_INDEXTYPE sizeij = 0;
         for (size_type i=1; i<=cp.rank(); ++i) {
-            sizeij = maxintind(cp.getCoefficients(i, j), tree.basis());
+            sizeij   = maxintindhash(cp.getCoefficients(i, j), j, tree);
             sizes(j) = (sizeij>sizes(j)) ? sizeij : sizes(j);
         }
 
         for (size_type i=1; i<=cp.rank(); ++i) {
             DV x(sizes(j));
             for (const auto& it : cp.getCoefficients(i, j)) {
-                x(maptoint(it.first, tree.basis())) = it.second;
+                x(tree.map()(it.first, j)) = it.second;
             }
             list.add(x);
         }
@@ -182,7 +240,8 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             unsigned FLENS_DEFAULT_INDEXTYPE rows = U.numRows();
             unsigned FLENS_DEFAULT_INDEXTYPE cols = U.numCols();
 
-            unsigned FLENS_DEFAULT_INDEXTYPE max = maxintind(coeff, tree.basis());
+            unsigned FLENS_DEFAULT_INDEXTYPE max = maxintindhash(coeff, idx[0],
+                                                                 tree);
             if (!rows || !cols) {
                 U.resize(max, col);
             } else if (max>rows || col>cols) {
@@ -194,7 +253,7 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             }
 
             for (const auto& it : coeff) {
-                U(maptoint(it.first, tree.basis()), col) = it.second;
+                U(tree.map()(it.first, idx[0]), col) = it.second;
             }
 
             return;
@@ -231,7 +290,7 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             size_type colsset  = coeff.rank();
             size_type rowsset  = 0;
             for (size_type i=1; i<=colsset; ++i) {
-                auto max = maxintind(coeff(i, 1), tree.basis());
+                auto max = maxintindhash(coeff(i, 1), idx[0], tree);
                 rowsset = (max>rowsset) ? max : rowsset;
             }
 
@@ -247,7 +306,7 @@ set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
 
             for (size_type i=1; i<=colsset; ++i) {
                 for (const auto& it : coeff(i, 1)) {
-                    U(maptoint(it.first, tree.basis()), i) = it.second;
+                    U(tree.map()(it.first, idx[0]), i) = it.second;
                 }
             }
 
@@ -283,7 +342,9 @@ axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             unsigned FLENS_DEFAULT_INDEXTYPE rows = U.numRows();
             unsigned FLENS_DEFAULT_INDEXTYPE cols = U.numCols();
 
-            unsigned FLENS_DEFAULT_INDEXTYPE max = maxintind(coeff, tree.basis());
+            unsigned FLENS_DEFAULT_INDEXTYPE max = maxintindhash(coeff,
+                                                                 idx[0],
+                                                                 tree);
             if (!rows || !cols) {
                 U.resize(max, col);
             } else if (max>rows || col>cols) {
@@ -295,7 +356,7 @@ axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             }
 
             for (const auto& it : coeff) {
-                U(maptoint(it.first, tree.basis()), col) += alpha*it.second;
+                U(tree.map()(it.first, idx[0]), col) += alpha*it.second;
             }
 
             return;
@@ -332,7 +393,7 @@ axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             size_type colsset  = coeff.rank();
             size_type rowsset  = 0;
             for (size_type i=1; i<=colsset; ++i) {
-                auto max = maxintind(coeff(i, 1), tree.basis());
+                auto max = maxintindhash(coeff(i, 1), idx[0], tree);
                 rowsset = (max>rowsset) ? max : rowsset;
             }
 
@@ -348,7 +409,7 @@ axpy(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
 
             for (size_type i=1; i<=colsset; ++i) {
                 for (const auto& it : coeff(i, 1)) {
-                    U(maptoint(it.first, tree.basis()), i) += alpha*it.second;
+                    U(tree.map()(it.first, idx[0]), i) += alpha*it.second;
                 }
             }
 
@@ -384,7 +445,9 @@ xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             unsigned FLENS_DEFAULT_INDEXTYPE rows = U.numRows();
             unsigned FLENS_DEFAULT_INDEXTYPE cols = U.numCols();
 
-            unsigned FLENS_DEFAULT_INDEXTYPE max = maxintind(coeff, tree.basis());
+            unsigned FLENS_DEFAULT_INDEXTYPE max = maxintindhash(coeff,
+                                                                 idx[0],
+                                                                 tree);
             if (!rows || !cols) {
                 U.resize(max, col);
             } else if (max>rows || col>cols) {
@@ -396,7 +459,7 @@ xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             }
 
             for (const auto& it : coeff) {
-                FLENS_DEFAULT_INDEXTYPE rowi = maptoint(it.first, tree.basis());
+                FLENS_DEFAULT_INDEXTYPE rowi = tree.map()(it.first, idx[0]);
                 U(rowi, col) = alpha*U(rowi, col)+it.second;
             }
 
@@ -434,7 +497,7 @@ xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
             size_type colsset  = coeff.rank();
             size_type rowsset  = 0;
             for (size_type i=1; i<=colsset; ++i) {
-                auto max = maxintind(coeff(i, 1), tree.basis());
+                auto max = maxintindhash(coeff(i, 1), idx[0], tree);
                 rowsset = (max>rowsset) ? max : rowsset;
             }
 
@@ -450,7 +513,7 @@ xpay(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
 
             for (size_type i=1; i<=colsset; ++i) {
                 for (const auto& it : coeff(i, 1)) {
-                    FLENS_DEFAULT_INDEXTYPE rowi = maptoint(it.first, tree.basis());
+                    FLENS_DEFAULT_INDEXTYPE rowi = tree.map()(it.first, idx[0]);
                     U(rowi, i) = alpha*U(rowi, i)+it.second;
                 }
             }
@@ -486,7 +549,7 @@ extract(const HTCoefficients<T, Basis>& tree,
             assert(col<=(unsigned) U.numCols());
             for (unsigned FLENS_DEFAULT_INDEXTYPE i=1; i<=(unsigned) U.numRows(); ++i) {
                 if (U(i, col)!=(T) 0) {
-                    ret[maptowav(i, tree.basis())] = U(i, col);
+                    ret[tree.map()(i, idx[0])] = U(i, col);
                 }
             }
 
@@ -517,11 +580,46 @@ extract(const HTCoefficients<T, Basis>& tree,
                               ->getUorB();
             SepCoefficients<Lexicographical, T, Index1D>   ret(U.numCols(), 1);
             for (unsigned FLENS_DEFAULT_INDEXTYPE i=1; i<=(unsigned) U.numRows(); ++i) {
-                Index1D index = maptowav(i, tree.basis());
+                Index1D index = tree.map()(i, idx[0]);
                 for (unsigned FLENS_DEFAULT_INDEXTYPE j=1; j<=(unsigned) U.numCols(); ++j) {
                     if (U(i, j)!=(T) 0) {
                         ret(j, 1)[index] = U(i, j);
                     }
+                }
+            }
+
+            return ret;
+        }
+    }
+
+    std::cerr << "error extract: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
+template <typename T, typename Basis>
+SepCoefficients<Lexicographical, T, Index1D>
+extract(      HTCoefficients<T, Basis>& tree,
+        const IndexSet<Index1D>& Lambda,
+        const htucker::DimensionIndex& idx)
+{
+    assert(idx.length()>0);
+    assert(idx.min()>=1 && idx.max()<=tree.dim());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    for (auto tit=tree.tree().getGeneralTree().end();
+              tit>=tree.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            const Matrix& U = tit.getNode()->getContent()
+                              ->getUorB();
+            SepCoefficients<Lexicographical, T, Index1D>   ret(U.numCols(), 1);
+            for (const auto& index : Lambda) {
+                auto i = tree.map()(index, idx[0]);
+                for (unsigned FLENS_DEFAULT_INDEXTYPE j=1;
+                     j<=(unsigned) U.numCols(); ++j) {
+                    ret(j, 1)[index] = U(i, j);
                 }
             }
 
@@ -1160,7 +1258,7 @@ evalstandard(Sepop<Optype>& A,
             idx[0] = j;
 
             SepCoefficients<Lexicographical, T, Index1D>
-            frame = extract(prod, idx);
+            frame = extract(prod, cols[j-1], idx);
 
             // Too many copies here
             for (size_type k=1; k<=frame.rank(); ++k) {
@@ -1236,7 +1334,7 @@ evalsimple_old(Sepop<Optype>& A,
         idx[0] = i;
 
         SepCoefficients<Lexicographical, T, Index1D>
-        frame = extract(prod, idx);
+        frame = extract(prod, cols[i-1], idx);
 
         // Too many copies here
         for (size_type k=1; k<=frame.rank(); ++k) {
@@ -1311,7 +1409,7 @@ evallaplace_old(Sepop<Optype>& A,
         idx[0] = i;
 
         SepCoefficients<Lexicographical, T, Index1D>
-        frame = extract(prod, idx);
+        frame = extract(prod, cols[i-1], idx);
 
         // Too many copies here
         for (size_type k=1; k<=frame.rank(); ++k) {
@@ -1363,7 +1461,7 @@ evallaplace_old(Sepop<Optype>& A,
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
 evalsimple(Sepop<Optype>& A,
-           const HTCoefficients<T, Basis>& u,
+                 HTCoefficients<T, Basis>& u,
            const std::vector<IndexSet<Index1D> >& rows,
            const std::vector<IndexSet<Index1D> >& cols,
            const std::size_t hashtablelength)
@@ -1376,7 +1474,7 @@ evalsimple(Sepop<Optype>& A,
 
     using flens::_;
 
-    HTCoefficients<T, Basis> Au(u.dim(), u.basis());
+    HTCoefficients<T, Basis> Au(u.dim(), u.basis(), u.map());
     Au.tree().set_tree(u.tree());
 
     htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
@@ -1395,7 +1493,7 @@ evalsimple(Sepop<Optype>& A,
             Matrix& UAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
             auto rowsU  = Uu.numRows();
             auto colsU  = Uu.numCols();
-            auto max    = maxintind(rows[idx[0]-1], u.basis());
+            auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
             assert(max>=(unsigned) rowsU);
             UAu.resize(max, 2*colsU);
             UAu(_(1, rowsU), _(1, colsU)) = Uu;
@@ -1408,7 +1506,7 @@ evalsimple(Sepop<Optype>& A,
 
                 /* Set input */
                 for (auto& lambda : cols[idx[0]-1]) {
-                    auto i = maptoint(lambda, u.basis());
+                    auto i = u.map()(lambda, idx[0]);
                     assert(i<=(unsigned) rowsU);
 
                     auto j     = lambda.j;
@@ -1426,12 +1524,12 @@ evalsimple(Sepop<Optype>& A,
                 /* Set output */
                 for (auto& lambda : rows[idx[0]-1]) {
                     #ifndef NDEBUG
-                        auto i = maptoint(lambda, u.basis());
+                        auto i = u.map()(lambda, idx[0]);
                         assert(i<=max);
                     #endif
 
                     auto j     = lambda.j;
-                    auto _k     = lambda.k;
+                    auto _k    = lambda.k;
                     auto xtype = lambda.xtype;
                     if (xtype==XBSpline) {
                         output.bylevel[j-1-output.offset].
@@ -1450,7 +1548,7 @@ evalsimple(Sepop<Optype>& A,
                      output.bylevel[0].map.begin();
                      it!=output.bylevel[0].map.end(); ++it) {
                         Index1D lambda(output.offset+1, (*it).first,XBSpline);
-                        auto i = maptoint(lambda, u.basis());
+                        auto i = u.map()(lambda, idx[0]);
                         UAu(i, colsU+k) = (*it).second;
                 }
                 for (FLENS_DEFAULT_INDEXTYPE i=1; i<=JMAX; ++i) {
@@ -1460,7 +1558,7 @@ evalsimple(Sepop<Optype>& A,
                          it!=output.bylevel[i].map.end(); ++it) {
                             Index1D lambda(output.offset+i,
                                            (*it).first,XWavelet);
-                            auto j = maptoint(lambda, u.basis());
+                            auto j = u.map()(lambda, idx[0]);
                             UAu(j, colsU+k) = (*it).second;
                     }
                 }
@@ -1531,7 +1629,7 @@ evalsimple(Sepop<Optype>& A,
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
 evallaplace(Sepop<Optype>& A,
-            const HTCoefficients<T, Basis>& u,
+                  HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index1D> >& rows,
             const std::vector<IndexSet<Index1D> >& cols,
             const std::size_t hashtablelength)
@@ -1544,7 +1642,7 @@ evallaplace(Sepop<Optype>& A,
 
     using flens::_;
 
-    HTCoefficients<T, Basis> Au(u.dim(), u.basis());
+    HTCoefficients<T, Basis> Au(u.dim(), u.basis(), u.map());
     Au.tree().set_tree(u.tree());
 
     htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
@@ -1563,7 +1661,7 @@ evallaplace(Sepop<Optype>& A,
             Matrix& UAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
             auto rowsU  = Uu.numRows();
             auto colsU  = Uu.numCols();
-            auto max    = maxintind(rows[idx[0]-1], u.basis());
+            auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
             assert(max>=(unsigned) rowsU);
             UAu.resize(max, 2*colsU);
             UAu(_(1, rowsU), _(1, colsU)) = Uu;
@@ -1576,7 +1674,7 @@ evallaplace(Sepop<Optype>& A,
 
                 /* Set input */
                 for (auto& lambda : cols[idx[0]-1]) {
-                    auto i = maptoint(lambda, u.basis());
+                    auto i = u.map()(lambda, idx[0]);
                     assert(i<=(unsigned) rowsU);
 
                     auto j     = lambda.j;
@@ -1594,7 +1692,7 @@ evallaplace(Sepop<Optype>& A,
                 /* Set output */
                 for (auto& lambda : rows[idx[0]-1]) {
                     #ifndef NDEBUG
-                        auto i = maptoint(lambda, u.basis());
+                        auto i = u.map()(lambda, idx[0]);
                         assert(i<=max);
                     #endif
 
@@ -1618,7 +1716,7 @@ evallaplace(Sepop<Optype>& A,
                      output.bylevel[0].map.begin();
                      it!=output.bylevel[0].map.end(); ++it) {
                         Index1D lambda(output.offset+1, (*it).first,XBSpline);
-                        auto i = maptoint(lambda, u.basis());
+                        auto i = u.map()(lambda, idx[0]);
                         UAu(i, colsU+k) = (*it).second;
                 }
                 for (FLENS_DEFAULT_INDEXTYPE i=1; i<=JMAX; ++i) {
@@ -1628,7 +1726,7 @@ evallaplace(Sepop<Optype>& A,
                          it!=output.bylevel[i].map.end(); ++it) {
                             Index1D lambda(output.offset+i,
                                            (*it).first,XWavelet);
-                            auto j = maptoint(lambda, u.basis());
+                            auto j = u.map()(lambda, idx[0]);
                             UAu(j, colsU+k) = (*it).second;
                     }
                 }
@@ -1701,7 +1799,7 @@ evallaplace(Sepop<Optype>& A,
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
 eval(Sepop<Optype>& A,
-     const HTCoefficients<T, Basis>& u,
+           HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >& rows,
      const std::vector<IndexSet<Index1D> >& cols,
      const double eps,
@@ -1720,22 +1818,18 @@ eval(Sepop<Optype>& A,
 }
 
 
-template <typename T, typename Basis>
 FLENS_DEFAULT_INDEXTYPE
-maxlevel(const HTCoefficients<T, Basis>& u)
+maxlevel(const std::vector<IndexSet<Index1D> >& Lambda)
 {
-    FLENS_DEFAULT_INDEXTYPE jmax = u.basis().j0;
+    typedef std::vector<IndexSet<Index1D> >::size_type size_type;
 
-    for (auto tit=u.tree().getGeneralTree().end();
-              tit>=u.tree().getGeneralTree().begin(); tit--) {
-        if (tit.getNode()->isLeaf()) {
-            FLENS_DEFAULT_INDEXTYPE rows    = tit.getNode()->getContent()->getUorB().numRows();
-            auto lambda = maptowav(rows, u.basis());
-            FLENS_DEFAULT_INDEXTYPE j       = lambda.j;
-            if (lambda.xtype==XWavelet) ++j;
-            jmax = MAX(jmax, j);
-        } else {
-            break;
+    FLENS_DEFAULT_INDEXTYPE jmax = 0;
+
+    for (size_type i=0; i<Lambda.size(); ++i) {
+        for (const auto& lambda : Lambda[i]) {
+             FLENS_DEFAULT_INDEXTYPE j = lambda.j;
+             if (lambda.xtype==XWavelet) ++j;
+             jmax = MAX(jmax, j);
         }
     }
 
@@ -1754,27 +1848,41 @@ compOmegamin2(const Basis& basis,
 }
 
 
-template <typename T, typename Basis>
+template <typename T>
 T
-compOmegamax2(const HTCoefficients<T, Basis>& u, const T order)
+compOmegamax2(const std::vector<IndexSet<Index1D> >& Lambda, const T order)
 {
-    auto d = u.dim();
+    auto d = Lambda.size();
 
-    FLENS_DEFAULT_INDEXTYPE jmax = maxlevel(u);
+    FLENS_DEFAULT_INDEXTYPE jmax = maxlevel(Lambda);
 
     return d*std::pow(2., 2.*order*jmax);
 }
 
 
-template <typename T, typename Basis>
+template <typename T>
 T
-compUnDistFac(const HTCoefficients<T, Basis>& u, const T order)
+compOmegamax4(const std::vector<IndexSet<Index1D> >& Lambda, const T order)
 {
-    auto d   = u.dim();
-    FLENS_DEFAULT_INDEXTYPE j0   = u.basis().j0;
-    FLENS_DEFAULT_INDEXTYPE jmax = maxlevel(u);
+    auto d = Lambda.size();
 
-    T factor = std::pow(2., (order+1)*j0-jmax-1.);
+    FLENS_DEFAULT_INDEXTYPE jmax = maxlevel(Lambda);
+
+    return d*std::pow(2., 4.*order*jmax);
+}
+
+
+template <typename Basis>
+typename Basis::T
+compUnDistFac(const Basis& basis,
+              const std::vector<IndexSet<Index1D> >& Lambda,
+              const typename Basis::T order)
+{
+    auto d   = Lambda.size();
+    FLENS_DEFAULT_INDEXTYPE j0   = basis.j0;
+    FLENS_DEFAULT_INDEXTYPE jmax = maxlevel(Lambda);
+
+    typename Basis::T factor = std::pow(2., (order+1)*j0-jmax-1.);
     for (FLENS_DEFAULT_INDEXTYPE j=j0+1; j<=jmax; ++j) {
         factor += std::pow(2., (order+1.)*j-jmax-2.);
     }
@@ -1881,7 +1989,35 @@ compIndexscale2(const HTCoefficients<T, Basis>& u, const T order)
         sum += std::pow(2., 4.*order*jmax(i));
     }
 
-    return sum/compOmegamin2(u.basis(), u.dim(), order);
+    return sum/compOmegamin4(u.basis(), u.dim(), order);
+}
+
+
+template <typename Basis>
+typename Basis::T
+compIndexscale2(const Basis& basis,
+                const std::vector<IndexSet<Index1D> >& Lambda,
+                const typename Basis::T order)
+{
+    typedef typename SepCoefficients<Lexicographical, typename Basis::T,
+                     Index1D>::size_type
+                     size_type;
+
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE> > jmax(Lambda.size());
+    for (size_type j=1; j<=Lambda.size(); ++j) {
+        for (const auto& it : Lambda[j-1]) {
+            FLENS_DEFAULT_INDEXTYPE level = it.j;
+            if (it.xtype==XWavelet) ++level;
+            jmax(j) = MAX(level, jmax(j));
+        }
+    }
+
+    typename Basis::T sum = 0;
+    for (FLENS_DEFAULT_INDEXTYPE i=1; (unsigned) i<=Lambda.size(); ++i) {
+        sum += std::pow(2., 4.*order*jmax(i));
+    }
+
+    return sum/compOmegamin4(basis, Lambda.size(), order);
 }
 
 
@@ -2113,7 +2249,7 @@ operator*(Sepdiagscal<Basis>& S,
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 eval(Sepdiagscal<Basis>& S,
-     const HTCoefficients<T, Basis>& u,
+     HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >& cols,
      const double eps)
 {
@@ -2122,7 +2258,7 @@ eval(Sepdiagscal<Basis>& S,
 
     typedef typename Sepdiagscal<Basis>::size_type  size_type;
 
-    T iscale = compIndexscale(u, S.order());
+    T iscale = compIndexscale(u.basis(), cols, S.order());
     S.set_iscale(iscale);
     S.comp_n();
     T omega2 = compOmegamin2(S.basis(), S.dim(), S.order());
@@ -2133,14 +2269,20 @@ eval(Sepdiagscal<Basis>& S,
         T                        sumnorms = 0.;
     #endif
 
-    HTCoefficients<T, Basis>    sum(u.dim(), u.basis());
+    HTCoefficients<T, Basis>    sum(u.dim(), u.basis(), u.map());
 
-    unsigned counter = 0;
-    for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i, ++counter) {
+    unsigned N = S.n()+S.nplus()+1;
+    std::vector<HTCoefficients<T, Basis> >  prods(N);
+    flens::DenseVector<flens::Array<T> >    nrms(N);
+    flens::DenseVector<flens::Array<int> >  ids(N);
+
+    unsigned count=0;
+    for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i,
+                                                                    ++count) {
         HTCoefficients<T, Basis> prod(u);
         T factor2 = 2.*std::pow(M_PI, -0.5)*
                     (1./(1+std::exp(-1.*S.h()*(T) i)));
-        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+        factor2 = std::pow(factor1*factor2, 1./(T) S.dim());
         T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
 
         for (size_type j=1; j<=S.dim(); ++j) {
@@ -2148,7 +2290,7 @@ eval(Sepdiagscal<Basis>& S,
             idx[0] = j;
 
             SepCoefficients<Lexicographical, T, Index1D>
-            frame = extract(prod, idx);
+            frame = extract(prod, cols[j-1], idx);
 
             for (size_type k=1; k<=frame.rank(); ++k) {
                 P(cols[j-1], frame(k, 1));
@@ -2162,18 +2304,20 @@ eval(Sepdiagscal<Basis>& S,
             set(prod, idx, frame);
         }
 
+       // nrms(count+1) = nrm2(prod);
+       // prods[count]  = prod;
 
         if (i==-1*(signed) S.n()) {
             sum = prod;
-            sum.truncate(eps);
             #ifdef DEBUG_CANCEL
                 sumexact  = prod;
                 prod.orthogonalize();
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
         } else {
-            prod.truncate(eps);
-            sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
+            //if (nrm2(prod)>eps) {
+                sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
+            //}
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
                 prod.orthogonalize();
@@ -2188,6 +2332,34 @@ eval(Sepdiagscal<Basis>& S,
                   << sumnorms/(T) sumexact.tree().L2normorthogonal()
                   << std::endl;
     #endif
+/*
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+    for (;count<nrms.length(); ++count) {
+        eps_ += nrms(count+1);
+        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
+                     eps/2*eps_/refsum);
+    }*/
 
     return sum;
 }
@@ -2196,7 +2368,7 @@ eval(Sepdiagscal<Basis>& S,
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 evalS2(Sepdiagscal<Basis>& S,
-       const HTCoefficients<T, Basis>& u,
+       HTCoefficients<T, Basis>& u,
        const std::vector<IndexSet<Index1D> >& cols,
        const double eps)
 {
@@ -2205,7 +2377,7 @@ evalS2(Sepdiagscal<Basis>& S,
 
     typedef typename Sepdiagscal<Basis>::size_type  size_type;
 
-    T iscale = compIndexscale2(u, S.order());
+    T iscale = compIndexscale2(u.basis(), cols, S.order());
     S.set_iscale(iscale);
     S.comp_n();
     T omega2 = compOmegamin4(S.basis(), S.dim(), S.order());
@@ -2216,13 +2388,20 @@ evalS2(Sepdiagscal<Basis>& S,
         T                        sumnorms = 0.;
     #endif
 
-    HTCoefficients<T, Basis>    sum(u.dim(), u.basis());
+    HTCoefficients<T, Basis>    sum(u.dim(), u.basis(), u.map());
 
-    for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i) {
+    unsigned N = S.n()+S.nplus()+1;
+    std::vector<HTCoefficients<T, Basis> >  prods(N);
+    flens::DenseVector<flens::Array<T> >    nrms(N);
+    flens::DenseVector<flens::Array<int> >  ids(N);
+
+    unsigned count=0;
+    for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i,
+                                                                    ++count) {
         HTCoefficients<T, Basis> prod(u);
         T factor2 = 2.*std::pow(M_PI, -0.5)*
-                    (1./(1+std::exp(-1.*S.h()*(T) i)));
-        factor2 = std::pow(factor2*factor1, 1./(T) S.dim());
+                    (1./(1.+std::exp(-1.*S.h()*(T) i)));
+        factor2 = std::pow(factor1*factor2, 1./(T) S.dim());
         T alpha = std::pow(std::log(1.+std::exp((T) i*S.h())), 2.);
 
         for (size_type j=1; j<=S.dim(); ++j) {
@@ -2230,7 +2409,7 @@ evalS2(Sepdiagscal<Basis>& S,
             idx[0] = j;
 
             SepCoefficients<Lexicographical, T, Index1D>
-            frame = extract(prod, idx);
+            frame = extract(prod, cols[j-1], idx);
 
             for (size_type k=1; k<=frame.rank(); ++k) {
                 P(cols[j-1], frame(k, 1));
@@ -2244,9 +2423,11 @@ evalS2(Sepdiagscal<Basis>& S,
             set(prod, idx, frame);
         }
 
+        nrms(count+1) = nrm2(prod);
+        prods[count]  = prod;
 
+/*
         if (i==-1*(signed) S.n()) {
-            prod.truncate(eps);
             sum = prod;
             #ifdef DEBUG_CANCEL
                 sumexact  = prod;
@@ -2254,14 +2435,17 @@ evalS2(Sepdiagscal<Basis>& S,
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
         } else {
-            prod.truncate(eps);
-            sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
+            if (nrm2(prod)>eps) {
+                sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
+            } else {
+                std::cout << "Skipped i = " << i << std::endl;
+            }
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
                 prod.orthogonalize();
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
-        }
+        }*/
     }
 
     #ifdef DEBUG_CANCEL
@@ -2270,6 +2454,34 @@ evalS2(Sepdiagscal<Basis>& S,
                   << sumnorms/(T) sumexact.tree().L2normorthogonal()
                   << std::endl;
     #endif
+
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==nrms.length()) {
+        std::cerr << "evalS2: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+    for (;count<nrms.length(); ++count) {
+        eps_ += nrms(count+1);
+        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
+                     eps/2*eps_/refsum);
+    }
 
     return sum;
 }
@@ -2297,7 +2509,7 @@ assemble(Sepdiagscal<Basis>& S,
     T factor1 = S.h()*(1./std::sqrt(omega2));
 
     for (size_type j=1; j<=cols.size(); ++j) {
-        auto max = maxintind(cols[j-1], S.basis());
+        auto max = maxintindhash(cols[j-1], j, Stree);
         for (FLENS_DEFAULT_INDEXTYPE k=-1*S.n(); k<=(signed) S.nplus(); ++k) {
             DV vecA(max*max);
 
@@ -2306,7 +2518,7 @@ assemble(Sepdiagscal<Basis>& S,
             factor2   = std::pow(factor2*factor1, 1./(T) S.dim());
             T alpha   = std::pow(std::log(1.+std::exp((T) k*S.h())), 2.);
             for (FLENS_DEFAULT_INDEXTYPE i=1; i<=(signed) max; ++i) {
-                auto index        = maptowav(i, S.basis());
+                auto index        = Stree.map()(i, j);
                 FLENS_DEFAULT_INDEXTYPE level         = index.j;
                 if (index.xtype==XWavelet) ++level;
                 T weight          = std::pow(2., 2.*S.order()*level)/omega2;
@@ -2339,7 +2551,7 @@ std::ostream& operator<<(std::ostream& s,
 
 template <typename T, typename Basis, typename Index>
 Coefficients<Lexicographical, T, Index>
-contraction(const HTCoefficients<T, Basis>& u,
+contraction(      HTCoefficients<T, Basis>& u,
             const IndexSet<Index>& activex,
             const flens::DenseVector<flens::Array<T> >& sigmas,
             const FLENS_DEFAULT_INDEXTYPE dim)
@@ -2361,7 +2573,7 @@ contraction(const HTCoefficients<T, Basis>& u,
             assert(sigmas.length()>=numCols);
 
             for (const auto& mu : activex) {
-                FLENS_DEFAULT_INDEXTYPE rowi = maptoint(mu, u.basis());
+                FLENS_DEFAULT_INDEXTYPE rowi = u.map()(mu, dim);
                 assert(rowi<=numRows);
                 T entry = 0.;
                 for (FLENS_DEFAULT_INDEXTYPE j=1; j<=numCols; ++j) {
@@ -2381,7 +2593,7 @@ contraction(const HTCoefficients<T, Basis>& u,
 
 template <typename T, typename Basis, typename Index>
 void
-contraction(const HTCoefficients<T, Basis>& u,
+contraction(      HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index> >& activex,
             const std::vector<flens::DenseVector<flens::Array<T> > >& sigmas,
             std::vector<Coefficients<Lexicographical, T, Index> >& ret)
@@ -2451,7 +2663,7 @@ restrict(HTCoefficients<T, Basis>& f,
     idx[0] = j;
 
     SepCoefficients<Lexicographical, T, Index1D>
-    frame = extract(f, idx);
+    frame = extract(f, activex, idx);
 
     for (size_type k=1; k<=frame.rank(); ++k) {
         P(activex, frame(k, 1));
@@ -2478,7 +2690,7 @@ restrict(HTCoefficients<T, Basis>& f,
         if (node->isLeaf()) {
             htucker::DimensionIndex idx = node->getContent()->getIndex();
             Matrix& U = const_cast<Matrix&>(node->getContent()->getUorB());
-            auto max = maxintind(activex[idx[0]-1], f.basis());
+            auto max = maxintindhash(activex[idx[0]-1], idx[0], f);
             assert(max<=(unsigned) U.numRows());
 
             Matrix copy = U;
@@ -2489,7 +2701,7 @@ restrict(HTCoefficients<T, Basis>& f,
             }
 
             for (auto& lambda : activex[idx[0]-1]) {
-                auto i = maptoint(lambda, f.basis());
+                auto i = f.map()(lambda, idx[0]);
                 for (FLENS_DEFAULT_INDEXTYPE k=1; k<=U.numCols(); ++k) {
                     U(i, k) = copy(i, k);
                 }
@@ -2522,7 +2734,7 @@ extend(HTCoefficients<T, Basis>& f,
                          ->getUorB());
             FLENS_DEFAULT_INDEXTYPE      rowsold = U.numRows();
             FLENS_DEFAULT_INDEXTYPE      cols    = U.numCols();
-            unsigned rowsnew = maxintind(activex, f.basis());
+            unsigned rowsnew = maxintindhash(activex, j, f);
 
             if (rowsnew>(unsigned) rowsold) {
                 Matrix copy = U;
@@ -2558,7 +2770,7 @@ extend(HTCoefficients<T, Basis>& f,
         if (node->isLeaf()) {
             htucker::DimensionIndex idx = node->getContent()->getIndex();
             Matrix& U = const_cast<Matrix&>(node->getContent()->getUorB());
-            auto max = maxintind(activex[idx[0]-1], f.basis());
+            auto max = maxintindhash(activex[idx[0]-1], idx[0], f);
             assert(max>=(unsigned) U.numRows());
 
             if (max!=(unsigned) U.numRows()) {

@@ -243,10 +243,12 @@ struct HTAWGM_Params
     double   gamma      = 1e-02; /* galerkin_pcg adaptive accuracy */
     unsigned maxit_awgm = 5e+01; /* Maxit for AWGM */
     unsigned maxit_pcg  = 5e+01; /* Maxit for galerkin_pcg */
-    double   delta_pcg  = 1e-01; /* Adaptive trunc tolerance galerkin_pcg */
-    double   trunc_pres = 1e-08; /* Truncation accuracy presidual */
-    double   alpha      = 0.95;   /* Bulk chasing parameter */
-    unsigned maxit_bulk = 1e+01; /* Maxit bulk chasing */
+    double   delta1_pcg = 1e-01; /* Adaptive trunc tolerance search dir */
+    double   delta2_pcg = 1e-01; /* Adaptive trunc tolerance search dir*/
+    double   delta3_pcg = 1e-01; /* Adaptive trunc tolerance solution */
+    double   alpha      = 0.95;  /* Bulk chasing parameter */
+    double   recompr    = 0.5;   /* Bulk chasing parameter */
+    double   theta      = 0.1;   /* Min reduction parameter */
 };
 
 std::ostream& operator<<(std::ostream& s,

@@ -234,10 +234,12 @@ std::ostream& operator<<(std::ostream& s,
     s << "gamma      = " << params.gamma      << std::endl;
     s << "maxit_awgm = " << params.maxit_awgm << std::endl;
     s << "maxit_pcg  = " << params.maxit_pcg  << std::endl;
-    s << "delta_pcg  = " << params.delta_pcg  << std::endl;
-    s << "trunc_pres = " << params.trunc_pres << std::endl;
+    s << "delta1_pcg = " << params.delta1_pcg << std::endl;
+    s << "delta2_pcg = " << params.delta2_pcg << std::endl;
+    s << "delta3_pcg = " << params.delta3_pcg << std::endl;
     s << "alpha      = " << params.alpha      << std::endl;
-    s << "maxit_bulk = " << params.maxit_bulk << std::endl;
+    s << "recompr    = " << params.recompr    << std::endl;
+    s << "theta      = " << params.theta      << std::endl;
 
     return s;
 }

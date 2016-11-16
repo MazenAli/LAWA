@@ -26,7 +26,9 @@ galerkin_pcg(Sepop<Optype>& A,
              const bool uzero     = true,
              const T tol          = 1e-08,
              const unsigned maxit = 1e+02,
-             const T delta        = 1e-01,
+             const T delta1       = 1e-01,
+             const T delta2       = 1e-01,
+             const T delta3       = 1e-01,
              const T trunc        = 1e-10);
 
 
@@ -34,8 +36,9 @@ template <typename Optype, typename Basis, typename T>
 std::vector<IndexSet<Index1D> >
 presidual(Sepop<Optype>& A,
           Sepdiagscal<Basis>& S,
-          const HTCoefficients<T, Basis>& u,
+                HTCoefficients<T, Basis>& u,
                 HTCoefficients<T, Basis>& f,
+                SepCoefficients<Lexicographical, T, Index1D> fcp,
                 HTCoefficients<T, Basis>& r,
           const SeparableRHSD<T, Basis>& fint,
           const std::vector<IndexSet<Index1D> >& current,
@@ -46,12 +49,10 @@ presidual(Sepop<Optype>& A,
 
 template <typename T, typename Basis>
 std::vector<IndexSet<Index1D> >
-bulk(const T alpha, const T resex, const T rescg,
+bulk(const T alpha, const T resex,
            HTCoefficients<T, Basis>& res,
            std::vector<IndexSet<Index1D> >& Lambda,
-     const std::vector<IndexSet<Index1D> >& diff,
-     const std::vector<IndexSet<Index1D> >& total,
-     const unsigned maxit = 10);
+     const std::vector<IndexSet<Index1D> >& diff);
 
 
 template <typename Optype, typename Basis, typename T>

@@ -34,6 +34,17 @@ setCoefficients(SepCoefficients<S, T, Index>& coeffs,
                 ::Coeff& coeff);
 
 
+template <SortingCriterion S, typename T, typename Index>
+void
+addCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                const typename SepCoefficients<S, T, Index>
+                ::size_type i,
+                const typename SepCoefficients<S, T, Index>
+                ::size_type j,
+                const typename SepCoefficients<S, T, Index>
+                ::Coeff& coeff);
+
+
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
 genCoefficients(SepCoefficients<S, T, Index>& coeffs,
@@ -48,6 +59,13 @@ genCoefficients(SepCoefficients<S, T, Index>& coeffs,
                 const std::vector<IndexSet<Index>>& indexset);
 
 
+template <SortingCriterion S, typename T, typename Index, typename Basis>
+void
+genAddCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                const SeparableRHSD<T, Basis>& rhs,
+                const std::vector<IndexSet<Index>>& indexset);
+
+
 template <SortingCriterion S, typename T, typename Index>
 std::ostream& operator<<(std::ostream& s,
                          const SepCoefficients<S, T, Index>& coeffs);
@@ -56,6 +74,13 @@ std::ostream& operator<<(std::ostream& s,
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 unsigned FLENS_DEFAULT_INDEXTYPE
 maxintind(const Coefficients<S, T, Index>& coeffs, const Basis& basis);
+
+
+template <SortingCriterion S, typename T, typename Index, typename Basis>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const Coefficients<S, T, Index>& coeffs,
+              const int dim,
+              HTCoefficients<T, Basis>& u);
 
 
 template <typename T, SortingCriterion S, typename Index, typename Basis>
@@ -112,6 +137,13 @@ extract(const HTCoefficients<T, Basis>& tree,
 template <typename T, typename Basis>
 SepCoefficients<Lexicographical, T, Index1D>
 extract(const HTCoefficients<T, Basis>& tree,
+        const htucker::DimensionIndex& idx);
+
+
+template <typename T, typename Basis>
+SepCoefficients<Lexicographical, T, Index1D>
+extract(      HTCoefficients<T, Basis>& tree,
+        const IndexSet<Index1D>& Lambda,
         const htucker::DimensionIndex& idx);
 
 
@@ -268,7 +300,7 @@ evallaplace_old(Sepop<Optype>& A,
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
 evalsimple(Sepop<Optype>& A,
-           const HTCoefficients<T, Basis>& u,
+                 HTCoefficients<T, Basis>& u,
            const std::vector<IndexSet<Index1D> >&  rows,
            const std::vector<IndexSet<Index1D> >&  cols,
            const std::size_t hashtablelength=193);
@@ -277,7 +309,7 @@ evalsimple(Sepop<Optype>& A,
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
 evallaplace(Sepop<Optype>& A,
-            const HTCoefficients<T, Basis>& u,
+                  HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index1D> >&  rows,
             const std::vector<IndexSet<Index1D> >&  cols,
             const std::size_t hashtablelength=193);
@@ -286,16 +318,15 @@ evallaplace(Sepop<Optype>& A,
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
 eval(Sepop<Optype>& A,
-     const HTCoefficients<T, Basis>& u,
+           HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >&  rows,
      const std::vector<IndexSet<Index1D> >&  cols,
      const double eps = 1e-08,
      const std::size_t hashtablelength=193);
 
 
-template <typename T, typename Basis>
 FLENS_DEFAULT_INDEXTYPE
-maxlevel(const HTCoefficients<T, Basis>& u);
+maxlevel(const std::vector<IndexSet<Index1D> >& Lambda);
 
 
 template <typename Basis>
@@ -305,14 +336,23 @@ compOmegamin2(const Basis& basis,
               const typename Sepdiagscal<Basis>::T order);
 
 
-template <typename T, typename Basis>
+template <typename T>
 T
-compOmegamax2(const HTCoefficients<T, Basis>& u, const T order);
+compOmegamax2(const std::vector<IndexSet<Index1D> >& Lambda,
+              const T order);
 
 
-template <typename T, typename Basis>
+template <typename T>
 T
-compUnDistFac(const HTCoefficients<T, Basis>& u, const T order);
+compOmegamax4(const std::vector<IndexSet<Index1D> >& Lambda,
+              const T order);
+
+
+template <typename Basis>
+typename Basis::T
+compUnDistFac(const Basis& basis,
+              const std::vector<IndexSet<Index1D> >& Lambda,
+              const typename Basis::T order);
 
 
 template <typename Basis>
@@ -336,6 +376,13 @@ compIndexscale(const HTCoefficients<T, Basis>& u, const T order);
 template <typename T, typename Basis>
 T
 compIndexscale2(const HTCoefficients<T, Basis>& u, const T order);
+
+
+template <typename Basis>
+typename Basis::T
+compIndexscale2(const Basis& basis,
+                const std::vector<IndexSet<Index1D> >& Lambda,
+                const typename Basis::T order);
 
 
 template <typename Basis>
@@ -386,7 +433,7 @@ operator*(Sepdiagscal<Basis>& S,
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 eval(Sepdiagscal<Basis>& S,
-     const HTCoefficients<T, Basis>& u,
+     HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >&  cols,
      const double eps = 1e-08);
 
@@ -394,7 +441,7 @@ eval(Sepdiagscal<Basis>& S,
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 evalS2(Sepdiagscal<Basis>& S,
-       const HTCoefficients<T, Basis>& u,
+       HTCoefficients<T, Basis>& u,
        const std::vector<IndexSet<Index1D> >& cols,
        const double eps);
 
@@ -413,7 +460,7 @@ std::ostream& operator<<(std::ostream& s,
 
 template <typename T, typename Basis, typename Index>
 Coefficients<Lexicographical, T, Index>
-contraction(const HTCoefficients<T, Basis>& u,
+contraction(      HTCoefficients<T, Basis>& u,
             const IndexSet<Index>& activex,
             const flens::DenseVector<flens::Array<T> >& sigmas,
             const FLENS_DEFAULT_INDEXTYPE dim);
@@ -421,7 +468,7 @@ contraction(const HTCoefficients<T, Basis>& u,
 
 template <typename T, typename Basis, typename Index>
 void
-contraction(const HTCoefficients<T, Basis>& u,
+contraction(      HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index> >& activex,
             const std::vector<flens::DenseVector<flens::Array<T> > >& sigmas,
             std::vector<Coefficients<Lexicographical, T, Index> >& ret);

@@ -483,8 +483,9 @@ Coefficients<Bucket,T,Index>::bucketsort(const Coefficients<Lexicographical,T,In
 
     if (_coeff.size() > 0) {
         for (const_it lambda = _coeff.begin(); lambda != _coeff.end(); ++lambda) {
-            FLENS_DEFAULT_INDEXTYPE pos = std::max((FLENS_DEFAULT_INDEXTYPE) 0,(FLENS_DEFAULT_INDEXTYPE)(std::ceil(-2*std::log(fabs((*lambda).second)/supremumnorm)/std::log(T(2))))-1);
-            if (pos>=NumOfBuckets-1) continue;
+            FLENS_DEFAULT_INDEXTYPE pos = std::max((FLENS_DEFAULT_INDEXTYPE) 1,(FLENS_DEFAULT_INDEXTYPE)((-2.*std::log(fabs((*lambda).second)/supremumnorm)/std::log(T(2))))+1);
+            --pos;
+            if (pos>NumOfBuckets-1) continue;
             //std::cerr << "pos for " << (*lambda).first << ", " << (*lambda).second
             //          << ": " << -2*std::log(fabs((*lambda).second)/supremumnorm)/std::log(T(2)) << std::endl;
             const std::pair<const Index,T>* tmp = &(*lambda);

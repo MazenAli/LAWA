@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
 #include <lawa/methods/adaptive/datastructures/index.h>
+#include <lawa/methods/adaptive/datastructures/mapwavind.h>
 #include <flens/flens.cxx>
 #include <vector>
 
@@ -16,10 +17,12 @@ class HTCoefficients
 {
 public:
     typedef typename htucker::HTuckerTree<T>    HTTree;
+    typedef Mapwavind<Index1D>                  Maptype;
 
 private:
-    HTTree          httree;
-    const Basis*    basis_;
+    HTTree              httree;
+    const Basis*        basis_;
+    Maptype*            map_;
 
 public:
     HTCoefficients();
@@ -28,9 +31,11 @@ public:
 
     HTCoefficients(HTCoefficients&&)        = default;
 
-    HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const Basis& _basis);
+    HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const Basis& _basis,
+                   Maptype& _map);
 
-    HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const double split, const Basis& _basis);
+    HTCoefficients(const FLENS_DEFAULT_INDEXTYPE d, const double split,
+                   const Basis& _basis, Maptype& _map);
 
     FLENS_DEFAULT_INDEXTYPE
     dim() const;
@@ -47,6 +52,12 @@ public:
     const Basis&
     basis() const;
 
+    const Maptype&
+    map() const;
+
+    Maptype&
+    map();
+
     void
     orthogonalize();
 
@@ -62,16 +73,16 @@ public:
     truncate(double eps);
 
     T
-    eval(const IndexD& index) const;
+    eval(const IndexD& index);
 
     T
-    eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim) const;
+    eval(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim);
 
     T
-    operator()(const IndexD& index) const;
+    operator()(const IndexD& index);
 
     T
-    operator()(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim) const;
+    operator()(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim);
 
     HTCoefficients<T, Basis>&
     operator=(const HTCoefficients<T, Basis>& copy);

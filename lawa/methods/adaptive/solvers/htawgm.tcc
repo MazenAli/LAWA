@@ -20,7 +20,6 @@
 namespace lawa
 {
 
-
 template <typename Optype, typename Basis, typename T>
 unsigned
 galerkin_pcg(Sepop<Optype>& A,
@@ -32,143 +31,9 @@ galerkin_pcg(Sepop<Optype>& A,
              const bool uzero,
              const T tol,
              const unsigned maxit,
-             const T delta,
-             const T trunc)
-{
-    assert(A.dim()==S.dim());
-    assert(A.dim()==(unsigned) x.dim());
-    assert(A.dim()==(unsigned) b.dim());
-    assert(A.dim()==Lambda.size());
-
-    HTCoefficients<T, Basis>             r(x.dim(), x.basis());
-    HTCoefficients<T, Basis>             Sb(x.dim(), x.basis());
-    HTCoefficients<T, Basis>             p(x.dim(), x.basis());
-    HTCoefficients<T, Basis>             Ap(x.dim(), x.basis());
-    HTCoefficients<T, Basis>             tmp(x.dim(), x.basis());
-
-    T   nrmp;
-
-    Sb = eval(S, b, Lambda, trunc);
-    r  = Sb;
-
-    /* Initial residual */
-    if (!uzero) {
-        Ap = eval(S, x, Lambda, trunc);
-        Ap = eval(A, Ap, Lambda, Lambda);
-        Ap.truncate(trunc);
-        Ap = eval(S, Ap, Lambda, trunc);
-        scal(-1., Ap);
-        r.tree() = add_truncate(Ap.tree(), r.tree(), trunc);
-    }
-
-    residual = nrm2(r);
-    p        = r;
-    nrmp     = residual;
-
-    for (unsigned k=1; k<=maxit; ++k) {
-        T ak, bk, pAp, trunc_acc;
-
-        #ifdef VERBOSE
-            std::cout << "galerkin_pcg: Iteration " << k
-                      << " residual " << residual << std::endl;
-            std::cout << "galerkin_pcg: max rank r "
-                      << r.tree().max_rank() << std::endl;
-            std::cout << "galerkin_pcg: max rank solution "
-                      << x.tree().max_rank() << std::endl;
-            std::cout << "galerkin_pcg: max rank p "
-                      << p.tree().max_rank() << std::endl;
-            std::cout << "galerkin_pcg: max rank Sb "
-                      << Sb.tree().max_rank() << std::endl;
-        #endif
-
-        if (residual<=tol) {
-            #ifdef VERBOSE
-                std::cout << "galerkin_pcg: Tolerance reached r = "
-                          << residual << std::endl;
-            #endif
-
-            return k;
-        }
-
-        /* alpha_k */
-        trunc_acc = delta*nrmp;
-        Ap        = eval(S, p, Lambda, trunc_acc);
-        std::cout << "galerkin_pcg: max rank Sp " << Ap.tree().max_rank() << std::endl;
-        Ap        = eval(A, Ap, Lambda, Lambda);
-        std::cout << "galerkin_pcg: max rank ASp " << Ap.tree().max_rank() << std::endl;
-        Ap.truncate(MAX(trunc, trunc_acc));
-        Ap        = eval(S, Ap, Lambda, trunc_acc);
-        std::cout << "galerkin_pcg: max rank SASp " << Ap.tree().max_rank() << std::endl;
-        ak        = dot(Sb, p);
-        std::cout << "(Sb, p) = " << ak << std::endl;
-
-        if (!uzero || k>1) {
-            ak -= dot(x, Ap);
-        }
-
-        std::cout << "(Sb, p)-(x, Ap) = " << ak << std::endl;
-        pAp        = dot(p, Ap);
-        std::cout << "pAp = " << pAp << std::endl;
-        ak        /= pAp;
-        trunc_acc *= ak;
-
-        std::cout << "truncation accuracy = " << trunc_acc << std::endl;
-        std::cout << "nrmp  = " << nrmp << std::endl;
-        std::cout << "delta = " << delta << std::endl;
-        std::cout << "ak    = " << ak << std::endl;
-
-        /* Update x_k and r_k */
-        if (uzero && k==1) {
-            x.tree() = ak*p.tree();
-        } else {
-            tmp = p;
-            scal(ak, tmp);
-            x.tree() = add_truncate(tmp.tree(), x.tree(), trunc_acc);
-        std::cout << "galerkin_pcg: max rank new Sx " << x.tree().max_rank() << std::endl;
-        }
-
-        r = eval(S, x, Lambda, trunc_acc);
-        std::cout << "galerkin_pcg: max rank new Sx " << r.tree().max_rank() << std::endl;
-        r = eval(A, r, Lambda, Lambda);
-        std::cout << "galerkin_pcg: max rank new ASx " << r.tree().max_rank() << std::endl;
-        r.truncate(trunc_acc);
-        r = eval(S, r, Lambda, trunc_acc);
-        std::cout << "galerkin_pcg: max rank new SASx " << r.tree().max_rank() << std::endl;
-        scal(-1., r);
-        r.tree() = add_truncate(Sb.tree(), r.tree(), trunc_acc);
-        std::cout << "galerkin_pcg: max rank new Sb-SASx " << r.tree().max_rank() << std::endl;
-        residual = nrm2(r);
-
-        /* Update p_k */
-        bk        = -dot(r, Ap)/pAp;
-        scal(bk, p);
-        Ap.tree() = r.tree()+p.tree();
-        std::cout << "galerkin_pcg: max rank p before trunc " << Ap.tree().max_rank() << std::endl;
-        p.tree()  = add_truncate(r.tree(), p.tree(), delta*nrm2(Ap));
-        nrmp      = nrm2(p);
-    }
-
-    std::cerr << "galerkin_pcg: Max iterations reached: maxit " << maxit
-              << " r = " << residual << std::endl;
-
-    return maxit;
-}
-
-
-
-
-template <typename Optype, typename Basis, typename T>
-unsigned
-galerkin_pcg2(Sepop<Optype>& A,
-             Sepdiagscal<Basis>& S,
-             HTCoefficients<T, Basis>& x,
-             const HTCoefficients<T, Basis>& b,
-             const std::vector<IndexSet<Index1D> >& Lambda,
-             T& residual,
-             const bool uzero,
-             const T tol,
-             const unsigned maxit,
-             const T delta,
+             const T delta1,
+             const T delta2,
+             const T delta3,
              const T trunc)
 {
     assert(A.dim()==S.dim());
@@ -177,29 +42,43 @@ galerkin_pcg2(Sepop<Optype>& A,
     assert(A.dim()==Lambda.size());
 
     HTCoefficients<T, Basis>             r(b);
-    HTCoefficients<T, Basis>             p(x.dim(), x.basis());
-    HTCoefficients<T, Basis>             Ap(x.dim(), x.basis());
-    HTCoefficients<T, Basis>             tmp(x.dim(), x.basis());
+    HTCoefficients<T, Basis>             p(x.dim(),   x.basis(), x.map());
+    HTCoefficients<T, Basis>             tmp(x.dim(), x.basis(), x.map());
+    HTCoefficients<T, Basis>             rold(x.dim(), x.basis(), x.map());
 
-    T   nrmp;
-
-    T factor = compUnDistFac(r, S.order());
+    T nrmp, trunc_acc, nrmz, trunc_prec_s, t, nrmr, zr, trunc_prec;
 
     /* Initial residual */
     if (!uzero) {
-        Ap = eval(A, x, Lambda, Lambda);
-        scal(-1., Ap);
-        r.tree() = add_truncate(Ap.tree(), r.tree(), trunc);
+        tmp = eval(A, x, Lambda, Lambda);
+        scal(-1., tmp);
+        r.tree() = add_truncate(tmp.tree(), r.tree(), trunc);
     }
 
+    /* Single precondition truncation accuracy */
+    t            = compOmegamax2(Lambda, S.order())/
+                   compOmegamin2(S.basis(), S.dim(), S.order());
+    trunc_prec_s = 10.*S.eps()/std::sqrt(t);
+    #ifdef VERBOSE
+        std::cout << "galerkin_pcg: trunc_prec single = " << trunc_prec_s
+                  << std::endl;
+    #endif
+    nrmr      = nrm2(r);
+    rold      = r;
+    trunc_prec= std::min(1e-03, trunc_prec_s*nrmr);
+    r         = eval(S, r, Lambda, trunc_prec);
     residual  = nrm2(r);
-    residual *= factor;
-    p         = evalS2(S, r, Lambda, trunc);
+    trunc_acc = residual;
+
+    p         = eval(S, r, Lambda, delta1*residual);
+    zr        = dot(rold, p);
     nrmp      = nrm2(p);
+    nrmz      = nrmp;
 
-
+    T bk           = 1.;
+    T trunc_search = trunc_acc;
     for (unsigned k=1; k<=maxit; ++k) {
-        T ak, bk, pAp, trunc_acc;
+        T ak, pAp;
 
         #ifdef VERBOSE
             std::cout << "galerkin_pcg: Iteration " << k
@@ -214,32 +93,23 @@ galerkin_pcg2(Sepop<Optype>& A,
                       << b.tree().max_rank() << std::endl;
         #endif
 
-        if (residual<=tol) {
+        if (residual<=tol && k>1) {
             #ifdef VERBOSE
                 std::cout << "galerkin_pcg: Tolerance reached r = "
                           << residual << std::endl;
             #endif
-
             return k;
         }
 
         /* alpha_k */
-        Ap         = eval(A, p, Lambda, Lambda);
-        trunc_acc  = delta*nrmp;
-        Ap.truncate(MAX(trunc, trunc_acc));
+        tmp        = eval(A, p, Lambda, Lambda);
         ak         = dot(b, p);
-        pAp        = dot(p, Ap);
-
+        pAp        = dot(p, tmp);
         if (!uzero || k>1) {
-            ak -= dot(x, Ap);
+            ak -= dot(x, tmp);
         }
-
-        ak        /= pAp;
-        trunc_acc *= ak;
-        std::cout << "trunc_acc = " << trunc_acc << std::endl;
-        std::cout << "nrmp      = " << nrmp <<std::endl;
-        std::cout << "ak        = " << ak << std::endl;
-        std::cout << "bk        = " << bk << std::endl;
+        ak       /= pAp;
+        trunc_acc = nrmz*delta3*std::fabs(ak);
 
         /* Update x_k and r_k */
         if (uzero && k==1) {
@@ -250,25 +120,60 @@ galerkin_pcg2(Sepop<Optype>& A,
             x.tree() = add_truncate(tmp.tree(), x.tree(), trunc_acc);
         }
 
+        #ifdef VERBOSE
+            std::cout << "galerkin_pcg: trunc_acc    = " << trunc_acc
+                      << std::endl;
+            std::cout << "galerkin_pcg: trunc_search = " << trunc_search
+                      << std::endl;
+            std::cout << "galerkin_pcg: nrmp         = " << nrmp
+                      << std::endl;
+            std::cout << "galerkin_pcg: nrmz         = " << nrmz
+                      << std::endl;
+            std::cout << "galerkin_pcg: ak           = " << ak
+                      << std::endl;
+            std::cout << "galerkin_pcg: bk           = " << bk
+                      << std::endl;
+            std::cout << "galerkin_pcg: nrmr         = " << nrmr
+                      << std::endl;
+        #endif
+
         r = eval(A, x, Lambda, Lambda);
         r.truncate(trunc_acc);
         scal(-1., r);
-        r.tree() = add_truncate(b.tree(), r.tree(), trunc_acc);
-        residual = nrm2(r);
-        residual *= factor;
-        r = evalS2(S, r, Lambda, trunc_acc);
+        scal(-1., rold);
+        r.tree()   = add_truncate(b.tree(), r.tree(), trunc_acc);
+        tmp.tree() = add_truncate(r.tree(), rold.tree(), trunc_acc);
+        rold       = r;
+
+        nrmr       = nrm2(r);
+        trunc_prec = std::min(trunc_acc, trunc_prec_s*nrmr);
+        r          = eval(S, r, Lambda, trunc_prec);
+        residual   = nrm2(r);
+        trunc_prec = std::min(trunc_acc, trunc_prec_s*residual);
+        r          = eval(S, r, Lambda, trunc_prec);
 
         /* Update p_k */
-        bk        = -dot(r, Ap)/pAp;
-        scal(bk, p);
-        Ap.tree() = r.tree()+p.tree();
-        p.tree()  = add_truncate(r.tree(), p.tree(), delta*nrm2(Ap));
-        nrmp      = nrm2(p);
+        nrmz = nrm2(r);
+        trunc_search = delta2*(nrmz*nrmz)/(std::fabs(bk)*nrmp);
+        if (k==1) {
+            trunc_search = delta1*nrmz;
+        } else {
+            trunc_search = std::min(trunc_search, delta1*nrmz);
+        }
+
+        bk = dot(r, tmp)/zr;
+        zr = dot(r, rold);
+        if (bk<=0) {
+            p = r;
+        } else {
+            scal(bk, p);
+            p.tree()  = add_truncate(r.tree(), p.tree(), trunc_search);
+        }
+        nrmp = nrm2(p);
     }
 
     std::cerr << "galerkin_pcg: Max iterations reached: maxit " << maxit
               << " r = " << residual << std::endl;
-
     return maxit;
 }
 
@@ -277,8 +182,9 @@ template <typename Optype, typename Basis, typename T>
 std::vector<IndexSet<Index1D> >
 presidual(Sepop<Optype>& A,
           Sepdiagscal<Basis>& S,
-          const HTCoefficients<T, Basis>& u,
+                HTCoefficients<T, Basis>& u,
                 HTCoefficients<T, Basis>& f,
+                SepCoefficients<Lexicographical, T, Index1D> fcp,
                 HTCoefficients<T, Basis>& r,
           const SeparableRHSD<T, Basis>& fint,
           const std::vector<IndexSet<Index1D> >& current,
@@ -297,20 +203,13 @@ presidual(Sepop<Optype>& A,
     typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
 
     std::vector<IndexSet<Index1D> > diff(current.size());
-    SepCoefficients<Lexicographical, T, Index1D>
-                                    fdiff_(fint.rank(),
-                                            fint.dim());
-    HTCoefficients<T, Basis>        fdiff(u.dim(), u.basis());
-    HTCoefficients<T, Basis>        Au(u.dim(), u.basis());
-    HTCoefficients<T, Basis>        prec(u.dim(), u.basis());
-    htucker::HTuckerTree<T>         gram;
-    flens::DenseVector
-          <flens::Array<T> >        eps2vec(u.tree().depth()-1);
+    HTCoefficients<T, Basis>        Au(u.dim(),    u.basis(), u.map());
+    HTCoefficients<T, Basis>        prec(u.dim(),  u.basis(), u.map());
 
     /* Determine extended index set for evaluation */
     for (size_type j=0; j<current.size(); ++j) {
         extendMultiTree(u.basis(), sweep[j], total[j],
-                        "standard", true);
+                        "standard", false);
         diff[j] = total[j];
 
         for (auto& lambda : current[j]) {
@@ -318,16 +217,16 @@ presidual(Sepop<Optype>& A,
         }
     }
 
-    /* Evaluate on difference only */
-    genCoefficients(fdiff_, fint, diff);
-    set(fdiff, fdiff_);
-    f.tree() = add_truncate(f.tree(), fdiff.tree(), trunc);
+    /* Evaluate */
+    genAddCoefficients(fcp, fint, diff);
+    set(f, fcp);
 
     /* Compute residual */
     r = eval(A, u, total, current);
-    r.truncate(trunc);
+    //r.truncate(trunc);
     scal(-1., r);
     r.tree() = add_truncate(f.tree(), r.tree(), trunc);
+    r        = eval(S, r, total, trunc);
 
     return diff;
 }
@@ -335,95 +234,72 @@ presidual(Sepop<Optype>& A,
 
 template <typename T, typename Basis>
 std::vector<IndexSet<Index1D> >
-bulk(const T alpha, const T resex, const T rescg,
+bulk(const T alpha, const T resex,
            HTCoefficients<T, Basis>& res,
            std::vector<IndexSet<Index1D> >& Lambda,
-     const std::vector<IndexSet<Index1D> >& diff,
-     const std::vector<IndexSet<Index1D> >& total,
-     const unsigned maxit)
+     const std::vector<IndexSet<Index1D> >& diff)
 {
     assert(Lambda.size()==(unsigned) res.dim());
 
     typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
 
-    HTCoefficients<T, Basis>        res_current(res);
     std::vector<flens::DenseVector<flens::Array<T> > >
                                     sigmas(Lambda.size());
     std::vector<Coefficients<Lexicographical, T, Index1D> >
                                     cont(Lambda.size());
     std::vector<IndexSet<Index1D> > sweep(Lambda.size());
-    std::vector<IndexSet<Index1D> > diff_current(diff);
-    T current_nrm, bulk, thresh;
 
-    bulk        = alpha*resex;
-    current_nrm = rescg;
-    thresh      = std::sqrt((T) 1-alpha*alpha)*resex;
+    T thresh = std::sqrt((T) 1-alpha*alpha)*resex;
 
-    for (unsigned k=1; k<=maxit; ++k) {
+    /* Compute contractions */
+    res.orthogonalize_svd(sigmas);
+    contraction(res, diff, sigmas, cont);
 
-        /* Compute contractions */
-        res_current.orthogonalize_svd(sigmas);
-        contraction(res_current, diff_current, sigmas, cont);
-
-        /* Distribute contractions */
-        Coefficients<Lexicographical, T, Index1DC> contvec;
-        for (size_type j=0; j<cont.size(); ++j) {
-            for (auto& lambda : cont[j]) {
-                Index1DC index(lambda.first.j,
-                               lambda.first.k,
-                               lambda.first.xtype,
-                               j+1);
-                contvec[index] = lambda.second;
-            }
-        }
-
-        /* Bucket sort */
-        Coefficients<Bucket, T, Index1DC>           buckets;
-        Coefficients<Lexicographical, T, Index1DC>  newind;
-        T P_Lambda;
-        P_Lambda = current_nrm*current_nrm;
-        buckets.bucketsort(contvec, thresh);
-
-        for (size_type i=0; i<buckets.bucket_ell2norms.size(); ++i) {
-            P_Lambda += std::pow(buckets.bucket_ell2norms[i], 2.0L);
-            buckets.addBucketToCoefficients(newind, i);
-
-            if (P_Lambda >= bulk*bulk) break;
-        }
-
-        /* Update index set and set new sweep */
-        for (auto& it : newind) {
-            completeMultiTree(res.basis(), it.first,
-                              Lambda[it.first.d-1],
-                              sweep[it.first.d-1],
-                              true);
-        }
-        restrict(res_current, Lambda);
-        current_nrm = nrm2(res_current);
-
-        /* Check bulk criterion */
-        if (current_nrm>=bulk) {
-            #ifdef VERBOSE
-                std::cout << "bulk: Required " << k
-                          << " iterations" << std::endl;
-            #endif
-            restrict(res, Lambda);
-            return sweep;
-        }
-
-        /* Prepare next iteration */
-        res_current.tree() = res.tree();
-        for (size_type j=0; j<Lambda.size(); ++j) {
-            diff_current[j] = total[j];
-            for (auto& lambda : Lambda[j]) {
-                diff_current[j].erase(lambda);
-            }
+    /* Distribute contractions */
+    Coefficients<Lexicographical, T, Index1DC> contvec;
+    for (size_type j=0; j<cont.size(); ++j) {
+        for (auto& lambda : cont[j]) {
+            Index1DC index(lambda.first.j,
+                           lambda.first.k,
+                           lambda.first.xtype,
+                           j+1);
+            contvec[index] = lambda.second;
         }
     }
 
-    std::cerr << "bulk: Max iterations reached: maxit " << maxit
-              << ", alpha = "  << alpha
-              << ", rnew/rext = " << current_nrm/resex << std::endl;
+    /* Bucket sort */
+    Coefficients<Bucket, T, Index1DC>           buckets;
+    Coefficients<Lexicographical, T, Index1DC>  newind;
+    T P_Lambda    = 0;
+    size_type num = 0;
+    buckets.bucketsort(contvec, thresh);
+
+    for (int i=buckets.bucket_ell2norms.size()-1; i>=0;
+         --i) {
+        P_Lambda += std::pow(buckets.bucket_ell2norms[i], 2.0L);
+        if (P_Lambda > thresh*thresh) {
+            num = i;
+            break;
+        }
+    }
+
+    for (size_type i=0; i<=num; ++i) {
+        buckets.addBucketToCoefficients(newind, i);
+    }
+
+    /* Update index set and set new sweep */
+    for (auto& it : newind) {
+        completeMultiTree(res.basis(), it.first,
+                          Lambda[it.first.d-1],
+                          sweep[it.first.d-1],
+                          true);
+    }
+
+    #ifdef VERBOSE
+        restrict(res, Lambda);
+        std::cout << "bulk: true alpha = " << nrm2(res)/resex << std::endl;
+    #endif
+
     return sweep;
 }
 
@@ -447,12 +323,12 @@ htawgm(Sepop<Optype>&                   A,
     std::vector<IndexSet<Index1D> >              sweep(A.dim());
     std::vector<IndexSet<Index1D> >              total(A.dim());
     SepCoefficients<Lexicographical, T, Index1D> Fcp(f.rank(), f.dim());
-    HTCoefficients<T, Basis>                     F(u.dim(), u.basis());
-    HTCoefficients<T, Basis>                     Fnew(u.dim(), u.basis());
-    HTCoefficients<T, Basis>                     r(u.dim(), u.basis());
-    HTCoefficients<T, Basis>                     Au(u.dim(), u.basis());
-    HTCoefficients<T, Basis>                     prec(u.dim(), u.basis());
-    T                                            factor;
+    HTCoefficients<T, Basis>                     F(u.dim(),    u.basis(),
+                                                   u.map());
+    HTCoefficients<T, Basis>                     r(u.dim(),    u.basis(),
+                                                   u.map());
+    HTCoefficients<T, Basis>                     Au(u.dim(),   u.basis(),
+                                                   u.map());
 
     sweep = Lambda;
     total = Lambda;
@@ -460,20 +336,29 @@ htawgm(Sepop<Optype>&                   A,
     genCoefficients(Fcp, f, Lambda);
     set(F, Fcp);
     r.tree() = F.tree();
-    r.truncate(params.trunc_pres);
 
-    factor = compUnDistFac(F, S.order());
+    T nrmf = nrm2(F);
+
+    /* Reduction parameter */
+    T kappap = std::sqrt(2.*(T)S.dim()-3.);
+    T alpha  = params.recompr;
+    T kappar = params.theta/(1.+kappap*(1.+alpha));
+
+    #ifdef VERBOSE
+        std::cout << "htawgm: kappar = " << kappar << std::endl;
+    #endif
 
     /* Initial residual */
     if (!params.uzero) {
         Au = eval(A, u, Lambda, Lambda);
-        Au.truncate(params.trunc_pres);
+        Au.truncate(nrmf*1e-01);
         scal(-1., Au);
-        r.tree() = add_truncate(F.tree(), Au.tree(), params.trunc_pres);
+        r.tree() = add_truncate(F.tree(), Au.tree(), nrmf*1e-01);
     }
 
+    r         = eval(S, r, Lambda, params.tol_awgm*1e-01);
     residual  = nrm2(r);
-    residual *= factor;
+    T xi      = residual;
 
     if (residual<=params.tol_awgm) {
         #ifdef VERBOSE
@@ -484,6 +369,7 @@ htawgm(Sepop<Optype>&                   A,
         return 0;
     }
 
+    T tol;
     for (unsigned k=1; k<=params.maxit_awgm; ++k) {
         unsigned pcg_it, size;
         T        res_pcg;
@@ -494,33 +380,33 @@ htawgm(Sepop<Optype>&                   A,
         #endif
 
         /* Galerkin solve */
-        pcg_it = galerkin_pcg2(A, S, u, F, Lambda, res_pcg,
+        tol    = params.gamma*residual;
+        pcg_it = galerkin_pcg(A, S, u, F, Lambda, res_pcg,
                               params.uzero,
-                              params.gamma*residual,
+                              tol,
                               params.maxit_pcg,
-                              params.delta_pcg,
-                              params.gamma*residual*1e-01);
+                              params.delta1_pcg,
+                              params.delta2_pcg,
+                              params.delta3_pcg,
+                              tol*1e-01);
         #ifdef VERBOSE
-            std::cout << "galerkin_pcg required " << pcg_it
+            std::cout << "htawgm: galerkin_pcg required " << pcg_it
                       << " iterations to reach tolerance "
-                      << params.gamma*residual
+                      << tol
                       << std::endl;
         #else
             (void) pcg_it;
         #endif
 
-        /* Recompress */
-        //u.truncate(residual*params.gamma*1e-01);
-
         /* Approximate residual */
-        sweep = presidual(A, S, u, F, r, f,
-                          Lambda, sweep, total,
-                          params.trunc_pres);
-
-        residual  = nrm2(r);
-        factor    = compUnDistFac(r, S.order());
-        residual *= factor;
-
+//        T t, trunc_prec_s;
+//        t            = compOmegamax2(Lambda, S.order())/
+//                       compOmegamin2(S.basis(), S.dim(), S.order());
+//        trunc_prec_s = S.eps()/std::sqrt(t);
+        sweep        = presidual(A, S, u, F, Fcp, r, f,
+                                 Lambda, sweep, total,
+                                 params.tol_awgm);
+        residual     = nrm2(r);
 
         if (residual<=params.tol_awgm) {
             #ifdef VERBOSE
@@ -531,28 +417,51 @@ htawgm(Sepop<Optype>&                   A,
             return k;
         }
 
+        /* Recompress */
+        if (residual/xi<=params.theta) {
+            u.truncate(std::min(residual*params.recompr, 1e-04));
+            #ifdef VERBOSE
+                std::cout << "htawgm: Recompressing with tolerance "
+                          //<< kappap*(1.+alpha)*residual << std::endl;
+                          << params.recompr*residual << std::endl;
+            #endif
+            /* Compute residual */
+            /*r = eval(A, u, total, Lambda);
+            scal(-1., r);
+            r.tree() = add_truncate(F.tree(), r.tree(), params.tol_awgm*1e-01);
+            S.set_nu(params.tol_awgm*1e-01);
+            r        = eval(S, r, total, params.tol_awgm*1e-01);
+            residual = nrm2(r);*/
+            xi       = residual;
+        }
+
         /* Bulk chasing */
-        sweep = bulk(params.alpha, residual, res_pcg,
-                     r, Lambda, sweep, total,
-                     params.maxit_bulk);
+        sweep = bulk(params.alpha, residual,
+                     r, Lambda, sweep);
 
         /* New RHS */
         restrict(F, Lambda);
-        F.truncate(params.trunc_pres);
 
         /* Extend u to new Lambda */
         extend(u, Lambda);
-        params.uzero = true;
+        params.uzero = false;
 
         #ifdef VERBOSE
-            std::cout << "ht_awgm: Index set sizes\n";
+            std::cout << "htawgm: Index set sizes\n";
             size = 0;
             for (size_type j=0; j<Lambda.size(); ++j) {
-                std::cout << "d = " << j+1
+                std::cout << "htawgm: d = " << j+1
                           << " : " << Lambda[j].size() << std::endl;
                 size += Lambda[j].size();
+                FLENS_DEFAULT_INDEXTYPE jmax = 0;
+                for (const auto& it : Lambda[j]) {
+                    FLENS_DEFAULT_INDEXTYPE level = it.j;
+                    if (it.xtype==XWavelet) ++level;
+                    jmax = MAX(level, jmax);
+                }
+                std::cout << "htawgm: jmax = " << jmax << std::endl;
             }
-            std::cout << "Overall = " << size << std::endl;
+            std::cout << "htawgm: Overall = " << size << std::endl;
         #else
             (void) size;
         #endif
