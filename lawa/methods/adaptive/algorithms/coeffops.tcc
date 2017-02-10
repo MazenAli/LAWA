@@ -2271,11 +2271,6 @@ eval(Sepdiagscal<Basis>& S,
 
     HTCoefficients<T, Basis>    sum(u.dim(), u.basis(), u.map());
 
-    unsigned N = S.n()+S.nplus()+1;
-    std::vector<HTCoefficients<T, Basis> >  prods(N);
-    flens::DenseVector<flens::Array<T> >    nrms(N);
-    flens::DenseVector<flens::Array<int> >  ids(N);
-
     unsigned count=0;
     for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i,
                                                                     ++count) {
@@ -2304,9 +2299,6 @@ eval(Sepdiagscal<Basis>& S,
             set(prod, idx, frame);
         }
 
-       // nrms(count+1) = nrm2(prod);
-       // prods[count]  = prod;
-
         if (i==-1*(signed) S.n()) {
             sum = prod;
             #ifdef DEBUG_CANCEL
@@ -2315,9 +2307,9 @@ eval(Sepdiagscal<Basis>& S,
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
         } else {
-            //if (nrm2(prod)>eps) {
+            if (nrm2(prod)>eps) {
                 sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
-            //}
+            }
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
                 prod.orthogonalize();
@@ -2332,34 +2324,6 @@ eval(Sepdiagscal<Basis>& S,
                   << sumnorms/(T) sumexact.tree().L2normorthogonal()
                   << std::endl;
     #endif
-/*
-    flens::sort(nrms, ids);
-    count    = 0;
-    T cutoff = 0.;
-    for (; count<nrms.length(); ++count) {
-        cutoff += nrms(count+1);
-        if (cutoff>eps/2) break;
-    }
-
-    if (count==nrms.length()) {
-        std::cerr << "eval: Warning! Truncation parameter too large!\n";
-        count = nrms.length()-1;
-    }
-
-    T refsum = 0.;
-    for (unsigned i=count+1; i<=nrms.length(); ++i) {
-        refsum += (T) (nrms.length()-i+1)*nrms(i);
-    }
-
-    sum    = prods[ids(count+1)-1];
-    T eps_ = nrms(count+1);
-    sum.truncate(eps/2*eps_/refsum);
-    ++count;
-    for (;count<nrms.length(); ++count) {
-        eps_ += nrms(count+1);
-        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
-                     eps/2*eps_/refsum);
-    }*/
 
     return sum;
 }
@@ -2425,27 +2389,6 @@ evalS2(Sepdiagscal<Basis>& S,
 
         nrms(count+1) = nrm2(prod);
         prods[count]  = prod;
-
-/*
-        if (i==-1*(signed) S.n()) {
-            sum = prod;
-            #ifdef DEBUG_CANCEL
-                sumexact  = prod;
-                prod.orthogonalize();
-                sumnorms += prod.tree().L2normorthogonal();
-            #endif
-        } else {
-            if (nrm2(prod)>eps) {
-                sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
-            } else {
-                std::cout << "Skipped i = " << i << std::endl;
-            }
-            #ifdef DEBUG_CANCEL
-                sumexact.tree() = sumexact.tree()+prod.tree();
-                prod.orthogonalize();
-                sumnorms += prod.tree().L2normorthogonal();
-            #endif
-        }*/
     }
 
     #ifdef DEBUG_CANCEL

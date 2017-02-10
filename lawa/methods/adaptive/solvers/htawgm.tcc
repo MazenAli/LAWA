@@ -223,7 +223,6 @@ presidual(Sepop<Optype>& A,
 
     /* Compute residual */
     r = eval(A, u, total, current);
-    //r.truncate(trunc);
     scal(-1., r);
     r.tree() = add_truncate(f.tree(), r.tree(), trunc);
     r        = eval(S, r, total, trunc);
@@ -358,7 +357,6 @@ htawgm(Sepop<Optype>&                   A,
 
     r         = eval(S, r, Lambda, params.tol_awgm*1e-01);
     residual  = nrm2(r);
-    T xi      = residual;
 
     if (residual<=params.tol_awgm) {
         #ifdef VERBOSE
@@ -399,10 +397,6 @@ htawgm(Sepop<Optype>&                   A,
         #endif
 
         /* Approximate residual */
-//        T t, trunc_prec_s;
-//        t            = compOmegamax2(Lambda, S.order())/
-//                       compOmegamin2(S.basis(), S.dim(), S.order());
-//        trunc_prec_s = S.eps()/std::sqrt(t);
         sweep        = presidual(A, S, u, F, Fcp, r, f,
                                  Lambda, sweep, total,
                                  params.tol_awgm);
@@ -415,24 +409,6 @@ htawgm(Sepop<Optype>&                   A,
             #endif
 
             return k;
-        }
-
-        /* Recompress */
-        if (residual/xi<=params.theta) {
-            u.truncate(std::min(residual*params.recompr, 1e-04));
-            #ifdef VERBOSE
-                std::cout << "htawgm: Recompressing with tolerance "
-                          //<< kappap*(1.+alpha)*residual << std::endl;
-                          << params.recompr*residual << std::endl;
-            #endif
-            /* Compute residual */
-            /*r = eval(A, u, total, Lambda);
-            scal(-1., r);
-            r.tree() = add_truncate(F.tree(), r.tree(), params.tol_awgm*1e-01);
-            S.set_nu(params.tol_awgm*1e-01);
-            r        = eval(S, r, total, params.tol_awgm*1e-01);
-            residual = nrm2(r);*/
-            xi       = residual;
         }
 
         /* Bulk chasing */
