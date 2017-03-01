@@ -85,7 +85,10 @@ public:
     operator()(const IndexD& index, const FLENS_DEFAULT_INDEXTYPE vardim);
 
     HTCoefficients<T, Basis>&
-    operator=(const HTCoefficients<T, Basis>& copy);
+    operator=(const HTCoefficients<T, Basis>& copy) = default;
+
+    HTCoefficients<T, Basis>&
+    operator=(HTCoefficients<T, Basis>&& copy) = default;
 };
 
 } // namespace lawa

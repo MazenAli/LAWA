@@ -182,16 +182,6 @@ HTCoefficients<T, Basis>::operator()(const IndexD& index,
     return eval(index, vardim);
 }
 
-
-template <typename T, typename Basis>
-HTCoefficients<T, Basis>&
-HTCoefficients<T, Basis>::operator=(const HTCoefficients<T, Basis>& copy)
-{
-    basis_ = &copy.basis();
-    httree = copy.tree();
-    return *this;
-}
-
 } // namespace lawa
 
 #endif // LAWA_METHODS_ADAPTIVE_DATASTRUCTURES_HTCOEFFICIENTS_TCC

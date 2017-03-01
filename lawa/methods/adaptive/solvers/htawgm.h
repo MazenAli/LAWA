@@ -69,4 +69,4 @@ htawgm(Sepop<Optype>&                   A,
 
 #include <lawa/methods/adaptive/solvers/htawgm.tcc>
 
-#endif // LAWA_METHODS_ADAPTIVE_SOLVERS_HTAWGM_H 1
+#endif // LAWA_METHODS_ADAPTIVE_SOLVERS_HTAWGM_H

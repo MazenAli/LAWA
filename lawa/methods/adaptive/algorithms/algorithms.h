@@ -29,3 +29,4 @@
 #include <lawa/methods/adaptive/algorithms/sample.h>
 #include <lawa/methods/adaptive/algorithms/indexops.h>
 #include <lawa/methods/adaptive/algorithms/coeffops.h>
+#include <lawa/methods/adaptive/algorithms/optcore.h>

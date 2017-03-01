@@ -245,4 +245,17 @@ std::ostream& operator<<(std::ostream& s,
 }
 
 
+std::ostream& operator<<(std::ostream& s,
+                         const Rank1UP_Params& params)
+{
+    s << "update     = " << params.update    << std::endl;
+    s << "orthog     = " << params.orthog    << std::endl;
+    s << "tol_als    = " << params.tol_als   << std::endl;
+    s << "tol_cg     = " << params.tol_cg    << std::endl;
+    s << "max_sweep  = " << params.max_sweep << std::endl;
+    s << "maxit_cg   = " << params.maxit_cg  << std::endl;
+
+    return s;
+}
+
 } // namespace lawa

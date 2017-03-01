@@ -29,4 +29,8 @@
 #include <lawa/methods/adaptive/solvers/solver_parameters.h>
 #include <lawa/methods/adaptive/solvers/multitreeawgm2.h>
 #include <lawa/methods/adaptive/solvers/htawgm.h>
-
+#include <lawa/methods/adaptive/solvers/cg.h>
+#include <lawa/methods/adaptive/solvers/rank1als.h>
+#include <lawa/methods/adaptive/solvers/fixpoint.h>
+#include <lawa/methods/adaptive/solvers/rank1update.h>
+#include <lawa/methods/adaptive/solvers/rank1greedy.h>

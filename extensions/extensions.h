@@ -19,3 +19,4 @@
 
 #include <extensions/gmpmath/gmpmath.h>
 #include <extensions/flens/flens.h>
+#include <extensions/matlab/matlab.h>

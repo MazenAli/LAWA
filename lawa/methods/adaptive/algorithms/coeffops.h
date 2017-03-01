@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <flens/flens.cxx>
 #include <lawa/settings/enum.h>
 #include <lawa/righthandsides/separablerhsd.h>
 #include <lawa/methods/adaptive/datastructures/index.h>
@@ -83,10 +84,33 @@ maxintindhash(const Coefficients<S, T, Index>& coeffs,
               HTCoefficients<T, Basis>& u);
 
 
+template <typename T, typename Index, typename Basis>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const IndexSet<Index>& active,
+              HTCoefficients<T, Basis>& u,
+              const int dim);
+
+
 template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 set(HTCoefficients<T, Basis>& tree,
     const SepCoefficients<S, T, Index>& cp);
+
+
+template <typename T, typename Basis>
+void
+init(HTCoefficients<T, Basis>&              tree,
+     const std::vector<IndexSet<Index1D> >& activex,
+     const unsigned                         rank  = 1,
+     const T                                value = 1.);
+
+
+template <typename T, typename Basis>
+void
+rndinit(HTCoefficients<T, Basis>&              tree,
+        const std::vector<IndexSet<Index1D> >& activex,
+        const unsigned                         rank  = 1,
+        const long                             seed  = -1);
 
 
 template <typename T, SortingCriterion S, typename Index, typename Basis>
@@ -99,6 +123,12 @@ template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 set(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
     const SepCoefficients<S, T, Index>& coeff);
+
+
+template <typename T, SortingCriterion S, typename Index, typename Basis>
+void
+set_inplace(HTCoefficients<T, Basis>& tree, const htucker::DimensionIndex& idx,
+            const SepCoefficients<S, T, Index>& coeff);
 
 
 template <typename T, SortingCriterion S, typename Index, typename Basis>
@@ -299,7 +329,7 @@ evallaplace_old(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
-evalsimple(Sepop<Optype>& A,
+evalsimple(      Sepop<Optype>&            A,
                  HTCoefficients<T, Basis>& u,
            const std::vector<IndexSet<Index1D> >&  rows,
            const std::vector<IndexSet<Index1D> >&  cols,
@@ -308,7 +338,7 @@ evalsimple(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
-evallaplace(Sepop<Optype>& A,
+evallaplace(      Sepop<Optype>&            A,
                   HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index1D> >&  rows,
             const std::vector<IndexSet<Index1D> >&  cols,
@@ -316,13 +346,158 @@ evallaplace(Sepop<Optype>& A,
 
 
 template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+evallaplace(      Sepop<Optype>&            A,
+            const flens::GeMatrix<
+                  flens::FullStorage<T,
+                  cxxblas::ColMajor> >&     U,
+                  HTCoefficients<T, Basis>& u,
+            const unsigned                    j,
+            const IndexSet<Index1D>&        rows,
+            const IndexSet<Index1D>&        cols,
+            const std::size_t               hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Prec, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+evallaplace(      Sepop<Optype>&            A,
+                  Prec&                     P,
+            const flens::GeMatrix<
+                  flens::FullStorage<T,
+                  cxxblas::ColMajor> >&     U,
+                  HTCoefficients<T, Basis>& u,
+            const unsigned                  j,
+            const IndexSet<Index1D>&        rows,
+            const IndexSet<Index1D>&        cols,
+            const std::size_t               hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
-eval(Sepop<Optype>& A,
+eval(      Sepop<Optype>&            A,
            HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >&  rows,
      const std::vector<IndexSet<Index1D> >&  cols,
      const double eps = 1e-08,
      const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+eval(      Sepop<Optype>&              A,
+     const flens::GeMatrix<
+           flens::FullStorage<T,
+           cxxblas::ColMajor> >&       U,
+           HTCoefficients<T, Basis>&   u,
+     const unsigned                    j,
+     const IndexSet<Index1D>&          rows,
+     const IndexSet<Index1D>&          cols,
+     const double                      eps = 1e-08,
+     const std::size_t                 hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Prec, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+eval(      Sepop<Optype>&              A,
+           Prec&                       P,
+     const flens::GeMatrix<
+           flens::FullStorage<T,
+           cxxblas::ColMajor> >&       U,
+           HTCoefficients<T, Basis>&   u,
+     const unsigned                    j,
+     const IndexSet<Index1D>&          rows,
+     const IndexSet<Index1D>&          cols,
+     const double                      eps = 1e-08,
+     const std::size_t                 hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+redeval(      Sepop<Optype>&              A,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&       Uj,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&       Pj,
+              HTCoefficients<T, Basis>&   u,
+        const unsigned                    j,
+        const IndexSet<Index1D>&          rows,
+        const IndexSet<Index1D>&          cols,
+        const double                      eps = 1e-08,
+        const std::size_t                 hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Prec, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+redeval_laplace(      Sepop<Optype>&              A,
+                      Prec&                       P,
+                const flens::GeMatrix<
+                      flens::FullStorage<T,
+                      cxxblas::ColMajor> >&       Uj,
+                const flens::GeMatrix<
+                      flens::FullStorage<T,
+                      cxxblas::ColMajor> >&       Pj,
+                      HTCoefficients<T, Basis>&   u,
+                const unsigned                    j,
+                const IndexSet<Index1D>&          rows,
+                const IndexSet<Index1D>&          cols,
+                const double                      eps = 1e-08,
+                const std::size_t                 hashtablelength = 193);
+
+
+template <typename T, typename Optype, typename Prec, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+redeval(      Sepop<Optype>&              A,
+              Prec&                       P,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&       Uj,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&       Pj,
+              HTCoefficients<T, Basis>&   u,
+        const unsigned                    j,
+        const IndexSet<Index1D>&          rows,
+        const IndexSet<Index1D>&          cols,
+        const double                      eps = 1e-08,
+        const std::size_t                 hashtablelength = 193);
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+redeval(      Sepop<Optype>&                    A,
+              Sepdiagscal<Basis>&               S,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&             Uj,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&             Pj,
+              HTCoefficients<T, Basis>&         u,
+        const unsigned                          j,
+        const std::vector<IndexSet<Index1D> >&  rows,
+        const std::vector<IndexSet<Index1D> >&  cols,
+        const double                            eps = 1e-08,
+        const std::size_t                       hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+redeval(      Sepop<Optype>&              A,
+              Sepdiagscal<Basis>&         S,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&       Uj,
+        const flens::GeMatrix<
+              flens::FullStorage<T,
+              cxxblas::ColMajor> >&       Pj,
+              HTCoefficients<T, Basis>&   u,
+        const unsigned                    j,
+        const IndexSet<Index1D>&          rows,
+        const IndexSet<Index1D>&          cols,
+        const double                      eps = 1e-08,
+        const std::size_t                 hashtablelength = 193);
 
 
 FLENS_DEFAULT_INDEXTYPE
@@ -440,6 +615,136 @@ eval(Sepdiagscal<Basis>& S,
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
+eval_notrunc(Sepdiagscal<Basis>&                     S,
+             HTCoefficients<T, Basis>&               u,
+             const std::vector<IndexSet<Index1D> >&  cols);
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+fixeval_notrunc(Sepdiagscal<Basis>&                      S,
+                HTCoefficients<T, Basis>&                u,
+                const std::vector<IndexSet<Index1D> >&   cols);
+
+
+template <typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+eval(      Sepdiagscal<Basis>&              S,
+     const flens::GeMatrix
+           <flens::FullStorage
+           <T, cxxblas::ColMajor>>&         Uj,
+           HTCoefficients<T, Basis>&        u,
+     const unsigned                         j,
+     const std::vector<IndexSet<Index1D> >& cols);
+
+
+template <typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+fixeval(      Sepdiagscal<Basis>&           S,
+        const flens::GeMatrix
+              <flens::FullStorage
+              <T, cxxblas::ColMajor>>&      Uj,
+              HTCoefficients<T, Basis>&     u,
+     const unsigned                         j,
+     const IndexSet<Index1D>&               cols);
+
+
+template <typename Precon, typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+prec(Precon&                                                     P,
+     const
+     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
+     HTCoefficients<T, Basis>&                                   u,
+     const unsigned                                              j,
+     const IndexSet<Index1D>&                                    active);
+
+
+
+template <typename Precon, typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+prec(Precon&                                                     P,
+     const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& Pj,
+     const
+     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
+     HTCoefficients<T, Basis>&                                   u,
+     const unsigned                                              j,
+     const IndexSet<Index1D>&                                    active);
+
+
+template <typename Precon, typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+precsq(Precon&                                                     P,
+     const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& Pj,
+     const
+     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
+     HTCoefficients<T, Basis>&                                   u,
+     const unsigned                                              j,
+     const IndexSet<Index1D>&                                    active);
+
+
+template <typename Precon, typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+remove_prec(Precon&                                                     P,
+            const
+            flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
+            HTCoefficients<T, Basis>&                                   u,
+            const unsigned                                              j,
+            const IndexSet<Index1D>&                                    active);
+
+
+template <typename Precon, typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+precsq(Precon&                                                     P,
+       const
+       flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
+       HTCoefficients<T, Basis>&                                   u,
+       const unsigned                                              j,
+       const IndexSet<Index1D>&                                    active);
+
+
+template <typename Precon, typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+remove_precsq(Precon&                                      P,
+              const
+              flens::GeMatrix
+              <flens::FullStorage<T, cxxblas::ColMajor> >& U,
+              HTCoefficients<T, Basis>&                    u,
+              const unsigned                               j,
+              const IndexSet<Index1D>&                     active);
+
+
+template <typename Precon, typename T, typename Basis>
+void
+rank1prec(Precon&                               P,
+          HTCoefficients<T, Basis>&             u,
+          const std::vector<IndexSet<Index1D>>& Lambda);
+
+
+template <typename Precon, typename T, typename Basis>
+void
+rank1prec(Precon&                   P,
+          HTCoefficients<T, Basis>& u,
+          const unsigned            j,
+          const IndexSet<Index1D>&  Lambda);
+
+
+template <typename Precon, typename T, typename Basis>
+void
+remove_rank1prec(Precon&                               P,
+                 HTCoefficients<T, Basis>&             u,
+                 const std::vector<IndexSet<Index1D>>& Lambda);
+
+
+template <typename Precon, typename T, typename Basis>
+void
+remove_rank1prec(Precon&                    P,
+                 HTCoefficients<T, Basis>&  u,
+                 const unsigned             j,
+                 const IndexSet<Index1D>&   Lambda);
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
 evalS2(Sepdiagscal<Basis>& S,
        HTCoefficients<T, Basis>& u,
        const std::vector<IndexSet<Index1D> >& cols,
@@ -520,6 +825,32 @@ template <typename T, typename Basis>
 void
 extend(HTCoefficients<T, Basis>& f,
        const std::vector<IndexSet<Index1D> >& activex);
+
+
+template <typename T, typename Optype, typename Basis>
+std::vector<flens::GeMatrix<
+flens::FullStorage<T, cxxblas::ColMajor> >>
+reduce_laplace(      Sepop<Optype>&                    A,
+                     HTCoefficients<T, Basis>&         U,
+               const std::vector<IndexSet<Index1D> >&  rows,
+               const std::vector<IndexSet<Index1D> >&  cols,
+               const std::size_t                       hashtablelength = 193);
+
+
+template <typename T, typename Optype, typename Basis>
+std::vector<flens::GeMatrix<
+flens::FullStorage<T, cxxblas::ColMajor> >>
+reduce(      Sepop<Optype>&                    A,
+             HTCoefficients<T, Basis>&         U,
+       const std::vector<IndexSet<Index1D> >&  rows,
+       const std::vector<IndexSet<Index1D> >&  cols,
+       const std::size_t                       hashtablelength = 193);
+
+
+template <typename T, typename Basis>
+std::vector<flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > >
+reduce_rhs(const HTCoefficients<T, Basis>&         U,
+           const HTCoefficients<T, Basis>&         b);
 
 } // namespace lawa
 

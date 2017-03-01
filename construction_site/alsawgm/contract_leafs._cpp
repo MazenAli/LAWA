@@ -1,0 +1,204 @@
+#include <iostream>
+#include <iomanip>
+#include <htucker/htucker.h>
+#include <lawa/lawa.h>
+#include <vector>
+#include <cmath>
+
+typedef double                                  T;
+typedef htucker::HTuckerTree<T>                 HTTree;
+typedef htucker::HTuckerTreeNode<T>             HNode;
+typedef htucker::GeneralTreeIterator
+        <HNode>                                 TreeIt;
+typedef htucker::GeneralTreeNode<
+        htucker::HTuckerTreeNode<T> >           GNode;
+typedef lawa::Basis<T, lawa::Orthogonal,
+        lawa::Interval, lawa::Multi>            Basis;
+typedef lawa::Index1D                           Index1D;
+typedef lawa::IndexSet<Index1D>                 IndexSet;
+typedef std::vector<IndexSet>                   IndexSetVec;
+typedef lawa::SepCoefficients<
+        lawa::Lexicographical, T, Index1D>      SepCoeff;
+typedef flens::GeMatrix<flens::FullStorage
+        <T, cxxblas::ColMajor> >                GeMat;
+typedef flens::GeMatrix<flens::FullStorage
+        <int, cxxblas::ColMajor> >              MatInt;
+typedef flens::DenseVector<flens::Array<T> >    DenseVector;
+typedef lawa::Function<T>                       Function;
+typedef lawa::HTCoefficients<T, Basis>          HTCoeffTree;
+
+typedef     lawa::AdaptiveLaplaceOperator1D<T,
+            lawa::Orthogonal,
+            lawa::Interval,
+            lawa::Multi>                        Laplace1D;
+typedef     lawa::AdaptiveLaplaceOperator1D<T,
+            lawa::Orthogonal,
+            lawa::Interval,
+            lawa::MultiRefinement>              RefLaplace1D;
+typedef     lawa::LocalOperator1D<Basis,
+            Basis, RefLaplace1D, Laplace1D>     LOp_Lapl1D;
+typedef     lawa::Sepop<
+            lawa::AbstractLocalOperator1D<T,
+            Basis>>
+                                                Sepop;
+
+
+double
+x2(double x)
+{
+    return x*x;
+}
+
+double
+x3(double x)
+{
+    return x*x*x;
+}
+
+double
+mycos(double x)
+{
+    return std::cos(x);
+}
+
+    double
+mysin(double x)
+{
+    return std::sin(x);
+}
+
+double
+myexp(double x)
+{
+    return std::exp(x);
+}
+
+
+int
+main()
+{
+    int rank = 2;
+    int dim  = 4;
+
+    /* Generate example */
+    Basis                       basis(2);
+    basis.template              enforceBoundaryCondition<lawa::DirichletBC>();
+    lawa::Mapwavind<Index1D>    map(dim);
+    map.rehash(8);
+
+    IndexSet                    indexset;
+    getFullIndexSet(basis, indexset, 2);
+    /*
+    Index1D mu1(1, 1,  lawa::XWavelet);
+    Index1D mu2(2, 2,  lawa::XWavelet);
+    Index1D mu3(3, 4, lawa::XWavelet);
+    Index1D mu4(3, 5, lawa::XWavelet);
+    Index1D mu5(4, 1,  lawa::XWavelet);
+    indexset.insert(mu1);
+    indexset.insert(mu2);
+    indexset.insert(mu3);
+    indexset.insert(mu4);
+    indexset.insert(mu5);
+    */
+    IndexSetVec     indexsetvec(dim);
+    for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
+        indexsetvec[l] = indexset;
+    }
+
+    std::cout << "The index set size is\n" << indexset.size()
+              << std::endl;
+    HTCoeffTree                     f(dim, basis, map);
+    SepCoeff                        coeffs(rank, dim);
+
+    DenseVector             sings;
+    Function                x2f(x2, sings);
+    Function                x3f(x3, sings);
+    Function                cosf(mycos, sings);
+    Function                sinf(mysin, sings);
+    Function                expf(myexp, sings);
+    std::vector<Function>   fvec;
+    fvec.push_back(cosf);
+    fvec.push_back(sinf);
+    fvec.push_back(sinf);
+    fvec.push_back(expf);
+    fvec.push_back(expf);
+    fvec.push_back(x3f);
+    fvec.push_back(x2f);
+    fvec.push_back(expf);
+
+    lawa::SeparableFunctionD<T>     F(fvec, rank, dim);
+    GeMat                           deltas(3,2);
+    std::vector<GeMat>              _deltas;
+    MatInt                          derivs(rank, dim);
+    for (int i=1; i<=rank; ++i) {
+        for (int j=1; j<=dim; ++j) {
+            derivs(i,j) = 0;
+            _deltas.push_back(deltas);
+        }
+    }
+    lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
+    genCoefficients(coeffs, Fint, indexsetvec);
+    set(f, coeffs);
+    HTTree X = f.tree();
+    /* ---------------------------------------------------------- */
+
+    std::cout << "The resulting tree is=>\n";
+    X.print_w_UorB();
+    std::cout << std::endl;
+
+    /* Test contraction */
+    X.orthogonalize();
+    HTTree G = gramians_orthogonal(X);
+    std::cout << "Post orthogonalization tree is=>\n";
+    X.print_w_UorB();
+    std::cout << std::endl;
+
+    int j   = 1;
+    GeMat U = contract_leaf(X, G, j);
+    std::cout << "Contracted leaf j = " << j << std::endl;
+    std::cout << U << std::endl;
+
+    HTTree Xcopy = X;
+    GeMat Ucopy  = contract(X, Xcopy, j);
+    std::cout << "Check\n";
+    std::cout << Ucopy << std::endl;
+    /* ---------------------------------------------------------- */
+
+    /* Apply laplace, contract */
+    RefLaplace1D    RefLaplaceBil(basis.refinementbasis);
+    Laplace1D       LaplaceBil(basis);
+    LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
+    Sepop           A(lapl, dim, dim);
+
+    HTCoeffTree Af = eval(A, f, indexsetvec, indexsetvec);
+    HTTree AX      = Af.tree();
+    for (j=1; j<=4; ++j) {
+        GeMat UAx  = contract(AX, X, j);
+        std::cout << "Post eval j = " << j << "\n" << UAx << std::endl;
+    }
+
+    htucker::DimensionIndex idx(1);
+    j           = 4;
+    idx[0]      = j;
+    GeMat EX    = extract(X, idx);
+    std::cout << "Extracted node j = " << j << "\n" << EX << std::endl;
+    /* ---------------------------------------------------------- */
+
+    /* Test correctness by inner product (test adjoint property) */
+    double testsum = AX.ScalarProduct(X);
+    for (j=1; j<=4; ++j) {
+        idx[0]         = j;
+        EX             = extract(X, idx);
+        GeMat UAX      = contract(AX, X, j);
+        double innerp  = flens::blas::dot(EX.vectorView(), UAX.vectorView());
+
+        std::cout << "Error j = " << j << " : "
+                  << std::setprecision(10) << testsum-innerp << std::endl;
+    }
+
+    GeMat B(22, 2);
+    insert(X, B, idx);
+    std::cout << extract(X, idx) << std::endl;
+
+    return 0;
+}

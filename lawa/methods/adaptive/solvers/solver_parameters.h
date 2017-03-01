@@ -254,6 +254,21 @@ struct HTAWGM_Params
 std::ostream& operator<<(std::ostream& s,
                          const HTAWGM_Params& params);
 
+/* Rank 1 symmetric update parameters */
+struct Rank1UP_Params
+{
+    bool     update     = false;
+    bool     orthog     = false;
+    double   tol_als    = 1e-02;
+    double   tol_cg     = 1e-08;
+    unsigned max_sweep  = 1e+02;
+    unsigned maxit_cg   = 3e+02;
+
+};
+
+std::ostream& operator<<(std::ostream& s,
+                         const Rank1UP_Params& params);
+
 } // namespace lawa
 
 #include <lawa/methods/adaptive/solvers/solver_parameters.tcc>

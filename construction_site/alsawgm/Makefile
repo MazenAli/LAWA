@@ -4,7 +4,8 @@ SOURCEFILES  = $(wildcard *.cpp)
 TARGETS      = $(patsubst %.cpp,%,$(SOURCEFILES))
 
 LDFLAGS += -L$(LAWA_HOME)
-LDLIBS  := -llawa -lextensionsflens -lextensionssparsegrid $(LDLIBS)
+LDLIBS  := -llawa -lextensionsflens -lextensionssparsegrid -lextensionsmatlab\
+			$(LDLIBS)
 
 ifeq ($(TARGET), Darwin)
 	EX_LDFLAGS += -bind_at_load

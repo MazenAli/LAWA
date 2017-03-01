@@ -351,7 +351,7 @@ main()
     Sepop A(lapl, dim, dim);
 
     lawa::Sepdiagscal<Basis>    S(dim, basis);
-    setScaling(S, 0.5);
+    setScaling(S, 1e-04);
     S.set_nu(1e-04);
 
 /*

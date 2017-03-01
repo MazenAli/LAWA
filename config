@@ -61,11 +61,15 @@ HASHTYPE = -DBOOST -DBOOST_HAS_TR1_TUPLE
 CPPFLAGS += -DINCLUDE_TYPE_TRAITS
 CPPFLAGS += -DFLENS_DEFAULT_INDEXTYPE=__INT64_TYPE__
 
+# --- MATLAB Interface Libraries --------------------
+LDLIBS += -leng
+
 # --- debug mode -----------------------
 DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION \
              -DVERBOSE
 #DEBUGLAWA += -DDEBUG_CANCEL
 #DEBUGLAWA += -DDEBUG_SAMPLER
+DEBUGLAWA += -DCG_COMP_EVS
 DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
             -O0 -Wfatal-errors -pedantic -Wextra \
             -fPIC -Wall -Wno-attributes
