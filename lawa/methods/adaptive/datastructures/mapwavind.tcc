@@ -4,6 +4,7 @@
 #include <cassert>
 #include <stdlib.h>
 #include <limits>
+#include <unordered_map>
 
 namespace lawa
 {
@@ -13,8 +14,8 @@ Mapwavind<Index>::Mapwavind(const size_type d):
     activex(d)
 {
     for (size_type i=0; i<d; ++i) {
-        activex[i].max_load_factor(std::numeric_limits<double>::infinity());
-        activex[i].rehash(DEFAULT_HASH_SIZE);
+        activex[i].left.rehash(DEFAULT_HASH_SIZE);
+        activex[i].right.rehash(DEFAULT_HASH_SIZE);
     }
 }
 
@@ -41,7 +42,8 @@ Mapwavind<Index>::rehash(const size_type n, const size_type d)
 {
     assert(d>=1 && d<=dim());
 
-    activex[d-1].rehash(n);
+    activex[d-1].left.rehash(n);
+    activex[d-1].right.rehash(n);
 }
 
 
@@ -86,59 +88,43 @@ Mapwavind<Index>::load(const size_type d)
 
 
 template <typename Index>
-unsigned FLENS_DEFAULT_INDEXTYPE
+typename Mapwavind<Index>::Uint
 Mapwavind<Index>::operator()(const Index& index, const size_type d)
 {
     assert(d>=1 && d<=dim());
 
-    unsigned FLENS_DEFAULT_INDEXTYPE    ret = 0, count = 1;
-    size_type                           size, size_local;
-    index_eqfunction<Index>             eq;
-
-    /* Update activex */
-    if (activex[d-1].find(index)==activex[d-1].cend()) {
-        activex[d-1].insert(index);
+    /* Retrive index or update activex */
+    auto loc  = activex[d-1].left.find(index);
+    Uint val  = 0;
+    if (loc==activex[d-1].left.end()) {
+        val = activex[d-1].left.size()+1;
+        std::pair<Index, Uint> newind(index, val);
+        activex[d-1].left.insert(newind);
+    } else {
+        val = loc->second;
     }
 
-    ret  = activex[d-1].bucket(index);
-    size = activex[d-1].bucket_count();
-
-    /* Count collisions */
-    for (auto it =activex[d-1].cbegin(ret);
-              it!=activex[d-1].cend(ret); ++it, ++count) {
-        if (eq(*it, index)) break;
-    }
-    size_local = activex[d-1].bucket_size(activex[d-1].bucket(index));
-
-    return ret+1+size*(size_local-count);
+    return val;
 }
 
 
 template <typename Index>
 Index
-Mapwavind<Index>::operator()(const unsigned FLENS_DEFAULT_INDEXTYPE i,
+Mapwavind<Index>::operator()(const Uint i,
                              const size_type d) const
 {
-    unsigned FLENS_DEFAULT_INDEXTYPE n1, n2, count = 1;
-    size_type size = activex[d].bucket_count(), size_local;
+    assert(d>=1 && d<=dim());
 
-    n2 = i/size;
-    n1 = i%size-1;
-
-    if (n1>=size || n2>=activex[d-1].bucket_size(n1)) {
-        std::cerr <<
-        "error mapwavind::operator(): wavelet index has not been mapped before\n";
-        exit(1);
+    /* Retrive index or update activex */
+    auto loc  = activex[d-1].right.find(i);
+    if (loc!=activex[d-1].right.end()) {
+        return loc->second;
     }
 
-    size_local = activex[d-1].bucket_size(n1);
-    for (auto it = activex[d-1].cbegin(n1);
-              it!= activex[d-1].cend(n1); ++it, ++count) {
-        if ((size_local-count)==n2) return *it;
-    }
+    std::cerr <<
+    "error mapwavind::operator(): wavelet index has not been mapped before\n";
 
-    std::cerr << "error maptowavind::operator(): unexpected error\n";
-    exit(1);
+    return Index();
 }
 
 } // namespace lawa

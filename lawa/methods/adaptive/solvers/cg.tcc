@@ -29,6 +29,7 @@ cg(      Sepop<Optype>&               A,
    const unsigned                     maxit_cg)
 {
     assert(j>=1 && j<=A.dim());
+    using flens::_;
 
     typedef typename flens::GeMatrix
                     <flens::FullStorage<T, cxxblas::ColMajor> >     Matrix;
@@ -38,7 +39,6 @@ cg(      Sepop<Optype>&               A,
         typedef typename flens::DenseVector<flens::Array<INT> >         iVector;
 
         /* Compute evs  */
-        using flens::_;
         auto numr       = U.numRows();
         auto nume       = U.numCols();
         auto numc       = numr;
@@ -81,11 +81,17 @@ cg(      Sepop<Optype>&               A,
         std::cout << "cg: Max real part       : " << max          << std::endl;
         std::cout << "cg: Min real part       : " << min          << std::endl;
         std::cout << "cg: Condition           : " << cond         << std::endl;
+        std::cout << "cg: epsilon             : " << Pj(1, 2)/Pj(1, 1) << "\n";
     #endif
 
     /* Initial residual */
-    Matrix rk = B-redeval(A, U, Pj, u, j, Lambda, Lambda);
-    Matrix pk = rk, Apk;
+    Matrix tmp = B-redeval(A, U, Pj, u, j, Lambda, Lambda);
+    Matrix rk(tmp.numRows(), tmp.numCols());
+    for (auto& lambda : Lambda) {
+        auto i   = u.map()(lambda, j);
+        rk(i, _) = tmp(i, _);
+    }
+    Matrix pk = rk, Apk(rk.numRows(), rk.numCols());
     T nrmb = flens::blas::nrm2(B.vectorView());
     T rho;
     T rho_old = flens::blas::dot(rk.vectorView(), rk.vectorView());
@@ -395,6 +401,7 @@ cg_rank1prec(    Sepop<Optype>&               A,
            const unsigned                     maxit_cg)
 {
     assert(j>=1 && j<=A.dim());
+    using flens::_;
 
     typedef typename flens::GeMatrix
                     <flens::FullStorage<T, cxxblas::ColMajor> >     Matrix;
@@ -405,17 +412,14 @@ cg_rank1prec(    Sepop<Optype>&               A,
         typedef typename flens::DenseVector<flens::Array<INT> >         iVector;
 
         /* Compute evs  */
-        using flens::_;
-        auto numr       = U.numRows();
-        auto nume       = U.numCols();
-        auto numc       = numr;
-        Matrix Afull(numr, numc);
-        for (int k=1; k<=numc; ++k) {
-            Matrix ek(numr, nume);
-            ek(k, 1)    = 1.;
-            Matrix Aek;
-            Aek         = redeval(A, P, ek, Pj, u, j, Lambda, Lambda);
-            Afull(_, k) = Aek(_, 1);
+        auto numr = U.numRows();
+        Matrix Afull(numr, numr);
+        for (unsigned k=1; k<=numr; ++k) {
+            Matrix ek(numr, U.numCols());
+            ek(k, 1)      = 1.;
+            Matrix Aek    = redeval(A, ek, Pj, u, j, Lambda, Lambda);
+            Aek           = precsq(P, Aek, u, j, Lambda);
+            Afull(_, k)   = Aek(_, 1);
         }
         Vector wr, wi, scale, rCondE, rCondV;
         Matrix vl, vr;
@@ -451,12 +455,19 @@ cg_rank1prec(    Sepop<Optype>&               A,
     #endif
 
     /* Initial residual */
-    Matrix rk = B-redeval(A, P, U, Pj, u, j, Lambda, Lambda);
-    Matrix pk = rk, Apk;
+    Matrix tmp = B-redeval(A, U, Pj, u, j, Lambda, Lambda);
+    Matrix rk(tmp.numRows(), tmp.numCols());
+    for (auto& lambda : Lambda) {
+        auto i   = u.map()(lambda, j);
+        rk(i, _) = tmp(i, _);
+    }
+
+    Matrix zk = precsq(P, rk, u, j, Lambda);
+    Matrix pk = zk, Apk(rk.numRows(), rk.numCols());
     T nrmb    = flens::blas::nrm2(B.vectorView());
     T rho;
-    T rho_old = flens::blas::dot(rk.vectorView(), rk.vectorView());
-    res_cg    = std::sqrt(rho_old)/nrmb;
+    T rho_old = flens::blas::dot(rk.vectorView(), zk.vectorView());
+    res_cg    = flens::blas::nrm2(rk.vectorView())/nrmb;
     #ifdef VERBOSE
         std::cout << "cg: Iteration " << 0 << " r = " << res_cg
                   << std::endl;
@@ -465,16 +476,17 @@ cg_rank1prec(    Sepop<Optype>&               A,
 
     for (unsigned i=1; i<=maxit_cg; ++i) {
         /* Compute Apk */
-        Apk  = redeval(A, P, pk, Pj, u, j, Lambda, Lambda);
+        Apk  = redeval(A, pk, Pj, u, j, Lambda, Lambda);
 
         /* Compute corrections */
         T pAp = flens::blas::dot(pk.vectorView(), Apk.vectorView());
         T ak  = rho_old/pAp;
         U    += ak*pk;
         rk   -= ak*Apk;
-        rho   = flens::blas::dot(rk.vectorView(), rk.vectorView());
+        zk    = precsq(P, rk, u, j, Lambda);
+        rho   = flens::blas::dot(rk.vectorView(), zk.vectorView());
 
-        res_cg = std::sqrt(rho)/nrmb;
+        res_cg = flens::blas::nrm2(rk.vectorView())/nrmb;
         #ifdef VERBOSE
             std::cout << "cg: Iteration " << i << " residual = " << res_cg
                       << std::endl;
@@ -482,10 +494,10 @@ cg_rank1prec(    Sepop<Optype>&               A,
         if (res_cg<=tol_cg) return i;
 
         /* Update */
-        T bk       = rho/rho_old;
-        rho_old    = rho;
-        pk        *= bk;
-        pk        += rk;
+        T bk     = rho/rho_old;
+        rho_old  = rho;
+        pk      *= bk;
+        pk      += zk;
     }
 
     std::cerr << "cg: Reached max iterations " << maxit_cg << "\n";

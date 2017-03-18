@@ -258,7 +258,10 @@ std::ostream& operator<<(std::ostream& s,
 struct Rank1UP_Params
 {
     bool     update     = false;
+    bool     check_res  = false;
     bool     orthog     = false;
+    bool     sw         = true;
+    double   balance    = 1.;
     double   tol_als    = 1e-02;
     double   tol_cg     = 1e-08;
     unsigned max_sweep  = 1e+02;
@@ -268,6 +271,40 @@ struct Rank1UP_Params
 
 std::ostream& operator<<(std::ostream& s,
                          const Rank1UP_Params& params);
+
+struct OptTTCoreParams
+{
+    unsigned maxIt   = 10;
+    double   tol     = 1e-10;
+    double   stag    = 1e-08;
+};
+
+std::ostream& operator<<(std::ostream& s,
+                         const OptTTCoreParams& params);
+
+struct GreedyALSParams
+{
+    unsigned maxIt   = 10;
+    double   tol     = 1e-04;
+};
+
+std::ostream& operator<<(std::ostream& s,
+                         const GreedyALSParams& params);
+
+struct AgALSParams
+{
+    double          tol     = 1e-08;
+    unsigned        maxit   = 3e+01;
+    double          gamma   = 1e-01;
+    double          bulk    = .9;
+    double          rndinit = 1.;
+    Rank1UP_Params  r1update;
+    OptTTCoreParams coreopt;
+    GreedyALSParams greedyals;
+};
+
+std::ostream& operator<<(std::ostream& s,
+                         const AgALSParams& params);
 
 } // namespace lawa
 

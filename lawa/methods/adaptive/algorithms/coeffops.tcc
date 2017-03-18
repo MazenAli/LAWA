@@ -108,6 +108,36 @@ genCoefficients(SepCoefficients<S, T, Index>& coeffs,
 }
 
 
+template <SortingCriterion S, typename T, typename Index>
+void
+genCoefficientsRnd(SepCoefficients<S, T, Index>&       coeffs,
+                   const std::vector<IndexSet<Index>>& indexset,
+                   const T                             scale,
+                   const long                          seed)
+{
+    assert(coeffs.dim()==indexset.size());
+    typedef typename SepCoefficients<S, T, Index>::size_type size_type;
+
+    /* Random number generator */
+    unsigned actual_seed;
+    if (seed<0) actual_seed = time(NULL);
+    else actual_seed = (unsigned) seed;
+    srand(actual_seed);
+
+    for (size_type i=1; i<=coeffs.rank(); ++i) {
+        for (size_type j=1; j<=coeffs.dim(); ++j) {
+            Coefficients<S, T, Index> x;
+            for (auto& lambda : indexset[j-1]) {
+                T value         = (T) rand()/(T) RAND_MAX;
+                value          *= scale;
+                x[lambda]       = value;
+            }
+            setCoefficients(coeffs, i, j, x);
+        }
+    }
+}
+
+
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
 genAddCoefficients(SepCoefficients<S, T, Index>& coeffs,
@@ -271,36 +301,15 @@ void
 rndinit(HTCoefficients<T, Basis>&              tree,
         const std::vector<IndexSet<Index1D> >& activex,
         const unsigned                         rank,
+        const T                                scale,
         const long                             seed)
 {
     assert(activex.size()==(unsigned) tree.dim());
 
-    typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
-    typedef typename flens::DenseVector<flens::Array<T> >       DV;
-    typedef typename htucker::DenseVectorList<T>                DVList;
+    SepCoefficients<Lexicographical, T, Index1D> coeffs(rank, activex.size());
+    genCoefficientsRnd(coeffs, activex, scale, seed);
 
-    DVList  list;
-
-    /* Random number generator */
-    unsigned actual_seed;
-    if (seed<0) actual_seed = time(NULL);
-    else actual_seed = (unsigned) seed;
-    srand(actual_seed);
-
-    for (size_type j=1; j<=(unsigned) tree.dim(); ++j) {
-        for (size_type i=1; i<=rank; ++i) {
-            unsigned FLENS_DEFAULT_INDEXTYPE size
-            = maxintindhash(activex[j-1], tree, j);
-            DV x(size);
-            for (auto i=x.firstIndex(); i<=x.lastIndex(); ++i) {
-                    T value = (T) rand()/(T) RAND_MAX;
-                    x(i)    = value;
-            }
-            list.add(x);
-        }
-    }
-
-    tree.tree().generateTofElementary(list, rank, tree.dim());
+    set(tree, coeffs);
 }
 
 
@@ -1806,7 +1815,6 @@ evallaplace(Sepop<Optype>& A,
             assert(max>=(unsigned) rowsU);
             UAu.resize(max, 2*colsU);
             UAu(_(1, rowsU), _(1, colsU))         = Uu;
-            UAu(_(1, rowsU), _(colsU+1, 2*colsU)) = Uu;
 
             /* Apply operator to columns */
             for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
@@ -1966,7 +1974,6 @@ evallaplace(      Sepop<Optype>&            A,
     assert(max>=(unsigned) rowsU);
     Au.resize(max, 2*colsU);
     Au(_(1, rowsU), _(1, colsU))         = U;
-    Au(_(1, rowsU), _(colsU+1, 2*colsU)) = U;
 
     /* Apply operator to columns */
     for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
@@ -2066,7 +2073,6 @@ evallaplace(      Sepop<Optype>&            A,
     auto max    = maxintindhash(rows, j, u);
     assert(max>=(unsigned) rowsU);
     Au.resize(max, colsU);
-    Au(_(1, rowsU), _(1, colsU))         = U;
 
     /* Apply operator to columns */
     for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
@@ -2381,6 +2387,44 @@ maxlevel(const std::vector<IndexSet<Index1D> >& Lambda)
              if (lambda.xtype==XWavelet) ++j;
              jmax = MAX(jmax, j);
         }
+    }
+
+    return jmax;
+}
+
+
+flens::DenseVector<
+flens::Array<FLENS_DEFAULT_INDEXTYPE> >
+maxlevels(const std::vector<IndexSet<Index1D> >& Lambda)
+{
+    typedef std::vector<IndexSet<Index1D> >::size_type size_type;
+
+    flens::DenseVector<
+    flens::Array<FLENS_DEFAULT_INDEXTYPE> > jmaxs(Lambda.size());
+
+    for (size_type i=0; i<Lambda.size(); ++i) {
+        FLENS_DEFAULT_INDEXTYPE jmax=0;
+        for (const auto& lambda : Lambda[i]) {
+             FLENS_DEFAULT_INDEXTYPE j = lambda.j;
+             if (lambda.xtype==XWavelet) ++j;
+             jmax = MAX(jmax, j);
+        }
+        jmaxs(i+1) = jmax;
+    }
+
+    return jmaxs;
+}
+
+
+FLENS_DEFAULT_INDEXTYPE
+maxlevel(const IndexSet<Index1D>& Lambda)
+{
+
+    FLENS_DEFAULT_INDEXTYPE jmax = 0;
+    for (const auto& lambda : Lambda) {
+         FLENS_DEFAULT_INDEXTYPE j = lambda.j;
+         if (lambda.xtype==XWavelet) ++j;
+         jmax = MAX(jmax, j);
     }
 
     return jmax;
@@ -2820,6 +2864,7 @@ eval(Sepdiagscal<Basis>& S,
     #endif
 
     HTCoefficients<T, Basis>    sum(u.dim(), u.basis(), u.map());
+    sum.tree().set_tree(u.tree());
 
     unsigned count=0;
     for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i,
@@ -2846,7 +2891,7 @@ eval(Sepdiagscal<Basis>& S,
                     it.second *= factor2*std::exp(-alpha*weight);
                 }
             }
-            set_inplace(prod, idx, frame);
+            set(prod, idx, frame);
         }
 
         if (i==-1*(signed) S.n()) {
@@ -2858,7 +2903,9 @@ eval(Sepdiagscal<Basis>& S,
             #endif
         } else {
             if (nrm2(prod)>eps) {
-                sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
+                sum.tree() = sum.tree()+prod.tree();
+                sum.tree().truncate(eps);
+                //sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
             }
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
@@ -2898,6 +2945,7 @@ eval_notrunc(Sepdiagscal<Basis>& S,
     T factor1 = S.h()*(1./std::sqrt(omega2));
 
     HTCoefficients<T, Basis>    sum(u.dim(), u.basis(), u.map());
+    sum.tree().set_tree(u.tree());
 
     unsigned count=0;
     for (FLENS_DEFAULT_INDEXTYPE i=-1*S.n(); i<=(signed) S.nplus(); ++i,
@@ -2924,7 +2972,7 @@ eval_notrunc(Sepdiagscal<Basis>& S,
                     it.second *= factor2*std::exp(-alpha*weight);
                 }
             }
-            set_inplace(prod, idx, frame);
+            set(prod, idx, frame);
         }
 
         if (i==-1*(signed) S.n()) {
@@ -2979,7 +3027,7 @@ fixeval_notrunc(Sepdiagscal<Basis>&                    S,
                     it.second *= factor2*std::exp(-alpha*weight);
                 }
             }
-            set_inplace(prod, idx, frame);
+            set(prod, idx, frame);
         }
 
         if (i==-1*(signed) S.n()) {
@@ -3117,7 +3165,7 @@ prec(Precon&                                                     P,
     auto numr = U.numRows();
     auto numc = U.numCols();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>
-    ret = U;
+    ret(numr, numc);
     for (auto& lambda : active) {
         auto i = u.map()(lambda, j);
         auto p = P(lambda);
@@ -3127,7 +3175,7 @@ prec(Precon&                                                     P,
             (void) numr;
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-            ret (i, k) *= p;
+            ret (i, k) = U(i, k)*p;
         }
     }
 
@@ -3150,7 +3198,7 @@ prec(Precon&                                                     P,
     auto numr = U.numRows();
     auto numc = U.numCols();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>
-    ret     = U;
+    ret(numr, numc);
     T alpha = Pj(1, 2);
     T beta  = Pj(1, 1);
     for (auto& lambda : active) {
@@ -3167,7 +3215,7 @@ prec(Precon&                                                     P,
             (void) numr;
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-            ret (i, k) *= p;
+            ret (i, k) = U(i, k)*p;
         }
     }
 
@@ -3178,19 +3226,19 @@ prec(Precon&                                                     P,
 template <typename Precon, typename T, typename Basis>
 flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
 precsq(Precon&                                                     P,
-     const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& Pj,
-     const
-     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
-     HTCoefficients<T, Basis>&                                   u,
-     const unsigned                                              j,
-     const IndexSet<Index1D>&                                    active)
+       const flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& Pj,
+       const
+       flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >& U,
+       HTCoefficients<T, Basis>&                                   u,
+       const unsigned                                              j,
+       const IndexSet<Index1D>&                                    active)
 {
     assert(j>=1 && j<=(unsigned) u.dim());
 
     auto numr = U.numRows();
     auto numc = U.numCols();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>
-    ret     = U;
+    ret(numr, numc);
     T alpha = Pj(1, 2);
     T beta  = Pj(1, 1);
     for (auto& lambda : active) {
@@ -3207,7 +3255,7 @@ precsq(Precon&                                                     P,
             (void) numr;
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-            ret (i, k) *= p;
+            ret (i, k) = U(i, k)*p;
         }
     }
 
@@ -3229,7 +3277,7 @@ remove_prec(Precon&                                                     P,
     auto numr = U.numRows();
     auto numc = U.numCols();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>
-    ret = U;
+    ret(numr, numc);
     for (auto& lambda : active) {
         auto i = u.map()(lambda, j);
         auto p = P(lambda);
@@ -3239,7 +3287,7 @@ remove_prec(Precon&                                                     P,
             (void) numr;
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-            ret (i, k) /= p;
+            ret (i, k) = U(i, k)/p;
         }
     }
 
@@ -3261,7 +3309,7 @@ precsq(Precon&                                                     P,
     auto numr = U.numRows();
     auto numc = U.numCols();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>
-    ret = U;
+    ret(numr, numc);
     for (auto& lambda : active) {
         auto i = u.map()(lambda, j);
         auto p = P(lambda);
@@ -3271,7 +3319,7 @@ precsq(Precon&                                                     P,
             (void) numr;
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-            ret (i, k) *= p*p;
+            ret (i, k) = p*p*U(i, k);
         }
     }
 
@@ -3294,7 +3342,7 @@ remove_precsq(Precon&                                      P,
     auto numr = U.numRows();
     auto numc = U.numCols();
     flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor>>
-    ret = U;
+    ret(numr, numc);
     for (auto& lambda : active) {
         auto i = u.map()(lambda, j);
         auto p = P(lambda);
@@ -3304,7 +3352,7 @@ remove_precsq(Precon&                                      P,
             (void) numr;
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-            ret (i, k) /= p*p;
+            ret (i, k) = U(i, k)/(p*p);
         }
     }
 
@@ -3332,6 +3380,8 @@ rank1prec(Precon&                               P,
             Matrix& U = const_cast<Matrix&>(node->getContent()->getUorB());
             auto numr = U.numRows();
             auto numc = U.numCols();
+            Matrix Uc = U;
+            U.fill((T) 0.);
 
             for (auto& lambda : Lambda[idx[0]-1]) {
                 auto i = u.map()(lambda, idx[0]);
@@ -3340,11 +3390,9 @@ rank1prec(Precon&                               P,
                     assert(i<=(unsigned) numr);
                 #endif
                 for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
-                    U(i, k) *= p;
+                    U(i, k) = Uc(i, k)*p;
                 }
             }
-        } else {
-            break;
         }
     }
 }
@@ -3408,6 +3456,8 @@ remove_rank1prec(Precon&                               P,
             Matrix& U = const_cast<Matrix&>(node->getContent()->getUorB());
             auto numr = U.numRows();
             auto numc = U.numCols();
+            Matrix Uc = U;
+            U.fill((T) 0.);
 
             for (auto& lambda : Lambda[idx[0]-1]) {
                 auto i = u.map()(lambda, idx[0]);
@@ -3416,11 +3466,9 @@ remove_rank1prec(Precon&                               P,
                 #endif
                 for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
                     auto p   = 1./P(lambda);
-                    U(i, k) *= p;
+                    U(i, k)  = Uc(i, k)*p;
                 }
             }
-        } else {
-            break;
         }
     }
 }
@@ -3488,6 +3536,7 @@ evalS2(Sepdiagscal<Basis>& S,
     #endif
 
     HTCoefficients<T, Basis>    sum(u.dim(), u.basis(), u.map());
+    sum.tree().set_tree(u.tree());
 
     unsigned N = S.n()+S.nplus()+1;
     std::vector<HTCoefficients<T, Basis> >  prods(N);
@@ -3519,7 +3568,7 @@ evalS2(Sepdiagscal<Basis>& S,
                     it.second *= factor2*std::exp(-alpha*weight);
                 }
             }
-            set_inplace(prod, idx, frame);
+            set(prod, idx, frame);
         }
 
         nrms(count+1) = nrm2(prod);
@@ -3966,8 +4015,6 @@ reduce_laplace(      Sepop<Optype>&                    A,
             flens::blas::mm(cxxblas::Trans, cxxblas::NoTrans, 1., Uv,
                             AU, 0., ret);
             Bv[idx[0]-1] = ret;
-        } else {
-            break;
         }
     }
 
@@ -4023,8 +4070,6 @@ reduce_rhs(const HTCoefficients<T, Basis>&         U,
             flens::blas::mm(cxxblas::Trans, cxxblas::NoTrans, 1., Uv,
                             bv, 0., ret);
             c[idx[0]-1] = ret;
-        } else {
-            break;
         }
     }
 

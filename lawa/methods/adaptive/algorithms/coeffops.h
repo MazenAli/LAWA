@@ -53,6 +53,14 @@ genCoefficients(SepCoefficients<S, T, Index>& coeffs,
                 const IndexSet<Index>& indexset);
 
 
+template <SortingCriterion S, typename T, typename Index>
+void
+genCoefficientsRnd(SepCoefficients<S, T, Index>&       coeffs,
+                   const std::vector<IndexSet<Index>>& indexset,
+                   const T                             scale = 1.,
+                   const long                          seed  = -1);
+
+
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
 genCoefficients(SepCoefficients<S, T, Index>& coeffs,
@@ -110,6 +118,7 @@ void
 rndinit(HTCoefficients<T, Basis>&              tree,
         const std::vector<IndexSet<Index1D> >& activex,
         const unsigned                         rank  = 1,
+        const T                                scale = 1.,
         const long                             seed  = -1);
 
 
@@ -502,6 +511,13 @@ redeval(      Sepop<Optype>&              A,
 
 FLENS_DEFAULT_INDEXTYPE
 maxlevel(const std::vector<IndexSet<Index1D> >& Lambda);
+
+flens::DenseVector<
+flens::Array<FLENS_DEFAULT_INDEXTYPE> >
+maxlevels(const std::vector<IndexSet<Index1D> >& Lambda);
+
+FLENS_DEFAULT_INDEXTYPE
+maxlevel(const IndexSet<Index1D>& Lambda);
 
 
 template <typename Basis>

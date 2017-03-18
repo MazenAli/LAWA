@@ -43,8 +43,11 @@ galerkin_pcg(Sepop<Optype>& A,
 
     HTCoefficients<T, Basis>             r(b);
     HTCoefficients<T, Basis>             p(x.dim(),   x.basis(), x.map());
+    p.tree().set_tree(x.tree());
     HTCoefficients<T, Basis>             tmp(x.dim(), x.basis(), x.map());
+    tmp.tree().set_tree(x.tree());
     HTCoefficients<T, Basis>             rold(x.dim(), x.basis(), x.map());
+    rold.tree().set_tree(x.tree());
 
     T nrmp, trunc_acc, nrmz, trunc_prec_s, t, nrmr, zr, trunc_prec;
 
@@ -184,7 +187,7 @@ presidual(Sepop<Optype>& A,
           Sepdiagscal<Basis>& S,
                 HTCoefficients<T, Basis>& u,
                 HTCoefficients<T, Basis>& f,
-                SepCoefficients<Lexicographical, T, Index1D> fcp,
+                SepCoefficients<Lexicographical, T, Index1D>& fcp,
                 HTCoefficients<T, Basis>& r,
           const SeparableRHSD<T, Basis>& fint,
           const std::vector<IndexSet<Index1D> >& current,
@@ -204,7 +207,9 @@ presidual(Sepop<Optype>& A,
 
     std::vector<IndexSet<Index1D> > diff(current.size());
     HTCoefficients<T, Basis>        Au(u.dim(),    u.basis(), u.map());
+    Au.tree().set_tree(u.tree());
     HTCoefficients<T, Basis>        prec(u.dim(),  u.basis(), u.map());
+    prec.tree().set_tree(u.tree());
 
     /* Determine extended index set for evaluation */
     for (size_type j=0; j<current.size(); ++j) {
@@ -324,10 +329,13 @@ htawgm(Sepop<Optype>&                   A,
     SepCoefficients<Lexicographical, T, Index1D> Fcp(f.rank(), f.dim());
     HTCoefficients<T, Basis>                     F(u.dim(),    u.basis(),
                                                    u.map());
+    F.tree().set_tree(u.tree());
     HTCoefficients<T, Basis>                     r(u.dim(),    u.basis(),
                                                    u.map());
+    r.tree().set_tree(u.tree());
     HTCoefficients<T, Basis>                     Au(u.dim(),   u.basis(),
                                                    u.map());
+    Au.tree().set_tree(u.tree());
 
     sweep = Lambda;
     total = Lambda;

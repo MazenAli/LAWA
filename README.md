@@ -10,4 +10,4 @@ Key features of LAWA are:
     -> extensibility
     -> flexibility
 
-In the present state the library is mostly undocumented, contains obsolete code, is not bug-free and is user unfriendly.
+In the present state the library is mostly undocumented, contains obsolete code, is not bug-free and is user-unfriendly.

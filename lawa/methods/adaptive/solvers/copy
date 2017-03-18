@@ -265,12 +265,14 @@ precrank1als_sym(       Sepop<Optype>&                      A,
     typedef HTCoefficients<T, Basis>                                HTCoeff;
 
     /* Initial residual */
-    HTCoeff Ax, xold;
+    HTCoeff Ax, Sb(b), xold;
+    rank1prec(P, Sb, Lambda);
     T nrmb;
 
-    Ax = eval(A, x, Lambda, Lambda);
     if (check_res) {
-        HTTree res = b.tree()-Ax.tree();
+        HTCoeff tmp;
+        tmp        = eval(A, x, Lambda, Lambda);
+        HTTree res = b.tree()-tmp.tree();
         res.orthogonalize();
         nrmb       = nrm2(const_cast<HTCoeff&>(b));
         residual   = res.L2normorthogonal()/nrmb;
@@ -287,75 +289,200 @@ precrank1als_sym(       Sepop<Optype>&                      A,
 
     /* ALS sweeps */
     int prec = 2;
-    T eps;
-
     Matrix Pj, B;
+    T eps;
+    if (sw) {
+        Ax  = eval(A, x, Lambda, Lambda);
+        Pj  = projection(Ax.tree(), x.tree(), 1);
+        eps = Pj(1, 2)/Pj(1, 1);
+    }
+
+    if (sw && eps*balance*scales(1)<1.) {
+        B    = contract(b.tree(), x.tree(), 1);
+        prec = 1;
+    } else {
+        Ax = eval(A, x, Lambda, Lambda);
+        rank1prec(P, Ax, Lambda);
+        HTCoeff tmp = x;
+        remove_rank1prec(P, tmp, Lambda);
+        Pj = projection(Ax.tree(), tmp.tree(), 1);
+        B  = contract(Sb.tree(), tmp.tree(), 1);
+        B  = remove_prec(P, B, x, 1, Lambda[0]);
+        prec = 2;
+    }
+
     for (unsigned sweep=1; sweep<=max_sweep; ++sweep) {
         xold = x;
 
         for (unsigned j=1; j<=A.dim(); ++j) {
-            /* Compute projection */
-            Pj  = projection(Ax.tree(), x.tree(), j);
-            eps = Pj(1, 2)/Pj(1, 1);
-            if (sw && eps*balance*scales(j)<1.) prec = 1;
-            else                                prec = 2;
+            if (!(sweep==1&&j==1)) {
+                HTCoeff tmp;
+                /* Compute projection */
+                switch (prec) {
+                    case 1: {
+                        Pj  = projection(Ax.tree(), x.tree(), j);
+                        break;
+                   }
+                    case 2: {
+                        tmp = x;
+                        remove_rank1prec(P, tmp, Lambda);
+                        Pj  = projection(Ax.tree(), tmp.tree(), j);
+                        break;
+                    }
+                }
+                    eps = Pj(1, 2)/Pj(1, 1);
+                    {
+                        HTCoeff Axnonprec = eval(A, x, Lambda, Lambda);
+                        auto Pjnonprec = projection(Axnonprec.tree(), x.tree(), j);
+                        rank1prec(P, Axnonprec, Lambda);
+                        HTCoeff xprec = x;
+                        remove_rank1prec(P, xprec, Lambda);
+                        auto Pjprec    = projection(Axnonprec.tree(), xprec.tree(), j);
+                        T epsnprec = Pjnonprec(1, 2)/Pjnonprec(1, 1);
+                        T epsprec  = Pjprec(1, 2)/Pjprec(1, 1);
+                        std::cout << "Current epsilon non prec " << epsnprec << std::endl;
+                        std::cout << "Current epsilon     prec " << epsprec << std::endl;
+                    }
+                switch (prec) {
+                    case 1: {
+                        if (eps*balance*scales(j)<1.) {
+                            B    = contract(b.tree(), x.tree(), j);
+                            prec = 1;
+                        } else {
+                            std::cout << "Switch from case 1 to case 2\n";
+                            tmp  = x;
+                            remove_rank1prec(P, tmp, Lambda);
+                            Ax   = eval(A, x, Lambda, Lambda);
+                            rank1prec(P, Ax, Lambda);
+                            Pj   = projection(Ax.tree(), tmp.tree(), j);
+                            B    = contract(Sb.tree(), tmp.tree(), j);
+                            B    = remove_prec(P, B, x, j, Lambda[j-1]);
+                            prec = 2;
+                        }
 
-            /* Compute rhs */
-            B = contract(b.tree(), x.tree(), j);
+                        break;
+                }
+                    case 2: {
+                        if (sw && eps*balance*scales(j)<1.) {
+                            std::cout << "Switch from case 2 to case 1\n";
+                            Pj   = projection(Ax.tree(), x.tree(), j);
+                            Ax   = eval(A, x, Lambda, Lambda);
+                            B    = contract(b.tree(), x.tree(), j);
+                            prec = 1;
+                        } else {
+                            B    = contract(Sb.tree(), tmp.tree(), j);
+                            B    = remove_prec(P, B, x, j, Lambda[j-1]);
+                            prec = 2;
+                        }
 
-            /* CG solve on leaf*/
-            htucker::DimensionIndex idx(1);
-            idx[0]           = j;
-            Matrix   xk      = extract(x.tree(), idx);
-            T res_cg;
-            unsigned it;
+                        break;
+                    }
+                }
+            }
+
             switch (prec) {
                 case 1: {
                     #ifdef VERBOSE
                         std::cout << "precrank1als_sym: Solving the non-prec case\n";
                     #endif
-                    it = cg(A, xk, B, Pj, x, j,
-                            Lambda[j-1], res_cg, tol_cg, maxit_cg);
+                    /* CG solve on leaf*/
+                    htucker::DimensionIndex idx(1);
+                    idx[0]           = j;
+                    Matrix   xk      = extract(x.tree(), idx);
+                    T res_cg;
+                    unsigned it      = cg(A, xk, B, Pj, x, j,
+                                          Lambda[j-1], res_cg, tol_cg, maxit_cg);
+
+                    #ifdef VERBOSE
+                        std::cout << "precrank1als_sym: Sweep " << sweep << ", leaf "
+                                  << j << ", CG required " << it
+                                  << " iterations to reach "
+                                  << res_cg << "\n";
+                    #endif
+
+                    /* Update x */
+                    insert(x.tree(), xk, idx);
+                    if (orthog) x.tree().orthogonalize();
+
                     break;
                 }
                 case 2: {
                     #ifdef VERBOSE
                         std::cout << "precrank1als_sym: Solving the prec case\n";
                     #endif
-                    it  = cg_rank1prec(A, P, xk, B, Pj, x, j,
-                                       Lambda[j-1], res_cg, tol_cg, maxit_cg);
+                    /* CG solve on leaf*/
+                    htucker::DimensionIndex idx(1);
+                    idx[0]       = j;
+                    Matrix   xk  = extract(x.tree(), idx);
+                    T res_cg;
+                    unsigned it  = cg_rank1prec(A, P, xk, B, Pj, x, j,
+                                                Lambda[j-1], res_cg, tol_cg, maxit_cg);
+                    #ifdef VERBOSE
+                        std::cout << "precrank1als_sym: Sweep " << sweep << ", leaf "
+                                  << j << ", CG required " << it
+                                  << " iterations to reach "
+                                  << res_cg << "\n";
+                    #endif
+
+                    /* Update x */
+                    insert(x.tree(), xk, idx);
+                    if (orthog) x.tree().orthogonalize();
+
                     break;
                 }
             }
 
-            #ifdef VERBOSE
-                std::cout << "precrank1als_sym: Sweep " << sweep << ", leaf "
-                          << j << ", CG required " << it
-                          << " iterations to reach "
-                          << res_cg << "\n";
-            #endif
-
-            /* Update x */
-            insert(x.tree(), xk, idx);
-            if (orthog) x.tree().orthogonalize();
-
-            /* Full residual */
-            Ax = eval(A, x, Lambda, Lambda);
-            if (check_res) {
-                HTTree res = b.tree()-Ax.tree();
-                res.orthogonalize();
-                residual   = res.L2normorthogonal()/nrmb;
-                    std::cout << "precrank1als_sym: Sweep " << sweep << ", leaf " << j
-                              << ", residual = " << residual << "\n";
+            switch (prec) {
+                case 1: {
+                    /* Full residual */
+                    Ax = eval(A, x, Lambda, Lambda);
+                    if (check_res) {
+                        HTTree res = b.tree()-Ax.tree();
+                        res.orthogonalize();
+                        residual   = res.L2normorthogonal()/nrmb;
+                            std::cout << "precrank1als_sym: Sweep " << sweep << ", leaf " << j
+                                      << ", residual = " << residual << "\n";
+                    }
+                    break;
+                }
+                case 2: {
+                    /* Full residual */
+                    Ax = eval(A, x, Lambda, Lambda);
+                    rank1prec(P, Ax, Lambda);
+                    if (check_res) {
+                        HTCoeff tmp;
+                        tmp        = eval(A, x, Lambda, Lambda);
+                        HTTree res = b.tree()-tmp.tree();
+                        res.orthogonalize();
+                        residual   = res.L2normorthogonal()/nrmb;
+                            std::cout << "precrank1als_sym: Sweep " << sweep << ", leaf " << j
+                                      << ", residual = " << residual << "\n";
+                    }
+                    break;
+                }
             }
         }
 
         /* Check for stagnation */
-        auto nrmx   = nrm2(xold);
-        xold.tree() = x.tree()-xold.tree();
-        T diff      = nrm2(xold)/nrmx;
-        if (diff<=tol) {
-            return sweep;
+        switch (prec) {
+            case 1: {
+                auto nrmx   = nrm2(xold);
+                xold.tree() = x.tree()-xold.tree();
+                T diff      = nrm2(xold)/nrmx;
+                if (diff<=tol) {
+                    return sweep;
+                }
+                break;
+            }
+            case 2: {
+                auto nrmx   = nrm2(xold);
+                xold.tree() = x.tree()-xold.tree();
+                T diff      = nrm2(xold)/nrmx;
+                if (diff<=tol) {
+                    return sweep;
+                }
+                break;
+            }
         }
     }
 

@@ -17,7 +17,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
- 
+
 #include <lawa/methods/adaptive/algorithms/lambdatilde.h>
 #include <lawa/methods/adaptive/algorithms/linearsystemsolvers.h>
 #include <lawa/methods/adaptive/algorithms/localrefinement.h>
@@ -29,4 +29,5 @@
 #include <lawa/methods/adaptive/algorithms/sample.h>
 #include <lawa/methods/adaptive/algorithms/indexops.h>
 #include <lawa/methods/adaptive/algorithms/coeffops.h>
-#include <lawa/methods/adaptive/algorithms/optcore.h>
+#include <lawa/methods/adaptive/algorithms/optTTcore.h>
+#include <lawa/methods/adaptive/algorithms/szoneres.h>

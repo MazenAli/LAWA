@@ -25,6 +25,7 @@ rank1update_sym(      Sepop<Optype>&                      A,
     typedef HTCoefficients<T, Basis>                                HTCoeff;
 
     HTCoeff bup(x.dim(), x.basis(), x.map());
+    bup.tree().set_tree(x.tree());
     if (params.update) {
         HTCoeff Ax = eval(A, x, Lambda, Lambda);
         bup.tree() = b.tree()-Ax.tree();
@@ -34,9 +35,13 @@ rank1update_sym(      Sepop<Optype>&                      A,
     T residual;
     if (params.update) {
         HTCoeff xup(x.dim(), x.basis(), x.map());
+        xup.tree().set_tree(x.tree());
         rndinit(xup, Lambda, 1);
         it = precrank1als_sym(A, P, xup, bup, Lambda, residual,
+                              params.check_res,
                               params.orthog,
+                              params.sw,
+                              params.balance,
                               params.tol_als,
                               params.max_sweep,
                               params.tol_cg,
@@ -44,7 +49,10 @@ rank1update_sym(      Sepop<Optype>&                      A,
         x.tree() = x.tree()+xup.tree();
     } else {
         it = precrank1als_sym(A, P, x, b, Lambda, residual,
+                              params.check_res,
                               params.orthog,
+                              params.sw,
+                              params.balance,
                               params.tol_als,
                               params.max_sweep,
                               params.tol_cg,

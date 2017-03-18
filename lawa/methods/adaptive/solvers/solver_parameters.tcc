@@ -249,11 +249,48 @@ std::ostream& operator<<(std::ostream& s,
                          const Rank1UP_Params& params)
 {
     s << "update     = " << params.update    << std::endl;
+    s << "check_res  = " << params.check_res << std::endl;
     s << "orthog     = " << params.orthog    << std::endl;
+    s << "sw         = " << params.sw        << std::endl;
+    s << "balance    = " << params.balance   << std::endl;
     s << "tol_als    = " << params.tol_als   << std::endl;
     s << "tol_cg     = " << params.tol_cg    << std::endl;
     s << "max_sweep  = " << params.max_sweep << std::endl;
     s << "maxit_cg   = " << params.maxit_cg  << std::endl;
+
+    return s;
+}
+
+std::ostream& operator<<(std::ostream& s,
+                         const OptTTCoreParams& params)
+{
+    s << "maxIt     = " << params.maxIt << std::endl;
+    s << "tol       = " << params.tol   << std::endl;
+    s << "stag      = " << params.stag  << std::endl;
+
+    return s;
+}
+
+std::ostream& operator<<(std::ostream& s,
+                         const GreedyALSParams& params)
+{
+    s << "maxIt     = " << params.maxIt << std::endl;
+    s << "tol       = " << params.tol   << std::endl;
+
+    return s;
+}
+
+std::ostream& operator<<(std::ostream& s,
+                         const AgALSParams& params)
+{
+    s << "tol       = " << params.tol       << std::endl;
+    s << "maxit     = " << params.maxit     << std::endl;
+    s << "gamma     = " << params.gamma     << std::endl;
+    s << "bulk      = " << params.bulk      << std::endl;
+    s << "rndinit   = " << params.rndinit   << std::endl;
+    s << "r1update  = " << params.r1update  << std::endl;
+    s << "coreopt   = " << params.coreopt   << std::endl;
+    s << "greedyals = " << params.greedyals << std::endl;
 
     return s;
 }

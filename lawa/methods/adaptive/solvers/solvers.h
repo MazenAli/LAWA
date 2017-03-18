@@ -34,3 +34,5 @@
 #include <lawa/methods/adaptive/solvers/fixpoint.h>
 #include <lawa/methods/adaptive/solvers/rank1update.h>
 #include <lawa/methods/adaptive/solvers/rank1greedy.h>
+#include <lawa/methods/adaptive/solvers/greedyALS.h>
+#include <lawa/methods/adaptive/solvers/agals.h>

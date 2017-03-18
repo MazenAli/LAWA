@@ -15,11 +15,24 @@ namespace matlab
 typedef flens::GeMatrix<flens::FullStorage<double, cxxblas::ColMajor>>
         RealColMat;
 
-mxArray*
-create2DCell(const std::vector<std::vector<RealColMat>>& B);
+typedef flens::DenseVector<
+        flens::Array<FLENS_DEFAULT_INDEXTYPE> >
+        IndexVector;
 
-std::vector<std::vector<RealColMat>>
-read2DCell(const mxArray* cell);
+mxArray*
+createDouble(const double d);
+
+mxArray*
+create1DCell(const std::vector<RealColMat>& B);
+
+mxArray*
+createIndexVector(const IndexVector& x);
+
+std::vector<RealColMat>
+read1DCell(const mxArray* cell);
+
+IndexVector
+readIndexVector(const mxArray* vector);
 
 } // namespace matlab
 } // namespace flens

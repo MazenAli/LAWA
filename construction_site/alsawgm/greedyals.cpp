@@ -77,6 +77,13 @@ myexp(double x)
 }
 
 
+double
+zero(double)
+{
+    return 0.;
+}
+
+
 int
 main()
 {
@@ -87,14 +94,13 @@ main()
     Basis                       basis(2);
     basis.template              enforceBoundaryCondition<lawa::DirichletBC>();
     lawa::Mapwavind<Index1D>    map(dim);
-    map.rehash(10);
 
     IndexSet                    indexset;
     IndexSet                    indexset2;
     IndexSet                    indexset3;
-    getFullIndexSet(basis, indexset, 1);
-    getFullIndexSet(basis, indexset2, 1);
-    getFullIndexSet(basis, indexset3, 1);
+    getFullIndexSet(basis, indexset, 2);
+    getFullIndexSet(basis, indexset2, 2);
+    getFullIndexSet(basis, indexset3, 2);
     IndexSetVec     indexsetvec(dim);
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         indexsetvec[l] = indexset;
@@ -142,47 +148,87 @@ main()
     Sepop           A(lapl, dim, dim);
     /* ---------------------------------------------------------- */
 
-    /* Test interface */
-    rndinit(u, indexsetvec, 2);
-    u.tree().orthogonalize();
+    /* Test greedy solver */
+    rndinit(u, indexsetvec, 1, 1e-02);
 
-    auto rhs = reduce_rhs(u, f);
-    auto B   = reduce(A, u, indexsetvec, indexsetvec);
-    std::vector<GeMat> x0(rhs.size()-1);
-    IVector ranks(x0.size());
-    extract_core(u.tree(), x0, ranks);
-
-    std::cout << "Tree is\n";
-    u.tree().print_w_UorB();
-    std::cout << "\n";
-    std::cout << "Cores are\n";
-    for (unsigned k=0; k<x0.size(); ++k) {
-        std::cout << "Core " << k+1 << "\n";
-        std::cout << x0[k] << "\n";
-        std::cout << "Rank : " << ranks(k+1) << "\n";
+    for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
+        std::cout << "Indexset " << l+1 << " : "
+                  << indexsetvec[l].size() << std::endl;
     }
 
-    std::cout << "Initial matrices are\n";
-    for (unsigned k=0; k<rhs.size(); ++k) {
-        std::cout << "k = " << k+1 << std::endl;
-        std::cout << "B = \n" << B[k] << std::endl;
-        std::cout << "b = \n" << rhs[k] << std::endl;
-    }
+    lawa::Rank1UP_Params        p1;
+    lawa::OptTTCoreParams       p2;
+    lawa::GreedyALSParams       p3;
+    lawa::H1NormPreconditioner1D<T, Basis> P(basis);
+    //lawa::NoPreconditioner<T, Index1D>     P;
+    double delta = 0.5;
+    lawa::Sepdiagscal<Basis>    S(u.dim(), u.basis());
+    setScaling(S, delta);
+    S.set_nu(1e-02);
 
     /* Start MATLAB session */
     Engine *ep;
-    std::cout << "Starting matlab...\n";
     if (!(ep = engOpen(""))) {
         std::cerr << "\nCan't start MATLAB engine\n" << std::endl;
         exit(1);
     }
 
-    lawa::OptTTCoreParams params;
-    std::vector<GeMat> output = lawa::optTTcoreLaplace(ep, B, rhs, x0, ranks, params);
+    lawa::AgALSParams   params;
+    params.maxit              = 10;
+    params.gamma              = .5;
+    params.rndinit            = 1e-02;
+    params.r1update.sw        = true;
+    params.r1update.orthog    = false;
+    params.r1update.tol_als   = 1e-02;
+    params.r1update.tol_cg    = 1e-08;
+    params.r1update.check_res = false;
+    params.greedyals.maxIt    = 25;
+
+    std::cout << "The map is\n";
+    for (const auto& mu : map.get_active()[0].left) {
+        std::cout << mu.first << " mapsto " << mu.second << std::endl;
+    }
+
+    std::cout << "Solver parameters\n" << params << std::endl;
+    double residual;
+//    u.tree().orthogonalize();
+//    (void) precrank1als_sym(A, P, u, f, indexsetvec, residual,
+//                            true,
+//                            false,
+//                            true,
+//                            1.,
+//                            1e-03,
+//                            10,
+//                            1e-08,
+//                            1e+02);
+//    exit(1);
+    unsigned it = agals_sym(ep, A, S, P, u, Fint, indexsetvec, residual, params);
+//    params.coreopt.tol     = 1e-10;
+//    params.coreopt.stag    = 1e-08;
+//    params.greedyals.tol   = 1e-08;
+//    params.r1update.sw     = true;
+//    params.r1update.orthog = false;
+//    unsigned it = greedyALS_sym(ep, A, P, u, f, indexsetvec, residual,
+//                                params.r1update,
+//                                params.coreopt,
+//                                params.greedyals);
+    std::cout << "AGALS took " << it << " iterations to reach relative residual "
+              << residual << std::endl;
+
+//    htucker::DimensionIndex idx(1);
+//    idx[0] = 3;
+//    auto toplot = extract(u, idx);
+//    for (unsigned k=1; k<=toplot.rank(); ++k) {
+//        std::cout << "Plotting function k=" << k << std::endl;
+//        writeCoefficientsToFile(toplot(k, 1), k, "data_basisd3_nosworth");
+//        std::string name = "basis_functiond3_nosworthlowcg_";
+//        name            += std::to_string(k);
+//        name            += ".dat";
+//        plot(basis, toplot(k, 1), p, zero, zero, 0., 1.1, 1e-03, name.c_str());
+//    }
+//    std::cout << "Done...\n";
+
     engClose(ep);
-    insert_core(u.tree(), output, ranks);
-    std::cout << "Result tree is\n";
-    u.tree().print_w_UorB();
 
     return 0;
 }
