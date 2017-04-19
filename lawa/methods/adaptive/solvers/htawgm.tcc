@@ -4,6 +4,7 @@
 #include <cassert>
 #include <iostream>
 #include <cmath>
+#include <chrono>
 
 #include <flens/flens.cxx>
 
@@ -58,23 +59,18 @@ galerkin_pcg(Sepop<Optype>& A,
         r.tree() = add_truncate(tmp.tree(), r.tree(), trunc);
     }
 
-    /* Single precondition truncation accuracy */
-    t            = compOmegamax2(Lambda, S.order())/
-                   compOmegamin2(S.basis(), S.dim(), S.order());
+    t           = compOmegamax2(Lambda, S.order())/
+                  compOmegamin2(S.basis(), S.dim(), S.order());
     trunc_prec_s = 10.*S.eps()/std::sqrt(t);
-    #ifdef VERBOSE
-        std::cout << "galerkin_pcg: trunc_prec single = " << trunc_prec_s
-                  << std::endl;
-    #endif
-    nrmr      = nrm2(r);
-    rold      = r;
-    trunc_prec= std::min(1e-03, trunc_prec_s*nrmr);
-    r         = eval(S, r, Lambda, trunc_prec);
-    residual  = nrm2(r);
-    trunc_acc = residual;
 
-    p         = eval(S, r, Lambda, delta1*residual);
-    zr        = dot(rold, p);
+    rold      = r;
+    nrmr      = nrm2(r);
+    r         = eval(S, r, Lambda, trunc);
+    residual  = nrm2(r);
+    trunc_acc = trunc;
+
+    p         = eval(S, r, Lambda, trunc);
+    zr        = 1.;
     nrmp      = nrm2(p);
     nrmz      = nrmp;
 
@@ -112,7 +108,12 @@ galerkin_pcg(Sepop<Optype>& A,
             ak -= dot(x, tmp);
         }
         ak       /= pAp;
-        trunc_acc = nrmz*delta3*std::fabs(ak);
+        if (k==1) {
+            trunc_acc = std::max(delta3*std::fabs(ak)*tol*1e-01,
+                                 nrmz*delta3*std::fabs(ak));
+        } else {
+            trunc_acc = nrmz*delta3*std::fabs(ak);
+        }
 
         /* Update x_k and r_k */
         if (uzero && k==1) {
@@ -144,6 +145,7 @@ galerkin_pcg(Sepop<Optype>& A,
         r.truncate(trunc_acc);
         scal(-1., r);
         scal(-1., rold);
+
         r.tree()   = add_truncate(b.tree(), r.tree(), trunc_acc);
         tmp.tree() = add_truncate(r.tree(), rold.tree(), trunc_acc);
         rold       = r;
@@ -159,7 +161,7 @@ galerkin_pcg(Sepop<Optype>& A,
         nrmz = nrm2(r);
         trunc_search = delta2*(nrmz*nrmz)/(std::fabs(bk)*nrmp);
         if (k==1) {
-            trunc_search = delta1*nrmz;
+            trunc_search = trunc_acc;
         } else {
             trunc_search = std::min(trunc_search, delta1*nrmz);
         }
@@ -206,25 +208,28 @@ presidual(Sepop<Optype>& A,
     typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
 
     std::vector<IndexSet<Index1D> > diff(current.size());
-    HTCoefficients<T, Basis>        Au(u.dim(),    u.basis(), u.map());
-    Au.tree().set_tree(u.tree());
-    HTCoefficients<T, Basis>        prec(u.dim(),  u.basis(), u.map());
-    prec.tree().set_tree(u.tree());
+    std::vector<IndexSet<Index1D> > eval_diff(sweep.size());
 
     /* Determine extended index set for evaluation */
     for (size_type j=0; j<current.size(); ++j) {
+        IndexSet<Index1D> currenteval = total[j];
         extendMultiTree(u.basis(), sweep[j], total[j],
                         "standard", false);
-        diff[j] = total[j];
+        diff[j]      = total[j];
+        eval_diff[j] = total[j];
 
         for (auto& lambda : current[j]) {
             diff[j].erase(lambda);
         }
+
+        for (auto& lambda : currenteval) {
+            eval_diff[j].erase(lambda);
+        }
     }
 
     /* Evaluate */
-    genAddCoefficients(fcp, fint, diff);
-    set(f, fcp);
+    genAddCoefficients(fcp, fint, eval_diff);
+    set(f, fcp, total);
 
     /* Compute residual */
     r = eval(A, u, total, current);
@@ -346,16 +351,8 @@ htawgm(Sepop<Optype>&                   A,
 
     T nrmf = nrm2(F);
 
-    /* Reduction parameter */
-    T kappap = std::sqrt(2.*(T)S.dim()-3.);
-    T alpha  = params.recompr;
-    T kappar = params.theta/(1.+kappap*(1.+alpha));
-
-    #ifdef VERBOSE
-        std::cout << "htawgm: kappar = " << kappar << std::endl;
-    #endif
-
     /* Initial residual */
+    auto start = std::chrono::system_clock::now();
     if (!params.uzero) {
         Au = eval(A, u, Lambda, Lambda);
         Au.truncate(nrmf*1e-01);
@@ -376,9 +373,17 @@ htawgm(Sepop<Optype>&                   A,
     }
 
     T tol;
+    T gamma = params.gamma0;
+    bool reset = true;
     for (unsigned k=1; k<=params.maxit_awgm; ++k) {
         unsigned pcg_it, size;
         T        res_pcg;
+
+        auto end     = std::chrono::system_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
+        std::cout << "htawgm: Iteration " << k
+                  << ", current elapsed time "
+                  << elapsed.count() << " seconds\n";
 
         #ifdef VERBOSE
             std::cout << "htawgm: Iteration " << k
@@ -386,7 +391,17 @@ htawgm(Sepop<Optype>&                   A,
         #endif
 
         /* Galerkin solve */
-        tol    = params.gamma*residual;
+        if (k>1) gamma *= 2.;
+        if (gamma>params.gamma1) {
+            if (reset) {
+                gamma = params.gamma1;
+                reset = false;
+            } else if (gamma>0.5) {
+                gamma = 0.5;
+            }
+        }
+        tol    = gamma*residual;
+        std::cout << "Current gamma " << gamma << std::endl;
         pcg_it = galerkin_pcg(A, S, u, F, Lambda, res_pcg,
                               params.uzero,
                               tol,
@@ -394,7 +409,7 @@ htawgm(Sepop<Optype>&                   A,
                               params.delta1_pcg,
                               params.delta2_pcg,
                               params.delta3_pcg,
-                              tol*1e-01);
+                              tol);
         #ifdef VERBOSE
             std::cout << "htawgm: galerkin_pcg required " << pcg_it
                       << " iterations to reach tolerance "
@@ -405,9 +420,14 @@ htawgm(Sepop<Optype>&                   A,
         #endif
 
         /* Approximate residual */
+        T save       = S.nu();
+        T cv         = (1.-S.eps())/(4.*params.nrmA);
+        T eta        = 0.5*cv*params.omega*residual/nrm2(F);
+        S.set_nu(eta);
         sweep        = presidual(A, S, u, F, Fcp, r, f,
                                  Lambda, sweep, total,
                                  params.tol_awgm);
+        S.set_nu(save);
         residual     = nrm2(r);
 
         if (residual<=params.tol_awgm) {
@@ -431,6 +451,8 @@ htawgm(Sepop<Optype>&                   A,
         params.uzero = false;
 
         #ifdef VERBOSE
+            std::cout << "htawgm: max rank solution " << u.tree().max_rank()
+                      << std::endl;
             std::cout << "htawgm: Index set sizes\n";
             size = 0;
             for (size_type j=0; j<Lambda.size(); ++j) {

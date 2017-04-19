@@ -240,19 +240,43 @@ struct HTAWGM_Params
 {
     bool     uzero      = true;  /* u_0=0? */
     double   tol_awgm   = 1e-08; /* AWGM solve accuracy */
-    double   gamma      = 1e-02; /* galerkin_pcg adaptive accuracy */
+    double   gamma0     = 1e-02; /* galerkin_pcg adaptive accuracy */
+    double   gamma1     = 1e-01; /* galerkin_pcg adaptive accuracy */
     unsigned maxit_awgm = 5e+01; /* Maxit for AWGM */
     unsigned maxit_pcg  = 5e+01; /* Maxit for galerkin_pcg */
     double   delta1_pcg = 1e-01; /* Adaptive trunc tolerance search dir */
     double   delta2_pcg = 1e-01; /* Adaptive trunc tolerance search dir*/
     double   delta3_pcg = 1e-01; /* Adaptive trunc tolerance solution */
     double   alpha      = 0.95;  /* Bulk chasing parameter */
-    double   recompr    = 0.5;   /* Bulk chasing parameter */
-    double   theta      = 0.1;   /* Min reduction parameter */
+    double   nrmA       = 50;    /* Estimate for operator norm */
+    double   omega      = 0.1;   /* Estimate for relative res eval precision */
 };
 
 std::ostream& operator<<(std::ostream& s,
                          const HTAWGM_Params& params);
+
+/* HTRICH solver parameters */
+struct HTRICH_Params
+{
+    bool     uzero       = true;
+    double   nrmA        = 50;
+    double   cA          = 10;
+    double   omega       = 0.25;
+    double   beta1       = 0.5;
+    double   beta2       = 0.5;
+    double   kappa1      = 0.25;
+    double   kappa2      = 0.25;
+    double   kappa3      = 0.25;
+    double   eps0        = 100;
+    double   rho         = 0.5;
+    double   tol_rich    = 1e-06;
+    double   trunc       = 1e-01;
+    unsigned maxit_rich  = 1e+02;
+    unsigned maxit_inner = 1e+02;
+};
+
+std::ostream& operator<<(std::ostream& s,
+                         const HTRICH_Params& params);
 
 /* Rank 1 symmetric update parameters */
 struct Rank1UP_Params
@@ -261,11 +285,12 @@ struct Rank1UP_Params
     bool     check_res  = false;
     bool     orthog     = false;
     bool     sw         = true;
-    double   balance    = 1.;
+    double   balance    = 50.;
     double   tol_als    = 1e-02;
     double   tol_cg     = 1e-08;
     unsigned max_sweep  = 1e+02;
     unsigned maxit_cg   = 3e+02;
+    bool     verbose    = false;
 
 };
 
@@ -274,7 +299,7 @@ std::ostream& operator<<(std::ostream& s,
 
 struct OptTTCoreParams
 {
-    unsigned maxIt   = 10;
+    unsigned maxit   = 10;
     double   tol     = 1e-10;
     double   stag    = 1e-08;
 };
@@ -284,8 +309,9 @@ std::ostream& operator<<(std::ostream& s,
 
 struct GreedyALSParams
 {
-    unsigned maxIt   = 10;
+    unsigned maxit   = 10;
     double   tol     = 1e-04;
+    double   stag    = 1e-04;
 };
 
 std::ostream& operator<<(std::ostream& s,

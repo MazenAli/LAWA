@@ -231,15 +231,39 @@ std::ostream& operator<<(std::ostream& s,
 {
     s << "uzero      = " << params.uzero      << std::endl;
     s << "tol_awgm   = " << params.tol_awgm   << std::endl;
-    s << "gamma      = " << params.gamma      << std::endl;
+    s << "gamma0     = " << params.gamma0     << std::endl;
+    s << "gamma1     = " << params.gamma1     << std::endl;
     s << "maxit_awgm = " << params.maxit_awgm << std::endl;
     s << "maxit_pcg  = " << params.maxit_pcg  << std::endl;
     s << "delta1_pcg = " << params.delta1_pcg << std::endl;
     s << "delta2_pcg = " << params.delta2_pcg << std::endl;
     s << "delta3_pcg = " << params.delta3_pcg << std::endl;
     s << "alpha      = " << params.alpha      << std::endl;
-    s << "recompr    = " << params.recompr    << std::endl;
-    s << "theta      = " << params.theta      << std::endl;
+    s << "nrmA       = " << params.nrmA      << std::endl;
+    s << "omega      = " << params.omega      << std::endl;
+
+    return s;
+}
+
+
+std::ostream& operator<<(std::ostream& s,
+                         const HTRICH_Params& params)
+{
+    s << "uzero       = " << params.uzero       << std::endl;
+    s << "nrmA        = " << params.nrmA        << std::endl;
+    s << "cA          = " << params.cA          << std::endl;
+    s << "omega       = " << params.omega       << std::endl;
+    s << "beta1       = " << params.beta1       << std::endl;
+    s << "beta2       = " << params.beta2       << std::endl;
+    s << "kappa1      = " << params.kappa1      << std::endl;
+    s << "kappa2      = " << params.kappa2      << std::endl;
+    s << "kappa3      = " << params.kappa3      << std::endl;
+    s << "eps0        = " << params.eps0        << std::endl;
+    s << "rho         = " << params.rho         << std::endl;
+    s << "tol_rich    = " << params.tol_rich    << std::endl;
+    s << "trunc       = " << params.trunc       << std::endl;
+    s << "maxit_rich  = " << params.maxit_rich  << std::endl;
+    s << "maxit_inner = " << params.maxit_inner << std::endl;
 
     return s;
 }
@@ -257,6 +281,7 @@ std::ostream& operator<<(std::ostream& s,
     s << "tol_cg     = " << params.tol_cg    << std::endl;
     s << "max_sweep  = " << params.max_sweep << std::endl;
     s << "maxit_cg   = " << params.maxit_cg  << std::endl;
+    s << "verbose    = " << params.verbose   << std::endl;
 
     return s;
 }
@@ -264,7 +289,7 @@ std::ostream& operator<<(std::ostream& s,
 std::ostream& operator<<(std::ostream& s,
                          const OptTTCoreParams& params)
 {
-    s << "maxIt     = " << params.maxIt << std::endl;
+    s << "maxit     = " << params.maxit << std::endl;
     s << "tol       = " << params.tol   << std::endl;
     s << "stag      = " << params.stag  << std::endl;
 
@@ -274,8 +299,9 @@ std::ostream& operator<<(std::ostream& s,
 std::ostream& operator<<(std::ostream& s,
                          const GreedyALSParams& params)
 {
-    s << "maxIt     = " << params.maxIt << std::endl;
+    s << "maxit     = " << params.maxit << std::endl;
     s << "tol       = " << params.tol   << std::endl;
+    s << "stag      = " << params.stag  << std::endl;
 
     return s;
 }

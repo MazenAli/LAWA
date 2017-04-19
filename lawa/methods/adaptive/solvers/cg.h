@@ -31,7 +31,8 @@ cg(      Sepop<Optype>&               A,
    const IndexSet<Index1D>&           Lambda,
          T&                           res_cg,
    const T                            tol_cg    = 1e-08,
-   const unsigned                     maxit_cg  = 1e+06);
+   const unsigned                     maxit_cg  = 1e+06,
+   const bool                         verbose   = false);
 
 
 /* Preconditioned version */
@@ -97,7 +98,8 @@ cg_rank1prec(    Sepop<Optype>&               A,
            const IndexSet<Index1D>&           Lambda,
                  T&                           res_cg,
            const T                            tol_cg    = 1e-08,
-           const unsigned                     maxit_cg  = 1e+06);
+           const unsigned                     maxit_cg  = 1e+06,
+           const bool                         verbose   = false);
 
 } // namespace lawa
 

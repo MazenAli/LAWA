@@ -70,6 +70,9 @@ precrank1als_sym(       Sepop<Optype>&                      A,
                         HTCoefficients<T, Basis>&           x,
                   const HTCoefficients<T, Basis>&           b,
                   const std::vector<IndexSet<Index1D> >&    Lambda,
+                  const flens::GeMatrix
+                        <flens::FullStorage
+                        <T, cxxblas::ColMajor> >&           scales,
                         T&                                  residual,
                   const bool                                check_res = false,
                   const bool                                orthog    = false,
@@ -78,7 +81,24 @@ precrank1als_sym(       Sepop<Optype>&                      A,
                   const T                                   tol       = 1e-08,
                   const unsigned                            max_sweep = 100,
                   const T                                   tol_cg    = 1e-08,
-                  const unsigned                            maxit_cg  = 1e+06);
+                  const unsigned                            maxit_cg  = 1e+06,
+                  const bool                                verbose_cg= false);
+
+
+template <typename Optype, typename T, typename Basis>
+unsigned
+rank1als_laplace(      Sepop<Optype>&                      A,
+                 const std::vector<flens::SyMatrix
+                       <flens::FullStorage
+                       <T, cxxblas::ColMajor> > >&         Astiff,
+                       HTCoefficients<T, Basis>&           x,
+                 const HTCoefficients<T, Basis>&           b,
+                 const std::vector<IndexSet<Index1D> >&    Lambda,
+                 const bool                                check_res = false,
+                 const bool                                orthog    = true,
+                 const T                                   tol       = 1e-02,
+                 const unsigned                            max_sweep = 100,
+                 const bool                                verbose   = false);
 
 } // namespace lawa
 

@@ -17,18 +17,17 @@ namespace lawa
 /* Greedy ALS Galerkin Solver
  * So far works only with TT tree (Anthony's optTTcore)
  */
-template <typename Optype, typename Prec, typename T, typename Basis>
+template <typename Optype, typename T, typename Basis>
 unsigned
-greedyALS_sym(        Engine                             *ep,
-                      Sepop<Optype>&                      A,
-                      Prec&                               P,
-                      HTCoefficients<T, Basis>&           x,
-                const HTCoefficients<T, Basis>&           b,
-                const std::vector<IndexSet<Index1D> >&    Lambda,
-                      T&                                  residual,
-                const Rank1UP_Params&                     paramsUP,
-                const OptTTCoreParams&                    paramsOpt,
-                const GreedyALSParams&                    params);
+greedyALS_laplace(      Engine                             *ep,
+                        Sepop<Optype>&                      A,
+                        HTCoefficients<T, Basis>&           x,
+                  const HTCoefficients<T, Basis>&           b,
+                  const std::vector<IndexSet<Index1D> >&    Lambda,
+                        T&                                  residual,
+                  const Rank1UP_Params&                     paramsUP,
+                  const OptTTCoreParams&                    paramsOpt,
+                  const GreedyALSParams&                    params);
 
 } // namespace lawa
 

@@ -39,7 +39,7 @@ optTTcoreLaplace(      Engine                                       *ep,
         char buffer[BUFSIZE];
     #endif
 
-    mxArray *maxIt    = flens::matlab::createDouble((double) params.maxIt);
+    mxArray *maxIt    = flens::matlab::createDouble((double) params.maxit);
     mxArray *tol      = flens::matlab::createDouble((double) params.tol);
     mxArray *stag     = flens::matlab::createDouble((double) params.stag);
     mxArray *cellA    = flens::matlab::create1DCell(A);

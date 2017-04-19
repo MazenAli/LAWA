@@ -21,7 +21,7 @@ szoneres(      Sepop<Optype>& A,
                HTCoefficients<T, Basis>& f,
                SepCoefficients<Lexicographical, T, Index1D>& fcp,
          const SeparableRHSD<T, Basis>& fint,
-         const std::vector<IndexSet<Index1D> >& current,
+         const std::vector<IndexSet<Index1D> >& Lambda,
                std::vector<IndexSet<Index1D> >& sweep,
                std::vector<IndexSet<Index1D> >& total);
 

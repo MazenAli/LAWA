@@ -26,7 +26,8 @@ cg(      Sepop<Optype>&               A,
    const IndexSet<Index1D>&           Lambda,
          T&                           res_cg,
    const T                            tol_cg,
-   const unsigned                     maxit_cg)
+   const unsigned                     maxit_cg,
+   const bool                         verbose)
 {
     assert(j>=1 && j<=A.dim());
     using flens::_;
@@ -96,10 +97,10 @@ cg(      Sepop<Optype>&               A,
     T rho;
     T rho_old = flens::blas::dot(rk.vectorView(), rk.vectorView());
     res_cg         = std::sqrt(rho_old)/nrmb;
-    #ifdef VERBOSE
+    if (verbose) {
         std::cout << "cg: Iteration " << 0 << " r = " << res_cg
                   << std::endl;
-    #endif
+    }
     if (res_cg<=tol_cg) return 0;
 
     for (unsigned i=1; i<=maxit_cg; ++i) {
@@ -115,10 +116,10 @@ cg(      Sepop<Optype>&               A,
 
         res_cg     = std::sqrt(rho);
         res_cg    /= nrmb;
-        #ifdef VERBOSE
+        if (verbose) {
             std::cout << "cg: Iteration " << i << " residual = " << res_cg
                       << std::endl;
-        #endif
+        }
         if (res_cg<=tol_cg) return i;
 
         /* Update */
@@ -398,7 +399,8 @@ cg_rank1prec(    Sepop<Optype>&               A,
            const IndexSet<Index1D>&           Lambda,
                  T&                           res_cg,
            const T                            tol_cg,
-           const unsigned                     maxit_cg)
+           const unsigned                     maxit_cg,
+           const bool                         verbose)
 {
     assert(j>=1 && j<=A.dim());
     using flens::_;
@@ -418,7 +420,7 @@ cg_rank1prec(    Sepop<Optype>&               A,
             Matrix ek(numr, U.numCols());
             ek(k, 1)      = 1.;
             Matrix Aek    = redeval(A, ek, Pj, u, j, Lambda, Lambda);
-            Aek           = precsq(P, Aek, u, j, Lambda);
+            Aek           = apply_precsq(P, Aek);
             Afull(_, k)   = Aek(_, 1);
         }
         Vector wr, wi, scale, rCondE, rCondV;
@@ -462,16 +464,16 @@ cg_rank1prec(    Sepop<Optype>&               A,
         rk(i, _) = tmp(i, _);
     }
 
-    Matrix zk = precsq(P, rk, u, j, Lambda);
+    Matrix zk = apply_precsq(P, rk);
     Matrix pk = zk, Apk(rk.numRows(), rk.numCols());
     T nrmb    = flens::blas::nrm2(B.vectorView());
     T rho;
     T rho_old = flens::blas::dot(rk.vectorView(), zk.vectorView());
     res_cg    = flens::blas::nrm2(rk.vectorView())/nrmb;
-    #ifdef VERBOSE
+    if (verbose) {
         std::cout << "cg: Iteration " << 0 << " r = " << res_cg
                   << std::endl;
-    #endif
+    }
     if (res_cg<=tol_cg) return 0;
 
     for (unsigned i=1; i<=maxit_cg; ++i) {
@@ -483,14 +485,14 @@ cg_rank1prec(    Sepop<Optype>&               A,
         T ak  = rho_old/pAp;
         U    += ak*pk;
         rk   -= ak*Apk;
-        zk    = precsq(P, rk, u, j, Lambda);
+        zk    = apply_precsq(P, rk);
         rho   = flens::blas::dot(rk.vectorView(), zk.vectorView());
 
         res_cg = flens::blas::nrm2(rk.vectorView())/nrmb;
-        #ifdef VERBOSE
+        if (verbose) {
             std::cout << "cg: Iteration " << i << " residual = " << res_cg
                       << std::endl;
-        #endif
+        }
         if (res_cg<=tol_cg) return i;
 
         /* Update */

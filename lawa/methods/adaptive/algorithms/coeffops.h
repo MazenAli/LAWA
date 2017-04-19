@@ -105,6 +105,13 @@ set(HTCoefficients<T, Basis>& tree,
     const SepCoefficients<S, T, Index>& cp);
 
 
+template <typename T, SortingCriterion S, typename Index, typename Basis>
+void
+set(      HTCoefficients<T, Basis>&        tree,
+          SepCoefficients<S, T, Index>&    cp,
+    const std::vector<IndexSet<Index1D> >& active);
+
+
 template <typename T, typename Basis>
 void
 init(HTCoefficients<T, Basis>&              tree,
@@ -719,6 +726,22 @@ precsq(Precon&                                                     P,
 
 
 template <typename Precon, typename T, typename Basis>
+flens::DenseVector<flens::Array<T> >
+assemble_precsq(Precon&                     P,
+                HTCoefficients<T, Basis>&   u,
+                const unsigned              j,
+                const IndexSet<Index1D>&    active);
+
+
+template <typename T>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+apply_precsq(const flens::DenseVector<flens::Array<T> >&    prec,
+             const flens::GeMatrix
+                   <flens::FullStorage
+                   <T, cxxblas::ColMajor> >&                U);
+
+
+template <typename Precon, typename T, typename Basis>
 flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
 remove_precsq(Precon&                                      P,
               const
@@ -867,6 +890,14 @@ template <typename T, typename Basis>
 std::vector<flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> > >
 reduce_rhs(const HTCoefficients<T, Basis>&         U,
            const HTCoefficients<T, Basis>&         b);
+
+
+template <typename Optype, typename T, typename Basis>
+flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+assemble_projected_laplace(      Sepop<Optype>&             A,
+                                 HTCoefficients<T, Basis>&  u,
+                           const IndexSet<Index1D>&         Lambda,
+                           const unsigned                   j);
 
 } // namespace lawa
 

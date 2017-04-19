@@ -2,50 +2,63 @@
 #define LAWA_METHODS_ADAPTIVE_SOLVERS_GREEDYALS_TCC 1
 
 #include <iostream>
+#include <cassert>
+#include <cmath>
+#include <vector>
+
+#include <htucker/htucker.h>
 #include <lawa/methods/adaptive/algorithms/coeffops.h>
 #include <lawa/methods/adaptive/algorithms/optTTcore.h>
-#include <cassert>
-#include <htucker/htucker.h>
+
 
 namespace lawa
 {
 
-template <typename Optype, typename Prec, typename T, typename Basis>
+template <typename Optype, typename T, typename Basis>
 unsigned
-greedyALS_sym(        Engine                             *ep,
-                      Sepop<Optype>&                      A,
-                      Prec&                               P,
-                      HTCoefficients<T, Basis>&           x,
-                const HTCoefficients<T, Basis>&           b,
-                const std::vector<IndexSet<Index1D> >&    Lambda,
-                      T&                                  residual,
-                const Rank1UP_Params&                     paramsUP,
-                const OptTTCoreParams&                    paramsOpt,
-                const GreedyALSParams&                    params)
+greedyALS_laplace(      Engine                             *ep,
+                        Sepop<Optype>&                      A,
+                        HTCoefficients<T, Basis>&           x,
+                  const HTCoefficients<T, Basis>&           b,
+                  const std::vector<IndexSet<Index1D> >&    Lambda,
+                        T&                                  residual,
+                  const Rank1UP_Params&                     paramsUP,
+                  const OptTTCoreParams&                    paramsOpt,
+                  const GreedyALSParams&                    params)
 {
     assert(A.dim()==(unsigned) x.dim());
     assert(A.dim()==(unsigned) b.dim());
     assert(A.dim()==Lambda.size());
 
     typedef HTCoefficients<T, Basis>                                HTCoeff;
-    typedef flens::GeMatrix<flens::FullStorage
+    typedef flens::GeMatrix
+            <flens::FullStorage
             <T, cxxblas::ColMajor> >                                Matrix;
+    typedef flens::SyMatrix
+            <flens::FullStorage
+            <T, cxxblas::ColMajor> >                                SyMatrix;
     typedef flens::DenseVector<
             flens::Array<FLENS_DEFAULT_INDEXTYPE> >                 IVector;
 
-    unsigned it;
     Rank1UP_Params  p = paramsUP;
     unsigned nsweeps;
     auto bcopy = b;
+
     auto nrmb  = nrm2(bcopy);
-    for (it=1; it<=params.maxIt; ++it) {
-        nsweeps = rank1update_sym(A, P, x, bcopy, Lambda, p);
+    std::vector<SyMatrix>   Astiff;
+    for (unsigned j=1; j<=A.dim(); ++j) {
+        Astiff.push_back(assemble_projected_laplace(A, x, Lambda[j-1], j));
+    }
+
+    for (unsigned it=1; it<=params.maxit; ++it) {
+        HTCoeff xold = x;
+        nsweeps      = rank1update_laplace(A, Astiff, x, bcopy, Lambda, p);
         HTCoeff Ax;
         #ifdef VERBOSE
             Ax         = eval(A, x, Lambda, Lambda);
             Ax.tree()  = b.tree()-Ax.tree();
             residual   = nrm2(Ax)/nrmb;
-            std::cout << "greedyALS_sym: On update " << it
+            std::cout << "greedyALS_laplace: On update " << it
                       << " ALS required " << nsweeps
                       << " sweeps to reach relative residual "
                       << residual << std::endl;
@@ -62,21 +75,25 @@ greedyALS_sym(        Engine                             *ep,
         x0 = optTTcoreLaplace(ep, B, rhs, x0, ranks, paramsOpt);
         htucker::insert_core(x.tree(), x0, ranks);
 
-        Ax         = eval(A, x, Lambda, Lambda);
-        Ax.tree()  = b.tree()-Ax.tree();
-        residual   = nrm2(Ax)/nrmb;
+        Ax          = eval(A, x, Lambda, Lambda);
+        Ax.tree()   = b.tree()-Ax.tree();
+        residual    = nrm2(Ax)/nrmb;
+        xold.tree() = x.tree()-xold.tree();
+        T stag      = nrm2(xold)/nrm2(x);
         #ifdef VERBOSE
-            std::cout << "greedyALS_sym: Post core opt relative residual = "
+            std::cout << "greedyALS_laplace: Post core opt relative residual = "
                       << residual << std::endl;
+            std::cout << "greedyALS_laplace: Post core opt        stagnation = "
+                      << stag << std::endl;
         #endif
 
-        if (residual<=params.tol) {
+        if (residual<=params.tol || stag<=params.stag) {
             return it;
         }
     }
 
-    std::cerr << "greedyALS_sym: maxit " << params.maxIt << " reached\n";
-    return it;
+    std::cerr << "greedyALS_laplace: maxit " << params.maxit << " reached\n";
+    return params.maxit;
 }
 
 } // namespace lawa

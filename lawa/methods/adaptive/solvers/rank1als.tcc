@@ -9,6 +9,7 @@
 #include <lawa/methods/adaptive/solvers/cg.h>
 #include <lawa/methods/adaptive/solvers/splitting.h>
 #include <lawa/preconditioners/preconditioners1d/H1normpreconditioner1d.h>
+#include <lawa/methods/adaptive/algorithms/coeffops.h>
 
 namespace lawa
 {
@@ -249,6 +250,9 @@ precrank1als_sym(       Sepop<Optype>&                      A,
                         HTCoefficients<T, Basis>&           x,
                   const HTCoefficients<T, Basis>&           b,
                   const std::vector<IndexSet<Index1D> >&    Lambda,
+                  const flens::GeMatrix
+                        <flens::FullStorage
+                        <T, cxxblas::ColMajor> >&           scales,
                         T&                                  residual,
                   const bool                                check_res,
                   const bool                                orthog,
@@ -257,8 +261,14 @@ precrank1als_sym(       Sepop<Optype>&                      A,
                   const T                                   tol,
                   const unsigned                            max_sweep,
                   const T                                   tol_cg,
-                  const unsigned                            maxit_cg)
+                  const unsigned                            maxit_cg,
+                  const bool                                verbose_cg)
 {
+    assert(A.dim()==Lambda.size());
+    assert(A.dim()==(unsigned)x.dim());
+    assert(x.dim()==b.dim());
+
+    using flens::_;
     typedef typename flens::GeMatrix
                     <flens::FullStorage<T, cxxblas::ColMajor> >     Matrix;
     typedef typename htucker::HTuckerTree<T>                        HTTree;
@@ -278,18 +288,12 @@ precrank1als_sym(       Sepop<Optype>&                      A,
                       << ", residual = " << residual << "\n";
     }
 
-    /* Choose preconditioning */
-    auto jmax = maxlevels(Lambda);
-    flens::DenseVector<flens::Array<T> > scales(jmax.length());
-    for (unsigned j=1; j<=A.dim(); ++j) {
-        scales(j) = std::pow(2., 2.*(jmax(j)-x.basis().j0));
-    }
-
     /* ALS sweeps */
     int prec = 2;
     T eps;
 
     Matrix Pj, B;
+    bool force_switch = false;
     for (unsigned sweep=1; sweep<=max_sweep; ++sweep) {
         xold = x;
 
@@ -297,8 +301,17 @@ precrank1als_sym(       Sepop<Optype>&                      A,
             /* Compute projection */
             Pj  = projection(Ax.tree(), x.tree(), j);
             eps = Pj(1, 2)/Pj(1, 1);
-            if (sw && eps*balance*scales(j)<1.) prec = 1;
-            else                                prec = 2;
+            std::cout << "Current  eps is     " << eps << std::endl;
+
+            /* Decide on preconditioning */
+            T bm_nonprec = (1.+eps*scales(j, 1)*balance)/(1.+eps*scales(j, 2));
+            T bm_prec    = balance*scales(j, 1)/scales(j, 2)*
+                           (1.+eps*scales(j, 2)*balance)/
+                           (1.+eps*scales(j, 1)*balance);
+            if (!force_switch) {
+                if (sw && bm_nonprec<bm_prec) prec = 1;
+                else                          prec = 2;
+            }
 
             /* Compute rhs */
             B = contract(b.tree(), x.tree(), j);
@@ -309,21 +322,34 @@ precrank1als_sym(       Sepop<Optype>&                      A,
             Matrix   xk      = extract(x.tree(), idx);
             T res_cg;
             unsigned it;
+
             switch (prec) {
                 case 1: {
                     #ifdef VERBOSE
                         std::cout << "precrank1als_sym: Solving the non-prec case\n";
                     #endif
                     it = cg(A, xk, B, Pj, x, j,
-                            Lambda[j-1], res_cg, tol_cg, maxit_cg);
+                            Lambda[j-1], res_cg, tol_cg,
+                                                 maxit_cg,
+                                                 verbose_cg);
+                    if (it==maxit_cg) {
+                        prec=2;
+                        force_switch = !force_switch;
+                    }
                     break;
                 }
                 case 2: {
                     #ifdef VERBOSE
                         std::cout << "precrank1als_sym: Solving the prec case\n";
                     #endif
-                    it  = cg_rank1prec(A, P, xk, B, Pj, x, j,
-                                       Lambda[j-1], res_cg, tol_cg, maxit_cg);
+                    it  = cg_rank1prec(A, P[j-1], xk, B, Pj, x, j,
+                                       Lambda[j-1], res_cg, tol_cg,
+                                                            maxit_cg,
+                                                            verbose_cg);
+                    if (it==maxit_cg) {
+                        prec=1;
+                        force_switch = !force_switch;
+                    }
                     break;
                 }
             }
@@ -351,7 +377,7 @@ precrank1als_sym(       Sepop<Optype>&                      A,
         }
 
         /* Check for stagnation */
-        auto nrmx   = nrm2(xold);
+        auto nrmx   = nrm2(x, orthog);
         xold.tree() = x.tree()-xold.tree();
         T diff      = nrm2(xold)/nrmx;
         if (diff<=tol) {
@@ -360,6 +386,106 @@ precrank1als_sym(       Sepop<Optype>&                      A,
     }
 
     std::cerr << "rank1als_sym: Reached max sweeps " << max_sweep << "\n";
+    return max_sweep;
+}
+
+
+template <typename Optype, typename T, typename Basis>
+unsigned
+rank1als_laplace(      Sepop<Optype>&                      A,
+                 const std::vector<flens::SyMatrix
+                       <flens::FullStorage
+                       <T, cxxblas::ColMajor> > >&         Astiff,
+                       HTCoefficients<T, Basis>&           x,
+                 const HTCoefficients<T, Basis>&           b,
+                 const std::vector<IndexSet<Index1D> >&    Lambda,
+                 const bool                                check_res,
+                 const bool                                orthog,
+                 const T                                   tol,
+                 const unsigned                            max_sweep,
+                 const bool                                verbose)
+{
+    assert(A.dim()==(unsigned) x.dim());
+    assert(x.dim()==b.dim());
+
+    using flens::_;
+    typedef typename flens::GeMatrix
+                    <flens::FullStorage<T, cxxblas::ColMajor> >     Matrix;
+    typedef typename htucker::HTuckerTree<T>                        HTTree;
+    typedef HTCoefficients<T, Basis>                                HTCoeff;
+
+    /* Initial residual */
+    HTCoeff Ax, xold;
+    T nrmb, residual = -1.;
+
+    Ax = eval(A, x, Lambda, Lambda);
+    if (check_res) {
+        HTTree res = b.tree()-Ax.tree();
+        res.orthogonalize();
+        nrmb       = nrm2(const_cast<HTCoeff&>(b));
+        residual   = res.L2normorthogonal()/nrmb;
+            std::cout << "rank1als_laplace: Sweep " << 0 << ", leaf " << 0
+                      << ", residual = " << residual << "\n";
+    }
+
+    /* ALS sweeps */
+    T eps;
+    Matrix Pj, B;
+    for (unsigned sweep=1; sweep<=max_sweep; ++sweep) {
+        xold = x;
+
+        for (unsigned j=1; j<=A.dim(); ++j) {
+            /* Compute projection */
+            Pj  = projection(Ax.tree(), x.tree(), j);
+            eps = Pj(1, 2)/Pj(1, 1);
+
+            /* Compute rhs */
+            B = contract(b.tree(), x.tree(), j);
+
+            /* Solve on leaf */
+            htucker::DimensionIndex idx(1);
+            idx[0]           = j;
+            Matrix   xk      = extract(x.tree(), idx);
+
+            auto Ap = Astiff[j-1];
+            flens::blas::scal(Pj(1, 2), Ap);
+            for (int l=1; l<=Ap.numRows(); ++l) {
+                Ap(l, l) += Pj(1, 1);
+            }
+
+            xk        = B;
+            auto info = flens::lapack::posv(Ap, xk);
+            if (verbose) {
+                std::cout << "rank1als_laplace: Sweep " << sweep << ", leaf "
+                          << j << ", epsilon = " << eps
+                          << ", solver info = " << info << "\n";
+            }
+
+            /* Update x */
+            insert(x.tree(), xk, idx);
+            if (orthog) x.tree().orthogonalize();
+
+            /* Full residual */
+            Ax = eval(A, x, Lambda, Lambda);
+            if (check_res) {
+                HTTree res = b.tree()-Ax.tree();
+                res.orthogonalize();
+                residual   = res.L2normorthogonal()/nrmb;
+                    std::cout << "rank1als_laplace: Sweep " << sweep << ", leaf " << j
+                              << ", residual = " << residual << "\n";
+            }
+        }
+
+        /* Check for stagnation */
+        auto nrmx   = nrm2(x, orthog);
+        xold.tree() = x.tree()-xold.tree();
+        T diff      = nrm2(xold)/nrmx;
+        if (diff<=tol) {
+            return sweep;
+        }
+    }
+
+    std::cerr << "rank1als_laplace: Reached max sweeps " << max_sweep << "\n";
     return max_sweep;
 }
 

@@ -40,10 +40,7 @@ typedef     lawa::AdaptiveLaplaceOperator1D<T,
             lawa::MultiRefinement>              RefLaplace1D;
 typedef     lawa::LocalOperator1D<Basis,
             Basis, RefLaplace1D, Laplace1D>     LOp_Lapl1D;
-typedef     lawa::Sepop<
-            lawa::AbstractLocalOperator1D<T,
-            Basis>>
-                                                Sepop;
+typedef     lawa::Sepop<LOp_Lapl1D>             Sepop;
 
 
 double
@@ -84,10 +81,17 @@ zero(double)
 }
 
 
+double
+one(double)
+{
+    return 1.;
+}
+
+
 int
 main()
 {
-    int rank = 2;
+    int rank = 1;
     int dim  = 4;
 
     /* Generate example */
@@ -98,9 +102,9 @@ main()
     IndexSet                    indexset;
     IndexSet                    indexset2;
     IndexSet                    indexset3;
-    getFullIndexSet(basis, indexset, 2);
-    getFullIndexSet(basis, indexset2, 2);
-    getFullIndexSet(basis, indexset3, 2);
+    getFullIndexSet(basis, indexset,  3);
+    getFullIndexSet(basis, indexset2, 3);
+    getFullIndexSet(basis, indexset3, 3);
     IndexSetVec     indexsetvec(dim);
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         indexsetvec[l] = indexset;
@@ -119,15 +123,20 @@ main()
     Function                cosf(mycos, sings);
     Function                sinf(mysin, sings);
     Function                expf(myexp, sings);
+    Function                onef(one, sings);
     std::vector<Function>   fvec;
-    fvec.push_back(cosf);
-    fvec.push_back(sinf);
-    fvec.push_back(sinf);
-    fvec.push_back(expf);
-    fvec.push_back(expf);
-    fvec.push_back(x3f);
-    fvec.push_back(x2f);
-    fvec.push_back(expf);
+//    fvec.push_back(cosf);
+//    fvec.push_back(sinf);
+//    fvec.push_back(sinf);
+//    fvec.push_back(expf);
+//    fvec.push_back(expf);
+//    fvec.push_back(x3f);
+//    fvec.push_back(x2f);
+//    fvec.push_back(expf);
+
+    for (int i=0; i<dim; ++i) {
+        fvec.push_back(onef);
+    }
 
     lawa::SeparableFunctionD<T>     F(fvec, rank, dim);
     GeMat                           deltas(3,2);
@@ -149,18 +158,18 @@ main()
     /* ---------------------------------------------------------- */
 
     /* Test greedy solver */
-    rndinit(u, indexsetvec, 1, 1e-02);
+    rndinit(u, indexsetvec, 1, 1e-03);
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         std::cout << "Indexset " << l+1 << " : "
                   << indexsetvec[l].size() << std::endl;
     }
 
-    lawa::Rank1UP_Params        p1;
-    lawa::OptTTCoreParams       p2;
-    lawa::GreedyALSParams       p3;
-    lawa::H1NormPreconditioner1D<T, Basis> P(basis);
-    //lawa::NoPreconditioner<T, Index1D>     P;
+    lawa::Rank1UP_Params                    p1;
+    lawa::OptTTCoreParams                   p2;
+    lawa::GreedyALSParams                   p3;
+    lawa::DiagonalLevelPreconditioner1D<T>  P;
+    lawa::NoPreconditioner<T, Index1D>      p;
     double delta = 0.5;
     lawa::Sepdiagscal<Basis>    S(u.dim(), u.basis());
     setScaling(S, delta);
@@ -168,65 +177,64 @@ main()
 
     /* Start MATLAB session */
     Engine *ep;
-    if (!(ep = engOpen(""))) {
+    if (!(ep = engOpen("matlab -nojvm"))) {
         std::cerr << "\nCan't start MATLAB engine\n" << std::endl;
         exit(1);
     }
 
     lawa::AgALSParams   params;
-    params.maxit              = 10;
-    params.gamma              = .5;
-    params.rndinit            = 1e-02;
+    params.maxit              = 15;
+    params.gamma              = 1e-01;
+    params.r1update.update    = false;
     params.r1update.sw        = true;
-    params.r1update.orthog    = false;
-    params.r1update.tol_als   = 1e-02;
+    params.r1update.balance   = 500.;
+    params.r1update.orthog    = true;
+    params.r1update.tol_als   = 5e-02;
     params.r1update.tol_cg    = 1e-08;
     params.r1update.check_res = false;
-    params.greedyals.maxIt    = 25;
-
-    std::cout << "The map is\n";
-    for (const auto& mu : map.get_active()[0].left) {
-        std::cout << mu.first << " mapsto " << mu.second << std::endl;
-    }
+    params.r1update.max_sweep = 20;
+    params.r1update.verbose   = true;
+    params.r1update.maxit_cg  = 500;
+    params.greedyals.maxit    = 1;
 
     std::cout << "Solver parameters\n" << params << std::endl;
     double residual;
-//    u.tree().orthogonalize();
-//    (void) precrank1als_sym(A, P, u, f, indexsetvec, residual,
-//                            true,
-//                            false,
-//                            true,
-//                            1.,
-//                            1e-03,
-//                            10,
-//                            1e-08,
-//                            1e+02);
-//    exit(1);
-    unsigned it = agals_sym(ep, A, S, P, u, Fint, indexsetvec, residual, params);
-//    params.coreopt.tol     = 1e-10;
-//    params.coreopt.stag    = 1e-08;
-//    params.greedyals.tol   = 1e-08;
-//    params.r1update.sw     = true;
-//    params.r1update.orthog = false;
-//    unsigned it = greedyALS_sym(ep, A, P, u, f, indexsetvec, residual,
-//                                params.r1update,
-//                                params.coreopt,
-//                                params.greedyals);
+    auto start  = std::chrono::system_clock::now();
+    unsigned it = agals_laplace(ep, A, S, u, Fint, indexsetvec, residual, params);
+//    params.r1update.sw        = true;
+//    params.r1update.balance   = 500.;
+//    params.r1update.orthog    = true;
+//    params.r1update.tol_als   = 1e-02;
+//    params.r1update.max_sweep = 50;
+//    params.r1update.maxit_cg  = 150;
+//    params.coreopt.tol        = 1e-08;
+//    params.coreopt.stag       = 1e-07;
+//    params.greedyals.tol      = 1e-07;
+//    params.greedyals.stag     = 1e-07;
+//    params.greedyals.maxit    = 30;
+//    auto start  = std::chrono::system_clock::now();
+//    unsigned it = greedyALS_laplace(ep, A, u, f, indexsetvec, residual,
+//                                    params.r1update,
+//                                    params.coreopt,
+//                                    params.greedyals);
+    auto end     = std::chrono::system_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
     std::cout << "AGALS took " << it << " iterations to reach relative residual "
-              << residual << std::endl;
+            << residual << std::endl;
+    std::cout << "It took " << elapsed.count() << " secs\n";
 
-//    htucker::DimensionIndex idx(1);
-//    idx[0] = 3;
-//    auto toplot = extract(u, idx);
-//    for (unsigned k=1; k<=toplot.rank(); ++k) {
-//        std::cout << "Plotting function k=" << k << std::endl;
-//        writeCoefficientsToFile(toplot(k, 1), k, "data_basisd3_nosworth");
-//        std::string name = "basis_functiond3_nosworthlowcg_";
-//        name            += std::to_string(k);
-//        name            += ".dat";
-//        plot(basis, toplot(k, 1), p, zero, zero, 0., 1.1, 1e-03, name.c_str());
-//    }
-//    std::cout << "Done...\n";
+    htucker::DimensionIndex idx(1);
+    idx[0] = 1;
+    auto toplot = extract(u, idx);
+    for (unsigned k=1; k<=toplot.rank(); ++k) {
+        std::cout << "Plotting function k=" << k << std::endl;
+        //writeCoefficientsToFile(toplot(k, 1), k, "data_basisd1");
+        std::string name = "basis_functiond1_";
+        name            += std::to_string(k);
+        name            += ".dat";
+        plot(basis, toplot(k, 1), p, zero, zero, 0., 1.1, 1e-03, name.c_str());
+    }
+    std::cout << "Done...\n";
 
     engClose(ep);
 

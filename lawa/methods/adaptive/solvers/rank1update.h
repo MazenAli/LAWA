@@ -14,14 +14,16 @@ namespace lawa
 
 /* Rank 1 one update (A s.p.d.) over fixed wavelet index set
  */
-template <typename Optype, typename Prec, typename T, typename Basis>
+template <typename Optype, typename T, typename Basis>
 unsigned
-rank1update_sym(      Sepop<Optype>&                      A,
-                      Prec&                               P,
-                      HTCoefficients<T, Basis>&           x,
-                const HTCoefficients<T, Basis>&           b,
-                const std::vector<IndexSet<Index1D> >&    Lambda,
-                const Rank1UP_Params&                     params);
+rank1update_laplace(      Sepop<Optype>&                      A,
+                    const std::vector<flens::SyMatrix
+                          <flens::FullStorage
+                          <T, cxxblas::ColMajor> > >&         Astiff,
+                          HTCoefficients<T, Basis>&           x,
+                    const HTCoefficients<T, Basis>&           b,
+                    const std::vector<IndexSet<Index1D> >&    Lambda,
+                    const Rank1UP_Params&                     params);
 
 } // namespace lawa
 

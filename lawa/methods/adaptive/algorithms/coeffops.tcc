@@ -263,6 +263,38 @@ set(HTCoefficients<T, Basis>& tree,
 }
 
 
+template <typename T, SortingCriterion S, typename Index, typename Basis>
+void
+set(      HTCoefficients<T, Basis>&        tree,
+          SepCoefficients<S, T, Index>&    cp,
+    const std::vector<IndexSet<Index1D> >& active)
+{
+    assert((unsigned) tree.dim()==cp.dim());
+    assert(active.size()==cp.dim());
+
+    typedef typename SepCoefficients<S, T, Index>::size_type    size_type;
+    typedef typename flens::DenseVector<flens::Array<T> >       DV;
+    typedef typename htucker::DenseVectorList<T>                DVList;
+
+    DVList  list;
+
+    for (size_type j=1; j<=cp.dim(); ++j) {
+        unsigned FLENS_DEFAULT_INDEXTYPE sizej = 0;
+        sizej = maxintindhash(active[j-1], j, tree);
+
+        for (size_type i=1; i<=cp.rank(); ++i) {
+            DV x(sizej);
+            for (const auto& it : active[j-1]) {
+                x(tree.map()(it, j)) = cp(i, j)[it];
+            }
+            list.add(x);
+        }
+    }
+
+    tree.tree().generateTofElementary(list, cp.rank(), cp.dim());
+}
+
+
 template <typename T, typename Basis>
 void
 init(HTCoefficients<T, Basis>&              tree,
@@ -860,7 +892,7 @@ evalstandard(Sepop<Optype>& A,
     return sum;
 }
 
-    
+
 template <typename T, typename Optype>
 SepCoefficients<Lexicographical, T, Index1D>
 evalsimple(Sepop<Optype>& A,
@@ -2902,11 +2934,9 @@ eval(Sepdiagscal<Basis>& S,
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
         } else {
-            if (nrm2(prod)>eps) {
-                sum.tree() = sum.tree()+prod.tree();
-                sum.tree().truncate(eps);
-                //sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
-            }
+            //sum.tree() = sum.tree()+prod.tree();
+            //sum.tree().truncate(eps);
+            sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
                 prod.orthogonalize();
@@ -3320,6 +3350,60 @@ precsq(Precon&                                                     P,
         #endif
         for (FLENS_DEFAULT_INDEXTYPE k=1; k<=numc; ++k) {
             ret (i, k) = p*p*U(i, k);
+        }
+    }
+
+    return ret;
+}
+
+
+template <typename Precon, typename T, typename Basis>
+flens::DenseVector<flens::Array<T> >
+assemble_precsq(Precon&                     P,
+                HTCoefficients<T, Basis>&   u,
+                const unsigned              j,
+                const IndexSet<Index1D>&    active)
+{
+    assert(j>=1 && j<=(unsigned) u.dim());
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = j;
+
+    auto& U    = extract(u.tree(), idx);
+    auto  numr = U.numRows();
+
+    flens::DenseVector<flens::Array<T> >    ret(numr);
+    ret(numr);
+    ret.fill((T) 1.);
+    for (auto& lambda : active) {
+        auto i = u.map()(lambda, j);
+        auto p = P(lambda);
+        #ifndef NDEBUG
+            assert(i<=(unsigned) numr);
+        #endif
+        ret(i) = p*p;
+    }
+
+    return ret;
+}
+
+
+template <typename T>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+apply_precsq(const flens::DenseVector<flens::Array<T> >&    prec,
+             const flens::GeMatrix
+                   <flens::FullStorage
+                   <T, cxxblas::ColMajor> >&                U)
+{
+    assert(prec.length()==U.numRows());
+    assert(U.numCols()>0);
+
+    flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+    ret(U.numRows(), U.numCols());
+
+    for (long i=1; i<=U.numRows(); ++i) {
+        for (long j=1; j<=U.numCols(); ++j) {
+            ret(i, j) = U(i, j)*prec(i);
         }
     }
 
@@ -4075,6 +4159,31 @@ reduce_rhs(const HTCoefficients<T, Basis>&         U,
 
     return c;
 }
+
+
+template <typename Optype, typename T, typename Basis>
+flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+assemble_projected_laplace(      Sepop<Optype>&             A,
+                                 HTCoefficients<T, Basis>&  u,
+                           const IndexSet<Index1D>&         Lambda,
+                           const unsigned                   j)
+{
+    flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+    ret(Lambda.size(), flens::Lower);
+
+    auto& a = A(1, 1);
+    for (auto& lambdaR : Lambda) {
+        auto row = u.map()(lambdaR, j);
+        for (auto& lambdaC: Lambda) {
+            auto col      = u.map()(lambdaC, j);
+            if (col>row) continue;
+            ret(row, col) = a(lambdaR, lambdaC);
+        }
+    }
+
+    return ret;
+}
+
 
 } // namespace lawa
 

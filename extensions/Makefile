@@ -1,5 +1,5 @@
 include $(LAWA_HOME)/Makefile.common
-SUBDIRS := flens sparsegrid matlab
+SUBDIRS := flens sparsegrid matlab general
 
 all:
 	 $(SILENT) for i in $(SUBDIRS); \
