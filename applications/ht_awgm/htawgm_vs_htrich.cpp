@@ -94,6 +94,7 @@ main(int argc, char* argv[])
     }
 
     IndexSet        indexset;
+    IndexSet        indexset2;
     Coeff1D         coeff;
 
     std::vector<Function> fvec;
@@ -104,6 +105,7 @@ main(int argc, char* argv[])
 
     SepCoeff        coeffs(rank, dim);
     IndexSetVec     indexsetvec(dim);
+    IndexSetVec     indexsetvec2(dim);
     lawa::SeparableFunctionD<T> F(fvec, rank, dim);
     MatInt                      derivs(rank, dim);
     for (int i=1; i<=rank; ++i) {
@@ -116,12 +118,14 @@ main(int argc, char* argv[])
     lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
 
     getFullIndexSet(basis, indexset,  lev);
+    getFullIndexSet(basis, indexset2,  lev+2);
 
-    std::cout << "The initial index set size is\n" << indexset.size()
-              << std::endl;
+    std::cout << "The initial index set size is " << indexset.size()
+              << "\n\n";
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         indexsetvec[l] = indexset;
+        indexsetvec2[l] = indexset2;
     }
 
     /* Map */
@@ -142,7 +146,7 @@ main(int argc, char* argv[])
     lawa::Sepdiagscal<Basis>    S(dim, basis);
 
     lawa::HTRICH_Params  params;
-    params.omega      = 1e-03;
+    params.omega      = 1e-04;
     params.cA         = 1.;
     params.eps0       = 1.;
     params.rho        = 0.93;
@@ -166,6 +170,9 @@ main(int argc, char* argv[])
     params2.delta2_pcg = 1e-01;
     params2.delta3_pcg = 1e-01;
     params2.alpha      = 0.95;
+    params2.gamma0     = 1e-02;
+    params2.gamma1     = 0.25;
+    params2.gammait    = 10;
 
     std::cout << "HTRICH params =\n";
     std::cout << params << std::endl;
@@ -178,13 +185,22 @@ main(int argc, char* argv[])
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    setScaling(S, 1e-01);
-    S.set_nu(1e-02);
+    setScaling(S, 5e-01);
+    S.set_nu(1e-01);
 
     if (!awgm) {
         its = htrich(A, S, u, Fint, indexsetvec, res, params);
     } else {
-        its = htawgm(A, S, u, Fint, indexsetvec, res, params2);
+       // its = htawgm2(A, S, u, Fint, indexsetvec, res, params2);
+        auto SF = applyScale(S, f, indexsetvec, 1e-06);
+        its = galerkin_pcg2(A, S, u, SF, indexsetvec, res,
+                            true,
+                            1e-08,
+                            100,
+                            1e-01,
+                            1e-01,
+                            1e-01,
+                            1e-05);
     }
 
     std::cout << "Solver took " << its << " iterations to reach "

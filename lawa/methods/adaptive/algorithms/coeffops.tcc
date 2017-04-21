@@ -2957,6 +2957,310 @@ eval(Sepdiagscal<Basis>& S,
 
 
 template <typename T, typename Basis>
+void
+scale(      Sepdiagscal<Basis>&              S,
+            HTCoefficients<T, Basis>&        u,
+      const std::vector<IndexSet<Index1D> >& cols,
+      const FLENS_DEFAULT_INDEXTYPE          l)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(cols.size()==S.dim());
+    assert(l>=-1*(signed) S.n() && l<=(signed) S.nplus());
+
+    typedef typename Sepdiagscal<Basis>::size_type  size_type;
+
+    T omega2  = compOmegamin2(S.basis(), S.dim(), S.order());
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    T factor2 = 2.*std::pow(M_PI, -0.5)*
+                (1./(1+std::exp(-1.*S.h()*(T) l)));
+    factor2   = std::pow(factor1*factor2, 1./(T) S.dim());
+    T alpha   = std::pow(std::log(1.+std::exp((T) l*S.h())), 2.);
+
+    for (size_type j=1; j<=S.dim(); ++j) {
+        htucker::DimensionIndex idx(1);
+        idx[0] = j;
+
+        SepCoefficients<Lexicographical, T, Index1D>
+        frame = extract(u, cols[j-1], idx);
+
+        for (size_type k=1; k<=frame.rank(); ++k) {
+            P(cols[j-1], frame(k, 1));
+            for (auto& it : frame(k, 1)) {
+                FLENS_DEFAULT_INDEXTYPE level = it.first.j;
+                if (it.first.xtype==XWavelet) ++level;
+                T weight = std::pow(2., 2.*S.order()*level)/omega2;
+                it.second *= factor2*std::exp(-alpha*weight);
+            }
+        }
+        set(u, idx, frame);
+    }
+}
+
+
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+eval(      Sepop<Optype>&                   A,
+           Sepdiagscal<Basis>&              Srows,
+           HTCoefficients<T, Basis>&        u,
+     const std::vector<IndexSet<Index1D> >& rows,
+     const std::vector<IndexSet<Index1D> >& cols,
+     const T                                eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Srows.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), rows, Srows.order());
+    Srows.set_iscale(iscale);
+    Srows.comp_n();
+
+    auto Scols = Srows;
+    iscale     = compIndexscale(u.basis(), cols, Scols.order());
+    Scols.set_iscale(iscale);
+    Scols.comp_n();
+
+    /* Precompute summands */
+    auto Nrows = Srows.n()+Srows.nplus()+1;
+    auto Ncols = Scols.n()+Scols.nplus()+1;
+    flens::DenseVector<flens::Array<T>>                        nrms(Nrows*Ncols);
+    std::vector<HTCoefficients<T, Basis>>                      prods(Nrows*Ncols);
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(Nrows*Ncols);
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
+                                 l1<=(signed) Scols.nplus();
+                                 ++l1) {
+        auto v = u;
+        scale(Scols, v, cols, l1);
+        v = eval(A, v, rows, cols);
+        for (FLENS_DEFAULT_INDEXTYPE l0=-1*Srows.n();
+                                     l0<=(signed) Srows.nplus();
+                                     ++l0) {
+            auto tmp = v;
+            scale(Srows, tmp, rows, l0);
+            nrms(count+1) = nrm2(tmp);
+            prods[count]  = tmp;
+            ++count;
+        }
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    HTCoefficients<T, Basis> sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_      += nrms(count+1);
+        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
+                     eps/2*eps_/refsum);
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+evaleff(      Sepop<Optype>&                   A,
+              Sepdiagscal<Basis>&              Srows,
+              HTCoefficients<T, Basis>&        u,
+        const std::vector<IndexSet<Index1D> >& rows,
+        const std::vector<IndexSet<Index1D> >& cols,
+        const T                                eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Srows.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), rows, Srows.order());
+    Srows.set_iscale(iscale);
+    Srows.comp_n();
+
+    auto Scols = Srows;
+    iscale     = compIndexscale(u.basis(), cols, Scols.order());
+    Scols.set_iscale(iscale);
+    Scols.comp_n();
+
+    /* Distribute tolerances */
+    T epsR = 0.5*eps;
+    T epsL = 0.5*eps;
+
+    /* Precompute summands right */
+    auto N = Scols.n()+Scols.nplus()+1;
+    flens::DenseVector<flens::Array<T>>                        nrms(N);
+    std::vector<HTCoefficients<T, Basis>>                      prods(N);
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(N);
+
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
+                                 l1<=(signed) Scols.nplus();
+                                 ++l1) {
+        auto v = u;
+        scale(Scols, v, cols, l1);
+        nrms(count+1) = nrm2(v);
+        prods[count]  = v;
+        ++count;
+    }
+
+    /* Presort small norms */
+    T bound = compOmegamax2(cols, Scols.order());
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += bound*nrms(count+1);
+        if (cutoff>epsR/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    std::vector
+    <HTCoefficients<T, Basis>>               presortedprods(N-count);
+    flens::DenseVector
+    <flens::Array<T>>                        presortednrms(N-count);
+    flens::DenseVector
+    <flens::Array<FLENS_DEFAULT_INDEXTYPE>>  presortedids(N-count);
+    for (unsigned cnt=1; count<(unsigned) nrms.length(); ++count, ++cnt) {
+        auto v                = eval(A, prods[ids(count+1)-1], rows, cols);
+        presortednrms(cnt)    = nrm2(v);
+        presortedprods[cnt-1] = v;
+    }
+
+    /* Clean up to save temporary memory usage */
+    prods.resize(0);
+    nrms.resize(0);
+    ids.resize(0);
+
+    /* Sort norms */
+    flens::sort(presortednrms, presortedids);
+    count  = 0;
+    cutoff = 0.;
+    for (; count<(unsigned) presortednrms.length(); ++count) {
+        cutoff += presortednrms(count+1);
+        if (cutoff>epsR/2) break;
+    }
+
+    if (count==(unsigned) presortednrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = presortednrms.length()-1;
+    }
+
+    /* Add and truncate */
+    HTCoefficients<T, Basis> sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) presortednrms.length(); ++i) {
+        refsum += (T) (presortednrms.length()-i+1)*presortednrms(i);
+    }
+
+    sum    = presortedprods[presortedids(count+1)-1];
+    T eps_ = presortednrms(count+1);
+    sum.truncate(epsR/2*eps_/refsum);
+    ++count;
+    for (; count<(unsigned) presortednrms.length(); ++count) {
+        eps_      += presortednrms(count+1);
+        sum.tree() = add_truncate(sum.tree(),
+                     presortedprods[presortedids(count+1)-1].tree(),
+                     epsR/2*eps_/refsum);
+    }
+
+    /* Scale left */
+    sum = applyScale(Srows, sum, rows, epsL);
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+applyScale(      Sepdiagscal<Basis>&              S,
+                 HTCoefficients<T, Basis>&        u,
+           const std::vector<IndexSet<Index1D> >& cols,
+           const T                                eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(cols.size()==S.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), cols, S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+
+    /* Precompute summands */
+    auto N = S.n()+S.nplus()+1;
+    flens::DenseVector<flens::Array<T>>                        nrms(N);
+    std::vector<HTCoefficients<T, Basis>>                      prods(N);
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(N);
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l0=-1*S.n();
+                                 l0<=(signed) S.nplus();
+                                 ++l0) {
+        auto v = u;
+        scale(S, v, cols, l0);
+        nrms(count+1) = nrm2(v);
+        prods[count]  = v;
+        ++count;
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    HTCoefficients<T, Basis> sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_      += nrms(count+1);
+        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
+                     eps/2*eps_/refsum);
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 eval_notrunc(Sepdiagscal<Basis>& S,
              HTCoefficients<T, Basis>& u,

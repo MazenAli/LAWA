@@ -47,7 +47,8 @@ htrich(      Sepop<Optype>&                   A,
 
     T eta;
     T cv     = (1.-S.eps())/(4.*params.nrmA);
-    T nrmf   = nrm2(F);
+    auto SF  = applyScale(S, F, Lambda, 1e-04);
+    T nrmf   = nrm2(SF);
     auto J   = findminj(params.rho, params.omega, params.beta1,
                         params.beta2, params.kappa1, params.maxit_inner);
     auto start = std::chrono::system_clock::now();
@@ -61,12 +62,11 @@ htrich(      Sepop<Optype>&                   A,
 
             /* Evaluate residual */
             if (k==0 && j==0 && params.uzero) {
-                r.tree() = F.tree();
                 eta      = cv*(params.eps0*params.rho/nrmf);
                 S.set_nu(eta);
                 T num    = (T)S.nplus()+(T)S.n()+1.;
                 T tol    = 0.5*eta/num;
-                r        = eval(S, r, Lambda, tol);
+                r        = applyScale(S, F, Lambda, tol);
                 residual = nrm2(r);
             } else {
                 T nrmu   = nrm2(u);
@@ -75,9 +75,8 @@ htrich(      Sepop<Optype>&                   A,
                 S.set_nu(eta);
                 T num    = (T)S.nplus()+(T)S.n()+1.;
                 T tol    = 0.5*eta/num;
-                auto Su  = eval(S, u, Lambda, tol);
-                presidual(A, S, Su, F, Fcp, r, f, Lambda,
-                          total, tol);
+                presidual(A, S, u, F, Fcp, r, f, Lambda,
+                           total, tol);
                 residual = nrm2(r);
             }
 
@@ -271,10 +270,10 @@ presidual(Sepop<Optype>& A,
     set(f, fcp, total);
 
     /* Compute residual */
-    r = eval(A, u, total, current);
+    r = evaleff(A, S, u, total, current, trunc);
     scal(-1., r);
+    auto tmp = applyScale(S, f, total, trunc);
     r.tree() = add_truncate(f.tree(), r.tree(), trunc);
-    r        = eval(S, r, total, trunc);
 }
 
 template <typename T>

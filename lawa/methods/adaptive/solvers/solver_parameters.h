@@ -242,6 +242,7 @@ struct HTAWGM_Params
     double   tol_awgm   = 1e-08; /* AWGM solve accuracy */
     double   gamma0     = 1e-02; /* galerkin_pcg adaptive accuracy */
     double   gamma1     = 1e-01; /* galerkin_pcg adaptive accuracy */
+    unsigned gammait    = 10;    /* galerkin_pcg adaptive accuracy */
     unsigned maxit_awgm = 5e+01; /* Maxit for AWGM */
     unsigned maxit_pcg  = 5e+01; /* Maxit for galerkin_pcg */
     double   delta1_pcg = 1e-01; /* Adaptive trunc tolerance search dir */

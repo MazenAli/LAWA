@@ -233,6 +233,7 @@ std::ostream& operator<<(std::ostream& s,
     s << "tol_awgm   = " << params.tol_awgm   << std::endl;
     s << "gamma0     = " << params.gamma0     << std::endl;
     s << "gamma1     = " << params.gamma1     << std::endl;
+    s << "gammait    = " << params.gammait    << std::endl;
     s << "maxit_awgm = " << params.maxit_awgm << std::endl;
     s << "maxit_pcg  = " << params.maxit_pcg  << std::endl;
     s << "delta1_pcg = " << params.delta1_pcg << std::endl;

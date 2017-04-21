@@ -637,6 +637,32 @@ eval(Sepdiagscal<Basis>& S,
 
 
 template <typename T, typename Basis>
+void
+scale(      Sepdiagscal<Basis>&              S,
+            HTCoefficients<T, Basis>&        u,
+      const std::vector<IndexSet<Index1D> >& cols,
+      const FLENS_DEFAULT_INDEXTYPE          l);
+
+
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+eval(      Sepop<Optype>&                   A,
+           Sepdiagscal<Basis>&              Srows,
+           HTCoefficients<T, Basis>&        u,
+     const std::vector<IndexSet<Index1D> >& rows,
+     const std::vector<IndexSet<Index1D> >& cols,
+     const T                                eps = 1e-08);
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+applyScale(      Sepdiagscal<Basis>&              S,
+                 HTCoefficients<T, Basis>&        u,
+           const std::vector<IndexSet<Index1D> >& cols,
+           const T                                eps = 1e-08);
+
+
+template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 eval_notrunc(Sepdiagscal<Basis>&                     S,
              HTCoefficients<T, Basis>&               u,
