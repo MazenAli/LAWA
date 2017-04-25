@@ -146,21 +146,21 @@ main(int argc, char* argv[])
     lawa::Sepdiagscal<Basis>    S(dim, basis);
 
     lawa::HTRICH_Params  params;
-    params.omega      = 1e-04;
+    params.omega      = 1e-03;
     params.cA         = 1.;
-    params.eps0       = 1.;
+    params.eps0       = 1e-02;
     params.rho        = 0.93;
-    params.maxit_inner= 150;
+    params.maxit_inner= 60;
     params.beta1      = 1e-02;
     params.beta2      = 1e-02;
-    params.maxit_rich = 30;
+    params.maxit_rich = 100;
 
     double alpha      = 1e-02;
     double kappaP     = std::sqrt(2.*dim-3.);
     double kappaC     = std::sqrt(dim);
-    params.kappa1     = 0.1/(1.+(1.+alpha)*(kappaP+kappaC+kappaP*kappaC));
+    params.kappa1     = 1e-01/(1.+(1.+alpha)*(kappaP+kappaC+kappaP*kappaC));
     params.kappa2     = (1.+alpha)*kappaP*params.kappa1;
-    params.kappa3     = 0.1*kappaC*(kappaP+1.)*(1.+alpha)*params.kappa1;
+    params.kappa3     = 1e-01*kappaC*(kappaP+1.)*(1.+alpha)*params.kappa1;
 
     lawa::HTAWGM_Params params2;
     params2.maxit_pcg  = 50;
@@ -172,7 +172,7 @@ main(int argc, char* argv[])
     params2.alpha      = 0.95;
     params2.gamma0     = 1e-02;
     params2.gamma1     = 0.25;
-    params2.gammait    = 10;
+    params2.gammait    = 9;
 
     std::cout << "HTRICH params =\n";
     std::cout << params << std::endl;
@@ -191,16 +191,16 @@ main(int argc, char* argv[])
     if (!awgm) {
         its = htrich(A, S, u, Fint, indexsetvec, res, params);
     } else {
-       // its = htawgm2(A, S, u, Fint, indexsetvec, res, params2);
-        auto SF = applyScale(S, f, indexsetvec, 1e-06);
-        its = galerkin_pcg2(A, S, u, SF, indexsetvec, res,
-                            true,
-                            1e-08,
-                            100,
-                            1e-01,
-                            1e-01,
-                            1e-01,
-                            1e-05);
+        its = htawgm(A, S, u, Fint, indexsetvec, res, params2);
+       // auto SF = applyScale(S, f, indexsetvec, 1e-06);
+       // its = galerkin_pcg(A, S, u, f, indexsetvec, res,
+       //                    true,
+       //                    1e-08,
+       //                    100,
+       //                    1e-01,
+       //                    1e-01,
+       //                    1e-01,
+       //                    1e-05);
     }
 
     std::cout << "Solver took " << its << " iterations to reach "

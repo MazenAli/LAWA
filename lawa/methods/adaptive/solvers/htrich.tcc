@@ -62,19 +62,19 @@ htrich(      Sepop<Optype>&                   A,
 
             /* Evaluate residual */
             if (k==0 && j==0 && params.uzero) {
-                eta      = cv*(params.eps0*params.rho/nrmf);
+                //T scale  = std::max(1., nrmf);
+                eta      = .5*etakj*cv/nrmf;
                 S.set_nu(eta);
-                T num    = (T)S.nplus()+(T)S.n()+1.;
-                T tol    = 0.5*eta/num;
+                T tol    = .5*eta;
                 r        = applyScale(S, F, Lambda, tol);
                 residual = nrm2(r);
             } else {
                 T nrmu   = nrm2(u);
                 T max    = std::max(nrmu, nrmf);
+                //T scale  = std::max(1., max);
                 eta      = .5*etakj*cv/max;
                 S.set_nu(eta);
-                T num    = (T)S.nplus()+(T)S.n()+1.;
-                T tol    = 0.5*eta/num;
+                T tol    = .5*eta;
                 presidual(A, S, u, F, Fcp, r, f, Lambda,
                            total, tol);
                 residual = nrm2(r);
@@ -95,6 +95,7 @@ htrich(      Sepop<Optype>&                   A,
             #endif
 
             /* Update solution */
+            std::cout << "etakj => " << etakj << std::endl;
             scal(params.omega, r);
             if (k==0 && j==0 && params.uzero) {
                 u = r;
@@ -140,8 +141,10 @@ htrich(      Sepop<Optype>&                   A,
 
         /* Here follows coarse/compress */
         T tol     = params.kappa2*params.eps0*std::pow(2., -1.*k-1.);
+        std::cout << "Recompress tol " << tol << std::endl;
         u.truncate(tol);
         tol       = params.kappa3*params.eps0*std::pow(2., -1.*k-1.);
+        std::cout << "Coarse tol " << tol << std::endl;
         Lambda    = coarsen(u, Lambda, tol);
         restrict(u, Lambda);
         total     = Lambda;
@@ -270,10 +273,10 @@ presidual(Sepop<Optype>& A,
     set(f, fcp, total);
 
     /* Compute residual */
-    r = evaleff(A, S, u, total, current, trunc);
+    r = evaleff2(A, S, u, total, current, trunc);
     scal(-1., r);
     auto tmp = applyScale(S, f, total, trunc);
-    r.tree() = add_truncate(f.tree(), r.tree(), trunc);
+    r.tree() = add_truncate(tmp.tree(), r.tree(), trunc);
 }
 
 template <typename T>

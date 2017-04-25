@@ -50,7 +50,7 @@ galerkin_pcg(Sepop<Optype>& A,
     HTCoefficients<T, Basis>             rold(x.dim(), x.basis(), x.map());
     rold.tree().set_tree(x.tree());
 
-    T nrmp, trunc_acc, nrmz, trunc_prec_s, t, nrmr, zr, trunc_prec;
+    T nrmp, trunc_acc, nrmz, trunc_prec_s, t, nrmr, zr;
 
     /* Initial residual */
     if (!uzero) {
@@ -64,11 +64,11 @@ galerkin_pcg(Sepop<Optype>& A,
 
     rold      = r;
     nrmr      = nrm2(r);
-    r         = eval(S, r, Lambda, trunc);
+    r         = applyScale(S, r, Lambda, trunc*nrmr);
     residual  = nrm2(r);
-    trunc_acc = trunc;
+    trunc_acc = trunc*nrmr;
 
-    p         = eval(S, r, Lambda, trunc);
+    p         = applyScale(S, r, Lambda, trunc*residual);
     zr        = 1.;
     nrmp      = nrm2(p);
     nrmz      = nrmp;
@@ -153,7 +153,7 @@ galerkin_pcg(Sepop<Optype>& A,
         T eps_     = nrmp*1e-01;
         r          = applyScale(S, r, Lambda, trunc_prec_s*eps_*0.5);
         residual   = nrm2(r);
-        r          = applyScale(S, r, Lambda, eps_*0.5);
+        r          = applyScale(S, r, Lambda, trunc_search);
 
         /* Update p_k */
         nrmz = nrm2(r);
@@ -369,7 +369,7 @@ presidual(Sepop<Optype>& A,
     r = eval(A, u, total, current);
     scal(-1., r);
     r.tree() = add_truncate(f.tree(), r.tree(), trunc);
-    r        = eval(S, r, total, trunc);
+    r        = applyScale(S, r, total, trunc);
 
     return diff;
 }
@@ -552,7 +552,7 @@ htawgm(Sepop<Optype>&                   A,
         r.tree() = add_truncate(F.tree(), Au.tree(), nrmf*1e-01);
     }
 
-    r         = eval(S, r, Lambda, params.tol_awgm*1e-01);
+    r         = applyScale(S, r, Lambda, 1e-04);
     residual  = nrm2(r);
 
     if (residual<=params.tol_awgm) {
@@ -566,7 +566,7 @@ htawgm(Sepop<Optype>&                   A,
 
     T tol;
     T gamma = params.gamma0;
-    bool reset = true;
+//    bool reset = true;
     for (unsigned k=1; k<=params.maxit_awgm; ++k) {
         unsigned pcg_it, size;
         T        res_pcg;
@@ -583,15 +583,23 @@ htawgm(Sepop<Optype>&                   A,
         #endif
 
         /* Galerkin solve */
-        if (k>1) gamma *= 2.;
-        if (gamma>params.gamma1) {
-            if (reset) {
-                gamma = params.gamma1;
-                reset = false;
-            } else if (gamma>0.5) {
-                gamma = 0.5;
-            }
+        if (k>params.gammait) {
+            gamma = params.gamma1;
+        } else {
+            gamma = params.gamma0+
+                    (params.gamma1-params.gamma0)*
+                    (((double) k-1.)/(double) params.gammait);
         }
+
+//        if (k>1) gamma *= 2.;
+//        if (gamma>params.gamma1) {
+//            if (reset) {
+//                gamma = params.gamma1;
+//                reset = false;
+//            } else if (gamma>0.5) {
+//                gamma = 0.5;
+//            }
+//        }
         tol    = gamma*residual;
         std::cout << "Current gamma " << gamma << std::endl;
         pcg_it = galerkin_pcg(A, S, u, F, Lambda, res_pcg,
@@ -601,7 +609,7 @@ htawgm(Sepop<Optype>&                   A,
                               params.delta1_pcg,
                               params.delta2_pcg,
                               params.delta3_pcg,
-                              tol);
+                              1e-02);
         #ifdef VERBOSE
             std::cout << "htawgm: galerkin_pcg required " << pcg_it
                       << " iterations to reach tolerance "

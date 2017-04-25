@@ -3194,6 +3194,48 @@ evaleff(      Sepop<Optype>&                   A,
 }
 
 
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+evaleff2(     Sepop<Optype>&                   A,
+              Sepdiagscal<Basis>&              Srows,
+              HTCoefficients<T, Basis>&        u,
+        const std::vector<IndexSet<Index1D> >& rows,
+        const std::vector<IndexSet<Index1D> >& cols,
+        const T                                eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Srows.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), rows, Srows.order());
+    Srows.set_iscale(iscale);
+    Srows.comp_n();
+
+    auto Scols = Srows;
+    iscale     = compIndexscale(u.basis(), cols, Scols.order());
+    Scols.set_iscale(iscale);
+    Scols.comp_n();
+
+    /* Distribute tolerances */
+    T epsR = 0.95*eps;
+    T epsL = 0.05*eps;
+
+    /* Scale right */
+    T bound  = 0.001*compOmegamax2(cols, Scols.order());
+    bound    = std::max(bound, 1.);
+    auto v   = applyScale(Scols, u, cols, epsR/std::sqrt(bound));
+
+    /* Apply operator */
+    v = eval(A, v, rows, cols);
+
+    /* Scale left */
+    v = applyScale(Srows, v, rows, epsL);
+
+    return v;
+}
+
+
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 applyScale(      Sepdiagscal<Basis>&              S,
