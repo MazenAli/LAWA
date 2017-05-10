@@ -644,6 +644,7 @@ scale(      Sepdiagscal<Basis>&              S,
       const FLENS_DEFAULT_INDEXTYPE          l);
 
 
+/* Truncation strategy as in DB (least efficient) */
 template <typename T, typename Basis, typename Optype>
 HTCoefficients<T, Basis>
 eval(      Sepop<Optype>&                   A,
@@ -652,6 +653,28 @@ eval(      Sepop<Optype>&                   A,
      const std::vector<IndexSet<Index1D> >& rows,
      const std::vector<IndexSet<Index1D> >& cols,
      const T                                eps = 1e-08);
+
+
+/* Truncation strategy II from AU (2x times faster than DB) */
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+evaleff(      Sepop<Optype>&                   A,
+              Sepdiagscal<Basis>&              Srows,
+              HTCoefficients<T, Basis>&        u,
+        const std::vector<IndexSet<Index1D> >& rows,
+        const std::vector<IndexSet<Index1D> >& cols,
+        const T                                eps = 1e-08);
+
+
+/* Most efficient truncation strategy for moderate levels */
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+evaleff2(     Sepop<Optype>&                   A,
+              Sepdiagscal<Basis>&              Srows,
+              HTCoefficients<T, Basis>&        u,
+        const std::vector<IndexSet<Index1D> >& rows,
+        const std::vector<IndexSet<Index1D> >& cols,
+        const T                                eps = 1e-08);
 
 
 template <typename T, typename Basis>

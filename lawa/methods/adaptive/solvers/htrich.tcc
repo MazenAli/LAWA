@@ -62,7 +62,6 @@ htrich(      Sepop<Optype>&                   A,
 
             /* Evaluate residual */
             if (k==0 && j==0 && params.uzero) {
-                //T scale  = std::max(1., nrmf);
                 eta      = .5*etakj*cv/nrmf;
                 S.set_nu(eta);
                 T tol    = .5*eta;
@@ -71,7 +70,6 @@ htrich(      Sepop<Optype>&                   A,
             } else {
                 T nrmu   = nrm2(u);
                 T max    = std::max(nrmu, nrmf);
-                //T scale  = std::max(1., max);
                 eta      = .5*etakj*cv/max;
                 S.set_nu(eta);
                 T tol    = .5*eta;
@@ -201,15 +199,6 @@ coarsen(      HTCoefficients<T, Basis>&         u,
     int num       = 0;
     buckets.bucketsort(contvec, eps);
 
-    std::vector<T> checksum(cont.size());
-    for (size_type j=0; j<cont.size(); ++j) {
-        checksum[j] = 0.;
-        for (auto& lambda : cont[j]) {
-            checksum[j] += std::pow(lambda.second, 2.);
-        }
-        checksum[j] = std::sqrt(checksum[j]);
-    }
-
     for (int i=buckets.bucket_ell2norms.size()-1; i>=0;
          --i) {
         P_Lambda += std::pow(buckets.bucket_ell2norms[i], 2.0L);
@@ -222,6 +211,19 @@ coarsen(      HTCoefficients<T, Basis>&         u,
     for (int i=0; i<=num; ++i) {
         buckets.addBucketToCoefficients(newind, i);
     }
+
+//    /* Remove indices from last bucket */
+//    Coefficients<Lexicographical, T, Index1DC>  remove;
+//    buckets.addBucketToCoefficients(newind, num);
+//    buckets.addBucketToCoefficients(remove, num);
+//    for (auto& lambda : remove) {
+//        P_Lambda += lambda.second*lambda.second;
+//        if (P_Lambda>thresh) {
+//            break;
+//        }
+//        if (count>1) newind.erase(lambda.first);
+//        ++count;
+//    }
 
     /* Set new index set */
     for (auto& it : newind) {

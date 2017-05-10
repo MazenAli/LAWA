@@ -173,7 +173,7 @@ main()
     double delta = 0.5;
     lawa::Sepdiagscal<Basis>    S(u.dim(), u.basis());
     setScaling(S, delta);
-    S.set_nu(1e-02);
+    S.set_nu(1e-01);
 
     /* Start MATLAB session */
     Engine *ep;
@@ -195,7 +195,7 @@ main()
     params.r1update.max_sweep = 20;
     params.r1update.verbose   = true;
     params.r1update.maxit_cg  = 500;
-    params.greedyals.maxit    = 1;
+    params.greedyals.maxit    = 5;
 
     std::cout << "Solver parameters\n" << params << std::endl;
     double residual;

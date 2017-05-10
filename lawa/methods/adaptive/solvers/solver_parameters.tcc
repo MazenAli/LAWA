@@ -239,8 +239,9 @@ std::ostream& operator<<(std::ostream& s,
     s << "delta1_pcg = " << params.delta1_pcg << std::endl;
     s << "delta2_pcg = " << params.delta2_pcg << std::endl;
     s << "delta3_pcg = " << params.delta3_pcg << std::endl;
+    s << "dres       = " << params.dres_pcg   << std::endl;
     s << "alpha      = " << params.alpha      << std::endl;
-    s << "nrmA       = " << params.nrmA      << std::endl;
+    s << "nrmA       = " << params.nrmA       << std::endl;
     s << "omega      = " << params.omega      << std::endl;
 
     return s;

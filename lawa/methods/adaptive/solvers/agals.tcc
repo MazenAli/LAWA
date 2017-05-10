@@ -39,18 +39,17 @@ agals_laplace(      Engine                             *ep,
 
     genCoefficients(Fcp, f, Lambda);
     set(F, Fcp);
-    T trunc   = 1e-08;
-    HTCoeff r = eval(S, F, Lambda, trunc);
+    T trunc   = 1e-04;
+    HTCoeff r = applyScale(S, F, Lambda, trunc);
     T nrmb    = nrm2(r);
 
     /* Initial residual */
-    trunc     = std::min(1e-03, params.tol*nrmb*1e-01);
     r         = eval(A, u, Lambda, Lambda);
     r.tree()  = F.tree()-r.tree();
     T unres   = nrm2(r);
     HTCoeff copy(F);
     unres    /= nrm2(copy);
-    r         = eval(S, r, Lambda, trunc);
+    r         = applyScale(S, r, Lambda, trunc);
     residual  = nrm2(r)/nrmb;
 
     if (residual<=params.tol) {
@@ -78,7 +77,7 @@ agals_laplace(      Engine                             *ep,
         p1.stag   = std::min(1e-06, p1.tol*1e+01);
         p2.tol    = std::min(1e-06, params.gamma*residual);
         p2.stag   = std::min(1e-06, 1e-01*p2.tol);
-        p2.maxit  = k;
+        p2.maxit  = 1;
         T greedy_res;
         greedy_it = greedyALS_laplace(ep, A, u, F, Lambda, greedy_res,
                                       p0,
@@ -101,18 +100,17 @@ agals_laplace(      Engine                             *ep,
         unres     = nrm2(r);
         copy      = F;
         unres    /= nrm2(copy);
-        trunc     = std::min(1e-10, residual*nrmb*1e-01);
+        trunc     = std::min(1e-03, residual*nrmb*1e-01);
         if (trunc<1e-10) trunc = 1e-10;
-        r         = eval(S, r, Lambda, trunc);
+        r         = applyScale(S, r, Lambda, trunc);
         residual  = nrm2(r);
 
         /* Bulk chasing */
         sweep = bulk(params.bulk, residual,
                      r, Lambda, sweep);
 
-        trunc     = std::min(1e-10, residual*nrmb*1e-01);
-        if (trunc<1e-10) trunc = 1e-10;
-        r         = eval(S, F, Lambda, trunc);
+        trunc     = std::min(1e-03, residual*nrmb*1e-01);
+        r         = applyScale(S, F, Lambda, trunc);
         nrmb      = nrm2(r);
         residual /= nrmb;
 
@@ -134,9 +132,9 @@ agals_laplace(      Engine                             *ep,
         restrict(F, Lambda);
 
         /* Extend u to new Lambda */
-        //extend(u, Lambda);
-        rndinit(u, Lambda, 1, 1e-03);
-        p0.update = false;
+        extend(u, Lambda);
+        //rndinit(u, Lambda, 1, 1e-03);
+        p0.update = true;
 
         #ifdef VERBOSE
             std::cout << "agals_laplace: Index set sizes\n";

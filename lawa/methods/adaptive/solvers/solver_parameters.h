@@ -248,6 +248,7 @@ struct HTAWGM_Params
     double   delta1_pcg = 1e-01; /* Adaptive trunc tolerance search dir */
     double   delta2_pcg = 1e-01; /* Adaptive trunc tolerance search dir*/
     double   delta3_pcg = 1e-01; /* Adaptive trunc tolerance solution */
+    double   dres_pcg   = 2.;    /* Scaling adjustment for res trunc */
     double   alpha      = 0.95;  /* Bulk chasing parameter */
     double   nrmA       = 50;    /* Estimate for operator norm */
     double   omega      = 0.1;   /* Estimate for relative res eval precision */

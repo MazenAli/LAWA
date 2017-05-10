@@ -58,6 +58,13 @@ one(double)
 }
 
 
+double
+zero(double)
+{
+    return 0.;
+}
+
+
 int
 main(int argc, char* argv[])
 {
@@ -95,8 +102,6 @@ main(int argc, char* argv[])
 
     IndexSet        indexset;
     IndexSet        indexset2;
-    Coeff1D         coeff;
-
     std::vector<Function> fvec;
 
     for (int i=1; i<=dim; ++i) {
@@ -106,6 +111,7 @@ main(int argc, char* argv[])
     SepCoeff        coeffs(rank, dim);
     IndexSetVec     indexsetvec(dim);
     IndexSetVec     indexsetvec2(dim);
+    IndexSetVec     diff(dim);
     lawa::SeparableFunctionD<T> F(fvec, rank, dim);
     MatInt                      derivs(rank, dim);
     for (int i=1; i<=rank; ++i) {
@@ -118,14 +124,14 @@ main(int argc, char* argv[])
     lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
 
     getFullIndexSet(basis, indexset,  lev);
-    getFullIndexSet(basis, indexset2,  lev+2);
+    //getFullIndexSet(basis, indexset2,  lev-3);
 
     std::cout << "The initial index set size is " << indexset.size()
               << "\n\n";
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         indexsetvec[l] = indexset;
-        indexsetvec2[l] = indexset2;
+        //indexsetvec2[l] = indexset2;
     }
 
     /* Map */
@@ -141,6 +147,15 @@ main(int argc, char* argv[])
     RefIdentity1D   RefIdentityBil(basis.refinementbasis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
 
+    rndinit(u, indexsetvec, 5, 10.);
+    double a = 0.1;
+    std::cout << "Required       => " << a << std::endl;
+    double min = std::sqrt((a*a-1.+(double) dim)/(double) dim);
+    std::cout << "Hypothesis min => " << min << std::endl;
+    (void) bulkBestN(a, nrm2(u), u, indexsetvec2, indexsetvec);
+
+    exit(1);
+
     Sepop A(lapl, dim, dim);
 
     lawa::Sepdiagscal<Basis>    S(dim, basis);
@@ -148,30 +163,30 @@ main(int argc, char* argv[])
     lawa::HTRICH_Params  params;
     params.omega      = 1e-03;
     params.cA         = 1.;
-    params.eps0       = 1e-02;
-    params.rho        = 0.93;
-    params.maxit_inner= 60;
-    params.beta1      = 1e-02;
-    params.beta2      = 1e-02;
+    params.eps0       = 5e-02;
+    params.rho        = 0.92;
+    params.maxit_inner= 250;
+    params.beta1      = 1e-01;
+    params.beta2      = 1e-01;
     params.maxit_rich = 100;
 
     double alpha      = 1e-02;
     double kappaP     = std::sqrt(2.*dim-3.);
     double kappaC     = std::sqrt(dim);
-    params.kappa1     = 1e-01/(1.+(1.+alpha)*(kappaP+kappaC+kappaP*kappaC));
+    params.kappa1     = 1./(1.+(1.+alpha)*(kappaP+kappaC+kappaP*kappaC));
     params.kappa2     = (1.+alpha)*kappaP*params.kappa1;
-    params.kappa3     = 1e-01*kappaC*(kappaP+1.)*(1.+alpha)*params.kappa1;
+    params.kappa3     = kappaC*(kappaP+1.)*(1.+alpha)*params.kappa1;
 
     lawa::HTAWGM_Params params2;
-    params2.maxit_pcg  = 50;
+    params2.nrmA       = 100.;
+    params2.maxit_pcg  = 150;
     params2.maxit_awgm = 100;
     params2.tol_awgm   = 1e-08;
-    params2.delta1_pcg = 1e-01;
-    params2.delta2_pcg = 1e-01;
-    params2.delta3_pcg = 1e-01;
-    params2.alpha      = 0.95;
+    params2.delta1_pcg = .5;
+    params2.dres_pcg   = 1.;
+    params2.alpha      = 1e-01;
     params2.gamma0     = 1e-02;
-    params2.gamma1     = 0.25;
+    params2.gamma1     = 8e-02;
     params2.gammait    = 9;
 
     std::cout << "HTRICH params =\n";
@@ -185,22 +200,39 @@ main(int argc, char* argv[])
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    setScaling(S, 5e-01);
+    setScaling(S, 1e-01);
     S.set_nu(1e-01);
-
+//    f          = evaleff2(A, S, f, indexsetvec, indexsetvec, 1e-07);
+//    std::cout << "max rank f => " << f.tree().max_rank() << std::endl;
+//
+//    for (int i=0; i<dim; ++i) {
+//        diff[i] = indexsetvec[i];
+//        for (auto& lambda : indexsetvec2[i]) {
+//            diff[i].erase(lambda);
+//        }
+//    }
+//
+//    double nrm   = nrm2(f);
+//    auto   rf    = f;
+//    restrict(rf, indexsetvec2);
+//    double min   = nrm2(rf)/nrm;
+//    std::cout << "nrm(f) = " << nrm << std::endl;
+//    std::cout << "min    = " << min << std::endl;
+//    double a     = 0.91;
+//    auto   sweep = bulk(a, nrm, f, indexsetvec2, diff);
+//
+//    exit(1);
     if (!awgm) {
         its = htrich(A, S, u, Fint, indexsetvec, res, params);
     } else {
-        its = htawgm(A, S, u, Fint, indexsetvec, res, params2);
-       // auto SF = applyScale(S, f, indexsetvec, 1e-06);
-       // its = galerkin_pcg(A, S, u, f, indexsetvec, res,
-       //                    true,
-       //                    1e-08,
-       //                    100,
-       //                    1e-01,
-       //                    1e-01,
-       //                    1e-01,
-       //                    1e-05);
+        its = htawgm2(A, S, u, Fint, indexsetvec, res, params2);
+       // its = galerkin_pcg2(A, S, u, f, indexsetvec, res,
+       //                     true,
+       //                     1e-08,
+       //                     200,
+       //                     0.9,
+       //                     2.,
+       //                     1e-08);
     }
 
     std::cout << "Solver took " << its << " iterations to reach "
