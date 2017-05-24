@@ -40,7 +40,7 @@ agals_laplace(      Engine                             *ep,
     genCoefficients(Fcp, f, Lambda);
     set(F, Fcp);
     T trunc   = 1e-04;
-    HTCoeff r = applyScale(S, F, Lambda, trunc);
+    HTCoeff r = applyScaleTT(S, F, Lambda, trunc);
     T nrmb    = nrm2(r);
 
     /* Initial residual */
@@ -49,7 +49,7 @@ agals_laplace(      Engine                             *ep,
     T unres   = nrm2(r);
     HTCoeff copy(F);
     unres    /= nrm2(copy);
-    r         = applyScale(S, r, Lambda, trunc);
+    r         = applyScaleTT(S, r, Lambda, trunc);
     residual  = nrm2(r)/nrmb;
 
     if (residual<=params.tol) {
@@ -71,13 +71,13 @@ agals_laplace(      Engine                             *ep,
     GreedyALSParams p2 = params.greedyals;
     for (unsigned k=1; k<=params.maxit; ++k) {
         unsigned greedy_it;
+        size_type size = 0;
 
         /* Greedy solve */
         p1.tol    = std::min(1e-06, params.gamma*residual);
         p1.stag   = std::min(1e-06, p1.tol*1e+01);
         p2.tol    = std::min(1e-06, params.gamma*residual);
         p2.stag   = std::min(1e-06, 1e-01*p2.tol);
-        p2.maxit  = 1;
         T greedy_res;
         greedy_it = greedyALS_laplace(ep, A, u, F, Lambda, greedy_res,
                                       p0,
@@ -93,16 +93,14 @@ agals_laplace(      Engine                             *ep,
         #endif
 
         /* Approximate residual */
-        r         = szoneres(A, u, F, Fcp, f,
-                             Lambda,
-                             sweep,
-                             total);
-        unres     = nrm2(r);
-        copy      = F;
-        unres    /= nrm2(copy);
+        r = szoneres(A, u, F, Fcp, f,
+                     Lambda,
+                     sweep,
+                     total);
         trunc     = std::min(1e-03, residual*nrmb*1e-01);
         if (trunc<1e-10) trunc = 1e-10;
-        r         = applyScale(S, r, Lambda, trunc);
+        S.set_nu(residual);
+        r         = applyScaleTT(S, r, total, trunc);
         residual  = nrm2(r);
 
         /* Bulk chasing */
@@ -110,7 +108,8 @@ agals_laplace(      Engine                             *ep,
                      r, Lambda, sweep);
 
         trunc     = std::min(1e-03, residual*nrmb*1e-01);
-        r         = applyScale(S, F, Lambda, trunc);
+        restrict(F, Lambda);
+        r         = applyScaleTT(S, F, Lambda, trunc);
         nrmb      = nrm2(r);
         residual /= nrmb;
 
@@ -128,17 +127,15 @@ agals_laplace(      Engine                             *ep,
             return k;
         }
 
-        /* New RHS */
-        restrict(F, Lambda);
-
         /* Extend u to new Lambda */
         extend(u, Lambda);
-        //rndinit(u, Lambda, 1, 1e-03);
         p0.update = true;
 
         #ifdef VERBOSE
+            std::cout << "agals_laplace: Current max rank of solution "
+                      << u.tree().max_rank() << std::endl;
             std::cout << "agals_laplace: Index set sizes\n";
-            size_type size = 0;
+            size = 0;
             for (size_type j=0; j<Lambda.size(); ++j) {
                 std::cout << "agals_laplace: d = " << j+1
                           << " : " << Lambda[j].size() << std::endl;

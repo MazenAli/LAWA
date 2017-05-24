@@ -25,6 +25,9 @@ typedef flens::GeMatrix<flens::FullStorage
 typedef flens::GeMatrix<flens::FullStorage
         <int, cxxblas::ColMajor> >              MatInt;
 typedef flens::DenseVector<flens::Array<T> >    DenseVector;
+typedef lawa::Coefficients<
+        lawa::Lexicographical, T,
+        lawa::Index1D>                          Coeff1D;
 typedef flens::DenseVector<
         flens::Array<unsigned> >                IVector;
 typedef lawa::Function<T>                       Function;
@@ -89,10 +92,21 @@ one(double)
 
 
 int
-main()
+main(int argc, char* argv[])
 {
+    if (argc!=3) {
+        std::cerr << "Usage: " << argv[0] << " dim level\n";
+        return 1;
+    }
+
+    int dim  = atoi(argv[1]);
+    int lev  = atoi(argv[2]);
+
+    if (dim<=0) {
+        std::cerr << "Dimension must be a positive integer\n";
+        return 1;
+    }
     int rank = 1;
-    int dim  = 4;
 
     /* Generate example */
     Basis                       basis(2);
@@ -101,16 +115,21 @@ main()
 
     IndexSet                    indexset;
     IndexSet                    indexset2;
-    IndexSet                    indexset3;
-    getFullIndexSet(basis, indexset,  3);
-    getFullIndexSet(basis, indexset2, 3);
-    getFullIndexSet(basis, indexset3, 3);
+    IndexSet                    diff;
+    getFullIndexSet(basis, indexset,  lev);
+    getFullIndexSet(basis, indexset2,  lev-1);
+    diff = indexset;
+    for (auto& it : indexset2) {
+        diff.erase(it);
+    }
     IndexSetVec     indexsetvec(dim);
+    IndexSetVec     indexsetvec2(dim);
+    IndexSetVec     diffvec(dim);
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         indexsetvec[l] = indexset;
+        indexsetvec2[l] = indexset2;
+        diffvec[l] = diff;
     }
-    indexsetvec[1] = indexset2;
-    indexsetvec[3] = indexset3;
 
     double sp = 1.;
     HTCoeffTree                     f(dim, sp, basis, map);
@@ -118,21 +137,8 @@ main()
     SepCoeff                        coeffs(rank, dim);
 
     DenseVector             sings;
-    Function                x2f(x2, sings);
-    Function                x3f(x3, sings);
-    Function                cosf(mycos, sings);
-    Function                sinf(mysin, sings);
-    Function                expf(myexp, sings);
     Function                onef(one, sings);
     std::vector<Function>   fvec;
-//    fvec.push_back(cosf);
-//    fvec.push_back(sinf);
-//    fvec.push_back(sinf);
-//    fvec.push_back(expf);
-//    fvec.push_back(expf);
-//    fvec.push_back(x3f);
-//    fvec.push_back(x2f);
-//    fvec.push_back(expf);
 
     for (int i=0; i<dim; ++i) {
         fvec.push_back(onef);
@@ -158,7 +164,19 @@ main()
     /* ---------------------------------------------------------- */
 
     /* Test greedy solver */
-    rndinit(u, indexsetvec, 1, 1e-03);
+    rndinit(u, indexsetvec, 25, 1e-12);
+
+    double a   = 0.7;
+    double nrm = nrm2(u);
+    auto   cp  = u;
+    auto   cp2 = indexsetvec2;
+
+    std::cout << "Best N\n";
+    (void) bulkBestN(a, nrm, u, indexsetvec2, diffvec);
+    std::cout << "Quasi best N\n";
+    (void) bulk(a, nrm, cp, cp2, diffvec);
+
+    exit(1);
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         std::cout << "Indexset " << l+1 << " : "
@@ -183,7 +201,7 @@ main()
     }
 
     lawa::AgALSParams   params;
-    params.maxit              = 15;
+    params.maxit              = 35;
     params.gamma              = 1e-01;
     params.r1update.update    = false;
     params.r1update.sw        = true;
@@ -195,7 +213,8 @@ main()
     params.r1update.max_sweep = 20;
     params.r1update.verbose   = true;
     params.r1update.maxit_cg  = 500;
-    params.greedyals.maxit    = 5;
+    params.greedyals.maxit    = 1;
+    params.bulk               = 0.5;
 
     std::cout << "Solver parameters\n" << params << std::endl;
     double residual;

@@ -687,6 +687,14 @@ applyScale(      Sepdiagscal<Basis>&              S,
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
+applyScaleTT(      Sepdiagscal<Basis>&              S,
+                   HTCoefficients<T, Basis>&        u,
+             const std::vector<IndexSet<Index1D> >& cols,
+             const T                                eps = 1e-08);
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
 eval_notrunc(Sepdiagscal<Basis>&                     S,
              HTCoefficients<T, Basis>&               u,
              const std::vector<IndexSet<Index1D> >&  cols);

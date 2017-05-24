@@ -3304,6 +3304,72 @@ applyScale(      Sepdiagscal<Basis>&              S,
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
+applyScaleTT(      Sepdiagscal<Basis>&              S,
+                 HTCoefficients<T, Basis>&          u,
+             const std::vector<IndexSet<Index1D> >& cols,
+             const T                                eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(cols.size()==S.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), cols, S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+
+    /* Precompute summands */
+    auto N = S.n()+S.nplus()+1;
+    flens::DenseVector<flens::Array<T>>                        nrms(N);
+    std::vector<HTCoefficients<T, Basis>>                      prods(N);
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(N);
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l0=-1*S.n();
+                                 l0<=(signed) S.nplus();
+                                 ++l0) {
+        auto v = u;
+        scale(S, v, cols, l0);
+        nrms(count+1) = nrm2(v);
+        prods[count]  = v;
+        ++count;
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    HTCoefficients<T, Basis> sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    sum.tree().truncate(eps/2*eps_/refsum);
+    ++count;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_      += nrms(count+1);
+        sum.tree() = sum.tree()+prods[ids(count+1)-1].tree();
+        sum.tree().truncate(eps/2*eps_/refsum);
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
 eval_notrunc(Sepdiagscal<Basis>& S,
              HTCoefficients<T, Basis>& u,
              const std::vector<IndexSet<Index1D> >& cols)
@@ -4515,7 +4581,7 @@ assemble_projected_laplace(      Sepop<Optype>&             A,
                            const unsigned                   j)
 {
     flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
-    ret(Lambda.size(), flens::Lower);
+    ret(maxintindhash(Lambda, u, j), flens::Lower);
 
     auto& a = A(1, 1);
     for (auto& lambdaR : Lambda) {

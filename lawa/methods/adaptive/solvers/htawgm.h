@@ -88,6 +88,14 @@ bulk(const T alpha, const T resex,
      const std::vector<IndexSet<Index1D> >& diff);
 
 
+template <typename T, typename Basis>
+std::vector<IndexSet<Index1D> >
+bulkBestN(const T alpha, const T resex,
+           HTCoefficients<T, Basis>& res,
+           std::vector<IndexSet<Index1D> >& Lambda,
+     const std::vector<IndexSet<Index1D> >& diff);
+
+
 template <typename Optype, typename Basis, typename T>
 unsigned
 htawgm(Sepop<Optype>&                   A,

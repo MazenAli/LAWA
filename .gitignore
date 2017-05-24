@@ -210,3 +210,4 @@ applications/rb_adaptive/Stempel/3/training_data_stempel/
 *.txt
 *.dat
 *.swp
+core.*

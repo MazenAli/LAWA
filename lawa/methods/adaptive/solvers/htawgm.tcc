@@ -462,20 +462,17 @@ bulk(const T alpha, const T resex,
     buckets.bucketsort(contvec, thresh);
 
     thresh *= thresh;
-    std::cout << "thresh^2 = " << thresh << std::endl;
 
     for (int i=buckets.bucket_ell2norms.size()-1; i>=0;
          --i) {
         P_Lambda += std::pow(buckets.bucket_ell2norms[i], 2.0L);
-        std::cout << "P_Lambda = " << P_Lambda << std::endl;
         if (P_Lambda > thresh) {
             num = i;
-            std::cout << "I broke first at " << num << std::endl;
             P_Lambda -= std::pow(buckets.bucket_ell2norms[i], 2.0L);
             break;
         }
     }
-    std::cout << "num = " << num << std::endl;
+
 
     /* Add buckets */
     for (size_type i=0; i<=num; ++i) {
@@ -484,13 +481,11 @@ bulk(const T alpha, const T resex,
 
     /* Remove indices from last bucket */
     Coefficients<Lexicographical, T, Index1DC>  remove;
-    buckets.addBucketToCoefficients(newind, num);
     buckets.addBucketToCoefficients(remove, num);
     int count = 1;
     for (auto& lambda : remove) {
         P_Lambda += lambda.second*lambda.second;
         if (P_Lambda>thresh) {
-            std::cout << "I broke at " << count << std::endl;
             break;
         }
         if (count>1) newind.erase(lambda.first);
@@ -508,8 +503,6 @@ bulk(const T alpha, const T resex,
     #ifdef VERBOSE
         restrict(res, Lambda);
         auto resnew = nrm2(res);
-        std::cout << "Norm old " << resex << std::endl;
-        std::cout << "Norm new " << resnew << std::endl;
         std::cout << "bulk: true alpha = " << resnew/resex << std::endl;
     #endif
 
@@ -534,7 +527,7 @@ bulkBestN(const T alpha, const T resex,
                                     cont(Lambda.size());
     std::vector<IndexSet<Index1D> > sweep(Lambda.size());
 
-    T thresh = std::sqrt((T) 1-alpha*alpha)*resex*std::sqrt((T) res.dim());
+    T thresh = std::sqrt((T) 1-alpha*alpha)*resex;
 
     /* Compute contractions */
     res.orthogonalize_svd(sigmas);
@@ -559,18 +552,16 @@ bulkBestN(const T alpha, const T resex,
     T P_Lambda    = 0;
 
     thresh *= thresh;
-    std::cout << "thresh^2 = " << thresh << std::endl;
 
     auto it = sorted.end();
     --it;
     auto save = it;
     int cnt = 0;
     for (;; --it) {
-        ++cnt; std::cout << cnt << std::endl;
+        ++cnt;
         P_Lambda += std::pow((*it).first, 2.0L);
         save = it;
         if (P_Lambda > thresh) {
-            std::cout << "I broke first at " << (*save).second << std::endl;
             break;
         }
     }
@@ -592,8 +583,6 @@ bulkBestN(const T alpha, const T resex,
     #ifdef VERBOSE
         restrict(res, Lambda);
         auto resnew = nrm2(res);
-        std::cout << "Norm old " << resex << std::endl;
-        std::cout << "Norm new " << resnew << std::endl;
         std::cout << "bulk: true alpha = " << resnew/resex << std::endl;
     #endif
 

@@ -430,11 +430,12 @@ rank1als_laplace(      Sepop<Optype>&                      A,
 
     /* ALS sweeps */
     T eps;
-    Matrix Pj, B;
     for (unsigned sweep=1; sweep<=max_sweep; ++sweep) {
         xold = x;
 
         for (unsigned j=1; j<=A.dim(); ++j) {
+            Matrix Pj, B;
+
             /* Compute projection */
             Pj  = projection(Ax.tree(), x.tree(), j);
             eps = Pj(1, 2)/Pj(1, 1);
