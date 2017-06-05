@@ -75,6 +75,7 @@ DEBUGLAWA += -DCG_COMP_EVS
 DEBUGMODE = -g -DDEBUG -D_GLIBCXX_DEBUG_PEDANTIC=1 $(DEBUGLAWA) $(HASHTYPE) \
             -O0 -Wfatal-errors -pedantic -Wextra \
             -fPIC -Wall -Wno-attributes
+DEBUGMODE += -fno-inline
 
 # --- release mode ----------------------
 RELEASEMODE = -O3 $(HASHTYPE) -fPIC -Wno-attributes

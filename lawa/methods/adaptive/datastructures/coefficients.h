@@ -222,6 +222,9 @@ struct Coefficients<Bucket,T,Index>
     void
     bucketsort(const Coefficients<Lexicographical,T,Index> &_coeff, T eps);
 
+    T
+    bucketsort2(const Coefficients<Lexicographical,T,Index> &_coeff, T eps);
+
     FLENS_DEFAULT_INDEXTYPE
     addBucketToIndexSet(IndexSet<Index> &Lambda, FLENS_DEFAULT_INDEXTYPE bucketnumber);
 
@@ -249,7 +252,7 @@ struct Coefficients<AbsoluteValue,T,Index> : std::multimap<T,Index,lt<AbsoluteVa
 {
     using std::multimap<T,Index,lt<AbsoluteValue,T> >::insert;
     using std::multimap<T,Index,lt<AbsoluteValue,T> >::erase;
-    
+
     Coefficients();
 
     Coefficients<AbsoluteValue,T,Index>&

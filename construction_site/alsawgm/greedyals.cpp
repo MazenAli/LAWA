@@ -164,19 +164,7 @@ main(int argc, char* argv[])
     /* ---------------------------------------------------------- */
 
     /* Test greedy solver */
-    rndinit(u, indexsetvec, 25, 1e-12);
-
-    double a   = 0.7;
-    double nrm = nrm2(u);
-    auto   cp  = u;
-    auto   cp2 = indexsetvec2;
-
-    std::cout << "Best N\n";
-    (void) bulkBestN(a, nrm, u, indexsetvec2, diffvec);
-    std::cout << "Quasi best N\n";
-    (void) bulk(a, nrm, cp, cp2, diffvec);
-
-    exit(1);
+    rndinit(u, indexsetvec, 1, 1e-03);
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         std::cout << "Indexset " << l+1 << " : "
@@ -201,7 +189,7 @@ main(int argc, char* argv[])
     }
 
     lawa::AgALSParams   params;
-    params.maxit              = 35;
+    params.maxit              = 25;
     params.gamma              = 1e-01;
     params.r1update.update    = false;
     params.r1update.sw        = true;
@@ -214,7 +202,7 @@ main(int argc, char* argv[])
     params.r1update.verbose   = true;
     params.r1update.maxit_cg  = 500;
     params.greedyals.maxit    = 1;
-    params.bulk               = 0.5;
+    params.bulk               = 0.8;
 
     std::cout << "Solver parameters\n" << params << std::endl;
     double residual;

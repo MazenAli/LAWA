@@ -504,6 +504,56 @@ Coefficients<Bucket,T,Index>::bucketsort(const Coefficients<Lexicographical,T,In
 }
 
 template <typename T, typename Index>
+T
+Coefficients<Bucket,T,Index>::bucketsort2(const Coefficients<Lexicographical,T,Index> &_coeff, T eps)
+{
+    typedef typename Coefficients<Lexicographical,T,Index>::const_iterator const_it;
+
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)buckets.size(); ++i) {
+        buckets[i].clear();
+    }
+    buckets.clear();
+    bucket_ell2norms.clear();
+
+    supremumnorm = 0.;
+    if (_coeff.size() > 0) {
+        for (const_it lambda = _coeff.begin(); lambda != _coeff.end(); ++lambda) {
+            supremumnorm = std::max(supremumnorm,(T)fabs((*lambda).second));
+        }
+    }
+    FLENS_DEFAULT_INDEXTYPE NumOfBuckets = std::max((FLENS_DEFAULT_INDEXTYPE) 1,(FLENS_DEFAULT_INDEXTYPE)(2*std::log(supremumnorm*std::sqrt(_coeff.size())/eps)/std::log(T(2)))+1);
+
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<NumOfBuckets; ++i) {
+        BucketEntry tmp;
+        buckets.push_back(tmp);
+        bucket_ell2norms.push_back(0.);
+    }
+
+    T ret = 0.;
+    if (_coeff.size() > 0) {
+        for (const_it lambda = _coeff.begin(); lambda != _coeff.end(); ++lambda) {
+            FLENS_DEFAULT_INDEXTYPE pos = std::max((FLENS_DEFAULT_INDEXTYPE) 1,(FLENS_DEFAULT_INDEXTYPE)((-2.*std::log(fabs((*lambda).second)/supremumnorm)/std::log(T(2))))+1);
+            --pos;
+            if (pos>NumOfBuckets-1) {
+                ret += (*lambda).second*(*lambda).second;
+                continue;
+            }
+            const std::pair<const Index,T>* tmp = &(*lambda);
+            buckets[pos].push_back(tmp);
+            T val = (*lambda).second;
+            bucket_ell2norms[pos] += (long double)(val*val);
+        }
+    }
+
+    for (FLENS_DEFAULT_INDEXTYPE i=0; i<(FLENS_DEFAULT_INDEXTYPE)bucket_ell2norms.size(); ++i) {
+        bucket_ell2norms[i] = std::sqrt(bucket_ell2norms[i]);
+    }
+
+    return ret;
+}
+
+
+template <typename T, typename Index>
 FLENS_DEFAULT_INDEXTYPE
 Coefficients<Bucket,T,Index>::addBucketToIndexSet(IndexSet<Index> &Lambda, FLENS_DEFAULT_INDEXTYPE bucketnumber)
 {

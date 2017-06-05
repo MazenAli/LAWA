@@ -446,7 +446,6 @@ rank1als_laplace(      Sepop<Optype>&                      A,
             /* Solve on leaf */
             htucker::DimensionIndex idx(1);
             idx[0]           = j;
-            Matrix   xk      = extract(x.tree(), idx);
 
             auto Ap = Astiff[j-1];
             flens::blas::scal(Pj(1, 2), Ap);
@@ -454,7 +453,7 @@ rank1als_laplace(      Sepop<Optype>&                      A,
                 Ap(l, l) += Pj(1, 1);
             }
 
-            xk        = B;
+            Matrix xk        = B;
             auto info = flens::lapack::posv(Ap, xk);
             if (verbose) {
                 std::cout << "rank1als_laplace: Sweep " << sweep << ", leaf "

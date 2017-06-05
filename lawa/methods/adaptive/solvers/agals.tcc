@@ -29,6 +29,9 @@ agals_laplace(      Engine                             *ep,
 
     typedef HTCoefficients<T, Basis>                    HTCoeff;
     typedef std::vector<IndexSet<Index1D> >::size_type  size_type;
+    typedef flens::SyMatrix
+            <flens::FullStorage
+            <T, cxxblas::ColMajor> >                    SyMatrix;
 
     std::vector<IndexSet<Index1D> >              sweep(Lambda);
     std::vector<IndexSet<Index1D> >              total(Lambda);
@@ -129,6 +132,19 @@ agals_laplace(      Engine                             *ep,
 
         /* Extend u to new Lambda */
         extend(u, Lambda);
+
+        /* Post smoothing */
+        if (k>1) {
+            std::cout << "agals_laplace: Post extend smoothing...\n";
+
+            std::vector<SyMatrix>   Astiff;
+            for (unsigned j=1; j<=A.dim(); ++j) {
+                Astiff.push_back(assemble_projected_laplace(A, u, Lambda[j-1], j));
+            }
+
+            p0.update = false;
+            (void) rank1update_laplace(A, Astiff, u, F, Lambda, p0);
+        }
         p0.update = true;
 
         #ifdef VERBOSE

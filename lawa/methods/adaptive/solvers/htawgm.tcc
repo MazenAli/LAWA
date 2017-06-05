@@ -457,9 +457,8 @@ bulk(const T alpha, const T resex,
     /* Bucket sort */
     Coefficients<Bucket, T, Index1DC>           buckets;
     Coefficients<Lexicographical, T, Index1DC>  newind;
-    T P_Lambda    = 0;
     size_type num = 0;
-    buckets.bucketsort(contvec, thresh);
+    T P_Lambda    = buckets.bucketsort2(contvec, thresh);
 
     thresh *= thresh;
 
@@ -556,14 +555,12 @@ bulkBestN(const T alpha, const T resex,
     auto it = sorted.end();
     --it;
     auto save = it;
-    int cnt = 0;
-    for (;; --it) {
-        ++cnt;
+    for (;it!=sorted.begin(); --it) {
         P_Lambda += std::pow((*it).first, 2.0L);
-        save = it;
         if (P_Lambda > thresh) {
             break;
         }
+        --save;
     }
 
     /* Add buckets */
