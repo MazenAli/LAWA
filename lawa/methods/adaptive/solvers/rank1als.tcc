@@ -411,6 +411,8 @@ rank1als_laplace(      Sepop<Optype>&                      A,
     using flens::_;
     typedef typename flens::GeMatrix
                     <flens::FullStorage<T, cxxblas::ColMajor> >     Matrix;
+    typedef typename flens::SyMatrix
+                    <flens::FullStorage<T, cxxblas::ColMajor> >     SyMatrix;
     typedef typename htucker::HTuckerTree<T>                        HTTree;
     typedef HTCoefficients<T, Basis>                                HTCoeff;
 
@@ -447,14 +449,58 @@ rank1als_laplace(      Sepop<Optype>&                      A,
             htucker::DimensionIndex idx(1);
             idx[0]           = j;
 
+            /* Compute X */
             auto Ap = Astiff[j-1];
-            flens::blas::scal(Pj(1, 2), Ap);
-            for (int l=1; l<=Ap.numRows(); ++l) {
-                Ap(l, l) += Pj(1, 1);
-            }
 
-            Matrix xk        = B;
-            auto info = flens::lapack::posv(Ap, xk);
+            int info;
+            Matrix xk;
+            if (B.numCols()==1) {
+                flens::blas::scal(Pj(1, 2), Ap);
+                for (int l=1; l<=Ap.numRows(); ++l) {
+                    Ap(l, l) += Pj(1, 1);
+                }
+
+                xk   = B;
+                info = flens::lapack::posv(Ap, xk);
+            } else {
+                auto n = B.numRows();
+                auto r = B.numCols();
+
+                /* Build Kronecker product (inefficient, replace later) */
+                SyMatrix At(n*r, flens::Lower);
+                for (int k=1; k<=n*r; ++k) {
+                    for (int m=k; m<=n*r; ++m) {
+                        unsigned r1 = (m-1)/n + 1;
+                        unsigned c1 = (k-1)/n + 1;
+                        unsigned r2 = (m-1)%n + 1;
+                        unsigned c2 = (k-1)%n + 1;
+                        if (r2<c2) {
+                            unsigned save = r2;
+                            r2 = c2;
+                            c2 = save;
+                        }
+
+                        At(m, k) = Pj(r1, r+c1)*Ap(r2, c2);
+                        if (r2==c2)
+                            At(m, k) += Pj(r1, c1);
+                    }
+                }
+
+                /* Vectorize rhs */
+                Matrix vecB(n*r, 1);
+                for (int k=1; k<=r; ++k) {
+                    vecB(_(n*(k-1)+1, n*k), 1) = B(_, k);
+                }
+
+                /* Solve */
+                info         = flens::lapack::posv(At, vecB);
+
+                /* Matricisize xk */
+                xk.resize(n, r);
+                for (int k=1; k<=r; ++k){
+                    xk(_, k) = vecB(_(n*(k-1)+1, n*k), 1);
+                }
+            }
             if (verbose) {
                 std::cout << "rank1als_laplace: Sweep " << sweep << ", leaf "
                           << j << ", epsilon = " << eps

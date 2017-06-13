@@ -29,9 +29,6 @@ agals_laplace(      Engine                             *ep,
 
     typedef HTCoefficients<T, Basis>                    HTCoeff;
     typedef std::vector<IndexSet<Index1D> >::size_type  size_type;
-    typedef flens::SyMatrix
-            <flens::FullStorage
-            <T, cxxblas::ColMajor> >                    SyMatrix;
 
     std::vector<IndexSet<Index1D> >              sweep(Lambda);
     std::vector<IndexSet<Index1D> >              total(Lambda);
@@ -78,14 +75,13 @@ agals_laplace(      Engine                             *ep,
 
         /* Greedy solve */
         p1.tol    = std::min(1e-06, params.gamma*residual);
-        p1.stag   = std::min(1e-06, p1.tol*1e+01);
-        p2.tol    = std::min(1e-06, params.gamma*residual);
-        p2.stag   = std::min(1e-06, 1e-01*p2.tol);
+        p1.stag   = 1e-03;
         T greedy_res;
         greedy_it = greedyALS_laplace(ep, A, u, F, Lambda, greedy_res,
                                       p0,
                                       p1,
                                       p2);
+
        #ifdef VERBOSE
             std::cout << "agals_laplace: greedyALS required " << greedy_it
                       << " iterations to reach tolerance "
@@ -134,17 +130,16 @@ agals_laplace(      Engine                             *ep,
         extend(u, Lambda);
 
         /* Post smoothing */
-        if (k>1) {
-            std::cout << "agals_laplace: Post extend smoothing...\n";
-
-            std::vector<SyMatrix>   Astiff;
-            for (unsigned j=1; j<=A.dim(); ++j) {
-                Astiff.push_back(assemble_projected_laplace(A, u, Lambda[j-1], j));
-            }
-
-            p0.update = false;
-            (void) rank1update_laplace(A, Astiff, u, F, Lambda, p0);
-        }
+//        if (k>1) {
+//            std::cout << "agals_laplace: Post extend smoothing...\n";
+//
+//            p0.update  = false;
+//            (void) greedyALS_laplace(ep, A, u, F, Lambda, greedy_res,
+//                                     p0,
+//                                     p1,
+//                                     p2);
+//
+//        }
         p0.update = true;
 
         #ifdef VERBOSE

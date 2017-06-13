@@ -81,11 +81,52 @@ greedyALS_laplace(      Engine                             *ep,
         xold.tree() = x.tree()-xold.tree();
         T stag      = nrm2(xold)/nrm2(x);
         #ifdef VERBOSE
-            std::cout << "greedyALS_laplace: Post core opt relative residual = "
+            std::cout << "greedyALS_laplace: Iteration " << it
+                      << ", post core opt relative residual = "
                       << residual << std::endl;
-            std::cout << "greedyALS_laplace: Post core opt        stagnation = "
+            std::cout << "greedyALS_laplace: Iteration " << it
+                      << ", post core opt        stagnation = "
                       << stag << std::endl;
         #endif
+
+
+
+
+
+//        p.update = false;
+//        nsweeps  = rank1update_laplace(A, Astiff, x, bcopy, Lambda, p);
+//        #ifdef VERBOSE
+//            Ax         = eval(A, x, Lambda, Lambda);
+//            Ax.tree()  = b.tree()-Ax.tree();
+//            residual   = nrm2(Ax)/nrmb;
+//            std::cout << "greedyALS_laplace: On update " << it
+//                      << " ALS required " << nsweeps
+//                      << " sweeps to reach relative residual "
+//                      << residual << std::endl;
+//        #endif
+//        p.update = true;
+//
+//        /* Optimize core */
+//        x.tree().orthogonalize();
+//        rhs = reduce_rhs(x, b);
+//        B   = reduce(A, x, Lambda, Lambda);
+//        htucker::extract_core(x.tree(), x0, ranks);
+//        x0 = optTTcoreLaplace(ep, B, rhs, x0, ranks, paramsOpt);
+//        htucker::insert_core(x.tree(), x0, ranks);
+//
+//        Ax          = eval(A, x, Lambda, Lambda);
+//        Ax.tree()   = b.tree()-Ax.tree();
+//        residual    = nrm2(Ax)/nrmb;
+//        xold.tree() = x.tree()-xold.tree();
+//        stag      = nrm2(xold)/nrm2(x);
+//        #ifdef VERBOSE
+//            std::cout << "greedyALS_laplace: Iteration " << it
+//                      << ", post core opt relative residual = "
+//                      << residual << std::endl;
+//            std::cout << "greedyALS_laplace: Iteration " << it
+//                      << ", post core opt        stagnation = "
+//                      << stag << std::endl;
+//        #endif
 
         if (residual<=params.tol || stag<=params.stag) {
             return it;

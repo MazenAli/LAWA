@@ -189,7 +189,7 @@ main(int argc, char* argv[])
     }
 
     lawa::AgALSParams   params;
-    params.maxit              = 25;
+    params.maxit              = 15;
     params.gamma              = 1e-01;
     params.r1update.update    = false;
     params.r1update.sw        = true;
@@ -198,11 +198,11 @@ main(int argc, char* argv[])
     params.r1update.tol_als   = 5e-02;
     params.r1update.tol_cg    = 1e-08;
     params.r1update.check_res = false;
-    params.r1update.max_sweep = 20;
+    params.r1update.max_sweep = 50;
     params.r1update.verbose   = true;
     params.r1update.maxit_cg  = 500;
     params.greedyals.maxit    = 1;
-    params.bulk               = 0.8;
+    params.bulk               = 0.95;
 
     std::cout << "Solver parameters\n" << params << std::endl;
     double residual;
