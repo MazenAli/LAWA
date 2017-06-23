@@ -42,6 +42,9 @@ public:
     size_type
     dim() const;
 
+    const IndexSetVec&
+    get_active() const;
+
     IndexSetVec&
     get_active();
 

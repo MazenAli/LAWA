@@ -193,6 +193,13 @@ extract(      HTCoefficients<T, Basis>& tree,
         const htucker::DimensionIndex& idx);
 
 
+template <typename T, typename Basis>
+Coefficients<Lexicographical, T, Index1D>
+extract(      HTCoefficients<T, Basis>& tree,
+        const IndexSet<Index1D>&        Lambda,
+        const unsigned                  j);
+
+
 template <typename T, SortingCriterion S, typename Index>
 SepCoefficients<S, T, Index>
 add(const SepCoefficients<S, T, Index>& left,
@@ -955,6 +962,28 @@ assemble_projected_laplace(      Sepop<Optype>&             A,
                                  HTCoefficients<T, Basis>&  u,
                            const IndexSet<Index1D>&         Lambda,
                            const unsigned                   j);
+
+
+template <typename T, typename Basis>
+flens::GeMatrix<
+flens::FullStorage<T, flens::ColMajor> >
+convert(const SepCoefficients<Lexicographical, T, Index1D>& cp,
+              HTCoefficients<T, Basis>&                     tree,
+        const unsigned                                      j);
+
+
+template <typename T, typename Basis>
+Coefficients<Lexicographical, T, Index1D>
+convert(const flens::GeMatrix<
+              flens::FullStorage<T, flens::ColMajor> >& U,
+              HTCoefficients<T, Basis>&                 tree,
+        const IndexSet<Index1D>&                        active,
+        const unsigned                                  j);
+
+
+template <typename Index>
+std::ostream& operator<<(std::ostream& s,
+                         const Mapwavind<Index>& map);
 
 } // namespace lawa
 

@@ -29,6 +29,14 @@ Mapwavind<Index>::dim() const
 
 
 template <typename Index>
+const typename Mapwavind<Index>::IndexSetVec&
+Mapwavind<Index>::get_active() const
+{
+    return activex;
+}
+
+
+template <typename Index>
 typename Mapwavind<Index>::IndexSetVec&
 Mapwavind<Index>::get_active()
 {

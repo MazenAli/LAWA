@@ -106,7 +106,7 @@ main(int argc, char* argv[])
         std::cerr << "Dimension must be a positive integer\n";
         return 1;
     }
-    int rank = 1;
+    int rank = 3;
 
     /* Generate example */
     Basis                       basis(2);
@@ -135,14 +135,30 @@ main(int argc, char* argv[])
     HTCoeffTree                     f(dim, sp, basis, map);
     HTCoeffTree                     u(dim, sp, basis, map);
     SepCoeff                        coeffs(rank, dim);
+    SepCoeff                        coeffs2(rank, dim);
 
     DenseVector             sings;
     Function                onef(one, sings);
+    Function                cosf(mycos, sings);
+    Function                sinf(mysin, sings);
+    Function                expf(myexp, sings);
     std::vector<Function>   fvec;
 
-    for (int i=0; i<dim; ++i) {
-        fvec.push_back(onef);
-    }
+//    for (int i=0; i<dim; ++i) {
+//        fvec.push_back(onef);
+//    }
+    dim = 3;
+    fvec.push_back(sinf);
+    fvec.push_back(cosf);
+    fvec.push_back(expf);
+
+    fvec.push_back(sinf);
+    fvec.push_back(sinf);
+    fvec.push_back(cosf);
+
+    fvec.push_back(expf);
+    fvec.push_back(onef);
+    fvec.push_back(sinf);
 
     lawa::SeparableFunctionD<T>     F(fvec, rank, dim);
     GeMat                           deltas(3,2);
@@ -155,7 +171,7 @@ main(int argc, char* argv[])
         }
     }
     lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
-    genCoefficients(coeffs, Fint, indexsetvec);
+    genCoefficients(coeffs, Fint, indexsetvec2);
     set(f, coeffs);
     RefLaplace1D    RefLaplaceBil(basis.refinementbasis);
     Laplace1D       LaplaceBil(basis);
@@ -163,13 +179,35 @@ main(int argc, char* argv[])
     Sepop           A(lapl, dim, dim);
     /* ---------------------------------------------------------- */
 
+
     /* Test greedy solver */
-    rndinit(u, indexsetvec, 1, 1e-03);
+    rndinit(u, indexsetvec2, 1, 1.);
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         std::cout << "Indexset " << l+1 << " : "
                   << indexsetvec[l].size() << std::endl;
     }
+
+    lawa::ProjRhs<T, Basis> rhs(coeffs, Fint, u);
+    rhs.computeProjection(1);
+    Coeff1D v = rhs(diff, indexset, 1);
+    std::cout << "ProjRhs =>\n" << v << std::endl;
+    indexsetvec2[0] = indexset;
+    genCoefficients(coeffs2, Fint, indexsetvec2);
+    set(f, coeffs2);
+    std::cout << htucker::contract(f.tree(), u.tree(), 1) << std::endl;
+
+    rhs.computeProjection(3);
+    v = rhs(diff, indexset, 3);
+    std::cout << "ProjRhs =>\n" << v << std::endl;
+    indexsetvec2[2] = indexset;
+    genCoefficients(coeffs2, Fint, indexsetvec2);
+    set(f, coeffs2);
+    std::cout << htucker::contract(f.tree(), u.tree(), 3) << std::endl;
+
+    std::cout << "Map =\n" << u.map() << std::endl;
+
+    exit(1);
 
     lawa::Rank1UP_Params                    p1;
     lawa::OptTTCoreParams                   p2;

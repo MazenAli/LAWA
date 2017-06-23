@@ -814,6 +814,42 @@ extract(      HTCoefficients<T, Basis>& tree,
 }
 
 
+template <typename T, typename Basis>
+Coefficients<Lexicographical, T, Index1D>
+extract(      HTCoefficients<T, Basis>& tree,
+        const IndexSet<Index1D>&        Lambda,
+        const unsigned                  j)
+{
+    assert(j >= 1 && j <= (unsigned) tree.dim());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = j;
+    for (auto tit=tree.tree().getGeneralTree().end();
+              tit>=tree.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            const Matrix& U = tit.getNode()->getContent()
+                              ->getUorB();
+            if (U.numCols()>1)
+                std::cerr << "warning extract: tensor not rank 1\n";
+
+            Coefficients<Lexicographical, T, Index1D>   ret;
+            for (const auto& index : Lambda) {
+                auto i = tree.map()(index, idx[0]);
+                ret[index] = U(i, 1);
+            }
+
+            return ret;
+        }
+    }
+
+    std::cerr << "error extract: dimension not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
 template <typename T, SortingCriterion S, typename Index>
 SepCoefficients<S, T, Index>
 add(const SepCoefficients<S, T, Index>& left,
@@ -4596,6 +4632,66 @@ assemble_projected_laplace(      Sepop<Optype>&             A,
     return ret;
 }
 
+
+template <typename T, typename Basis>
+flens::GeMatrix<
+flens::FullStorage<T, flens::ColMajor> >
+convert(const SepCoefficients<Lexicographical, T, Index1D>& cp,
+              HTCoefficients<T, Basis>&                     tree,
+        const unsigned                                      j)
+{
+    assert(j>=1 && j<=cp.dim());
+    assert(cp.dim()==(unsigned) tree.dim());
+
+    int rows = maxintindhash(cp(1, j), j, tree);
+    flens::GeMatrix<
+    flens::FullStorage<T, flens::ColMajor> > U(rows, cp.rank());
+
+    for (unsigned i=1; i<=cp.rank(); ++i) {
+        for (const auto& it : cp(i, j)) {
+            U(tree.map()(it.first, j), i) = it.second;
+        }
+    }
+
+    return U;
+}
+
+
+template <typename T, typename Basis>
+Coefficients<Lexicographical, T, Index1D>
+convert(const flens::GeMatrix<
+              flens::FullStorage<T, flens::ColMajor> >& U,
+              HTCoefficients<T, Basis>&                 tree,
+        const IndexSet<Index1D>&                        active,
+        const unsigned                                  j)
+{
+    assert(j>=1 && j<=(unsigned) tree.dim());
+    assert(U.numCols()==1);
+
+    Coefficients<Lexicographical, T, Index1D> v;
+
+    for (const auto& it : active) {
+        v[it] = U(tree.map()(it, j), 1);
+    }
+
+    return v;
+}
+
+
+template <typename Index>
+std::ostream& operator<<(std::ostream& s,
+                         const Mapwavind<Index>& map)
+{
+    for (unsigned j=0; j<map.dim(); ++j) {
+        s << "*** dimension = " << j+1 << " ***\n";
+        for (const auto& it : map.get_active()[j].right) {
+            s << it.first << " = " << it.second << std::endl;
+        }
+        s << "\n";
+    }
+
+    return s;
+}
 
 } // namespace lawa
 
