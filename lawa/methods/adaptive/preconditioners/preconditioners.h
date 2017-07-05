@@ -20,3 +20,4 @@
  
 #include <lawa/methods/adaptive/preconditioners/spacetimepreconditioners/spacetimepreconditioners.h>
 #include <lawa/methods/adaptive/preconditioners/preconditionersd/preconditionersd.h>
+#include <lawa/methods/adaptive/preconditioners/diagonalPreconditioner.h>

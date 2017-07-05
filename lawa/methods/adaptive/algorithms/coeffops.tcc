@@ -50,6 +50,22 @@ setCoefficients(SepCoefficients<S, T, Index>& coeffs,
 
 template <SortingCriterion S, typename T, typename Index>
 void
+updateCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                   const typename SepCoefficients<S, T, Index>
+                   ::size_type i,
+                   const typename SepCoefficients<S, T, Index>::
+                   size_type j,
+                   const typename SepCoefficients<S, T, Index>
+                   ::Coeff& coeff)
+{
+    assert(i>=1 && i<=coeffs.rank());
+    assert(j>=1 && j<=coeffs.dim());
+    coeffs.getCoefficients(i, j).update(coeff);
+}
+
+
+template <SortingCriterion S, typename T, typename Index>
+void
 addCoefficients(SepCoefficients<S, T, Index>& coeffs,
                 const typename SepCoefficients<S, T, Index>
                 ::size_type i,
@@ -84,8 +100,8 @@ genCoefficients(SepCoefficients<S, T, Index>& coeffs,
 
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
-genCoefficients(SepCoefficients<S, T, Index>& coeffs,
-                const SeparableRHSD<T, Basis>& rhs,
+genCoefficients(      SepCoefficients<S, T, Index>& coeffs,
+                      SeparableRHSD<T, Basis>& rhs,
                 const std::vector<IndexSet<Index>>& indexset)
 {
     assert(coeffs.rank()==rhs.rank());
@@ -140,8 +156,8 @@ genCoefficientsRnd(SepCoefficients<S, T, Index>&       coeffs,
 
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
-genAddCoefficients(SepCoefficients<S, T, Index>& coeffs,
-                   const SeparableRHSD<T, Basis>& rhs,
+genAddCoefficients(      SepCoefficients<S, T, Index>& coeffs,
+                         SeparableRHSD<T, Basis>& rhs,
                    const std::vector<IndexSet<Index>>& indexset)
 {
     assert(coeffs.rank()==rhs.rank());
@@ -158,6 +174,32 @@ genAddCoefficients(SepCoefficients<S, T, Index>& coeffs,
             } else {
                 addCoefficients(coeffs, i, j, rhs(i, j,
                                 indexset[j-1]));
+            }
+        }
+    }
+}
+
+
+template <SortingCriterion S, typename T, typename Index, typename Basis>
+void
+genUpdateCoefficients(      SepCoefficients<S, T, Index>& coeffs,
+                            SeparableRHSD<T, Basis>& rhs,
+                      const std::vector<IndexSet<Index>>& indexset)
+{
+    assert(coeffs.rank()==rhs.rank());
+    assert(coeffs.dim()==rhs.dim());
+    assert(indexset.size()==coeffs.rank()*coeffs.dim() ||
+           indexset.size()==coeffs.dim());
+    typedef typename SepCoefficients<S, T, Index>::size_type size_type;
+
+    for (size_type i=1; i<=coeffs.rank(); ++i) {
+        for (size_type j=1; j<=coeffs.dim(); ++j) {
+            if (indexset.size()==coeffs.rank()*coeffs.dim()) {
+                updateCoefficients(coeffs, i, j, rhs(i, j,
+                                   indexset[(j-1)*coeffs.rank()+(i-1)]));
+            } else {
+                updateCoefficients(coeffs, i, j, rhs(i, j,
+                                   indexset[j-1]));
             }
         }
     }
@@ -4691,6 +4733,71 @@ std::ostream& operator<<(std::ostream& s,
     }
 
     return s;
+}
+
+
+template <typename Index>
+FLENS_DEFAULT_INDEXTYPE
+maxlevel(const IndexSet<Index>& Lambda)
+{
+    FLENS_DEFAULT_INDEXTYPE jmax = -100;
+    for (const auto& it : Lambda) {
+        FLENS_DEFAULT_INDEXTYPE level = it.j;
+        if (it.xtype==XWavelet) ++level;
+        jmax = MAX(level, jmax);
+    }
+    return jmax;
+}
+
+
+template <typename T, typename Basis>
+void
+insert(      HTCoefficients<T, Basis>& x,
+       const Coefficients<Lexicographical, T, Index1D>& v,
+       const IndexSet<Index1D>&                         active,
+       const unsigned                                   j)
+{
+    assert(j>=1 && j<=(unsigned) x.dim());
+    assert(v.size()==active.size());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = j;
+
+    for (auto tit=x.tree().getGeneralTree().end();
+              tit>=x.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            Matrix& U = const_cast<Matrix&>
+                        (tit.getNode()->getContent()
+                         ->getUorB());
+            assert(U.numCols()==1);
+            auto max  = maxintindhash(active, x, j);
+            U.resize(max, 1);
+
+            for (const auto& it : v) {
+                U(x.map()(it.first, j), 1) = it.second;
+            }
+        }
+    }
+}
+
+
+template <typename Index>
+std::vector<IndexSet<Index> >
+unify(const std::vector<IndexSet<Index> >& A,
+      const std::vector<IndexSet<Index> >& B)
+{
+    assert(A.size()==B.size());
+
+    std::vector<IndexSet<Index> > C(A.size());
+
+    for (unsigned j=0; j<C.size(); ++j) {
+        C[j] = A[j] + B[j];
+    }
+
+    return C;
 }
 
 } // namespace lawa

@@ -21,9 +21,11 @@ class ProjRhs
 public:
     typedef typename flens::GeMatrix<
                      flens::FullStorage<T, flens::ColMajor> > Matrix;
+    typedef std::vector<IndexSet<Index1D> >                   IndexSetVec;
 
     ProjRhs(      SepCoefficients<Lexicographical, T, Index1D>& _rhsCp,
-            const SeparableRHSD<T, Basis>&                      _rhsInt,
+                  IndexSetVec&                                  _active,
+                  SeparableRHSD<T, Basis>&                      _rhsInt,
                   HTCoefficients<T, Basis>&                     _tree);
 
     void
@@ -37,16 +39,20 @@ public:
     Matrix
     getProj() const;
 
+    unsigned
+    dim() const;
+
     Coefficients<Lexicographical, T, Index1D>
     operator()(const IndexSet<Index1D>& Lambda,
                const IndexSet<Index1D>& active,
                const unsigned           j);
 
 private:
-          SepCoefficients<Lexicographical, T, Index1D>& rhsCp_;
-    const SeparableRHSD<T, Basis>&                      rhsInt_;
-          HTCoefficients<T, Basis>&                     tree_;
-          Matrix                                        proj_;
+    SepCoefficients<Lexicographical, T, Index1D>& rhsCp_;
+    IndexSetVec&                                  active_;
+    SeparableRHSD<T, Basis>&                      rhsInt_;
+    HTCoefficients<T, Basis>&                     tree_;
+    Matrix                                        proj_;
 
 }; // class ProjRhs
 

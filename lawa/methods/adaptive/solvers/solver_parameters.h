@@ -249,7 +249,7 @@ struct HTAWGM_Params
     double   delta2_pcg = 1e-01; /* Adaptive trunc tolerance search dir*/
     double   delta3_pcg = 1e-01; /* Adaptive trunc tolerance solution */
     double   dres_pcg   = 2.;    /* Scaling adjustment for res trunc */
-    double   alpha      = 0.95;  /* Bulk chasing parameter */
+    double   alpha      = 0.5;  /* Bulk chasing parameter */
     double   nrmA       = 50;    /* Estimate for operator norm */
     double   omega      = 0.1;   /* Estimate for relative res eval precision */
 };
@@ -333,6 +333,27 @@ struct AgALSParams
 
 std::ostream& operator<<(std::ostream& s,
                          const AgALSParams& params);
+
+struct AdaptiveLeafParams
+{
+    double   tol          = 1e-06;
+    unsigned maxit        = 100;
+    double   gamma        = 0.1;
+    unsigned cg_maxit     = 100;
+    bool     cg_verbose   = false;
+    bool     verbose      = false;
+    double   alpha        = 0.5;
+    bool     bulk_verbose = false;
+};
+
+struct Rank1AdaptiveAlsParams
+{
+    unsigned           max_sweep    = 50;
+    double             stag         = 1e-02;
+    bool               verbose      = false;
+    AdaptiveLeafParams adaptiveLeaf;
+};
+
 
 } // namespace lawa
 

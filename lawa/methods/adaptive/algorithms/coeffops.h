@@ -37,6 +37,17 @@ setCoefficients(SepCoefficients<S, T, Index>& coeffs,
 
 template <SortingCriterion S, typename T, typename Index>
 void
+updateCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                   const typename SepCoefficients<S, T, Index>
+                   ::size_type i,
+                   const typename SepCoefficients<S, T, Index>
+                   ::size_type j,
+                   const typename SepCoefficients<S, T, Index>
+                   ::Coeff& coeff);
+
+
+template <SortingCriterion S, typename T, typename Index>
+void
 addCoefficients(SepCoefficients<S, T, Index>& coeffs,
                 const typename SepCoefficients<S, T, Index>
                 ::size_type i,
@@ -48,8 +59,8 @@ addCoefficients(SepCoefficients<S, T, Index>& coeffs,
 
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
-genCoefficients(SepCoefficients<S, T, Index>& coeffs,
-                const SeparableRHSD<T, Basis>& rhs,
+genCoefficients(      SepCoefficients<S, T, Index>& coeffs,
+                      SeparableRHSD<T, Basis>& rhs,
                 const IndexSet<Index>& indexset);
 
 
@@ -70,9 +81,16 @@ genCoefficients(SepCoefficients<S, T, Index>& coeffs,
 
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
-genAddCoefficients(SepCoefficients<S, T, Index>& coeffs,
-                const SeparableRHSD<T, Basis>& rhs,
-                const std::vector<IndexSet<Index>>& indexset);
+genAddCoefficients(      SepCoefficients<S, T, Index>& coeffs,
+                         SeparableRHSD<T, Basis>& rhs,
+                   const std::vector<IndexSet<Index>>& indexset);
+
+
+template <SortingCriterion S, typename T, typename Index, typename Basis>
+void
+genUpdateCoefficients(      SepCoefficients<S, T, Index>& coeffs,
+                            SeparableRHSD<T, Basis>& rhs,
+                      const std::vector<IndexSet<Index>>& indexset);
 
 
 template <SortingCriterion S, typename T, typename Index>
@@ -984,6 +1002,24 @@ convert(const flens::GeMatrix<
 template <typename Index>
 std::ostream& operator<<(std::ostream& s,
                          const Mapwavind<Index>& map);
+
+
+template <typename Index>
+FLENS_DEFAULT_INDEXTYPE
+maxlevel(const IndexSet<Index>& Lambda);
+
+
+template <typename T, typename Basis>
+void
+insert(      HTCoefficients<T, Basis>& x,
+       const Coefficients<Lexicographical, T, Index1D>& v,
+       const unsigned                                   j);
+
+
+template <typename Index>
+std::vector<IndexSet<Index> >
+unify(const std::vector<IndexSet<Index> >& A,
+      const std::vector<IndexSet<Index> >& B);
 
 } // namespace lawa
 

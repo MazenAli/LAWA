@@ -16,7 +16,8 @@ SeparableRHSD<T, Basis>::SeparableRHSD(const Basis&     _basis,
     basis(&_basis),
     F(&_F),
     deltas(nullptr),
-    derivs(nullptr)
+    derivs(nullptr),
+    data(rank_*dim_)
 {
     for (size_type j=1; j<=dim(); ++j) {
         for (size_type i=1; i<=rank(); ++i) {
@@ -38,7 +39,8 @@ SeparableRHSD<T, Basis>::SeparableRHSD(const Basis&    _basis,
     basis(&_basis),
     F(&_F),
     deltas(&_deltas),
-    derivs(&_derivs)
+    derivs(&_derivs),
+    data(rank_*dim_)
 {
     assert(!deltas->size() || deltas->size()==dim()*rank());
     assert((!derivs->numRows() && !derivs->numCols())
@@ -104,12 +106,21 @@ SeparableRHSD<T, Basis>::getDeltas(const size_type i, const size_type j) const
 template <typename T, typename Basis>
 T
 SeparableRHSD<T, Basis>::eval(const size_type i, const size_type j,
-                              const Index1D& index) const
+                              const Index1D& index)
 {
     assert(i>=1 && i<=rank());
     assert(j>=1 && j<=dim());
+    assert(data.size() == rank()*dim());
+
+    // Typedefs
     typedef typename GeMat::IndexType IndexType;
 
+    // Check if in data
+    if (data[(j-1)*rank()+(i-1)].find(index) !=
+        data[(j-1)*rank()+(i-1)].end())
+        return data[(j-1)*rank()+(i-1)][index];
+
+    // Compute otherwise
     int derivij = 0;
     if (derivs) {
         if (derivs->numRows() && derivs->numCols()) {
@@ -130,6 +141,8 @@ SeparableRHSD<T, Basis>::eval(const size_type i, const size_type j,
         }
     }
 
+    data[(j-1)*rank()+(i-1)][index] = ret;
+
     return ret;
 }
 
@@ -137,7 +150,7 @@ SeparableRHSD<T, Basis>::eval(const size_type i, const size_type j,
 template <typename T, typename Basis>
 typename SeparableRHSD<T, Basis>::Coeff1D
 SeparableRHSD<T, Basis>::eval(const size_type i, const size_type j,
-                              const IndexSet<Index1D>& indexset) const
+                              const IndexSet<Index1D>& indexset)
 {
     assert(i>=1 && i<=rank());
     assert(j>=1 && j<=dim());
@@ -155,7 +168,7 @@ SeparableRHSD<T, Basis>::eval(const size_type i, const size_type j,
 
 template <typename T, typename Basis>
 T
-SeparableRHSD<T, Basis>::eval(const IndexD& index) const
+SeparableRHSD<T, Basis>::eval(const IndexD& index)
 {
     assert(index.dim()==dim());
 
@@ -175,7 +188,7 @@ SeparableRHSD<T, Basis>::eval(const IndexD& index) const
 template <typename T, typename Basis>
 T
 SeparableRHSD<T, Basis>::operator()(const size_type i, const size_type j,
-                                    const Index1D& index) const
+                                    const Index1D& index)
 {
     assert(i>=1 && i<=rank());
     assert(j>=1 && j<=dim());
@@ -186,7 +199,7 @@ SeparableRHSD<T, Basis>::operator()(const size_type i, const size_type j,
 template <typename T, typename Basis>
 typename SeparableRHSD<T, Basis>::Coeff1D
 SeparableRHSD<T, Basis>::operator()(const size_type i, const size_type j,
-                                    const IndexSet<Index1D>& indexset) const
+                                    const IndexSet<Index1D>& indexset)
 {
     assert(i>=1 && i<=rank());
     assert(j>=1 && j<=dim());
@@ -196,7 +209,7 @@ SeparableRHSD<T, Basis>::operator()(const size_type i, const size_type j,
 
 template <typename T, typename Basis>
 T
-SeparableRHSD<T, Basis>::operator()(const IndexD& index) const
+SeparableRHSD<T, Basis>::operator()(const IndexD& index)
 {
     assert(index.dim()==dim());
     return eval(index);

@@ -37,3 +37,6 @@
 #include <lawa/methods/adaptive/solvers/rank1greedy.h>
 #include <lawa/methods/adaptive/solvers/greedyALS.h>
 #include <lawa/methods/adaptive/solvers/agals.h>
+#include <lawa/methods/adaptive/solvers/wavPcg.h>
+#include <lawa/methods/adaptive/solvers/adaptiveLeaf.h>
+#include <lawa/methods/adaptive/solvers/rank1AdaptiveAls.h>

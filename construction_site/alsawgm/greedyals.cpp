@@ -135,7 +135,7 @@ main(int argc, char* argv[])
     HTCoeffTree                     f(dim, sp, basis, map);
     HTCoeffTree                     u(dim, sp, basis, map);
     SepCoeff                        coeffs(rank, dim);
-    SepCoeff                        coeffs2(rank, dim);
+    SepCoeff                        coeffs2(1, dim);
 
     DenseVector             sings;
     Function                onef(one, sings);
@@ -171,8 +171,9 @@ main(int argc, char* argv[])
         }
     }
     lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
-    genCoefficients(coeffs, Fint, indexsetvec2);
+    genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
+
     RefLaplace1D    RefLaplaceBil(basis.refinementbasis);
     Laplace1D       LaplaceBil(basis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
@@ -181,39 +182,66 @@ main(int argc, char* argv[])
 
 
     /* Test greedy solver */
-    rndinit(u, indexsetvec2, 1, 1.);
+    genCoefficientsRnd(coeffs2, indexsetvec2, 1., 1);
+    set(u, coeffs2);
+    genCoefficientsRnd(coeffs2, indexsetvec, 1., 1);
+    HTCoeffTree                     x(dim, sp, basis, map);
+    set(x, coeffs2);
+    lawa::DiagonalLevelPreconditioner1D<T>      p;
+    lawa::DiagonalPreconditioner
+    <lawa::DiagonalLevelPreconditioner1D<T>, T> dp(p);
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
         std::cout << "Indexset " << l+1 << " : "
                   << indexsetvec[l].size() << std::endl;
     }
 
-    lawa::ProjRhs<T, Basis> rhs(coeffs, Fint, u);
-    rhs.computeProjection(1);
-    Coeff1D v = rhs(diff, indexset, 1);
-    std::cout << "ProjRhs =>\n" << v << std::endl;
-    indexsetvec2[0] = indexset;
-    genCoefficients(coeffs2, Fint, indexsetvec2);
-    set(f, coeffs2);
-    std::cout << htucker::contract(f.tree(), u.tree(), 1) << std::endl;
+    int j = 1;
+    lawa::ProjRhs<T, Basis> rhs(coeffs, indexsetvec, Fint, u);
+    lawa::ProjResidual<T, Basis, LOp_Lapl1D>
+    f_Au(coeffs, Fint, u, u, A, indexsetvec, indexsetvec2);
+    lawa::ProjOperator<T, LOp_Lapl1D, Basis>
+    Auj(A, indexsetvec, indexsetvec2, u);
+    Auj.setActiveDimension(j);
+    Auj.computeProjection();
+    rhs.computeProjection(j);
 
-    rhs.computeProjection(3);
-    v = rhs(diff, indexset, 3);
-    std::cout << "ProjRhs =>\n" << v << std::endl;
-    indexsetvec2[2] = indexset;
-    genCoefficients(coeffs2, Fint, indexsetvec2);
-    set(f, coeffs2);
-    std::cout << htucker::contract(f.tree(), u.tree(), 3) << std::endl;
+    f_Au.computeProjection(j);
+    Coeff1D v;
+    v = f_Au(indexset, indexset, j);
+    std::cout << v << std::endl;
+    htucker::DimensionIndex idx2(1);
+    idx2[0] = j;
+    auto blub = extract(u, indexset2, idx2);
+    v = rhs(indexset, indexset, j)-Auj(blub(1, 1));
+    std::cout << v << std::endl;
+    exit(1);
 
-    std::cout << "Map =\n" << u.map() << std::endl;
+    lawa::AdaptiveLeafParams par;
+    par.tol          = 1e-02;
+    par.maxit        = 100;
+    par.gamma        = 1e-01;
+    par.cg_maxit     = 1e+02;
+    par.cg_verbose   = true;
+    par.verbose      = true;
+    par.alpha        = 0.5;
+    par.bulk_verbose = true;
+    lawa::Rank1AdaptiveAlsParams pam;
+    pam.max_sweep    = 5;
+    pam.stag         = 1e-02;
+    pam.verbose      = true;
+    pam.adaptiveLeaf = par;
+
+    exit(1);
+    u.orthogonalize();
+    std::cout << "rank 1 adaptive ALS required "
+              << rank1AdaptiveAls(A, dp, coeffs2, u, rhs, indexsetvec, pam);
 
     exit(1);
 
     lawa::Rank1UP_Params                    p1;
     lawa::OptTTCoreParams                   p2;
     lawa::GreedyALSParams                   p3;
-    lawa::DiagonalLevelPreconditioner1D<T>  P;
-    lawa::NoPreconditioner<T, Index1D>      p;
     double delta = 0.5;
     lawa::Sepdiagscal<Basis>    S(u.dim(), u.basis());
     setScaling(S, delta);

@@ -10,7 +10,7 @@ szoneres(      Sepop<Optype>& A,
                HTCoefficients<T, Basis>& u,
                HTCoefficients<T, Basis>& f,
                SepCoefficients<Lexicographical, T, Index1D>& fcp,
-         const SeparableRHSD<T, Basis>& fint,
+               SeparableRHSD<T, Basis>& fint,
          const std::vector<IndexSet<Index1D> >& Lambda,
                std::vector<IndexSet<Index1D> >& sweep,
                std::vector<IndexSet<Index1D> >& total)
@@ -42,7 +42,7 @@ szoneres(      Sepop<Optype>& A,
     }
 
     /* Evaluate */
-    genAddCoefficients(fcp, fint, eval_diff);
+    genUpdateCoefficients(fcp, fint, eval_diff);
     set(f, fcp);
 
     /* Compute residual */

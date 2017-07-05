@@ -130,11 +130,11 @@ struct Coefficients<Lexicographical,T,Index> : public __gnu_cxx::hash_map<Index,
 
     T
     operator*(const Coefficients<Lexicographical,T,Index> &_coeff) const;
-    
+
     //todo:: revise!!!
     Coefficients<Lexicographical,T,Index>
     operator*(const T factor) const;
-    
+
     void
     scale(const T factor);
 
@@ -143,6 +143,9 @@ struct Coefficients<Lexicographical,T,Index> : public __gnu_cxx::hash_map<Index,
 
     T
     norm(T tau=2.0) const;
+
+    void
+    update(const Coefficients<Lexicographical,T,Index> &_coeff);
 };
 
 template <typename T, typename Index>

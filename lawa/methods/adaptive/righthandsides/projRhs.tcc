@@ -9,12 +9,18 @@ namespace lawa
 template <typename T, typename Basis>
 ProjRhs<T, Basis>::
 ProjRhs(      SepCoefficients<Lexicographical, T, Index1D>& _rhsCp,
-        const SeparableRHSD<T, Basis>&                      _rhsInt,
+              IndexSetVec&                                  _active,
+              SeparableRHSD<T, Basis>&                      _rhsInt,
               HTCoefficients<T, Basis>&                     _tree):
     rhsCp_(_rhsCp),
+    active_(_active),
     rhsInt_(_rhsInt),
     tree_(_tree)
-{}
+{
+    assert(rhsCp_.dim()  == rhsInt_.dim());
+    assert(rhsCp_.rank() == rhsInt_.rank());
+    assert(rhsCp_.dim()  == active_.size());
+}
 
 
 template <typename T, typename Basis>
@@ -25,7 +31,7 @@ computeProjection(const unsigned j)
     assert(j>=1 && j<=rhsCp_.dim());
 
     HTCoefficients<T, Basis> b(tree_.dim(), tree_.basis(), tree_.map());
-    set(b, rhsCp_);
+    set(b, rhsCp_, active_);
     proj_ = projection(b.tree(), tree_.tree(), j);
 }
 
@@ -40,7 +46,7 @@ eval(const IndexSet<Index1D>& Lambda,
     assert(j>=1 && j<=rhsCp_.dim());
 
     for (unsigned i=1; i<=rhsCp_.rank(); ++i) {
-        addCoefficients(rhsCp_, i, j, rhsInt_(i, j, Lambda));
+        updateCoefficients(rhsCp_, i, j, rhsInt_(i, j, Lambda));
     }
 
     Matrix U = convert(rhsCp_, tree_, j);
@@ -61,6 +67,15 @@ ProjRhs<T, Basis>::
 getProj() const
 {
     return proj_;
+}
+
+
+template <typename T, typename Basis>
+unsigned
+ProjRhs<T, Basis>::
+dim() const
+{
+    return rhsCp_.dim();
 }
 
 

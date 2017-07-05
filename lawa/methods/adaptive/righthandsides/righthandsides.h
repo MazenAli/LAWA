@@ -26,3 +26,4 @@
 #include <lawa/methods/adaptive/righthandsides/thetatimestepseparablerhs.h>
 #include <lawa/methods/adaptive/righthandsides/flexiblecompoundrhs.h>
 #include <lawa/methods/adaptive/righthandsides/projRhs.h>
+#include <lawa/methods/adaptive/righthandsides/projResidual.h>

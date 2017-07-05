@@ -31,3 +31,4 @@
 #include <lawa/methods/adaptive/algorithms/coeffops.h>
 #include <lawa/methods/adaptive/algorithms/optTTcore.h>
 #include <lawa/methods/adaptive/algorithms/szoneres.h>
+#include <lawa/methods/adaptive/algorithms/bulk.h>

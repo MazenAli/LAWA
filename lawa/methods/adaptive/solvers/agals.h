@@ -21,8 +21,9 @@ template <typename Optype, typename T, typename Basis>
 unsigned
 agals_laplace(      Engine                             *ep,
                     Sepop<Optype>&                      A,
-                    HTCoefficients<T, Basis>&           x,
-              const HTCoefficients<T, Basis>&           b,
+                    Sepdiagscal<Basis>&                 S,
+                    HTCoefficients<T, Basis>&           u,
+                    SeparableRHSD<T, Basis>&            f,
                     std::vector<IndexSet<Index1D> >&    Lambda,
                     T&                                  residual,
               const AgALSParams&                        params);

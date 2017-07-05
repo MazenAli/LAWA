@@ -1,12 +1,18 @@
 #ifndef LAWA_METHODS_ADAPTIVE_SOLVERS_adaptiveLeaf_H
 #define LAWA_METHODS_ADAPTIVE_SOLVERS_adaptiveLeaf_H 1
 
+#include <vector>
+
 #include <flens/flens.cxx>
 
 #include <lawa/methods/adaptive/operators/operatorsd/sepop.h>
 #include <lawa/methods/adaptive/datastructures/htcoefficients.h>
+#include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
+#include <lawa/methods/adaptive/datastructures/coefficients.h>
 #include <lawa/methods/adaptive/datastructures/indexset.h>
 #include <lawa/methods/adaptive/datastructures/index.h>
+#include <lawa/methods/adaptive/solvers/solver_parameters.h>
+#include <lawa/righthandsides/separablerhsd.h>
 
 namespace lawa
 {
@@ -15,18 +21,17 @@ namespace lawa
 // See thesis.
 // Assumes rhs is given in CP form and b is already computed over
 // Lambda in CP form.
-template <typename Optype, typename T, typename Prec, typename Rhs>
+template <typename Optype, typename Prec, typename T, typename Basis,
+          typename Rhs>
 unsigned
-adaptiveLeaf_laplace(      Sepop<Optype>&                              A,
-                     const flens::GeMatrix<
-                           flens::FullStorage< T, flens::ColMajor > >& Pj,
-                           Prec&                                       P,
-                           HTCoefficients<T, Basis>&                   u,
-                           IndexSet<Index1D>&                          Lambda,
-                     const SeparableRHSD<T, Basis>&                    f,
-                     const HTCoefficients<T, Basis>&                   b,
-                     const unsigned                                    j,
-                     const AdaptiveAlsParams&                          p);
+adaptiveLeaf(      Sepop<Optype>&                                A,
+                   Prec&                                         P,
+                   HTCoefficients<T, Basis>&                     u,
+                   Coefficients<Lexicographical, T, Index1D>&    v,
+                   std::vector<IndexSet<Index1D>>&               active,
+                   Rhs&                                          f,
+             const unsigned                                      j,
+             const AdaptiveLeafParams&                           params);
 
 } // namespace lawa
 

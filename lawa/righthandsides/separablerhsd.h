@@ -29,6 +29,8 @@ public:
     typedef Coefficients<Lexicographical, T, Index1D>           Coeff1D;
 
 private:
+    typedef std::vector<Coeff1D>            mapType;
+
     const size_type                 rank_;
     const size_type                 dim_;
     const Basis*                    basis;
@@ -36,6 +38,7 @@ private:
     const Matvec*                   deltas;
     const IntMat*                   derivs;
     Intvec                          integral;
+    mapType                         data;
 
 public:
     SeparableRHSD()                     = delete;
@@ -67,25 +70,25 @@ public:
     getDeltas(const size_type i, const size_type j) const;
 
     T
-    eval(const size_type i, const size_type j, const Index1D& index) const;
+    eval(const size_type i, const size_type j, const Index1D& index);
 
     Coeff1D
     eval(const size_type i, const size_type j, const IndexSet<Index1D>&
-         indexset) const;
+         indexset);
 
     T
-    eval(const IndexD& index) const;
+    eval(const IndexD& index);
 
     T
     operator()(const size_type i, const size_type j,
-               const Index1D& index) const;
+               const Index1D& index);
 
     Coeff1D
     operator()(const size_type i, const size_type j,
-               const IndexSet<Index1D>& index) const;
+               const IndexSet<Index1D>& index);
 
     T
-    operator()(const IndexD& index) const;
+    operator()(const IndexD& index);
 };
 
 } // namespace lawa
