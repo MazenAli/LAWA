@@ -302,8 +302,8 @@ std::ostream& operator<<(std::ostream& s,
 struct OptTTCoreParams
 {
     unsigned maxit   = 10;
-    double   tol     = 1e-10;
-    double   stag    = 1e-08;
+    double   tol     = 1e-08;
+    double   stag    = 1e-06;
 };
 
 std::ostream& operator<<(std::ostream& s,
@@ -348,12 +348,20 @@ struct AdaptiveLeafParams
 
 struct Rank1AdaptiveAlsParams
 {
-    unsigned           max_sweep    = 50;
+    unsigned           max_sweep    = 10;
     double             stag         = 1e-02;
     bool               verbose      = false;
     AdaptiveLeafParams adaptiveLeaf;
 };
 
+struct AdaptiveGreedyParams
+{
+    bool                   verbose = false;
+    double                 tol     = 1e-06;
+    unsigned               maxit   = 30;
+    Rank1AdaptiveAlsParams r1Als;
+    OptTTCoreParams        dmrgTTcore;
+};
 
 } // namespace lawa
 

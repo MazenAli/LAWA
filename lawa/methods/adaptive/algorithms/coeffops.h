@@ -991,6 +991,15 @@ convert(const SepCoefficients<Lexicographical, T, Index1D>& cp,
 
 
 template <typename T, typename Basis>
+flens::GeMatrix<
+flens::FullStorage<T, flens::ColMajor> >
+convert(      SepCoefficients<Lexicographical, T, Index1D>& cp,
+        const IndexSet<Index1D>&                            active,
+              HTCoefficients<T, Basis>&                     tree,
+        const unsigned                                      j);
+
+
+template <typename T, typename Basis>
 Coefficients<Lexicographical, T, Index1D>
 convert(const flens::GeMatrix<
               flens::FullStorage<T, flens::ColMajor> >& U,

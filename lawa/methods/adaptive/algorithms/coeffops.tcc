@@ -4700,6 +4700,32 @@ convert(const SepCoefficients<Lexicographical, T, Index1D>& cp,
 
 
 template <typename T, typename Basis>
+flens::GeMatrix<
+flens::FullStorage<T, flens::ColMajor> >
+convert(      SepCoefficients<Lexicographical, T, Index1D>& cp,
+        const IndexSet<Index1D>&                            active,
+              HTCoefficients<T, Basis>&                     tree,
+        const unsigned                                      j)
+{
+    assert(j>=1 && j<=cp.dim());
+    assert(cp.dim()==(unsigned) tree.dim());
+
+    int rows = maxintindhash(active, j, tree);
+    flens::GeMatrix<
+    flens::FullStorage<T, flens::ColMajor> > U(rows, cp.rank());
+
+    for (const auto& it : active) {
+        unsigned r = tree.map()(it, j);
+        for (unsigned i=1; i<=cp.rank(); ++i) {
+            U(r, i) = cp(i, j)[it];
+        }
+    }
+
+    return U;
+}
+
+
+template <typename T, typename Basis>
 Coefficients<Lexicographical, T, Index1D>
 convert(const flens::GeMatrix<
               flens::FullStorage<T, flens::ColMajor> >& U,

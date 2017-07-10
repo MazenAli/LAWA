@@ -40,3 +40,4 @@
 #include <lawa/methods/adaptive/solvers/wavPcg.h>
 #include <lawa/methods/adaptive/solvers/adaptiveLeaf.h>
 #include <lawa/methods/adaptive/solvers/rank1AdaptiveAls.h>
+#include <lawa/methods/adaptive/solvers/adaptiveGreedy.h>

@@ -3,15 +3,26 @@
 
 #include <cassert>
 
+#include <flens/flens.cxx>
+
+#include <lawa/methods/adaptive/datastructures/sepcoefficients.h>
+#include <lawa/methods/adaptive/algorithms/coeffops.h>
+#include <lawa/methods/adaptive/righthandsides/projRhs.h>
+#include <lawa/methods/adaptive/righthandsides/projResidual.h>
+
 namespace lawa
 {
 
+template <typename Optype, typename Basis, typename Prec, typename T>
 unsigned
-adaptiveGreedy(Engine* ep,
-                Sepop<Optype>&  A,
-                Sepdiagscal<Basis>& S,
-                Prec&               P,
-                HTCoefficients<T, Basis> u)
+adaptiveGreedy(      Engine*                          ep,
+                     Sepop<Optype>&                   A,
+                     Sepdiagscal<Basis>&              S,
+                     Prec&                            P,
+                     HTCoefficients<T, Basis>&        u,
+                     std::vector<IndexSet<Index1D> >& Lambda,
+                     SeparableRHSD<T, Basis>&         f,
+               const AdaptiveGreedyParams&            params)
 {
     // Basic input check
     assert(A.dim() == S.dim());
@@ -31,10 +42,11 @@ adaptiveGreedy(Engine* ep,
     F.tree().set_tree(u.tree());
     SepCoefficients<Lexicographical, T, Index1D> Fcp(f.rank(), f.dim());
 
-    std::vector<IndexSet<Index1D> >              total   = Lambda;
+    std::vector<IndexSet<Index1D> >              sweep   = Lambda;
+    std::vector<IndexSet<Index1D> >              total;
     std::vector<IndexSet<Index1D> >              current = Lambda;
 
-    T trunc = 1e-08;
+    T trunc = 1e-05;
 
     // Initial RHS
     genCoefficients(Fcp, f, Lambda);
@@ -53,13 +65,17 @@ adaptiveGreedy(Engine* ep,
 
     // Rank 1 ALS
     SepCoefficients<Lexicographical, T, Index1D> v(1, A.dim());
-    genCoefficientsRnd(v, Lambda, 1e-03, 1);
+    genCoefficientsRnd(v, Lambda, 1., 1);
     ProjRhs<T, Basis> fj(Fcp, current, f, u);
     unsigned numit = rank1AdaptiveAls(A, P, v, u, fj, current, params.r1Als);
-    Lambda  = unify(Lambda, current);
+    std::cout << "Lambda  =>\n" << Lambda[1].size() << std::endl;
+    std::cout << "current =>\n" << current[1].size() << std::endl;
+    Lambda         = unify(Lambda, current);
+    std::cout << "Lambda  =>\n" << Lambda[1].size() << std::endl;
 
     // Residual
-    r   = szoneres(A, u, F, Fcp, f, Lambda, Lambda, total);
+    total = Lambda;
+    r   = szoneres(A, u, F, Fcp, f, Lambda, sweep, total);
     r   = applyScaleTT(S, F, total, trunc);
     res = nrm2(r);
 
@@ -70,13 +86,13 @@ adaptiveGreedy(Engine* ep,
     if (res<=params.tol || params.maxit<2) return 1;
 
     // Updates
-    for (unsigned k=2; k<=params.maxit) {
+    for (unsigned k=2; k<=params.maxit; ++k) {
         // Rank 1 update
         genCoefficientsRnd(v, Lambda, 1e-03, 1);
         HTCoefficients<T, Basis> x(u.dim(), u.basis(), u.map());
         x.tree().set_tree(u.tree());
         set(x, v, Lambda);
-        ProjResidual<T, Basis, Optype f_Auj(Fcp, f, x, u, A, current, Lambda);
+        ProjResidual<T, Basis, Optype> f_Auj(Fcp, f, x, u, A, current, Lambda);
         current  = Lambda;
         numit    = rank1AdaptiveAls(A, P, v, u, f_Auj, current, params.r1Als);
         u.tree() = x.tree()+u.tree();
@@ -92,10 +108,11 @@ adaptiveGreedy(Engine* ep,
         IVector ranks(x0.size());
         htucker::extract_core(u.tree(), x0, ranks);
         x0 = optTTcoreLaplace(ep, Ared, fred, x0, ranks, params.dmrgTTcore);
-        htucker::insert_core(x.tree(), x0, ranks);
+        htucker::insert_core(u.tree(), x0, ranks);
 
         // Residual
-        r   = szoneres(A, u, F, Fcp, f, Lambda, Lambda, total);
+        sweep = Lambda;
+        r   = szoneres(A, u, F, Fcp, f, Lambda, sweep, total);
         r   = applyScaleTT(S, F, total, trunc);
         res = nrm2(r);
 

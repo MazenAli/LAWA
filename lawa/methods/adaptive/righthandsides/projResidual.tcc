@@ -74,7 +74,7 @@ evalLaplace(const IndexSet<Index1D>& Lambda,
         updateCoefficients(rhsCp_, i, j, rhsInt_(i, j, Lambda));
     }
 
-    Matrix Uf  = convert(rhsCp_, u_, j);
+    Matrix Uf  = convert(rhsCp_, active, u_, j);
 
     // Prepare A*u
     htucker::DimensionIndex idx(1);
@@ -127,12 +127,12 @@ evalLaplace(const IndexSet<Index1D>& Lambda,
             ret(i, 1)[lambda]  = (*it).second;
         }
 
-        for (FLENS_DEFAULT_INDEXTYPE i=1; i<=JMAX; ++i) {
-            if (output.bylevel[i].map.size()==0) break;
+        for (FLENS_DEFAULT_INDEXTYPE _j=1; _j<=JMAX; ++_j) {
+            if (output.bylevel[_j].map.size()==0) break;
             for (typename CoefficientsByLevel<T>::const_it it=
-                 output.bylevel[i].map.begin();
-                 it!=output.bylevel[i].map.end(); ++it) {
-                Index1D lambda(output.offset+i, (*it).first, XWavelet);
+                 output.bylevel[_j].map.begin();
+                 it!=output.bylevel[_j].map.end(); ++it) {
+                Index1D lambda(output.offset+_j, (*it).first, XWavelet);
                 ret(i, 1)[lambda] = (*it).second;
             }
         }

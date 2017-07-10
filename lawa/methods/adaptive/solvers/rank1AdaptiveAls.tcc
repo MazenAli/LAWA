@@ -27,6 +27,9 @@ rank1AdaptiveAls(      Sepop<Optype>&                                A,
     assert(A.dim()  == Lambda.size());
     assert(v.rank() == 1);
 
+    // Typedefs
+    typedef Coefficients<Lexicographical, T, Index1D>   Coeff1D;
+
     // ALS sweeps
     std::vector<IndexSet<Index1D> > start = Lambda;
     for (unsigned sweep=1; sweep<=params.max_sweep; ++sweep) {
@@ -38,7 +41,7 @@ rank1AdaptiveAls(      Sepop<Optype>&                                A,
             f.computeProjection(j);
 
             // Solve on leaf
-            auto     v0    = v(1, j);
+            Coeff1D v0     = v(1, j);
             Lambda[j-1]    = start[j-1];
             insert(x, v0, Lambda[j-1], j);
             unsigned numit = adaptiveLeaf(A, P, x, v0, Lambda, f, j,

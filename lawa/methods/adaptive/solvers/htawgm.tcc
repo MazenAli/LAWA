@@ -511,6 +511,92 @@ bulk(const T alpha, const T resex,
 
 template <typename T, typename Basis>
 std::vector<IndexSet<Index1D> >
+bulk2(const T alpha, const T resex,
+            HTCoefficients<T, Basis>& res,
+            std::vector<IndexSet<Index1D> >& Lambda,
+      const std::vector<IndexSet<Index1D> >& diff,
+      const std::vector<IndexSet<Index1D> >& total)
+{
+    assert(Lambda.size()==(unsigned) res.dim());
+
+    typedef typename std::vector<IndexSet<Index1D> >::size_type size_type;
+    typedef typename flens::DenseVector<flens::Array<T> >       Vector;
+    typedef Coefficients<Lexicographical, T, Index1D>           Coeff1D;
+
+    std::vector<Vector>             sigmas(Lambda.size());
+    std::vector<Coeff1D>            cont(Lambda.size());
+    std::vector<IndexSet<Index1D> > sweep(Lambda.size());
+    Vector                          base(Lambda.size());
+
+    T thresh = std::sqrt((T) 1-alpha*alpha)*resex;
+
+    // Compute contractions
+    res.orthogonalize_svd(sigmas);
+    for (int j=1; j<=base.length(); ++j) {
+        auto copy   = res;
+        auto active = total;
+        active[j-1] = Lambda[j-1];
+        restrict(copy, active);
+        T resbase   = nrm2(copy);
+        base(j)     = resbase;
+        std::cout << "Minimum = " << resbase/resex << std::endl;
+    }
+    contraction(res, diff, sigmas, cont);
+
+
+    // Compute index set
+    T stop = alpha*alpha*resex*resex;
+    for (size_type j=0; j<Lambda.size(); ++j) {
+        // Bucket sort
+        Coefficients<Bucket, T, Index1D>          buckets;
+        Coefficients<Lexicographical, T, Index1D> newind;
+        buckets.bucketsort(cont[j], thresh);
+
+        // Determine bulk
+        T P_Lambda = base(j+1)*base(j+1);
+        size_type i = 0;
+        std::cout << "res/res = "
+                  << std::sqrt(base(j+1)*base(j+1)
+                  +cont[j].norm(2.)*cont[j].norm(2.))/resex << std::endl;
+        for (; i<buckets.bucket_ell2norms.size()-1; ++i) {
+            P_Lambda += std::pow(buckets.bucket_ell2norms[i], 2.0L);
+            if (P_Lambda >= stop) {
+                P_Lambda -= std::pow(buckets.bucket_ell2norms[i], 2.0L);
+                break;
+            }
+            (void) buckets.addBucketToCoefficients(newind, i);
+        }
+
+        for (const auto& it : buckets.buckets[i]) {
+            if (P_Lambda >= stop) break;
+            newind[it->first] = it->second;
+            P_Lambda         += it->second*it->second;
+        }
+
+        std::cout << "newind/res = "
+                  << std::sqrt(base(j+1)*base(j+1)
+                  +newind.norm(2.)*newind.norm(2.))/resex << std::endl;
+
+        // Complete tree
+        for (const auto& it : newind) {
+            completeMultiTree(res.basis(), it.first,
+                              Lambda[j],
+                              sweep[j], true);
+        }
+    }
+
+    #ifdef VERBOSE
+        restrict(res, Lambda);
+        auto resnew = nrm2(res);
+        std::cout << "bulk: true alpha = " << resnew/resex << std::endl;
+    #endif
+
+    return sweep;
+}
+
+
+template <typename T, typename Basis>
+std::vector<IndexSet<Index1D> >
 bulkBestN(const T alpha, const T resex,
            HTCoefficients<T, Basis>& res,
            std::vector<IndexSet<Index1D> >& Lambda,
@@ -821,8 +907,8 @@ htawgm2(      Sepop<Optype>&                   A,
     T beta    = 0.1;
     T c       = 2.;
     T omega4  = kappaP*(1+beta)*c;
-    T zeta    = 0.5;
-    T omega3  = zeta/(1.+omega4*params.nrmA);
+    //T zeta    = 0.5;
+    T omega3  = 1e-08;//zeta/(1.+omega4*params.nrmA);
     T ksi     = residual;
     std::cout << "omega3 = " << omega3 << std::endl;
     std::cout << "omega4 = " << omega4 << std::endl;
@@ -834,7 +920,7 @@ htawgm2(      Sepop<Optype>&                   A,
         auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
 
         /* Set acc */
-        S.set_nu(residual);
+        //S.set_nu(residual);
 
         /* Galerkin solve */
         tol    = gamma*residual;
@@ -859,28 +945,28 @@ htawgm2(      Sepop<Optype>&                   A,
         auto newsweep = presidual2(A, S, u, F, Fcp, r, f,
                                    Lambda, sweep, newtotal,
                                    params.tol_awgm);
-
-        #ifdef VERBOSE
-            std::cout << "htawgm: max rank solution " << u.tree().max_rank()
-                      << std::endl;
-            std::cout << "htawgm: Index set sizes\n";
-            size = 0;
-            for (size_type j=0; j<newtotal.size(); ++j) {
-                std::cout << "htawgm: d = " << j+1
-                          << " : " << newtotal[j].size() << std::endl;
-                size += newtotal[j].size();
-                FLENS_DEFAULT_INDEXTYPE jmax = 0;
-                for (const auto& it : newtotal[j]) {
-                    FLENS_DEFAULT_INDEXTYPE level = it.j;
-                    if (it.xtype==XWavelet) ++level;
-                    jmax = MAX(level, jmax);
-                }
-                std::cout << "htawgm: jmax = " << jmax << std::endl;
-            }
-            std::cout << "htawgm: Overall = " << size << std::endl;
-        #else
-            (void) size;
-        #endif
+//
+//        #ifdef VERBOSE
+//            std::cout << "htawgm: max rank solution " << u.tree().max_rank()
+//                      << std::endl;
+//            std::cout << "htawgm: Index set sizes\n";
+//            size = 0;
+//            for (size_type j=0; j<newtotal.size(); ++j) {
+//                std::cout << "htawgm: d = " << j+1
+//                          << " : " << newtotal[j].size() << std::endl;
+//                size += newtotal[j].size();
+//                FLENS_DEFAULT_INDEXTYPE jmax = 0;
+//                for (const auto& it : newtotal[j]) {
+//                    FLENS_DEFAULT_INDEXTYPE level = it.j;
+//                    if (it.xtype==XWavelet) ++level;
+//                    jmax = MAX(level, jmax);
+//                }
+//                std::cout << "htawgm: jmax = " << jmax << std::endl;
+//            }
+//            std::cout << "htawgm: Overall = " << size << std::endl;
+//        #else
+//            (void) size;
+//        #endif
 
         residual = nrm2(r);
         std::cout << "htawgm: Iteration " << k
@@ -893,26 +979,26 @@ htawgm2(      Sepop<Optype>&                   A,
         #endif
 
         /* Bulk chasing */
-        auto copy = r;
-        restrict(copy, Lambda);
-        T min     = nrm2(copy)/residual;
-        std::cout << "Minimum = " << min << std::endl;
-        if (min<params.alpha) {
-            std::cout << "Actually bulk chasing\n";
-            newsweep = bulk(params.alpha, residual,
-                            r, Lambda, newsweep);
-        } else {
-            newsweep = sweep;
-        }
+//        auto copy = r;
+//        restrict(copy, Lambda);
+//        T min     = nrm2(copy)/residual;
+//        std::cout << "Minimum = " << min << std::endl;
+//        if (min<params.alpha) {
+//            std::cout << "Actually bulk chasing\n";
+            newsweep = bulk2(params.alpha, residual,
+                             r, Lambda, newsweep, newtotal);
+//        } else {
+//            newsweep = sweep;
+//        }
 
         /* In case index set is empty */
-        for (unsigned j=1; j<=newsweep.size(); ++j) {
-            if (newsweep[j-1].size()>0) break;
-            if (j==newsweep.size()) {
-                std::cout << "newsweep is empty\n";
-                newsweep = sweep;
-            }
-        }
+//        for (unsigned j=1; j<=newsweep.size(); ++j) {
+//            if (newsweep[j-1].size()>0) break;
+//            if (j==newsweep.size()) {
+//                std::cout << "newsweep is empty\n";
+//                newsweep = sweep;
+//            }
+//        }
 
         if (residual<=omega3*ksi) {
             u.truncate(0.1*omega4*residual);

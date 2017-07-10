@@ -20,7 +20,7 @@ unsigned
 htrich(      Sepop<Optype>&                   A,
              Sepdiagscal<Basis>&              S,
              HTCoefficients<T, Basis>&        u,
-       const SeparableRHSD<T, Basis>&         f,
+             SeparableRHSD<T, Basis>&         f,
              std::vector<IndexSet<Index1D> >& Lambda,
              T&                               residual,
        const HTRICH_Params&                   params);

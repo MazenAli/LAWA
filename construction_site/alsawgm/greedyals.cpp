@@ -106,7 +106,7 @@ main(int argc, char* argv[])
         std::cerr << "Dimension must be a positive integer\n";
         return 1;
     }
-    int rank = 3;
+    int rank = 1;
 
     /* Generate example */
     Basis                       basis(2);
@@ -144,21 +144,9 @@ main(int argc, char* argv[])
     Function                expf(myexp, sings);
     std::vector<Function>   fvec;
 
-//    for (int i=0; i<dim; ++i) {
-//        fvec.push_back(onef);
-//    }
-    dim = 3;
-    fvec.push_back(sinf);
-    fvec.push_back(cosf);
-    fvec.push_back(expf);
-
-    fvec.push_back(sinf);
-    fvec.push_back(sinf);
-    fvec.push_back(cosf);
-
-    fvec.push_back(expf);
-    fvec.push_back(onef);
-    fvec.push_back(sinf);
+    for (int i=0; i<dim; ++i) {
+        fvec.push_back(onef);
+    }
 
     lawa::SeparableFunctionD<T>     F(fvec, rank, dim);
     GeMat                           deltas(3,2);
@@ -182,11 +170,8 @@ main(int argc, char* argv[])
 
 
     /* Test greedy solver */
-    genCoefficientsRnd(coeffs2, indexsetvec2, 1., 1);
-    set(u, coeffs2);
     genCoefficientsRnd(coeffs2, indexsetvec, 1., 1);
-    HTCoeffTree                     x(dim, sp, basis, map);
-    set(x, coeffs2);
+    set(u, coeffs2);
     lawa::DiagonalLevelPreconditioner1D<T>      p;
     lawa::DiagonalPreconditioner
     <lawa::DiagonalLevelPreconditioner1D<T>, T> dp(p);
@@ -196,56 +181,34 @@ main(int argc, char* argv[])
                   << indexsetvec[l].size() << std::endl;
     }
 
-    int j = 1;
-    lawa::ProjRhs<T, Basis> rhs(coeffs, indexsetvec, Fint, u);
-    lawa::ProjResidual<T, Basis, LOp_Lapl1D>
-    f_Au(coeffs, Fint, u, u, A, indexsetvec, indexsetvec2);
-    lawa::ProjOperator<T, LOp_Lapl1D, Basis>
-    Auj(A, indexsetvec, indexsetvec2, u);
-    Auj.setActiveDimension(j);
-    Auj.computeProjection();
-    rhs.computeProjection(j);
-
-    f_Au.computeProjection(j);
-    Coeff1D v;
-    v = f_Au(indexset, indexset, j);
-    std::cout << v << std::endl;
-    htucker::DimensionIndex idx2(1);
-    idx2[0] = j;
-    auto blub = extract(u, indexset2, idx2);
-    v = rhs(indexset, indexset, j)-Auj(blub(1, 1));
-    std::cout << v << std::endl;
-    exit(1);
+    double delta = 0.5;
+    lawa::Sepdiagscal<Basis>    S(u.dim(), u.basis());
+    setScaling(S, delta);
+    S.set_nu(1e-01);
 
     lawa::AdaptiveLeafParams par;
     par.tol          = 1e-02;
     par.maxit        = 100;
     par.gamma        = 1e-01;
-    par.cg_maxit     = 1e+02;
-    par.cg_verbose   = true;
-    par.verbose      = true;
+    par.cg_maxit     = 10;
+    par.cg_verbose   = false;
+    par.verbose      = false;
     par.alpha        = 0.5;
-    par.bulk_verbose = true;
+    par.bulk_verbose = false;
     lawa::Rank1AdaptiveAlsParams pam;
-    pam.max_sweep    = 5;
-    pam.stag         = 1e-02;
+    pam.max_sweep    = 10;
+    pam.stag         = 1e-03;
     pam.verbose      = true;
     pam.adaptiveLeaf = par;
 
-    exit(1);
-    u.orthogonalize();
-    std::cout << "rank 1 adaptive ALS required "
-              << rank1AdaptiveAls(A, dp, coeffs2, u, rhs, indexsetvec, pam);
-
-    exit(1);
+    lawa::AdaptiveGreedyParams agparams;
+    agparams.r1Als   = pam;
+    agparams.verbose = true;
+    agparams.maxit   = 1;
 
     lawa::Rank1UP_Params                    p1;
     lawa::OptTTCoreParams                   p2;
     lawa::GreedyALSParams                   p3;
-    double delta = 0.5;
-    lawa::Sepdiagscal<Basis>    S(u.dim(), u.basis());
-    setScaling(S, delta);
-    S.set_nu(1e-01);
 
     /* Start MATLAB session */
     Engine *ep;
@@ -253,6 +216,10 @@ main(int argc, char* argv[])
         std::cerr << "\nCan't start MATLAB engine\n" << std::endl;
         exit(1);
     }
+
+    std::cout << "adaptive greedy required "
+              << adaptiveGreedy(ep, A, S, dp, u, indexsetvec, Fint, agparams)
+              << std::endl;
 
     lawa::AgALSParams   params;
     params.maxit              = 15;
@@ -273,7 +240,7 @@ main(int argc, char* argv[])
     std::cout << "Solver parameters\n" << params << std::endl;
     double residual;
     auto start  = std::chrono::system_clock::now();
-    unsigned it = agals_laplace(ep, A, S, u, Fint, indexsetvec, residual, params);
+//    unsigned it = agals_laplace(ep, A, S, u, Fint, indexsetvec, residual, params);
 //    params.r1update.sw        = true;
 //    params.r1update.balance   = 500.;
 //    params.r1update.orthog    = true;
@@ -292,8 +259,8 @@ main(int argc, char* argv[])
 //                                    params.greedyals);
     auto end     = std::chrono::system_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
-    std::cout << "AGALS took " << it << " iterations to reach relative residual "
-            << residual << std::endl;
+//    std::cout << "AGALS took " << it << " iterations to reach relative residual "
+//            << residual << std::endl;
     std::cout << "It took " << elapsed.count() << " secs\n";
 
     htucker::DimensionIndex idx(1);

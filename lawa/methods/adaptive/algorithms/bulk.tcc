@@ -39,7 +39,7 @@ bulk(      IndexSet<Index1D>&                         active,
 
     // Add coefficients
     unsigned i=0;
-    for (i=0; i<buckets.bucket_ell2norms.size()-1; ++i) {
+    for (; i<buckets.bucket_ell2norms.size()-1; ++i) {
         P_Lambda += std::pow(buckets.bucket_ell2norms[i], 2.);
         if (P_Lambda >= stop) {
             P_Lambda -= std::pow(buckets.bucket_ell2norms[i], 2.);

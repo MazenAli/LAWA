@@ -19,7 +19,7 @@ unsigned
 htrich(      Sepop<Optype>&                   A,
              Sepdiagscal<Basis>&              S,
              HTCoefficients<T, Basis>&        u,
-       const SeparableRHSD<T, Basis>&         f,
+             SeparableRHSD<T, Basis>&         f,
              std::vector<IndexSet<Index1D> >& Lambda,
              T&                               residual,
        const HTRICH_Params&                   params)
@@ -244,7 +244,7 @@ presidual(Sepop<Optype>& A,
                 HTCoefficients<T, Basis>& f,
                 SepCoefficients<Lexicographical, T, Index1D>& fcp,
                 HTCoefficients<T, Basis>& r,
-          const SeparableRHSD<T, Basis>& fint,
+                SeparableRHSD<T, Basis>& fint,
           const std::vector<IndexSet<Index1D> >& current,
                 std::vector<IndexSet<Index1D> >& total,
           const T trunc)

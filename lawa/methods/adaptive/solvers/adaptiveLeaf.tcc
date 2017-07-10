@@ -90,6 +90,7 @@ adaptiveLeaf(      Sepop<Optype>&                                A,
                       << ", r = " << res << std::endl;
         }
         if (res<=params.tol) return k;
+        if (k==params.maxit) break;
 
         // Bulk chasing
         diff = bulk(active[j-1], r, params.alpha, res_abs, res_cg, u.basis(),

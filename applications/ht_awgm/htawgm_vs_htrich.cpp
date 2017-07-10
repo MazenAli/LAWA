@@ -147,15 +147,7 @@ main(int argc, char* argv[])
     RefIdentity1D   RefIdentityBil(basis.refinementbasis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
 
-    rndinit(u, indexsetvec, 5, 10.);
-    double a = 0.1;
-    std::cout << "Required       => " << a << std::endl;
-    double min = std::sqrt((a*a-1.+(double) dim)/(double) dim);
-    std::cout << "Hypothesis min => " << min << std::endl;
-    (void) bulkBestN(a, nrm2(u), u, indexsetvec2, indexsetvec);
-
-    exit(1);
-
+    rndinit(u, indexsetvec, 1, 1e-03);
     Sepop A(lapl, dim, dim);
 
     lawa::Sepdiagscal<Basis>    S(dim, basis);
@@ -184,7 +176,7 @@ main(int argc, char* argv[])
     params2.tol_awgm   = 1e-08;
     params2.delta1_pcg = .5;
     params2.dres_pcg   = 1.;
-    params2.alpha      = 1e-01;
+    params2.alpha      = 0.5;
     params2.gamma0     = 1e-02;
     params2.gamma1     = 8e-02;
     params2.gammait    = 9;
