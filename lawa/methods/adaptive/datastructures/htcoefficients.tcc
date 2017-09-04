@@ -126,7 +126,7 @@ template <typename T, typename Basis>
 void
 HTCoefficients<T, Basis>::truncate(double eps)
 {
-    tree().truncate_hsvd(eps);
+    tree().truncate(eps);
 }
 
 

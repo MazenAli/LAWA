@@ -72,6 +72,12 @@ genCoefficientsRnd(SepCoefficients<S, T, Index>&       coeffs,
                    const long                          seed  = -1);
 
 
+template <SortingCriterion S, typename T, typename Basis>
+void
+setCoefficientsJ0(      SepCoefficients<S, T, Index1D>& coeffs,
+                  const Basis&                        basis);
+
+
 template <SortingCriterion S, typename T, typename Index, typename Basis>
 void
 genCoefficients(SepCoefficients<S, T, Index>& coeffs,
@@ -700,6 +706,16 @@ evaleff2(     Sepop<Optype>&                   A,
         const std::vector<IndexSet<Index1D> >& rows,
         const std::vector<IndexSet<Index1D> >& cols,
         const T                                eps = 1e-08);
+
+
+template <typename T, typename Basis, typename Optype>
+HTCoefficients<T, Basis>
+evaleff2TT(     Sepop<Optype>&                   A,
+                Sepdiagscal<Basis>&              Srows,
+                HTCoefficients<T, Basis>&        u,
+          const std::vector<IndexSet<Index1D> >& rows,
+          const std::vector<IndexSet<Index1D> >& cols,
+          const T                                eps);
 
 
 template <typename T, typename Basis>

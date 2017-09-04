@@ -43,7 +43,7 @@ private:
 public:
     SeparableRHSD()                     = delete;
 
-    SeparableRHSD(const SeparableRHSD&) = delete;
+    SeparableRHSD(const SeparableRHSD&) = default;
 
     SeparableRHSD(SeparableRHSD&&)      = default;
 

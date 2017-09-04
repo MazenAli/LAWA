@@ -43,9 +43,15 @@ adaptiveLeaf(      Sepop<Optype>&                                A,
 
     // Initial residual
     Coefficients<Lexicographical, T, Index1D> b = f(null, active[j-1], j);
+    Coefficients<Lexicographical, T, Index1D> sb = b;
+    P(sb);
     Coefficients<Lexicographical, T, Index1D> r = b - Ap(v);
+    P(r);
+//    std::cout << "rhs =>\n" << b     << std::endl;
+//    std::cout << "lhs =>\n" << v     << std::endl;
+//    std::cout << "A*v =>\n" << Ap(v) << std::endl;
     T res_abs = std::sqrt(r*r);
-    T res     = res_abs/b.norm(2.);
+    T res     = res_abs/sb.norm(2.);
 
     if (params.verbose) {
         std::cout << "adaptiveLeaf: Iteration 0, r = " << res << std::endl;
@@ -80,14 +86,22 @@ adaptiveLeaf(      Sepop<Optype>&                                A,
         rowvec[j-1] = rows;
         b   = f(diff, rows, j);
         r   = b - Ap(v);
+        auto tmp = Ap(v);
+        std::cout << "nrmv  => " << v.norm(2.) << std::endl;
+        std::cout << "nrmb  => " << b.norm(2.) << std::endl;
+        std::cout << "nrmAp => " << tmp.norm(2.) << std::endl;
+        std::cout << "nrmr  => " << r.norm(2.) << std::endl;
         P(r);
         res_abs = std::sqrt(r*r);
-        res     = res_abs/b.norm(2.);
+        res     = res_abs/sb.norm(2.);
 
+//    std::cout << "rhs =>\n" << b     << std::endl;
+//    std::cout << "lhs =>\n" << v     << std::endl;
+//    std::cout << "A*v =>\n" << Ap(v) << std::endl;
         // Check residual
         if (params.verbose) {
             std::cout << "adaptiveLeaf: Iteration " << k
-                      << ", r = " << res << std::endl;
+                      << ", r = " << res_abs << std::endl;
         }
         if (res<=params.tol) return k;
         if (k==params.maxit) break;

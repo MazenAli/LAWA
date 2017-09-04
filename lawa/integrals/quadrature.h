@@ -26,6 +26,7 @@
 
 namespace lawa {
 
+// Do not initialize before main!
 template <QuadratureType Quad, typename Integral>
 class Quadrature
 {
@@ -54,14 +55,14 @@ class Quadrature<Gauss,Integral>
 
         const Integral &integral;
     private:
+        static FLENS_DEFAULT_INDEXTYPE _precalculatedOrder;
+        static flens::GeMatrix<flens::FullStorage<double, cxxblas::ColMajor> > _knots;
+        static flens::GeMatrix<flens::FullStorage<double, cxxblas::ColMajor> > _weights;
         static void
         _legendre(FLENS_DEFAULT_INDEXTYPE order);
-
         FLENS_DEFAULT_INDEXTYPE _order;
-        static FLENS_DEFAULT_INDEXTYPE _precalculatedOrder;
-        static flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > _knots;
-        static flens::GeMatrix<flens::FullStorage<T,cxxblas::ColMajor> > _weights;
 };
+
 
 //-----------------------------------------------------------------------------
 

@@ -26,6 +26,18 @@ namespace lawa {
 //--- Gauss-Legendre Quadrature-------------------------------------------------
 
 template <typename Integral>
+flens::GeMatrix<flens::FullStorage<double, cxxblas::ColMajor> >
+Quadrature<Gauss,Integral>::_knots;
+
+template <typename Integral>
+flens::GeMatrix<flens::FullStorage<double, cxxblas::ColMajor> >
+Quadrature<Gauss,Integral>::_weights;
+
+template <typename Integral>
+FLENS_DEFAULT_INDEXTYPE
+Quadrature<Gauss,Integral>::_precalculatedOrder = 10;
+
+template <typename Integral>
 Quadrature<Gauss,Integral>::Quadrature(const Integral &_integral)
     : integral(_integral), _order(-1)
 {
@@ -71,8 +83,8 @@ void
 Quadrature<Gauss,Integral>::_legendre(FLENS_DEFAULT_INDEXTYPE order)
 {
     T eps = Const<T>::EQUALITY_EPS;
-    _knots.engine().resize(order, order);
-    _weights.engine().resize(order, order);
+    _knots.resize(order, order);
+    _weights.resize(order, order);
 
     T x1 = -1,
       x2 =  1;
@@ -103,17 +115,6 @@ Quadrature<Gauss,Integral>::_legendre(FLENS_DEFAULT_INDEXTYPE order)
     }
 }
 
-template <typename Integral>
-flens::GeMatrix<flens::FullStorage<typename Integral::T,cxxblas::ColMajor> >
-Quadrature<Gauss,Integral>::_weights;
-
-template <typename Integral>
-flens::GeMatrix<flens::FullStorage<typename Integral::T,cxxblas::ColMajor> >
-Quadrature<Gauss,Integral>::_knots;
-
-template <typename Integral>
-FLENS_DEFAULT_INDEXTYPE
-Quadrature<Gauss,Integral>::_precalculatedOrder = 10;
 
 //---  Trapezoidal rule -------------------------------------------------------
 template <typename Integral>

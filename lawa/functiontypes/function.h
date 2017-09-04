@@ -28,8 +28,6 @@ namespace lawa {
 template <typename T>
 struct Function
 {
-    Function(T (*_f)(T));
-
     Function(T (*_f)(T), const flens::DenseVector<flens::Array<T> > &_singularPoints);
 
     T

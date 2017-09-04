@@ -44,10 +44,11 @@ wavPcg(      Operator&                                  A,
     if (res_cg<=tol) return 0;
 
     // pcg iterations
+
+
     for (unsigned k=1; k<=maxit; ++k) {
         // Compute Ap
         Ap = A(p);
-
         // Compute corrections
         T pAp = p*Ap;
         T a   = rho_old/pAp;

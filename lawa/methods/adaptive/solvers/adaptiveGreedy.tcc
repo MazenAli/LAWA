@@ -55,7 +55,7 @@ adaptiveGreedy(      Engine*                          ep,
     // Initial residual
     r        = eval(A, u, Lambda, Lambda);
     r.tree() = F.tree()-r.tree();
-    r        = applyScaleTT(S, F, Lambda, trunc);
+    r        = F;//applyScaleTT(S, F, Lambda, trunc);
     T res    = nrm2(r);
 
     if (params.verbose) {
@@ -68,15 +68,34 @@ adaptiveGreedy(      Engine*                          ep,
     genCoefficientsRnd(v, Lambda, 1., 1);
     ProjRhs<T, Basis> fj(Fcp, current, f, u);
     unsigned numit = rank1AdaptiveAls(A, P, v, u, fj, current, params.r1Als);
-    std::cout << "Lambda  =>\n" << Lambda[1].size() << std::endl;
-    std::cout << "current =>\n" << current[1].size() << std::endl;
+//    std::cout << "Lambda  =>\n" << Lambda[1].size() << std::endl;
+//    std::cout << "current =>\n" << current[1].size() << std::endl;
     Lambda         = unify(Lambda, current);
-    std::cout << "Lambda  =>\n" << Lambda[1].size() << std::endl;
+//    std::cout << "Lambda  =>\n" << Lambda[1].size() << std::endl;
+
+
+            std::cout << "htawgm: Index set sizes\n";
+            unsigned size = 0;
+            for (unsigned j=0; j<Lambda.size(); ++j) {
+                std::cout << "htawgm: d = " << j+1
+                          << " : " << Lambda[j].size() << std::endl;
+                size += Lambda[j].size();
+                FLENS_DEFAULT_INDEXTYPE jmax = 0;
+                for (const auto& it : Lambda[j]) {
+                    FLENS_DEFAULT_INDEXTYPE level = it.j;
+                    if (it.xtype==XWavelet) ++level;
+                    jmax = MAX(level, jmax);
+                }
+                std::cout << "htawgm: jmax = " << jmax << std::endl;
+            }
+            std::cout << "htawgm: Overall = " << size << std::endl;
+
+
 
     // Residual
     total = Lambda;
     r   = szoneres(A, u, F, Fcp, f, Lambda, sweep, total);
-    r   = applyScaleTT(S, F, total, trunc);
+//    r   = applyScaleTT(S, F, total, trunc);
     res = nrm2(r);
 
     if (params.verbose) {
