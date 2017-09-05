@@ -421,12 +421,52 @@ evallaplace(      Sepop<Optype>&            A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
+evalLaplaceD_1Dim(      Sepop<Optype>& A,
+                        HTCoefficients<T, Basis>& u,
+                  const std::vector<IndexSet<Index1D> >& rows,
+                  const std::vector<IndexSet<Index1D> >& cols,
+                  const unsigned j,
+                  const std::size_t hashtablelength);
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >
+evalLaplace1Dim(      Sepop<Optype>& A,
+                      HTCoefficients<T, Basis>& u,
+                const IndexSet<Index1D>&        rows,
+                const IndexSet<Index1D>&        cols,
+                const unsigned j,
+                const std::size_t hashtablelength);
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
 eval(      Sepop<Optype>&            A,
            HTCoefficients<T, Basis>& u,
      const std::vector<IndexSet<Index1D> >&  rows,
      const std::vector<IndexSet<Index1D> >&  cols,
      const double eps = 1e-08,
      const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalD_1Dim(      Sepop<Optype>&            A,
+                 HTCoefficients<T, Basis>& u,
+           const std::vector<IndexSet<Index1D> >&  rows,
+           const std::vector<IndexSet<Index1D> >&  cols,
+           const unsigned j,
+           const std::size_t hashtablelength=193);
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >
+eval1Dim(      Sepop<Optype>&                   A,
+               HTCoefficients<T, Basis>&        u,
+         const IndexSet<Index1D>&               rows,
+         const IndexSet<Index1D>&               cols,
+         const unsigned                         j,
+         const std::size_t                      hashtablelength=193);
 
 
 template <typename T, typename Optype, typename Basis>

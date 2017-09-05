@@ -2076,6 +2076,294 @@ evallaplace(Sepop<Optype>& A,
 
 
 template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalLaplaceD_1Dim(      Sepop<Optype>& A,
+                        HTCoefficients<T, Basis>& u,
+                  const std::vector<IndexSet<Index1D> >& rows,
+                  const std::vector<IndexSet<Index1D> >& cols,
+                  const unsigned j,
+                  const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==laplace);
+    assert(j>=1 && j<=A.dim());
+    assert(rows.size()==A.dim() && cols.size()==A.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    using flens::_;
+
+    HTCoefficients<T, Basis> Au(u.dim(), u.basis(), u.map());
+    Au.tree().set_tree(u.tree());
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titu = u.tree().getGeneralTree().end();
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titAu = Au.tree().getGeneralTree().end();
+    for (;titu>=u.tree().getGeneralTree().begin(); titu--, titAu--) {
+        auto nodeu  = titu.getNode();
+        auto nodeAu = titAu.getNode();
+
+        /* Apply operator to leafs */
+        if (nodeu->isLeaf()) {
+            htucker::DimensionIndex idx = nodeu->getContent()->getIndex();
+            Matrix& Uu  = nodeu->getContent()->getUorB();
+            Matrix& UAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            auto rowsU  = Uu.numRows();
+            auto colsU  = Uu.numCols();
+            if ((unsigned) idx[0] == j) {
+                UAu.resize(1, 2*colsU);
+                nodeAu->getContent()->setNumRows(2*colsU);
+            } else {
+                auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
+                assert(max>=(unsigned) rowsU);
+                UAu.resize(max, 2*colsU);
+                UAu(_(1, rowsU), _(1, colsU))         = Uu;
+
+                /* Apply operator to columns */
+                for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
+                    TreeCoefficients1D<T> input(hashtablelength, u.basis().j0);
+                    TreeCoefficients1D<T> output(hashtablelength, u.basis().j0);
+                    typedef typename TreeCoefficients1D<T>::val_type val_type;
+
+                    /* Set input */
+                    for (auto& lambda : cols[idx[0]-1]) {
+                        auto i = u.map()(lambda, idx[0]);
+                        assert(i<=(unsigned) rowsU);
+
+                        auto j     = lambda.j;
+                        auto _k     = lambda.k;
+                        auto xtype = lambda.xtype;
+                        if (xtype==XBSpline) {
+                            input.bylevel[j-1-input.offset].
+                                  map.insert(val_type(_k, Uu(i, k)));
+                        } else {
+                            input.bylevel[j-input.offset].
+                                  map.insert(val_type(_k, Uu(i, k)));
+                        }
+                    }
+
+                    /* Set output */
+                    for (auto& lambda : rows[idx[0]-1]) {
+                        #ifndef NDEBUG
+                            auto i = u.map()(lambda, idx[0]);
+                            assert(i<=max);
+                        #endif
+
+                        auto j     = lambda.j;
+                        auto _k     = lambda.k;
+                        auto xtype = lambda.xtype;
+                        if (xtype==XBSpline) {
+                            output.bylevel[j-1-output.offset].
+                                  map.insert(val_type(_k, (T) 0));
+                        } else {
+                            output.bylevel[j-output.offset].
+                                  map.insert(val_type(_k, (T) 0));
+                        }
+                    }
+
+                    /* Apply A */
+                    A(1, 1).eval(input, output, "A");
+
+                    /* Save result */
+                    for (typename CoefficientsByLevel<T>::const_it it=
+                         output.bylevel[0].map.begin();
+                         it!=output.bylevel[0].map.end(); ++it) {
+                            Index1D lambda(output.offset+1, (*it).first,XBSpline);
+                            auto i = u.map()(lambda, idx[0]);
+                            UAu(i, colsU+k) = (*it).second;
+                    }
+                    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=JMAX; ++i) {
+                        if (output.bylevel[i].map.size()==0) break;
+                        for (typename CoefficientsByLevel<T>::const_it it=
+                             output.bylevel[i].map.begin();
+                             it!=output.bylevel[i].map.end(); ++it) {
+                                Index1D lambda(output.offset+i,
+                                               (*it).first,XWavelet);
+                                auto j = u.map()(lambda, idx[0]);
+                                UAu(j, colsU+k) = (*it).second;
+                        }
+                    }
+                }
+
+                nodeAu->getContent()->setNumRows(2*colsU);
+            }
+        } else if (nodeu->isInner()) {
+
+            /* Set (sparse) transfer tensors */
+            auto nodenumel   = nodeu->getContent()->getNumRows();
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(4*nodenumel*nodercnumel, 2*nodelcnumel);
+
+            /* First column B of HT(A) */
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=nodenumel; ++i) {
+                BAu(_(2*nodercnumel*(i-1)+1, (2*i-1)*nodercnumel)
+                   ,_(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Second column B of HT(A) */
+            FLENS_DEFAULT_INDEXTYPE offset1 = (2*nodenumel+1)*nodercnumel;
+            FLENS_DEFAULT_INDEXTYPE offset2 = 2*nodenumel*nodercnumel;
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=nodenumel; ++i) {
+                /* Left block column */
+                BAu(_(offset1+2*nodercnumel*(i-1)+1,
+                      offset1+(2*i-1)*nodercnumel), _(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+
+                /* Right block column */
+                BAu(_(offset2+2*nodercnumel*(i-1)+1,
+                      offset2+(2*i-1)*nodercnumel),
+                    _(nodelcnumel+1, 2*nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(2*nodenumel);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        } else {
+
+            /* Set root */
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(2*nodercnumel, 2*nodelcnumel);
+
+            /* Left block column */
+            BAu(_(nodercnumel+1, 2*nodercnumel), _(1, nodelcnumel)) = Bu;
+
+            /* Right block column */
+            BAu(_(1, nodercnumel), _(nodelcnumel+1, 2*nodelcnumel)) = Bu;
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(1);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        }
+    }
+
+    return Au;
+}
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+evalLaplace1Dim(      Sepop<Optype>& A,
+                      HTCoefficients<T, Basis>& u,
+                const IndexSet<Index1D>& rows,
+                const IndexSet<Index1D>& cols,
+                const unsigned j,
+                const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(A.type()==laplace);
+    assert(j>=1 && j<=A.dim());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    using flens::_;
+
+    Matrix UAu;
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titu = u.tree().getGeneralTree().end();
+    for (;titu>=u.tree().getGeneralTree().begin(); titu--) {
+        auto nodeu  = titu.getNode();
+
+        /* Apply operator to leafs */
+        if (nodeu->isLeaf()) {
+            htucker::DimensionIndex idx = nodeu->getContent()->getIndex();
+            if ((unsigned) idx[0] == j) {
+                Matrix& Uu  = nodeu->getContent()->getUorB();
+                auto rowsU  = Uu.numRows();
+                auto colsU  = Uu.numCols();
+
+                auto max    = maxintindhash(rows, idx[0], u);
+                assert(max>=(unsigned) rowsU);
+                UAu.resize(max, 2*colsU);
+                UAu(_(1, rowsU), _(1, colsU))         = Uu;
+
+                /* Apply operator to columns */
+                for (FLENS_DEFAULT_INDEXTYPE k=1;
+                     k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
+                    TreeCoefficients1D<T> input(hashtablelength, u.basis().j0);
+                    TreeCoefficients1D<T> output(hashtablelength, u.basis().j0);
+                    typedef typename TreeCoefficients1D<T>::val_type val_type;
+
+                    /* Set input */
+                    for (auto& lambda : cols) {
+                        auto i = u.map()(lambda, idx[0]);
+                        assert(i<=(unsigned) rowsU);
+
+                        auto j     = lambda.j;
+                        auto _k     = lambda.k;
+                        auto xtype = lambda.xtype;
+                        if (xtype==XBSpline) {
+                            input.bylevel[j-1-input.offset].
+                                  map.insert(val_type(_k, Uu(i, k)));
+                        } else {
+                            input.bylevel[j-input.offset].
+                                  map.insert(val_type(_k, Uu(i, k)));
+                        }
+                    }
+
+                    /* Set output */
+                    for (auto& lambda : rows) {
+                        #ifndef NDEBUG
+                            auto i = u.map()(lambda, idx[0]);
+                            assert(i<=max);
+                        #endif
+
+                        auto j     = lambda.j;
+                        auto _k     = lambda.k;
+                        auto xtype = lambda.xtype;
+                        if (xtype==XBSpline) {
+                            output.bylevel[j-1-output.offset].
+                                  map.insert(val_type(_k, (T) 0));
+                        } else {
+                            output.bylevel[j-output.offset].
+                                  map.insert(val_type(_k, (T) 0));
+                        }
+                    }
+
+                    /* Apply A */
+                    A(1, 1).eval(input, output, "A");
+
+                    /* Save result */
+                    for (typename CoefficientsByLevel<T>::const_it it=
+                         output.bylevel[0].map.begin();
+                         it!=output.bylevel[0].map.end(); ++it) {
+                            Index1D lambda(output.offset+1, (*it).first,XBSpline);
+                            auto i = u.map()(lambda, idx[0]);
+                            UAu(i, colsU+k) = (*it).second;
+                    }
+                    for (FLENS_DEFAULT_INDEXTYPE i=1; i<=JMAX; ++i) {
+                        if (output.bylevel[i].map.size()==0) break;
+                        for (typename CoefficientsByLevel<T>::const_it it=
+                             output.bylevel[i].map.begin();
+                             it!=output.bylevel[i].map.end(); ++it) {
+                                Index1D lambda(output.offset+i,
+                                               (*it).first,XWavelet);
+                                auto j = u.map()(lambda, idx[0]);
+                                UAu(j, colsU+k) = (*it).second;
+                        }
+                    }
+                }
+
+                return UAu;
+            }
+        }
+    }
+
+    return UAu;
+}
+
+
+template <typename T, typename Optype, typename Basis>
 flens::GeMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
 evallaplace(      Sepop<Optype>&            A,
             const flens::GeMatrix<
@@ -2293,6 +2581,51 @@ eval(Sepop<Optype>& A,
     } else {
         return evallaplace(A, u, rows, cols, hashtablelength);
     }
+}
+
+
+template <typename T, typename Optype, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >
+eval1Dim(      Sepop<Optype>& A,
+               HTCoefficients<T, Basis>& u,
+         const IndexSet<Index1D>& rows,
+         const IndexSet<Index1D>& cols,
+         const unsigned j,
+         const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(j>=1 && j<=A.dim());
+
+    if (A.type()==laplace) {
+        return evalLaplace1Dim(A, u, rows, cols, j, hashtablelength);
+    } else {
+        std::cerr << "eval1Dim: Not implemented for operator type\n";
+        exit(1);
+    }
+}
+
+
+template <typename T, typename Optype, typename Basis>
+HTCoefficients<T, Basis>
+evalD_1Dim(      Sepop<Optype>& A,
+                 HTCoefficients<T, Basis>& u,
+           const std::vector<IndexSet<Index1D> >& rows,
+           const std::vector<IndexSet<Index1D> >& cols,
+           const unsigned j,
+           const std::size_t hashtablelength)
+{
+    assert(A.dim()==(unsigned) u.dim());
+    assert(rows.size()==cols.size());
+    assert(rows.size()==A.dim());
+    assert(j>=1 && j<=A.dim());
+
+    if (A.type()==laplace) {
+        return evalLaplaceD_1Dim(A, u, rows, cols, j, hashtablelength);
+    } else {
+        std::cerr << "evalD_1Dim: Not implemented for operator type\n";
+        exit(1);
+    }
+
 }
 
 

@@ -273,8 +273,8 @@ computeR1RhsIntegrals(const SepCoeff& f, const SepCoeff& u,
 
 
 void
-updateR1RhsIntegrals(GeMat& ints, const SepCoeff& f, Coeff1D& u,
-                     const unsigned j)
+updateR1RhsIntegrals_(GeMat& ints, const SepCoeff& f, const Coeff1D& u,
+                      const unsigned j)
 {
     assert(j>=1 && j<=f.dim());
 
@@ -312,7 +312,7 @@ public:
         assert(f.rank()==(unsigned) _ints.numRows());
         assert(f.dim() ==(unsigned) _ints.numCols());
         ints = _ints;
-
+        upToDate = false;
     }
 
     void
@@ -320,7 +320,7 @@ public:
     {
         assert(_j>=1 && _j<=f.dim());
         j = _j;
-
+        upToDate = false;
     }
 
     void
@@ -336,12 +336,25 @@ public:
             }
             factors(k) = alpha;
         }
-        std::cout << "factors=>\n" << factors << std::endl;
+        upToDate = true;
+    }
+
+    void
+    updateR1RhsIntegrals(const SepCoeff& fcp, const Coeff1D& v,
+                         const unsigned j)
+    {
+        assert(fcp.rank()==f.rank());
+        assert(fcp.dim() ==f.dim());
+        assert(j>=1 && j<=f.dim());
+
+        updateR1RhsIntegrals_(ints, fcp, v, j);
+        upToDate = false;
     }
 
     Coeff1D
     operator()(const IndexSet& Lambda)
     {
+        if (!upToDate) updateFactors();
         return rhsAls(f, Lambda, factors, j);
     }
 
@@ -350,15 +363,17 @@ private:
     GeMat                           ints;
     DenseVector                     factors;
     unsigned                        j;
+    bool                            upToDate = false;
 };
 
 
+template <typename Residual>
 unsigned
 solve1D(      DiffReaction&                                A,
               lawa::DiagonalPreconditioner
               <lawa::DiagonalLevelPreconditioner1D<T>, T>& Prec,
               Coeff1D&                                     u,
-              AlsRhs&                                      f,
+              Residual&                                    f,
               T&                                           residual,
               IndexSet&                                    Lambda,
         const Basis&                                       basis,
@@ -380,10 +395,8 @@ solve1D(      DiffReaction&                                A,
     T rel     = residual/b.norm(2.);
 
     if (params.verbose) {
-        //std::cout << "solve1D: Iteration 0, r = " << residual << std::endl;
         std::cout << "solve1D: Iteration 0, r = " << rel << std::endl;
     }
-    //if (residual<=params.tol) return 0.;
     if (rel<=params.tol) return 0.;
 
     // AWGM iterations
@@ -419,10 +432,8 @@ solve1D(      DiffReaction&                                A,
         // Check residual
         if (params.verbose) {
             std::cout << "solve1D: Iteration " << k
-                      //<< ", r = " << residual << std::endl;
                       << ", r = " << rel << std::endl;
         }
-        //if (residual<=params.tol) return k;
         if (rel<=params.tol) return k;
         if (k==params.maxit) break;
 
@@ -481,15 +492,240 @@ computeH1NormsProduct(const GeMat& norms, const unsigned j)
 }
 
 
+DenseVector
+computeR1L2Prods(const SepCoeff& u, const SepCoeff& v)
+{
+    assert(u.dim()==v.dim());
+    assert(u.rank()==1);
+    assert(v.rank()==1);
+
+    DenseVector L2Prods(u.dim());
+    for (unsigned j=1; j<=u.dim(); ++j) {
+        L2Prods(j) = u(1, j)*v(1, j);
+    }
+
+    return L2Prods;
+}
+
+
+DenseVector
+computeR1H1Prods(const SepCoeff& u, LOp_Lapl1D& A, const SepCoeff& v)
+{
+    assert(u.dim()==v.dim());
+    assert(u.rank()==1);
+    assert(v.rank()==1);
+
+    DenseVector H1Prods(u.dim());
+    for (unsigned j=1; j<=u.dim(); ++j) {
+        H1Prods(j) = computeEnergyProduct(u(1, j), A, v(1, j));
+    }
+
+    return H1Prods;
+}
+
+
+double
+computeR1H1InnerProduct(const SepCoeff& u, LOp_Lapl1D& A, const SepCoeff& v)
+{
+    assert(u.dim()==v.dim());
+    assert(u.rank()==1);
+    assert(v.rank()==1);
+
+    DenseVector L2Prods = computeR1L2Prods(u, v);
+    DenseVector H1Prods = computeR1H1Prods(u, A, v);
+    T L2Prod = 1.;
+    for (unsigned j=1; j<=u.dim(); ++j) {
+        L2Prod    *= L2Prods(j);
+    }
+
+    T sum = 0.;
+    for (unsigned k=1; k<=u.dim(); ++k) {
+        T prod = 1.;
+        for (unsigned j=1; j<=u.dim(); ++j) {
+            if (j!=k) {
+                prod *= L2Prods(j);
+            }
+        }
+
+        sum += H1Prods(k)*prod;
+    }
+
+    return L2Prod + sum;
+}
+
+
+double
+computeR1H1Difference(const SepCoeff& u, LOp_Lapl1D& A, const SepCoeff& v)
+{
+    assert(u.dim()==v.dim());
+    assert(u.rank()==1);
+    assert(v.rank()==1);
+
+    T uu, uv, vv;
+    uu = computeR1H1InnerProduct(u, A, u);
+    uv = computeR1H1InnerProduct(u, A, v);
+    vv = computeR1H1InnerProduct(v, A, v);
+
+    return std::sqrt(uu+vv-2.*uv);
+}
+
+
+class
+AlsOperatorRhs
+{
+public:
+    AlsOperatorRhs(const Sepop&       _A,
+                   const HTCoeffTree& _u,
+                   const HTCoeffTree& _v):
+        A(_A),
+        u(_u),
+        v(_v)
+    {
+        assert(A.dim()==(unsigned) u.dim());
+        assert(A.dim()==(unsigned) v.dim());
+    }
+
+    void
+    setRows(const IndexSetVec& _rows)
+    {
+        assert(_rows.size()==(unsigned) u.dim());
+
+        rows     = _rows;
+        upToDate = false;
+    }
+
+    void
+    setCols(const IndexSetVec& _cols)
+    {
+        assert(_cols.size()==(unsigned) u.dim());
+
+        cols     = _cols;
+        upToDate = false;
+    }
+
+    void
+    setDim(const unsigned _dim)
+    {
+        assert(_dim>=1 && _dim<=(unsigned) u.dim());
+
+        dim      = _dim;
+        upToDate = false;
+    }
+
+    void
+    computeProjection()
+    {
+        assert(rows.size()>0);
+        assert(cols.size()>0);
+        assert(rows.size()==cols.size());
+        assert(rows.size()==(unsigned) u.dim());
+
+        HTCoeffTree Au = evalD_1Dim(A, u, rows, cols, dim);
+        Pj             = projection(Au.tree(), v.tree(), dim);
+        assert(Pj.numRows()==1);
+        upToDate       = true;
+    }
+
+    void
+    update(const Coeff1D& vj, const unsigned j)
+    {
+        assert(j>=1 && j<=(unsigned) u.dim());
+        assert(cols.size()==(unsigned) u.dim());
+
+        rows[j-1] = supp(vj);
+        insert(v, vj, rows[j-1], j);
+        upToDate = false;
+    }
+
+    Coeff1D
+    operator()(const IndexSet& Lambda)
+    {
+        if (!upToDate) computeProjection();
+
+        GeMat AU = eval1Dim(A, u, Lambda, cols[dim-1], dim);
+
+        assert(AU.numCols()==Pj.numCols());
+        assert(Pj.numRows()==1);
+
+        GeMat tmp;
+        flens::blas::mm(cxxblas::NoTrans, cxxblas::Trans, 1., AU, Pj, 0., tmp);
+        Coeff1D ret = convert(tmp, u, Lambda, dim);
+
+        return ret;
+    }
+
+private:
+    Sepop       A;
+    HTCoeffTree u;
+    HTCoeffTree v;
+    IndexSetVec rows;
+    IndexSetVec cols;
+    unsigned    dim;
+    GeMat       Pj;
+    bool        upToDate = false;
+};
+
+
+class
+AlsResidual
+{
+public:
+    AlsResidual(const AlsRhs&         _f,
+                const AlsOperatorRhs& _A):
+        f(_f),
+        A(_A)
+    {}
+
+    void
+    setCoeffs(const GeMat& ints)
+    {
+        f.setCoeffs(ints);
+    }
+
+    void
+    setDim(const unsigned j)
+    {
+        assert(j>=1);
+
+        f.setDim(j);
+        f.updateFactors();
+
+        A.setDim(j);
+    }
+
+    void
+    updateR1RhsIntegrals(const SepCoeff& fcp, const Coeff1D& v,
+                         const unsigned j)
+    {
+        assert(j>=1 && j<=fcp.dim());
+
+        f.updateR1RhsIntegrals(fcp, v, j);
+        A.update(v, j);
+    }
+
+    Coeff1D
+    operator()(const IndexSet& Lambda)
+    {
+        return f(Lambda)-A(Lambda);
+    }
+
+private:
+    AlsRhs         f;
+    AlsOperatorRhs A;
+};
+
+
+template <typename Residual>
 unsigned
-rank1Solve(   DiffReaction&                                A,
-              lawa::DiagonalPreconditioner
-              <lawa::DiagonalLevelPreconditioner1D<T>, T>& Prec,
-              SepCoeff&                                    u,
-              lawa::SeparableRHSD<T, Basis>                f,
-              IndexSetVec&                                 Lambda,
-        const Basis&                                       basis,
-              lawa::Rank1AdaptiveAlsParams&                params)
+rank1PoissonUpdate(      DiffReaction&                                A,
+                         lawa::DiagonalPreconditioner
+                         <lawa::DiagonalLevelPreconditioner1D<T>, T>& Prec,
+                         SepCoeff&                                    u,
+                         lawa::SeparableRHSD<T, Basis>                f,
+                         Residual&                                    r,
+                         IndexSetVec&                                 Lambda,
+                   const Basis&                                       basis,
+                         lawa::Rank1AdaptiveAlsParams&                params)
 {
     assert(f.dim()==u.dim());
     assert(u.rank()==1);
@@ -512,17 +748,14 @@ rank1Solve(   DiffReaction&                                A,
     std::cout << "eps = " << alpha/beta << std::endl;
     A.setAlpha(alpha);
     A.setBeta(beta);
-    AlsRhs fals(f);
-    std::cout << "rhsints =>\n" << rhsInts << std::endl;
-    fals.setCoeffs(rhsInts);
-    fals.setDim(1);
-    fals.updateFactors();
+    r.setCoeffs(rhsInts);
+    r.setDim(1);
 
     // ALS sweeps
-    T tol = params.adaptiveLeaf.tol;
     IndexSetVec start = Lambda;
     SepCoeff    u0    = u;
     for (unsigned sweep=1; sweep<=params.max_sweep; ++sweep) {
+        SepCoeff uold = u;
         for (unsigned j=1; j<=u.dim(); ++j) {
             // Update constants
             if (sweep!=1 || j!=1) {
@@ -534,27 +767,20 @@ rank1Solve(   DiffReaction&                                A,
                 }
 
                 updateR1Norms(r1Norms, u(1, l), nabla, l);
-                updateR1RhsIntegrals(rhsInts, fcp, u(1, l), l);
                 alpha = computeAlpha(r1Norms, j);
                 beta  = computeBeta(r1Norms, j);
-    std::cout << "eps = " << alpha/beta << std::endl;
+                std::cout << "eps = " << alpha/beta << std::endl;
                 A.setAlpha(alpha);
                 A.setBeta(beta);
-                fals.setCoeffs(rhsInts);
-                fals.setDim(j);
-                fals.updateFactors();
+                r.updateR1RhsIntegrals(fcp, u(1, l), l);
+                r.setDim(j);
             }
 
             // Approximate factor
-            T H1  = computeH1NormsProduct(r1Norms, j);
-            T eps = alpha/beta;
-            //params.adaptiveLeaf.tol = tol*eps*eps/H1;
-            params.adaptiveLeaf.tol = tol;
-            std::cout << "Tolerance => " << params.adaptiveLeaf.tol << std::endl;
             IndexSet init = start[j-1];
             Coeff1D  v    = u0(1, j);
             T resleaf;
-            unsigned numit = solve1D(A, Prec, v, fals, resleaf, init, basis,
+            unsigned numit = solve1D(A, Prec, v, r, resleaf, init, basis,
                                      params.adaptiveLeaf);
             if (params.verbose) {
                 std::cout << "rank1Solve: Sweep " << sweep
@@ -568,11 +794,138 @@ rank1Solve(   DiffReaction&                                A,
             u(1, j)     = v;
             Lambda[j-1] = init;
         }
+
+        // Check for stagnation
+        T h1norm = std::sqrt(computeR1H1InnerProduct(u, nabla, u));
+        T h1diff = computeR1H1Difference(u, nabla, uold);
+        T stag = h1diff/h1norm;
+        if (params.verbose) {
+            std::cout << "rank1solve: Sweep " << sweep
+                      << ", stagnation = " << stag << std::endl;
+        }
+        if (stag<=params.stag) return sweep;
     }
 
     std::cerr << "rank1Solve: Reached max sweeps " << params.max_sweep
               << std::endl;
     return params.max_sweep;
+}
+
+
+void
+R1L2Normalize(SepCoeff& u)
+{
+    assert(u.rank()==1);
+
+    for (unsigned j=1; j<=u.dim(); ++j) {
+        T scale  = u(1, j).norm(2.);
+        u(1, j) *= 1./scale;
+    }
+}
+
+
+void
+R1H1Normalize(SepCoeff& u, LOp_Lapl1D& A)
+{
+    assert(u.rank()==1);
+
+    for (unsigned j=1; j<=u.dim(); ++j) {
+        T scale  = std::sqrt(computeEnergyProduct(u(1, j), A, u(1, j)));
+        u(1, j) *= 1./scale;
+    }
+}
+
+
+unsigned
+greedyPoissonSolve(      Engine                                      *ep,
+                         Sepop&                                       A,
+                         lawa::DiagonalPreconditioner
+                         <lawa::DiagonalLevelPreconditioner1D<T>, T>& Prec,
+                         HTCoeffTree&                                 u,
+                         lawa::SeparableRHSD<T, Basis>&               f,
+                         IndexSetVec&                                 Lambda,
+                   const AdaptiveGreedyParams&                        params)
+{
+    assert(f.dim()==A.dim());
+    assert(f.dim()==Lambda.size());
+    assert(f.dim()==(unsigned) u.dim());
+    assert(A.type()==lawa::laplace);
+
+    // Rank 1 solve
+    DiffReaction nabla(A(1, 1), 1., 1.);
+    AlsRhs fals(f);
+    SepCoeff v(1, f.dim());
+    setCoefficientsJ0(v, u.basis());
+
+    unsigned numit = rank1PoissonUpdate(nabla, Prec, v, f, fals, Lambda,
+                                        u.basis(), params.r1Als);
+    if (params.verbose) {
+        std::cout << "greedyPoissonSolve: Update 0 required " << numit
+                  << " sweeps\n";
+    }
+
+    // Scale core
+    R1L2Normalize(v);
+    HTCoeffTree vtree;
+    vtree.tree().set_tree(u.tree());
+    set(vtree, v);
+
+    SepCoeff Fcp(f.rank(), f.dim());
+    genCoefficients(Fcp, f, Lambda);
+    HTCoeffTree ftree;
+    ftree.tree().set_tree(u.tree());
+    set(ftree, Fcp, Lambda);
+    std::vector<GeMat> fred = reduce_rhs(u, ftree);
+    std::vector<GeMat> Ared = reduce(A, u, Lambda, Lambda);
+    std::vector<GeMat> x0(fred.size()-1);
+    IVector ranks(x0.size());
+    extract_core(u.tree(), x0, ranks);
+    x0 = optTTcoreLaplace(ep, Ared, fred, x0, ranks, params.dmrgTTcore);
+    insert_core(u.tree(), x0, ranks);
+
+    // Greedy iterations
+    for (unsigned k=1; k<=params.maxit; ++k) {
+        // Initial guess
+        setCoefficientsJ0(v, u.basis());
+        set(vtree, v);
+
+        // ALS residual
+        AlsOperatorRhs Au(A, u, v);
+        Au.setRows(Lambda);
+        Au.setCols(Lambda);
+        AlsResidual rals(fals, Au);
+
+        // Rank 1 update
+        numit = rank1PoissonUpdate(nabla, Prec, v, f, rals, Lambda,
+                                   u.basis(), params.r1Als);
+        if (params.verbose) {
+            std::cout << "greedyPoissonSolve: Update " << k <<" required "
+                      << numit
+                      << " sweeps\n";
+        }
+
+        // Update basis
+        R1L2Normalize(v);
+        set(vtree, v);
+        u.tree() = u.tree()+v.tree();
+        u.tree().orthogonalize();
+
+        // Optimize core
+        genCoefficients(Fcp, f, Lambda);
+        set(ftree, Fcp, Lambda);
+        fred = reduce_rhs(u, ftree);
+        Ared = reduce(A, u, Lambda, Lambda);
+        x0.resize(fred.size()-1);
+        ranks.resize(x0.size());
+        extract_core(u.tree(), x0, ranks);
+        x0 = optTTcoreLaplace(ep, Ared, fred, x0, ranks, params.dmrgTTcore);
+        insert_core(u.tree(), x0, ranks);
+    }
+
+    std::cerr << "greedyPoissonSolve: Reached max iterations " << params.maxit
+              << std::endl;
+
+    return params.maxit;
 }
 
 
@@ -675,7 +1028,7 @@ main(int argc, char* argv[])
     S.set_nu(1e-01);
 
     lawa::AdaptiveLeafParams par;
-    par.tol          = 1e-03;
+    par.tol          = 5e-03;
     par.maxit        = 50;
     par.gamma        = 1e-01;
     par.cg_maxit     = 100;
@@ -685,7 +1038,7 @@ main(int argc, char* argv[])
     par.bulk_verbose = false;
     lawa::Rank1AdaptiveAlsParams pam;
     pam.max_sweep    = 5;
-    pam.stag         = 1e-03;
+    pam.stag         = 1e-02;
     pam.verbose      = true;
     pam.adaptiveLeaf = par;
 
@@ -699,11 +1052,11 @@ main(int argc, char* argv[])
     lawa::GreedyALSParams                   p3;
 
     /* Start MATLAB session */
-//    Engine *ep;
-//    if (!(ep = engOpen("matlab -nojvm"))) {
-//        std::cerr << "\nCan't start MATLAB engine\n" << std::endl;
-//        exit(1);
-//    }
+    Engine *ep;
+    if (!(ep = engOpen("matlab -nojvm"))) {
+        std::cerr << "\nCan't start MATLAB engine\n" << std::endl;
+        exit(1);
+    }
 
     auto start  = std::chrono::system_clock::now();
 //    std::cout << "adaptive greedy required "
@@ -716,12 +1069,42 @@ main(int argc, char* argv[])
     rhss(1, 2) = 1.;
     DiffReaction nablaR(lapl, 1., 1.);
     nablaR.setRows(indexset);
-    Coeff1D w = coeffs(1, 1);
+    //Coeff1D w = coeffs(1, 1);
     //AlsRhs ff(Fint);
     //ff.setCoeffs(rhss);
     //ff.setDim(1);
     //(void) solve1D(nablaR, dp, w, ff, indexset, basis, par);
-    (void) rank1Solve(nablaR, dp, coeffs, Fint, indexsetvec, basis, pam);
+    AlsRhs fals(Fint);
+    (void) rank1PoissonUpdate(nablaR, dp, coeffs, Fint, fals,
+                              indexsetvec, basis, pam);
+    R1L2Normalize(coeffs);
+    set(u, coeffs);
+
+    SepCoeff Fcp(Fint.rank(), Fint.dim());
+    genCoefficients(Fcp, Fint, indexsetvec);
+    set(f, Fcp, indexsetvec);
+    std::vector<GeMat> fred = reduce_rhs(u, f);
+    std::vector<GeMat> Ared = reduce(A, u, indexsetvec, indexsetvec);
+    std::vector<GeMat> x0(fred.size()-1);
+    IVector ranks(x0.size());
+    extract_core(u.tree(), x0, ranks);
+    lawa::OptTTCoreParams dmrgParams;
+    x0 = optTTcoreLaplace(ep, Ared, fred, x0, ranks, dmrgParams);
+    insert_core(u.tree(), x0, ranks);
+
+    setCoefficientsJ0(coeffs, u.basis());
+    HTCoeffTree w(dim, sp, basis, map);
+    set(w, coeffs);
+
+    AlsOperatorRhs Au(A, u, w);
+    Au.setRows(indexsetvec);
+    Au.setCols(indexsetvec);
+
+    AlsResidual r(fals, Au);
+    (void) rank1PoissonUpdate(nablaR, dp, coeffs, Fint, r,
+                              indexsetvec, basis, pam);
+    R1L2Normalize(coeffs);
+    //R1H1Normalize(coeffs, lapl);
     //w = ff(indexset);
 
 //    lawa::AgALSParams   params;
@@ -785,7 +1168,7 @@ main(int argc, char* argv[])
 //    }
 //    std::cout << "Done...\n";
 
-//    engClose(ep);
+    engClose(ep);
 
     return 0;
 }
