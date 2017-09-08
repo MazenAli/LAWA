@@ -288,6 +288,38 @@ maxintindhash(const IndexSet<Index>& active,
 }
 
 
+template <typename Index, typename MapType>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const IndexSet<Index>& active,
+              const int              dim,
+                    MapType&         map)
+{
+    unsigned FLENS_DEFAULT_INDEXTYPE max = 0;
+    for (const auto& it : active) {
+        unsigned FLENS_DEFAULT_INDEXTYPE idx = map(it, dim);
+        max = (idx>max) ? idx : max;
+    }
+
+    return max;
+}
+
+
+template <SortingCriterion S, typename T, typename Index, typename MapType>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const Coefficients<S, T, Index>& v,
+              const int                        dim,
+                    MapType&                   map)
+{
+    unsigned FLENS_DEFAULT_INDEXTYPE max = 0;
+    for (const auto& it : v) {
+        unsigned FLENS_DEFAULT_INDEXTYPE idx = map(it.first, dim);
+        max = (idx>max) ? idx : max;
+    }
+
+    return max;
+}
+
+
 template <typename T, SortingCriterion S, typename Index, typename Basis>
 void
 set(HTCoefficients<T, Basis>& tree,
@@ -1941,9 +1973,9 @@ evallaplace(Sepop<Optype>& A,
             auto rowsU  = Uu.numRows();
             auto colsU  = Uu.numCols();
             auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
-            assert(max>=(unsigned) rowsU);
+            auto min    = std::min(max, (unsigned) rowsU);
             UAu.resize(max, 2*colsU);
-            UAu(_(1, rowsU), _(1, colsU))         = Uu;
+            UAu(_(1, min), _(1, colsU)) = Uu(_(1, min), _);
 
             /* Apply operator to columns */
             for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
@@ -2117,9 +2149,9 @@ evalLaplaceD_1Dim(      Sepop<Optype>& A,
                 nodeAu->getContent()->setNumRows(2*colsU);
             } else {
                 auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
-                assert(max>=(unsigned) rowsU);
+                auto min    = std::min(max, (unsigned) rowsU);
                 UAu.resize(max, 2*colsU);
-                UAu(_(1, rowsU), _(1, colsU))         = Uu;
+                UAu(_(1, min), _(1, colsU)) = Uu(_(1, min), _);
 
                 /* Apply operator to columns */
                 for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
@@ -2283,9 +2315,9 @@ evalLaplace1Dim(      Sepop<Optype>& A,
                 auto colsU  = Uu.numCols();
 
                 auto max    = maxintindhash(rows, idx[0], u);
-                assert(max>=(unsigned) rowsU);
+                auto min    = std::min(max, (unsigned) rowsU);
                 UAu.resize(max, 2*colsU);
-                UAu(_(1, rowsU), _(1, colsU))         = Uu;
+                UAu(_(1, min), _(1, colsU)) = Uu(_(1, min), _);
 
                 /* Apply operator to columns */
                 for (FLENS_DEFAULT_INDEXTYPE k=1;
@@ -5070,6 +5102,29 @@ assemble_projected_laplace(      Sepop<Optype>&             A,
 }
 
 
+template <typename T = double, typename BilForm, typename MapType>
+flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+assemble_laplace(      BilForm&           a,
+                       MapType&           map,
+                 const IndexSet<Index1D>& Lambda,
+                 const unsigned           j)
+{
+    flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+    ret(maxintindhash(Lambda, j, map), flens::Lower);
+
+    for (auto& lambdaR : Lambda) {
+        auto row = map(lambdaR, j);
+        for (auto& lambdaC: Lambda) {
+            auto col      = map(lambdaC, j);
+            if (col>row) continue;
+            ret(row, col) = a(lambdaR, lambdaC);
+        }
+    }
+
+    return ret;
+}
+
+
 template <typename T, typename Basis>
 flens::GeMatrix<
 flens::FullStorage<T, flens::ColMajor> >
@@ -5140,6 +5195,45 @@ convert(const flens::GeMatrix<
     return v;
 }
 
+
+template <typename T, typename MapType>
+Coefficients<Lexicographical, T, Index1D>
+convert(const flens::DenseVector<flens::Array<T> >& x,
+        const IndexSet<Index1D>&                    active,
+        const unsigned                              j,
+              MapType&                              map)
+{
+    assert(j>=1 && j<=map.dim());
+
+    Coefficients<Lexicographical, T, Index1D> v;
+    for (const auto& it : active) {
+        unsigned i = map(it, j);
+        assert(i<=(unsigned) x.length());
+        v[it] = x(i);
+    }
+
+    return v;
+}
+
+
+template <typename T, typename MapType>
+flens::DenseVector<flens::Array<T> >
+convert(const Coefficients<Lexicographical, T, Index1D>& v,
+        const unsigned                                   j,
+              MapType&                                   map)
+{
+    assert(j>=1 && j<=map.dim());
+
+    int length = maxintindhash(v, j, map);
+    flens::DenseVector<flens::Array<T> > x(length);
+
+    for (const auto& it : v) {
+        unsigned r = map(it.first, j);
+        x(r)       = it.second;
+    }
+
+    return x;
+}
 
 template <typename Index>
 std::ostream& operator<<(std::ostream& s,

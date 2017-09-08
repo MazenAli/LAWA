@@ -14,6 +14,8 @@
 #include <lawa/methods/adaptive/operators/operatorsd/sepop.h>
 #include <lawa/methods/adaptive/preconditioners/preconditionersd/sepdiagscal.h>
 
+// This is a big fucking mess. Sorry...
+
 namespace lawa
 {
 
@@ -121,6 +123,20 @@ unsigned FLENS_DEFAULT_INDEXTYPE
 maxintindhash(const IndexSet<Index>& active,
               HTCoefficients<T, Basis>& u,
               const int dim);
+
+
+template <typename Index, typename MapType>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const IndexSet<Index>& active,
+              const int              dim,
+                    MapType&         map);
+
+
+template <SortingCriterion S, typename T, typename Index, typename MapType>
+unsigned FLENS_DEFAULT_INDEXTYPE
+maxintindhash(const Coefficients<S, T, Index>& v,
+              const int                        dim,
+                    MapType&                   map);
 
 
 template <typename T, SortingCriterion S, typename Index, typename Basis>
@@ -1062,6 +1078,21 @@ convert(const flens::GeMatrix<
               HTCoefficients<T, Basis>&                 tree,
         const IndexSet<Index1D>&                        active,
         const unsigned                                  j);
+
+
+template <typename T, typename MapType>
+Coefficients<Lexicographical, T, Index1D>
+convert(const flens::DenseVector<flens::Array<T> >& x,
+        const IndexSet<Index1D>&                    active,
+        const unsigned                              j,
+              MapType&                              map);
+
+
+template <typename T, typename MapType>
+flens::DenseVector<flens::Array<T> >
+convert(const Coefficients<Lexicographical, T, Index1D>& v,
+        const unsigned                                   j,
+              MapType&                                   map);
 
 
 template <typename Index>
