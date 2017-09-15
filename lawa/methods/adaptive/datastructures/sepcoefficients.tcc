@@ -179,7 +179,7 @@ SepCoefficients<S, T, Index>&
 SepCoefficients<S, T, Index>::
 operator=(const SepCoefficients<S, T, Index>& copy)
 {
-    if (rank()*dim()!=copy.rank()*copy.dim()) {
+    if ((rank()!=copy.rank()) || (dim()!=copy.dim())) {
         resize(copy.rank(), copy.dim());
     }
 
