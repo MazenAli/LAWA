@@ -11,6 +11,7 @@
 #endif
 
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
@@ -1939,7 +1940,7 @@ evalsimple(Sepop<Optype>& A,
 
 template <typename T, typename Optype, typename Basis>
 HTCoefficients<T, Basis>
-evallaplace(Sepop<Optype>& A,
+evallaplace(      Sepop<Optype>& A,
                   HTCoefficients<T, Basis>& u,
             const std::vector<IndexSet<Index1D> >& rows,
             const std::vector<IndexSet<Index1D> >& cols,
@@ -2040,6 +2041,122 @@ evallaplace(Sepop<Optype>& A,
                             auto j = u.map()(lambda, idx[0]);
                             UAu(j, colsU+k) = (*it).second;
                     }
+                }
+            }
+
+            nodeAu->getContent()->setNumRows(2*colsU);
+        } else if (nodeu->isInner()) {
+
+            /* Set (sparse) transfer tensors */
+            auto nodenumel   = nodeu->getContent()->getNumRows();
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(4*nodenumel*nodercnumel, 2*nodelcnumel);
+
+            /* First column B of HT(A) */
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=nodenumel; ++i) {
+                BAu(_(2*nodercnumel*(i-1)+1, (2*i-1)*nodercnumel)
+                   ,_(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Second column B of HT(A) */
+            FLENS_DEFAULT_INDEXTYPE offset1 = (2*nodenumel+1)*nodercnumel;
+            FLENS_DEFAULT_INDEXTYPE offset2 = 2*nodenumel*nodercnumel;
+            for (FLENS_DEFAULT_INDEXTYPE i=1; i<=nodenumel; ++i) {
+                /* Left block column */
+                BAu(_(offset1+2*nodercnumel*(i-1)+1,
+                      offset1+(2*i-1)*nodercnumel), _(1, nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+
+                /* Right block column */
+                BAu(_(offset2+2*nodercnumel*(i-1)+1,
+                      offset2+(2*i-1)*nodercnumel),
+                    _(nodelcnumel+1, 2*nodelcnumel)) =
+                Bu(_(nodercnumel*(i-1)+1, nodercnumel*i), _);
+            }
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(2*nodenumel);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        } else {
+
+            /* Set root */
+            auto nodelcnumel = nodeu->getContent()->getLeftChildNumRows();
+            auto nodercnumel = nodeu->getContent()->getRightChildNumRows();
+            Matrix& Bu  = nodeu->getContent()->getUorB();
+            Matrix& BAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            BAu.resize(2*nodercnumel, 2*nodelcnumel);
+
+            /* Left block column */
+            BAu(_(nodercnumel+1, 2*nodercnumel), _(1, nodelcnumel)) = Bu;
+
+            /* Right block column */
+            BAu(_(1, nodercnumel), _(nodelcnumel+1, 2*nodelcnumel)) = Bu;
+
+            /* Set meta data */
+            nodeAu->getContent()->setNumRows(1);
+            nodeAu->getContent()->setLeftChildNumRows(2*nodelcnumel);
+            nodeAu->getContent()->setRightChildNumRows(2*nodercnumel);
+        }
+    }
+
+    return Au;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(      std::vector<SepCoefficients<Lexicographical, T, Index2D> >& Ws,
+                  HTCoefficients<T, Basis>&        u,
+            const std::vector<IndexSet<Index1D> >& rows,
+            const std::vector<IndexSet<Index1D> >& cols)
+{
+    assert(Ws.size()==(unsigned) u.dim());
+    assert(rows.size()==Ws.size() && cols.size()==Ws.size());
+
+    typedef flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    using flens::_;
+
+    HTCoefficients<T, Basis> Au(u.dim(), u.basis(), u.map());
+    Au.tree().set_tree(u.tree());
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titu = u.tree().getGeneralTree().end();
+
+    htucker::GeneralTreeIterator<htucker::HTuckerTreeNode<T> >
+    titAu = Au.tree().getGeneralTree().end();
+    for (;titu>=u.tree().getGeneralTree().begin(); titu--, titAu--) {
+        auto nodeu  = titu.getNode();
+        auto nodeAu = titAu.getNode();
+
+        /* Apply operator to leafs */
+        if (nodeu->isLeaf()) {
+            htucker::DimensionIndex idx = nodeu->getContent()->getIndex();
+            Matrix& Uu  = nodeu->getContent()->getUorB();
+            Matrix& UAu = const_cast<Matrix&>(nodeAu->getContent()->getUorB());
+            auto rowsU  = Uu.numRows();
+            auto colsU  = Uu.numCols();
+            auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
+            auto min    = std::min(max, (unsigned) rowsU);
+            UAu.resize(max, 2*colsU);
+            UAu(_(1, min), _(1, colsU)) = Uu(_(1, min), _);
+
+            /* Apply operator to columns */
+            for (FLENS_DEFAULT_INDEXTYPE k=1; k<=(FLENS_DEFAULT_INDEXTYPE) colsU; ++k) {
+                Coefficients<Lexicographical, T, Index1D> ret;
+                for (const auto& mu : Ws[idx[0]-1](k, 1)) {
+                    ret[mu.first.index1] += mu.second;
+                }
+
+                /* Save result */
+                for (const auto& mu : ret) {
+                    auto i = u.map()(mu.first, idx[0]);
+                    UAu(i, colsU+k) = mu.second;
                 }
             }
 
@@ -3396,8 +3513,6 @@ eval(Sepdiagscal<Basis>& S,
                 sumnorms += prod.tree().L2normorthogonal();
             #endif
         } else {
-            //sum.tree() = sum.tree()+prod.tree();
-            //sum.tree().truncate(eps);
             sum.tree() = add_truncate(sum.tree(), prod.tree(), eps);
             #ifdef DEBUG_CANCEL
                 sumexact.tree() = sumexact.tree()+prod.tree();
@@ -3446,7 +3561,6 @@ scale(      Sepdiagscal<Basis>&              S,
         frame = extract(u, cols[j-1], idx);
 
         for (size_type k=1; k<=frame.rank(); ++k) {
-            P(cols[j-1], frame(k, 1));
             for (auto& it : frame(k, 1)) {
                 FLENS_DEFAULT_INDEXTYPE level = it.first.j;
                 if (it.first.xtype==XWavelet) ++level;
@@ -3455,6 +3569,37 @@ scale(      Sepdiagscal<Basis>&              S,
             }
         }
         set(u, idx, frame);
+    }
+}
+
+
+template <typename T, typename Basis>
+void
+scale(      Sepdiagscal<Basis>&              S,
+            std::vector<SepCoefficients<Lexicographical, T, Index2D>>& Ws,
+      const FLENS_DEFAULT_INDEXTYPE                  l)
+{
+    assert(S.dim()==Ws.size());
+    assert(l>=-1*(signed) S.n() && l<=(signed) S.nplus());
+
+    typedef typename Sepdiagscal<Basis>::size_type  size_type;
+
+    T omega2  = compOmegamin2(S.basis(), S.dim(), S.order());
+    T factor1 = S.h()*(1./std::sqrt(omega2));
+    T factor2 = 2.*std::pow(M_PI, -0.5)*
+                (1./(1+std::exp(-1.*S.h()*(T) l)));
+    factor2   = std::pow(factor1*factor2, 1./(T) S.dim());
+    T alpha   = std::pow(std::log(1.+std::exp((T) l*S.h())), 2.);
+
+    for (size_type j=1; j<=S.dim(); ++j) {
+        for (size_type k=1; k<=Ws[j-1].rank(); ++k) {
+            for (auto& it : Ws[j-1](k, 1)) {
+                FLENS_DEFAULT_INDEXTYPE level = it.first.index2.j;
+                if (it.first.index2.xtype==XWavelet) ++level;
+                T weight   = std::pow(2., 2.*S.order()*level)/omega2;
+                it.second *= factor2*std::exp(-alpha*weight);
+            }
+        }
     }
 }
 
@@ -3531,6 +3676,7 @@ eval(      Sepop<Optype>&                   A,
     T eps_ = nrms(count+1);
     sum.truncate(eps/2*eps_/refsum);
     ++count;
+
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
         sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
@@ -3684,7 +3830,7 @@ evaleff2(     Sepop<Optype>&                   A,
     T epsL = 0.05*eps;
 
     /* Scale right */
-    T bound  = 0.001*compOmegamax2(cols, Scols.order());
+    T bound  = 0.01*compOmegamax2(cols, Scols.order());
     bound    = std::max(bound, 1.);
     auto v   = applyScale(Scols, u, cols, epsR/std::sqrt(bound));
 
@@ -3741,6 +3887,299 @@ evaleff2TT(     Sepop<Optype>&                   A,
 
 
 template <typename T, typename Basis>
+std::vector<SepCoefficients<Lexicographical, T, Index2D> >
+preassemble(const std::vector<Coefficients<Lexicographical, T, Index2D> >& Stiff,
+                  HTCoefficients<T, Basis>&                                v,
+            const std::vector<IndexSet<Index1D> >&                         cols)
+{
+    assert(Stiff.size() == (unsigned) v.dim());
+    assert(Stiff.size()  == cols.size());
+
+    unsigned dim = Stiff.size();
+    std::vector<SepCoefficients<Lexicographical, T, Index2D> > Ws(dim);
+    for (unsigned j=1; j<=dim; ++j) {
+        htucker::DimensionIndex idx(1);
+        idx[0] = j;
+        SepCoefficients<Lexicographical, T, Index1D> U = extract(v, cols[j-1], idx);
+        Ws[j-1].resize(U.rank(), dim);
+        for (const auto& mu : Stiff[j-1]) {
+            for (unsigned k=1; k<=U.rank(); ++k) {
+                Ws[j-1](k, 1)[mu.first] = mu.second*U(k, 1)[mu.first.index2];
+            }
+        }
+    }
+
+    return Ws;
+}
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             Srows,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Srows.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), rows, Srows.order());
+    Srows.set_iscale(iscale);
+    Srows.comp_n();
+
+    std::cout << "Current scaling rows\n" << Srows << std::endl;
+    auto Scols = Srows;
+    iscale     = compIndexscale(u.basis(), cols, Scols.order());
+    Scols.set_iscale(iscale);
+    Scols.comp_n();
+    std::cout << "Current scaling cols\n" << Scols << std::endl;
+
+    auto tgal0 = std::chrono::system_clock::now();
+    /* Assemble Laplace */
+    auto Ts = assemble_laplace<T, Optype>(A, rows, cols);
+
+    /* Precompute summands */
+    auto Ws    = preassemble(Ts, u, cols);
+    auto Nrows = Srows.n()+Srows.nplus()+1;
+    auto Ncols = Scols.n()+Scols.nplus()+1;
+
+    flens::DenseVector<flens::Array<T>>                        nrms(Nrows*Ncols);
+    std::vector<HTCoefficients<T, Basis>>                      prods(Nrows*Ncols);
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(Nrows*Ncols);
+
+
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
+                                 l1<=(signed) Scols.nplus();
+                                 ++l1) {
+        auto copy = Ws;
+        auto v    = u;
+        scale(Scols, copy, l1);
+        scale(Scols, v, cols, l1);
+        v         = evallaplace(copy, v, rows, cols);
+        for (FLENS_DEFAULT_INDEXTYPE l0=-1*Srows.n();
+                                     l0<=(signed) Srows.nplus();
+                                     ++l0) {
+            auto tmp = v;
+            scale(Srows, tmp, rows, l0);
+            nrms(count+1) = nrm2(tmp);
+            prods[count]  = tmp;
+            ++count;
+        }
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    HTCoefficients<T, Basis> sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    auto tgal1 = std::chrono::system_clock::now();
+    auto dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
+    std::cout << "eval no preassemble, prep time: " << dgal.count() << std::endl;
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    tgal0 = std::chrono::system_clock::now();
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+
+    std::cout << "need to truncate " << nrms.length()-count+1 << " times\n";
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_      += nrms(count+1);
+        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
+                     eps/2*eps_/refsum);
+    }
+
+    tgal1 = std::chrono::system_clock::now();
+    dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
+    std::cout << "eval no preassemble, trunc time: " << dgal.count() << std::endl;
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(const  std::vector<
+                   Coefficients<Lexicographical, T, Index2D> >&    Ts,
+                   Sepdiagscal<Basis>&                             Srows,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Srows.dim());
+
+    auto tgal0 = std::chrono::system_clock::now();
+    /* Compute scales */
+    T iscale = compIndexscale(u.basis(), rows, Srows.order());
+    Srows.set_iscale(iscale);
+    Srows.comp_n();
+
+    auto Scols = Srows;
+    iscale     = compIndexscale(u.basis(), cols, Scols.order());
+    Scols.set_iscale(iscale);
+    Scols.comp_n();
+
+    std::cout << "Current scaling\n" << Scols << std::endl;
+
+    /* Precompute summands */
+    auto Ws    = preassemble(Ts, u, cols);
+    auto Nrows = Srows.n()+Srows.nplus()+1;
+    auto Ncols = Scols.n()+Scols.nplus()+1;
+
+    flens::DenseVector<flens::Array<T>>                        nrms(Nrows*Ncols);
+    std::vector<HTCoefficients<T, Basis>>                      prods(Nrows*Ncols);
+    flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(Nrows*Ncols);
+
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
+                                 l1<=(signed) Scols.nplus();
+                                 ++l1) {
+        auto copy = Ws;
+        auto v    = u;
+        scale(Scols, copy, l1);
+        scale(Scols, v, cols, l1);
+        v         = evallaplace(copy, v, rows, cols);
+        for (FLENS_DEFAULT_INDEXTYPE l0=-1*Srows.n();
+                                     l0<=(signed) Srows.nplus();
+                                     ++l0) {
+            auto tmp = v;
+            scale(Srows, tmp, rows, l0);
+            nrms(count+1) = nrm2(tmp);
+            prods[count]  = tmp;
+            ++count;
+        }
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    HTCoefficients<T, Basis> sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    sum    = prods[ids(count+1)-1];
+    T eps_ = nrms(count+1);
+    auto tgal1 = std::chrono::system_clock::now();
+    auto dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
+    std::cout << "eval, prep time: " << dgal.count() << std::endl;
+    tgal0 = std::chrono::system_clock::now();
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+
+    std::cout << "need to truncate " << nrms.length()-count+1 << " times\n";
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_      += nrms(count+1);
+        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
+                     eps/2*eps_/refsum);
+    }
+    tgal1 = std::chrono::system_clock::now();
+    dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
+    std::cout << "eval, trunc time: " << dgal.count() << std::endl;
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+T
+energy(const std::vector<
+             Coefficients<Lexicographical, T, Index2D> >&  Ts,
+             Sepdiagscal<Basis>&                           S,
+             HTCoefficients<T, Basis>&                     left,
+             HTCoefficients<T, Basis>&                     right,
+       const std::vector<IndexSet<Index1D> >&              cols,
+             std::vector<HTCoefficients<T, Basis>>&        save)
+{
+    assert(S.dim()==(unsigned) left.dim());
+    assert(cols.size()==S.dim());
+    assert(left.dim()==right.dim());
+
+    /* Compute scales */
+    T iscale = compIndexscale(left.basis(), cols, S.order());
+    S.set_iscale(iscale);
+    S.comp_n();
+
+    /* Compute inner product */
+    auto N  = S.n()+S.nplus()+1;
+    auto Ws = preassemble(Ts, right, cols);
+    save.resize(N*N);
+    T        sum   = 0.;
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l1=-1*S.n();
+                                 l1<=(signed) S.nplus();
+                                 ++l1) {
+        auto copy = Ws;
+        auto v    = right;
+        scale(S, copy, l1);
+        scale(S, v, cols, l1);
+        v         = evallaplace(copy, v, cols, cols);
+        for (FLENS_DEFAULT_INDEXTYPE l0=-1*S.n();
+                                     l0<=(signed) S.nplus();
+                                     ++l0) {
+            auto tmp = v;
+            scale(S, tmp, cols, l0);
+            sum += dot(left, tmp);
+            save[count] = tmp;
+            ++count;
+        }
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
+T
+energy(const HTCoefficients<T, Basis>&                left,
+       const std::vector<HTCoefficients<T, Basis> >&  save)
+{
+    T sum = 0.;
+    for (unsigned k=1; k<=save.size(); ++k) {
+        sum += dot(left, save[k-1]);
+    }
+
+    return sum;
+}
+
+
+template <typename T, typename Basis>
 HTCoefficients<T, Basis>
 applyScale(      Sepdiagscal<Basis>&              S,
                  HTCoefficients<T, Basis>&        u,
@@ -3781,7 +4220,7 @@ applyScale(      Sepdiagscal<Basis>&              S,
     }
 
     if (count==(unsigned) nrms.length()) {
-        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        std::cerr << "applyScale: Warning! Truncation parameter too large!\n";
         count = nrms.length()-1;
     }
 
@@ -3820,7 +4259,6 @@ applyScaleTT(      Sepdiagscal<Basis>&              S,
     T iscale = compIndexscale(u.basis(), cols, S.order());
     S.set_iscale(iscale);
     S.comp_n();
-    std::cout << "S =>\n" << S << std::endl;
 
     /* Precompute summands */
     auto N = S.n()+S.nplus()+1;
@@ -3848,7 +4286,7 @@ applyScaleTT(      Sepdiagscal<Basis>&              S,
     }
 
     if (count==(unsigned) nrms.length()) {
-        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        std::cerr << "applyScaleTT: Warning! Truncation parameter too large!\n";
         count = nrms.length()-1;
     }
 
@@ -5099,6 +5537,35 @@ assemble_projected_laplace(      Sepop<Optype>&             A,
     }
 
     return ret;
+}
+
+
+template <typename T, typename Optype>
+std::vector<Coefficients<Lexicographical, T, Index2D> >
+assemble_laplace(      Sepop<Optype>&         A,
+                 const std::vector<IndexSet<Index1D> >&   rows,
+                 const std::vector<IndexSet<Index1D> >&   cols)
+{
+    assert(rows.size()==cols.size());
+    assert(A.dim()==rows.size());
+
+    unsigned dim = A.dim();
+    std::vector<Coefficients<Lexicographical, T, Index2D> >    Stiff(dim);
+
+    auto& a = A(1, 1);
+    for (unsigned j=1; j<=dim; ++j) {
+        for (const auto& lambda1 : rows[j-1]) {
+            for (const auto& lambda2 : cols[j-1]) {
+                T val = a(lambda1, lambda2);
+                if (val!=(T) 0) {
+                    Index2D mu(lambda1, lambda2);
+                    Stiff[j-1][mu] = val;
+                }
+            }
+        }
+    }
+
+    return Stiff;
 }
 
 

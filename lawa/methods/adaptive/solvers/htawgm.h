@@ -45,7 +45,6 @@ galerkin_pcg2(Sepop<Optype>& A,
               const T tol          = 1e-08,
               const unsigned maxit = 1e+02,
               const T delta        = 1e-01,
-              const T dres         = 2.,
               const T trunc        = 1e-10);
 
 

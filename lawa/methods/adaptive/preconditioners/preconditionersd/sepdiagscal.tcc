@@ -171,8 +171,8 @@ template <typename Basis>
 void
 Sepdiagscal<Basis>::comp_nplus()
 {
-    T max            = MAX(4.*std::pow(M_PI, -0.5),
-                           std::sqrt(std::abs(std::log(eps()/2.))));
+    T max            = std::max(4./std::sqrt(M_PI),
+                                std::sqrt(std::abs(std::log(eps()/2.))));
     size_type _nplus = std::ceil((1./h())*max);
     set_nplus(_nplus);
 }

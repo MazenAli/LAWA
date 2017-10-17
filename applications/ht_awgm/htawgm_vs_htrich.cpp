@@ -16,12 +16,16 @@ typedef lawa::Basis<T, lawa::Orthogonal,
         lawa::Interval, lawa::Multi>            Basis;
 typedef lawa::IndexD                            IndexD;
 typedef lawa::Index1D                           Index1D;
+typedef lawa::Index2D                           Index2D;
 typedef lawa::IndexSet<Index1D>                 IndexSet;
 typedef std::vector<IndexSet>                   IndexSetVec;
 typedef lawa::RHSWithPeaks1D<T, Basis>          Integral1D;
 typedef lawa::Coefficients<
         lawa::Lexicographical, T,
         lawa::Index1D>                          Coeff1D;
+typedef lawa::Coefficients<
+        lawa::Lexicographical, T,
+        lawa::Index2D>                          Coeff2D;
 typedef lawa::SepCoefficients<
         lawa::Lexicographical, T, Index1D>      SepCoeff;
 
@@ -49,8 +53,7 @@ typedef     lawa::LocalOperator1D<Basis,
             Basis, RefIdentity1D,
             Identity1D>                         LOp_Id1D;
 
-typedef     lawa::Sepop<lawa::AbstractLocalOperator1D<T, Basis>>
-                                                Sepop;
+typedef     lawa::Sepop<LOp_Lapl1D>             Sepop;
 double
 one(double)
 {
@@ -62,6 +65,43 @@ double
 zero(double)
 {
     return 0.;
+}
+
+
+unsigned
+richardson(Sepop&                          A,
+           lawa::Sepdiagscal<Basis>&       S,
+           lawa::HTCoefficients<T, Basis>& x,
+           lawa::HTCoefficients<T, Basis>& b,
+           IndexSetVec&                    Lambda,
+           T                               omega,
+           T                               tol,
+           unsigned                        maxit)
+{
+    auto r     = b;
+    T residual = nrm2(r);
+    T delta    = 1e-01;
+
+    std::cout << "richardson: Iteration 0, residual "
+              << residual << std::endl;
+    if (residual<=tol) return 0;
+
+    for (unsigned k=1; k<=maxit; ++k) {
+        scal(omega, r);
+        T trunc  = delta*omega*residual;
+        if (k==1) x   = r;
+        else x.tree() = add_truncate(x.tree(), r.tree(), trunc);
+
+        r        = evaleff2(A, S, x, Lambda, Lambda, trunc/2.);
+        scal(-1., r);
+        r.tree() = add_truncate(b.tree(), r.tree(), trunc/2.);
+        residual = nrm2(r);
+
+        std::cout << "richardson: Iteration " << k
+                  << ", residual " << residual << std::endl;
+    }
+
+    return maxit;
 }
 
 
@@ -101,7 +141,6 @@ main(int argc, char* argv[])
     }
 
     IndexSet        indexset;
-    IndexSet        indexset2;
     std::vector<Function> fvec;
 
     for (int i=1; i<=dim; ++i) {
@@ -110,8 +149,6 @@ main(int argc, char* argv[])
 
     SepCoeff        coeffs(rank, dim);
     IndexSetVec     indexsetvec(dim);
-    IndexSetVec     indexsetvec2(dim);
-    IndexSetVec     diff(dim);
     lawa::SeparableFunctionD<T> F(fvec, rank, dim);
     MatInt                      derivs(rank, dim);
     for (int i=1; i<=rank; ++i) {
@@ -124,14 +161,12 @@ main(int argc, char* argv[])
     lawa::SeparableRHSD<T, Basis>   Fint(basis, F, _deltas, derivs);
 
     getFullIndexSet(basis, indexset,  lev);
-    //getFullIndexSet(basis, indexset2,  lev-3);
 
     std::cout << "The initial index set size is " << indexset.size()
               << "\n\n";
 
     for (int l=0; (unsigned)l<indexsetvec.size(); ++l) {
-        indexsetvec[l] = indexset;
-        //indexsetvec2[l] = indexset2;
+        indexsetvec[l]   = indexset;
     }
 
     /* Map */
@@ -147,7 +182,7 @@ main(int argc, char* argv[])
     RefIdentity1D   RefIdentityBil(basis.refinementbasis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
 
-    rndinit(u, indexsetvec, 1, 1e-03);
+    rndinit(u, indexsetvec, 1, 1e-02);
     Sepop A(lapl, dim, dim);
 
     lawa::Sepdiagscal<Basis>    S(dim, basis);
@@ -171,13 +206,12 @@ main(int argc, char* argv[])
 
     lawa::HTAWGM_Params params2;
     params2.nrmA       = 100.;
-    params2.maxit_pcg  = 150;
-    params2.maxit_awgm = 100;
+    params2.maxit_pcg  = 50;
+    params2.maxit_awgm = 300;
     params2.tol_awgm   = 1e-08;
-    params2.delta1_pcg = .5;
-    params2.dres_pcg   = 1.;
+    params2.delta1_pcg = .1;
     params2.alpha      = 0.5;
-    params2.gamma0     = 1e-02;
+    params2.gamma0     = 1e-01;
     params2.gamma1     = 8e-02;
     params2.gammait    = 9;
 
@@ -192,39 +226,13 @@ main(int argc, char* argv[])
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    setScaling(S, 1e-01);
+    setScaling(S, 0.5);
     S.set_nu(1e-01);
-//    f          = evaleff2(A, S, f, indexsetvec, indexsetvec, 1e-07);
-//    std::cout << "max rank f => " << f.tree().max_rank() << std::endl;
-//
-//    for (int i=0; i<dim; ++i) {
-//        diff[i] = indexsetvec[i];
-//        for (auto& lambda : indexsetvec2[i]) {
-//            diff[i].erase(lambda);
-//        }
-//    }
-//
-//    double nrm   = nrm2(f);
-//    auto   rf    = f;
-//    restrict(rf, indexsetvec2);
-//    double min   = nrm2(rf)/nrm;
-//    std::cout << "nrm(f) = " << nrm << std::endl;
-//    std::cout << "min    = " << min << std::endl;
-//    double a     = 0.91;
-//    auto   sweep = bulk(a, nrm, f, indexsetvec2, diff);
-//
-//    exit(1);
+
     if (!awgm) {
         its = htrich(A, S, u, Fint, indexsetvec, res, params);
     } else {
         its = htawgm2(A, S, u, Fint, indexsetvec, res, params2);
-       // its = galerkin_pcg2(A, S, u, f, indexsetvec, res,
-       //                     true,
-       //                     1e-08,
-       //                     200,
-       //                     0.9,
-       //                     2.,
-       //                     1e-08);
     }
 
     std::cout << "Solver took " << its << " iterations to reach "

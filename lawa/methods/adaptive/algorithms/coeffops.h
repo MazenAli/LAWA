@@ -1054,6 +1054,14 @@ assemble_projected_laplace(      Sepop<Optype>&             A,
                            const unsigned                   j);
 
 
+template <typename T = double, typename BilForm, typename MapType>
+flens::SyMatrix<flens::FullStorage<T, cxxblas::ColMajor> >
+assemble_laplace(      BilForm&           a,
+                       MapType&           map,
+                 const IndexSet<Index1D>& Lambda,
+                 const unsigned           j);
+
+
 template <typename T, typename Basis>
 flens::GeMatrix<
 flens::FullStorage<T, flens::ColMajor> >

@@ -65,6 +65,9 @@ CPPFLAGS += -DUSE_CXXLAPACK
 # --- MATLAB Interface Libraries --------------------
 LDLIBS += -leng
 
+# --- SuiteSparse Library --------------------
+LDLIBS += -lcholmod
+
 # --- debug mode -----------------------
 DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION \
              -DVERBOSE

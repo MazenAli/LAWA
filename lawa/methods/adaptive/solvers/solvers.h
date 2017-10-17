@@ -30,14 +30,4 @@
 #include <lawa/methods/adaptive/solvers/multitreeawgm2.h>
 #include <lawa/methods/adaptive/solvers/htawgm.h>
 #include <lawa/methods/adaptive/solvers/htrich.h>
-#include <lawa/methods/adaptive/solvers/cg.h>
-#include <lawa/methods/adaptive/solvers/rank1als.h>
-#include <lawa/methods/adaptive/solvers/fixpoint.h>
-#include <lawa/methods/adaptive/solvers/rank1update.h>
-#include <lawa/methods/adaptive/solvers/rank1greedy.h>
-#include <lawa/methods/adaptive/solvers/greedyALS.h>
-#include <lawa/methods/adaptive/solvers/agals.h>
 #include <lawa/methods/adaptive/solvers/wavPcg.h>
-#include <lawa/methods/adaptive/solvers/adaptiveLeaf.h>
-#include <lawa/methods/adaptive/solvers/rank1AdaptiveAls.h>
-#include <lawa/methods/adaptive/solvers/adaptiveGreedy.h>
