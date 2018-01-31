@@ -3931,14 +3931,11 @@ evallaplace(       Sepop<Optype>&                                  A,
     Srows.set_iscale(iscale);
     Srows.comp_n();
 
-    std::cout << "Current scaling rows\n" << Srows << std::endl;
     auto Scols = Srows;
     iscale     = compIndexscale(u.basis(), cols, Scols.order());
     Scols.set_iscale(iscale);
     Scols.comp_n();
-    std::cout << "Current scaling cols\n" << Scols << std::endl;
 
-    auto tgal0 = std::chrono::system_clock::now();
     /* Assemble Laplace */
     auto Ts = assemble_laplace<T, Optype>(A, rows, cols);
 
@@ -3950,7 +3947,6 @@ evallaplace(       Sepop<Optype>&                                  A,
     flens::DenseVector<flens::Array<T>>                        nrms(Nrows*Ncols);
     std::vector<HTCoefficients<T, Basis>>                      prods(Nrows*Ncols);
     flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(Nrows*Ncols);
-
 
     unsigned count = 0;
     for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
@@ -3993,25 +3989,16 @@ evallaplace(       Sepop<Optype>&                                  A,
         refsum += (T) (nrms.length()-i+1)*nrms(i);
     }
 
-    auto tgal1 = std::chrono::system_clock::now();
-    auto dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
-    std::cout << "eval no preassemble, prep time: " << dgal.count() << std::endl;
     sum    = prods[ids(count+1)-1];
     T eps_ = nrms(count+1);
-    tgal0 = std::chrono::system_clock::now();
     sum.truncate(eps/2*eps_/refsum);
     ++count;
 
-    std::cout << "need to truncate " << nrms.length()-count+1 << " times\n";
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
         sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
                      eps/2*eps_/refsum);
     }
-
-    tgal1 = std::chrono::system_clock::now();
-    dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
-    std::cout << "eval no preassemble, trunc time: " << dgal.count() << std::endl;
 
     return sum;
 }
@@ -4031,7 +4018,6 @@ evallaplace(const  std::vector<
     assert(rows.size()==Srows.dim());
     assert(cols.size()==Srows.dim());
 
-    auto tgal0 = std::chrono::system_clock::now();
     /* Compute scales */
     T iscale = compIndexscale(u.basis(), rows, Srows.order());
     Srows.set_iscale(iscale);
@@ -4041,8 +4027,6 @@ evallaplace(const  std::vector<
     iscale     = compIndexscale(u.basis(), cols, Scols.order());
     Scols.set_iscale(iscale);
     Scols.comp_n();
-
-    std::cout << "Current scaling\n" << Scols << std::endl;
 
     /* Precompute summands */
     auto Ws    = preassemble(Ts, u, cols);
@@ -4096,22 +4080,14 @@ evallaplace(const  std::vector<
 
     sum    = prods[ids(count+1)-1];
     T eps_ = nrms(count+1);
-    auto tgal1 = std::chrono::system_clock::now();
-    auto dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
-    std::cout << "eval, prep time: " << dgal.count() << std::endl;
-    tgal0 = std::chrono::system_clock::now();
     sum.truncate(eps/2*eps_/refsum);
     ++count;
 
-    std::cout << "need to truncate " << nrms.length()-count+1 << " times\n";
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
         sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
                      eps/2*eps_/refsum);
     }
-    tgal1 = std::chrono::system_clock::now();
-    dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
-    std::cout << "eval, trunc time: " << dgal.count() << std::endl;
 
     return sum;
 }
