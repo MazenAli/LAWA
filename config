@@ -87,7 +87,7 @@ RELEASEMODE += -DVERBOSE
 #RELEASEMODE += -DSOLVER_DEBUG
 
 # --- profiling mode --------------------
-PROFILEMODE = -pg -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
+PROFILEMODE = -pg -g -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
 PROFILEMODE += -DVERBOSE
 
 # --- select compilation-mode here by commenting / uncommenting

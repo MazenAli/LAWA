@@ -212,19 +212,6 @@ coarsen(      HTCoefficients<T, Basis>&         u,
         buckets.addBucketToCoefficients(newind, i);
     }
 
-//    /* Remove indices from last bucket */
-//    Coefficients<Lexicographical, T, Index1DC>  remove;
-//    buckets.addBucketToCoefficients(newind, num);
-//    buckets.addBucketToCoefficients(remove, num);
-//    for (auto& lambda : remove) {
-//        P_Lambda += lambda.second*lambda.second;
-//        if (P_Lambda>thresh) {
-//            break;
-//        }
-//        if (count>1) newind.erase(lambda.first);
-//        ++count;
-//    }
-
     /* Set new index set */
     for (auto& it : newind) {
         completeMultiTree(u.basis(), it.first,

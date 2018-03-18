@@ -111,7 +111,6 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
         lawa::HTCoefficients<T, Basis>& u0,
         lawa::SeparableRHSD<T, Basis>   f,
         IndexSetVec&                    Lambda0,
-        T                               omega0,
         T                               omega1,
         T                               omega2,
         T                               omega3,
@@ -134,11 +133,27 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
     assert(S.dim()==Lambda0.size());
 
     // Initial residual and rhs
-    residual = omega0;
-    T fdelta = omega0;
+    lawa::HTCoefficients<T, Basis> f_Lambda(u0.dim(),
+                                            u0.basis(),
+                                            u0.map());
+    SepCoeff fcp(f.rank(), f.dim());
+
+    genCoefficients(fcp, f, Lambda0);
+    set(f_Lambda, fcp);
+    f_Lambda = applyScaleTT(S, f_Lambda, Lambda0, tol);
+
+    T fdelta     = nrm2(f_Lambda);
+    residual     = fdelta;
+    T omega0     = residual;
+    auto Ttotal0 = std::chrono::system_clock::now();
+    auto Ttotal1 = std::chrono::system_clock::now();
+    auto dt      = std::chrono::duration_cast<std::chrono::seconds>
+                   (Ttotal1-Ttotal0);
     if (verbose) {
         std::cout << "htawgm: Iteration 0, residual " << residual
                   << std::endl;
+        std::cout << "        Current time: " << dt.count()
+                  << " secs\n";
     }
     if ((1.+omega1)*residual<=tol) return 0;
 
@@ -149,15 +164,13 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
 
     // Outer iterations
     bool zero = true;
-    IndexSetVec sweep = Lambda0;
-    IndexSetVec total = Lambda0;
+    IndexSetVec Lambda = Lambda0;
+    IndexSetVec sweep  = Lambda0;
+    IndexSetVec total  = Lambda0;
     lawa::HTCoefficients<T, Basis> rtree(u0.dim(),
                                          u0.basis(),
                                          u0.map());
-    lawa::HTCoefficients<T, Basis> f_Lambda(u0.dim(),
-                                            u0.basis(),
-                                            u0.map());
-    SepCoeff fcp(f.rank(), f.dim());
+    T err0;
     for (unsigned k=0; k<=K; ++k) {
         // Inner iterations
         for (unsigned m=1; m<=M; ++m) {
@@ -165,37 +178,40 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             if (verbose) {
                 std::cout << "htawgm: Iteration (" << k
                           << ", " << m << ")\n";
-                for (unsigned j=0; j<Lambda0.size(); ++j) {
+                unsigned sum = 0;
+                for (unsigned j=0; j<Lambda.size(); ++j) {
                     unsigned jmax = 0;
-                    for (const auto& it : Lambda0[j]) {
+                    for (const auto& it : Lambda[j]) {
                         unsigned l = it.j;
                         if (it.xtype==lawa::XWavelet) ++l;
                         jmax = std::max(jmax, l);
                     }
 
+                    sum += Lambda[j].size();
                     std::cout << "        d = " << j+1
-                              << ", size = " << Lambda0[j].size()
+                              << ", size = " << Lambda[j].size()
                               << ", max level = " << jmax << std::endl;
                 }
 
+                std::cout << "        total size = " << sum << std::endl;
                 std::cout << "        rank = " << u0.tree().max_rank()
                           << std::endl;
             }
             // Fix rhs for pcg
             start   = std::chrono::system_clock::now();
 
-            genCoefficients(fcp, f, Lambda0);
+            genCoefficients(fcp, f, Lambda);
             set(f_Lambda, fcp);
 
             // Determine scaling precision
             T eps_km = omega2*residual;
-            T eta_km = (1.-S.eps())*eps_km/
+            T eta_km = (1.-S.eps())*residual/
                        (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-            S.set_nu(eta_km);
-            T iscale = compIndexscale(u0.basis(), Lambda0, S.order());
-            S.set_iscale(iscale);
-            S.comp_n();
-            f_Lambda = applyScale(S, f_Lambda, Lambda0, 0.5*eps_km);
+//            S.set_nu(eta_km);
+//            T iscale = compIndexscale(u0.basis(), Lambda, S.order());
+//            S.set_iscale(iscale);
+//            S.comp_n();
+            f_Lambda = applyScaleTT(S, f_Lambda, Lambda, eps_km);
 
             end     = std::chrono::system_clock::now();
             elapsed = std::chrono::duration_cast<std::chrono::seconds>
@@ -226,10 +242,12 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             }
             T        res_pcg;
             T        delta  = 1e-01;
-            unsigned pcgit = galerkin_pcg2(A, S, u0, f_Lambda, Lambda0,
-                                          res_pcg,
-                                          zero, eps_km, I, delta, 0.5*eps_km);
+            unsigned pcgit  = galerkin_pcg2(A, S, u0, f_Lambda, Lambda,
+                                            res_pcg,
+                                            zero, eps_km, I, delta, eps_km);
             zero            = false;
+            if (k==0 && m==1) err0 = nrm2(u0);
+
             if (verbose) {
                  std::cout << "htawgm: pcg required " << pcgit
                            << " iterations for r<="   << res_pcg
@@ -249,13 +267,8 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             // Evaluate residual
             start  = std::chrono::system_clock::now();
 
-            eps_km = omega1*eps_km;
-            eta_km = (1.-S.eps())*eps_km/
-                     (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-            S.set_nu(eta_km);
-
             sweep    = presidual2(A, S, u0, f_Lambda, fcp, rtree, f,
-                                  Lambda0, sweep, total,
+                                  Lambda, sweep, total,
                                   eps_km);
             residual = nrm2(rtree);
 
@@ -273,17 +286,23 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                  std::cout << "htawgm: Iteration (" << k
                            << ", " << m << "), residual = "
                            << residual << "\n";
+                 Ttotal1 = std::chrono::system_clock::now();
+                 dt      = std::chrono::duration_cast<std::chrono::seconds>
+                          (Ttotal1-Ttotal0);
+                 std::cout << "        Current time: " << dt.count()
+                          << " secs\n";
+
             }
             if ((1.+omega1)*residual<=tol) return k;
 
             // Check stopping criterion
-            if ((1.+omega1)*residual<=omega3*omega0) break;
+            if ((1.+omega1)*residual<=omega3*err0) break;
 
             // Extend index set
             start   = std::chrono::system_clock::now();
 
-            sweep   = bulk(alpha, residual, rtree, Lambda0, sweep);
-            extend(u0, Lambda0);
+            sweep   = bulk(alpha, residual, rtree, Lambda, sweep);
+            extend(u0, Lambda);
 
             end     = std::chrono::system_clock::now();
             elapsed = std::chrono::duration_cast<std::chrono::seconds>
@@ -298,8 +317,8 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
         }
 
         // Truncate and coarsen
-        T epst = omega4*omega0/lambda_min;
-        T epsc = omega5*omega0/lambda_min;
+        T epst = omega4*err0;
+        T epsc = omega5*err0;
 
         if (verbose) {
             std::cout << "htawgm: Iteration "    << k        << "\n";
@@ -311,9 +330,11 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
         start   = std::chrono::system_clock::now();
 
         u0.truncate(epst);
-        Lambda0 = coarsen(u0, Lambda0, epsc);
-        sweep   = Lambda0;
-        total   = Lambda0;
+        Lambda  = coarsen(u0, Lambda, epsc);
+        Lambda  = unify(Lambda0, Lambda);
+        restrict(u0, Lambda);
+        sweep   = Lambda;
+        total   = Lambda;
 
         end     = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::seconds>
@@ -325,18 +346,38 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                           << elapsed.count() << " secs\n";
         }
 
+        genCoefficients(fcp, f, Lambda);
+        omega0 *= omega3+omega4+omega5;
+
+        // Determine scaling precision
+        T eps_km = residual*10.;
+        T eta_km = (1.-S.eps())*residual/
+                   (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
+ //       S.set_nu(eta_km);
+
         (void) presidual2(A, S, u0, f_Lambda, fcp, rtree, f,
-                          Lambda0, sweep, total,
-                          residual);
+                          Lambda, sweep, total,
+                          eps_km);
         residual = nrm2(rtree);
+
+        sweep   = Lambda;
+        total   = Lambda;
+
         if (verbose) {
              std::cout << "htawgm: Iteration " << k+1
+                       << ", omega0 = " << omega0
                        << ", residual = "
                        << residual << "\n";
+             Ttotal1 = std::chrono::system_clock::now();
+             dt      = std::chrono::duration_cast<std::chrono::seconds>
+                      (Ttotal1-Ttotal0);
+             std::cout << "        Current time: " << dt.count()
+                      << " secs\n";
+
         }
 
-        // Update omega0
-        omega0 *= (omega3+omega4+omega5);
+        // Update err0
+        err0 *= omega3+omega4+omega5;
     }
 
     std::cerr << "htawgm: Warning! Max iterations reached!\n";
@@ -456,9 +497,10 @@ main(int argc, char* argv[])
     /* Map */
     lawa::Mapwavind<Index1D> map(dim);
 
-    lawa::HTCoefficients<T, Basis>    f(dim, basis, map);
-    lawa::HTCoefficients<T, Basis>    u(dim, basis, map);
-    lawa::HTCoefficients<T, Basis>    r(dim, basis, map);
+    T sp = 1.;
+    lawa::HTCoefficients<T, Basis>    f(dim, sp, basis, map);
+    lawa::HTCoefficients<T, Basis>    u(dim, sp, basis, map);
+    lawa::HTCoefficients<T, Basis>    r(dim, sp, basis, map);
 
     Laplace1D       LaplaceBil(basis);
     RefLaplace1D    RefLaplaceBil(basis.refinementbasis);
@@ -466,7 +508,7 @@ main(int argc, char* argv[])
     RefIdentity1D   RefIdentityBil(basis.refinementbasis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
 
-    rndinit(u, indexsetvec, 2, 0.5);
+    rndinit(u, indexsetvec, 1, 1.);
     Sepop A(lapl, dim, dim);
 
     lawa::Sepdiagscal<Basis>    S(dim, basis);
@@ -510,8 +552,7 @@ main(int argc, char* argv[])
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    //rndinit(f, indexsetvec, 5, 1.);
-    T delta  = 1e-01;
+    T delta  = 0.5;
     T eta    = 1e-01;
     setScaling(S, delta);
     S.set_nu(eta);
@@ -523,29 +564,33 @@ main(int argc, char* argv[])
         its = htawgm2(A, S, u, Fint, indexsetvec, res, params2);
     }*/
 
-    T lambda_max = 2.;
-    T lambda_min = 0.1;
+    T lambda_max = 3.;
+    T lambda_min = 0.3;
     T kA         = lambda_max/lambda_min;
     T comprho    = 1.01;
-    T outrho     = 0.1;
-    alpha        = 0.8;
+    T outrho     = 1e-01;
+    alpha        = 0.9;
 
-    T omega0     = 0.65;
-    T omega1     = 0.25;
-    T omega2     = 0.1;
+    T omega1     = 0.2;
+    T omega2     = 0.5;
     T omega3     = outrho/(1.+comprho*std::sqrt(2.*dim-3)+
                               comprho*std::sqrt((T) dim)*
                               (1.+std::sqrt(2.*dim-3)));
     T omega4     = comprho*std::sqrt(2.*dim-3)*omega3;
     T omega5     = comprho*std::sqrt((T) dim)*(1.+std::sqrt(2.*dim-3))*omega3;
-    T tol        = 1e-08;
+    T tol        = 1e-06;
 
     T inrho      = std::sqrt(1.-std::pow((alpha-omega1)/(1.+omega1), 2.)/kA+
                              std::pow(omega2/(1.-omega1), 2.)*kA);
 
-    unsigned I = 50;
-    unsigned M = 50;
-    unsigned K = 50;
+    unsigned I = 20;
+//    unsigned M = std::ceil(std::abs(std::log(omega3/std::sqrt(kA))/
+//                           std::log(inrho)));
+    unsigned M = 20;
+//    unsigned K = std::ceil(std::abs(
+//                 std::log(1./(tol*kA*omega3*omega0*(1.+omega1))*(1.-omega1))/
+//                 std::log(omega3+omega4+omega5)));
+    unsigned K = 20;
 
     bool verbose = true;
 
@@ -554,13 +599,15 @@ main(int argc, char* argv[])
     std::cout << "lambda_min = " << lambda_min << std::endl;
     std::cout << "kA         = " << kA << std::endl;
     std::cout << "alpha      = " << alpha << std::endl;
-    std::cout << "omega0     = " << omega0 << std::endl;
     std::cout << "omega1     = " << omega1 << std::endl;
     std::cout << "omega2     = " << omega2 << std::endl;
     std::cout << "omega3     = " << omega3 << std::endl;
     std::cout << "omega4     = " << omega4 << std::endl;
     std::cout << "omega5     = " << omega5 << std::endl;
     std::cout << "vartheta   = " << inrho  << std::endl;
+    std::cout << "I          = " << I      << std::endl;
+    std::cout << "M          = " << M      << std::endl;
+    std::cout << "K          = " << K      << std::endl;
     std::cout << "*** ----------------- ***\n";
 
  // Compare to exact scaling
@@ -627,7 +674,6 @@ main(int argc, char* argv[])
  //   exit(1);
 
     its = htawgm3(S, A, u, Fint, indexsetvec,
-                  omega0,
                   omega1,
                   omega2,
                   omega3,

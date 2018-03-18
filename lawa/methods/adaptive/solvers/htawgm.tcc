@@ -220,7 +220,9 @@ galerkin_pcg2(      Sepop<Optype>& A,
     if (!uzero) {
         tmp = evallaplace(stiff, S, x, Lambda, Lambda, trunc/2.);
         scal(-1., tmp);
-        r.tree() = add_truncate(tmp.tree(), b.tree(), trunc/2.);
+//        r.tree() = add_truncate(tmp.tree(), b.tree(), trunc/2.);
+        r.tree() = tmp.tree()+b.tree();
+        r.truncate(trunc/2.);
     }
 
     residual  = nrm2(r);
@@ -259,7 +261,7 @@ galerkin_pcg2(      Sepop<Optype>& A,
         std::cout << "pcg: (r,p) time: " << dgal.count() << std::endl;
 
         tgal0 = std::chrono::system_clock::now();
-        pAp = energy(stiff, S, p, p, Lambda, save);
+        pAp = energy(stiff, S, p, p, Lambda);
         tgal1 = std::chrono::system_clock::now();
         dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
         std::cout << "pcg: (p, Ap) time: " << dgal.count() << std::endl;
@@ -273,7 +275,8 @@ galerkin_pcg2(      Sepop<Optype>& A,
         } else {
             tmp = p;
             scal(ak, tmp);
-            x.tree() = add_truncate(tmp.tree(), x.tree(), trunc_acc);
+            x.tree() = tmp.tree()+x.tree();
+            x.truncate(trunc_acc);
         }
         tgal1 = std::chrono::system_clock::now();
         dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
@@ -281,7 +284,8 @@ galerkin_pcg2(      Sepop<Optype>& A,
 
 
         /* Compute residual */
-        T restol   = residual/2.;
+        T restol   = 1e-01*residual/2.;
+        std::cout << "pcg: tol = " << restol/2. << std::endl;
         tgal0 = std::chrono::system_clock::now();
         r          = evallaplace(stiff, S, x, Lambda, Lambda, restol/2.);
         tgal1 = std::chrono::system_clock::now();
@@ -289,7 +293,8 @@ galerkin_pcg2(      Sepop<Optype>& A,
         std::cout << "pcg: Ax time: " << dgal.count() << std::endl;
         scal(-1., r);
         tgal0 = std::chrono::system_clock::now();
-        r.tree()   = add_truncate(b.tree(), r.tree(), restol/2.);
+        r.tree()   = b.tree()+r.tree();
+        r.truncate(restol/2.);
         tgal1 = std::chrono::system_clock::now();
         dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
         std::cout << "pcg: b-Ax time: " << dgal.count() << std::endl;
@@ -297,7 +302,7 @@ galerkin_pcg2(      Sepop<Optype>& A,
 
         /* Update p_k */
         tgal0 = std::chrono::system_clock::now();
-        rAp = energy(r, save);
+        rAp   = energy(stiff, S, r, p, Lambda);
         tgal1 = std::chrono::system_clock::now();
         dgal  = std::chrono::duration_cast<std::chrono::seconds>(tgal1-tgal0);
         std::cout << "pcg: (r, Ap) time: " << dgal.count() << std::endl;
@@ -457,6 +462,7 @@ presidual2(      Sepop<Optype>& A,
     std::cout << "presidual: rhs took " << elapsed.count() << " secs\n";
 
     /* Compute residual */
+    std::cout << "presidual: tol = " << trunc/3. << std::endl;
     start = std::chrono::system_clock::now();
     r = evallaplace(A, S, u, total, current, trunc/3.);
     end     = std::chrono::system_clock::now();
@@ -465,13 +471,15 @@ presidual2(      Sepop<Optype>& A,
 
     scal(-1., r);
     start = std::chrono::system_clock::now();
-    f = applyScale(S, f, total, trunc/3.);
+    f = applyScaleTT(S, f, total, trunc/3.);
     end     = std::chrono::system_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
     std::cout << "presidual: S*f took " << elapsed.count() << " secs\n";
 
     start = std::chrono::system_clock::now();
-    r.tree() = add_truncate(f.tree(), r.tree(), trunc/3.);
+    //r.tree() = add_truncate(f.tree(), r.tree(), trunc/3.);
+    r.tree() = f.tree()+r.tree();
+    r.truncate(trunc/3.);
     end     = std::chrono::system_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
     std::cout << "presidual: Sf-Ax took " << elapsed.count() << " secs\n";

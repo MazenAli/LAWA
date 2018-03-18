@@ -3945,8 +3945,9 @@ evallaplace(       Sepop<Optype>&                                  A,
     auto Ncols = Scols.n()+Scols.nplus()+1;
 
     flens::DenseVector<flens::Array<T>>                        nrms(Nrows*Ncols);
-    std::vector<HTCoefficients<T, Basis>>                      prods(Nrows*Ncols);
     flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(Nrows*Ncols);
+    std::vector<
+    std::pair<FLENS_DEFAULT_INDEXTYPE, FLENS_DEFAULT_INDEXTYPE> > map(Nrows*Ncols);
 
     unsigned count = 0;
     for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
@@ -3963,7 +3964,7 @@ evallaplace(       Sepop<Optype>&                                  A,
             auto tmp = v;
             scale(Srows, tmp, rows, l0);
             nrms(count+1) = nrm2(tmp);
-            prods[count]  = tmp;
+            map[count]    = std::make_pair(l0, l1);
             ++count;
         }
     }
@@ -3989,20 +3990,60 @@ evallaplace(       Sepop<Optype>&                                  A,
         refsum += (T) (nrms.length()-i+1)*nrms(i);
     }
 
-    sum    = prods[ids(count+1)-1];
+    int times = nrms.length()-count;
+    std::cout << "evallaplace: Need to truncate " << times
+              << " times\n";
+
+    int minr = 0;
+    int maxr = 0;
+    int sumr = 0;
+
+    auto l0   = map[ids(count+1)-1].first;
+    auto l1   = map[ids(count+1)-1].second;
+    auto copy = Ws;
+    auto v    = u;
+    scale(Scols, copy, l1);
+    scale(Scols, v, cols, l1);
+    v         = evallaplace(copy, v, rows, cols);
+    scale(Srows, v, rows, l0);
+
+    sum    = v;
+    minr   = sum.tree().max_rank();
+    maxr   = minr;
+    sumr   = maxr;
+
     T eps_ = nrms(count+1);
     sum.truncate(eps/2*eps_/refsum);
     ++count;
 
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
-        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
-                     eps/2*eps_/refsum);
+
+        l0   = map[ids(count+1)-1].first;
+        l1   = map[ids(count+1)-1].second;
+        copy = Ws;
+        v    = u;
+        scale(Scols, copy, l1);
+        scale(Scols, v, cols, l1);
+        v         = evallaplace(copy, v, rows, cols);
+        scale(Srows, v, rows, l0);
+
+        int newr   = sum.tree().max_rank()+
+                     v.tree().max_rank();
+        minr       = std::min(minr, newr);
+        maxr       = std::max(maxr, newr);
+        sumr      += newr;
+
+        sum.tree() = sum.tree()+v.tree();
+        sum.truncate(eps/2*eps_/refsum);
     }
 
+    std::cout << "evallaplace: maximum rank = " << maxr       << std::endl;
+    std::cout << "evallaplace: minimum rank = " << minr       << std::endl;
+    std::cout << "evallaplace: average rank = " << (T)sumr/(T) times
+                                                << std::endl;
     return sum;
 }
-
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
@@ -4034,8 +4075,9 @@ evallaplace(const  std::vector<
     auto Ncols = Scols.n()+Scols.nplus()+1;
 
     flens::DenseVector<flens::Array<T>>                        nrms(Nrows*Ncols);
-    std::vector<HTCoefficients<T, Basis>>                      prods(Nrows*Ncols);
     flens::DenseVector<flens::Array<FLENS_DEFAULT_INDEXTYPE>>  ids(Nrows*Ncols);
+    std::vector<
+    std::pair<FLENS_DEFAULT_INDEXTYPE, FLENS_DEFAULT_INDEXTYPE> > map(Nrows*Ncols);
 
     unsigned count = 0;
     for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
@@ -4052,7 +4094,7 @@ evallaplace(const  std::vector<
             auto tmp = v;
             scale(Srows, tmp, rows, l0);
             nrms(count+1) = nrm2(tmp);
-            prods[count]  = tmp;
+            map[count]    = std::make_pair(l0, l1);
             ++count;
         }
     }
@@ -4078,16 +4120,59 @@ evallaplace(const  std::vector<
         refsum += (T) (nrms.length()-i+1)*nrms(i);
     }
 
-    sum    = prods[ids(count+1)-1];
+    int times = nrms.length()-count;
+    std::cout << "evallaplace: Need to truncate " << times
+              << " times\n";
+
+    int minr = 0;
+    int maxr = 0;
+    int sumr = 0;
+
+    auto l0   = map[ids(count+1)-1].first;
+    auto l1   = map[ids(count+1)-1].second;
+    auto copy = Ws;
+    auto v    = u;
+    scale(Scols, copy, l1);
+    scale(Scols, v, cols, l1);
+    v         = evallaplace(copy, v, rows, cols);
+    scale(Srows, v, rows, l0);
+
+    sum    = v;
+    minr   = sum.tree().max_rank();
+    maxr   = minr;
+    sumr   = maxr;
+
     T eps_ = nrms(count+1);
     sum.truncate(eps/2*eps_/refsum);
     ++count;
 
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
-        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
-                     eps/2*eps_/refsum);
+
+        l0   = map[ids(count+1)-1].first;
+        l1   = map[ids(count+1)-1].second;
+        copy = Ws;
+        v    = u;
+        scale(Scols, copy, l1);
+        scale(Scols, v, cols, l1);
+        v         = evallaplace(copy, v, rows, cols);
+        scale(Srows, v, rows, l0);
+
+        int newr   = sum.tree().max_rank()+
+                     v.tree().max_rank();
+        minr       = std::min(minr, newr);
+        maxr       = std::max(maxr, newr);
+        sumr      += newr;
+
+        sum.tree() = sum.tree()+v.tree();
+        sum.truncate(eps/2*eps_/refsum);
+
     }
+
+    std::cout << "evallaplace: maximum rank = " << maxr       << std::endl;
+    std::cout << "evallaplace: minimum rank = " << minr       << std::endl;
+    std::cout << "evallaplace: average rank = " << (T)sumr/(T) times
+                                                << std::endl;
 
     return sum;
 }
@@ -4100,8 +4185,7 @@ energy(const std::vector<
              Sepdiagscal<Basis>&                           S,
              HTCoefficients<T, Basis>&                     left,
              HTCoefficients<T, Basis>&                     right,
-       const std::vector<IndexSet<Index1D> >&              cols,
-             std::vector<HTCoefficients<T, Basis>>&        save)
+       const std::vector<IndexSet<Index1D> >&              cols)
 {
     assert(S.dim()==(unsigned) left.dim());
     assert(cols.size()==S.dim());
@@ -4115,7 +4199,6 @@ energy(const std::vector<
     /* Compute inner product */
     auto N  = S.n()+S.nplus()+1;
     auto Ws = preassemble(Ts, right, cols);
-    save.resize(N*N);
     T        sum   = 0.;
     unsigned count = 0;
     for (FLENS_DEFAULT_INDEXTYPE l1=-1*S.n();
@@ -4132,7 +4215,6 @@ energy(const std::vector<
             auto tmp = v;
             scale(S, tmp, cols, l0);
             sum += dot(left, tmp);
-            save[count] = tmp;
             ++count;
         }
     }
