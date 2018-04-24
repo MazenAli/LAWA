@@ -26,6 +26,9 @@ typedef lawa::Coefficients<
 typedef lawa::Coefficients<
         lawa::Lexicographical, T,
         lawa::Index2D>                          Coeff2D;
+typedef lawa::Coefficients<
+        lawa::Lexicographical, T,
+        lawa::IndexD>                           CoeffD;
 typedef lawa::SepCoefficients<
         lawa::Lexicographical, T, Index1D>      SepCoeff;
 
@@ -497,7 +500,7 @@ main(int argc, char* argv[])
     /* Map */
     lawa::Mapwavind<Index1D> map(dim);
 
-    T sp = 1.;
+    T sp = 0.5;
     lawa::HTCoefficients<T, Basis>    f(dim, sp, basis, map);
     lawa::HTCoefficients<T, Basis>    u(dim, sp, basis, map);
     lawa::HTCoefficients<T, Basis>    r(dim, sp, basis, map);
@@ -508,7 +511,7 @@ main(int argc, char* argv[])
     RefIdentity1D   RefIdentityBil(basis.refinementbasis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
 
-    rndinit(u, indexsetvec, 1, 1.);
+    rndinit(u, indexsetvec, 5, 1.);
     Sepop A(lapl, dim, dim);
 
     lawa::Sepdiagscal<Basis>    S(dim, basis);
@@ -552,8 +555,8 @@ main(int argc, char* argv[])
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    T delta  = 0.5;
-    T eta    = 1e-01;
+    T delta  = 1e-04;
+    T eta    = 1e-04;
     setScaling(S, delta);
     S.set_nu(eta);
 
@@ -672,7 +675,187 @@ main(int argc, char* argv[])
  //   std::cout << "Err3 = " << err << std::endl;
 
  //   exit(1);
+ //   unsigned sum = 0;
+ //   for (unsigned j=0; j<indexsetvec.size(); ++j) {
+ //       unsigned jmax = 0;
+ //       for (const auto& it : indexsetvec[j]) {
+ //           unsigned l = it.j;
+ //           if (it.xtype==lawa::XWavelet) ++l;
+ //           jmax = std::max(jmax, l);
+ //       }
 
+ //       sum += indexsetvec[j].size();
+ //       std::cout << "        d = " << j+1
+ //                 << ", size = " << indexsetvec[j].size()
+ //                 << ", max level = " << jmax << std::endl;
+ //   }
+ //   std::cout << "        total size = " << sum << std::endl;
+
+ //   T    eps_ = 1e-8;
+ //   auto t0   = std::chrono::system_clock::now();
+ //   auto Ax   = evallaplace(A, S, u, indexsetvec, indexsetvec, eps_);
+ //   auto t1   = std::chrono::system_clock::now();
+ //   auto dt   = std::chrono::duration_cast<std::chrono::seconds>(t1-t0);
+ //   std::cout << "A*x took " << dt.count() << " secs\n";
+ //   std::cout << "final rank = " << Ax.tree().max_rank() << std::endl;
+
+ //   unsigned maxi = maxintindhash(indexsetvec[0], u, 1);
+ //   DenseVector uT(maxi*maxi*maxi*maxi);
+ //   for (auto ind1 : indexsetvec[0]) {
+ //       for (auto ind2 : indexsetvec[1]) {
+ //           for (auto ind3 : indexsetvec[2]) {
+ //               for (auto ind4 : indexsetvec[3]) {
+ //                   int i1     = u.map()(ind1, 1);
+ //                   int i2     = u.map()(ind2, 2);
+ //                   int i3     = u.map()(ind3, 3);
+ //                   int i4     = u.map()(ind4, 4);
+
+ //                   int d4     = maxi*maxi*maxi;
+ //                   int d3     = maxi*maxi;
+ //                   int d2     = maxi;
+ //                   int i      = (i4-1)*d4+(i3-1)*d3+(i2-1)*d2+i1;
+
+ //                   lawa::IndexD lambda(4);
+ //                   lambda(1) = ind1;
+ //                   lambda(2) = ind2;
+ //                   lambda(3) = ind3;
+ //                   lambda(4) = ind4;
+
+ //                   int j1 = ind1.j;
+ //                   if (ind1.xtype==lawa::XWavelet) ++j1;
+ //                   int j2 = ind2.j;
+ //                   if (ind2.xtype==lawa::XWavelet) ++j2;
+ //                   int j3 = ind3.j;
+ //                   if (ind3.xtype==lawa::XWavelet) ++j3;
+ //                   int j4 = ind4.j;
+ //                   if (ind4.xtype==lawa::XWavelet) ++j4;
+
+ //                   T w  = std::pow(2., 2.*j1);
+ //                     w += std::pow(2., 2.*j2);
+ //                     w += std::pow(2., 2.*j3);
+ //                     w += std::pow(2., 2.*j4);
+ //                     w  = std::sqrt(w);
+
+ //                   uT(i)     = u(lambda)/w;
+ //               }
+ //           }
+ //       }
+ //   }
+
+
+ //   DenseVector AxT(maxi*maxi*maxi*maxi);
+ //   for (auto ind1 : indexsetvec[0]) {
+ //       for (auto ind2 : indexsetvec[1]) {
+ //           for (auto ind3 : indexsetvec[2]) {
+ //               for (auto ind4 : indexsetvec[3]) {
+ //                   int i1     = Ax.map()(ind1, 1);
+ //                   int i2     = Ax.map()(ind2, 2);
+ //                   int i3     = Ax.map()(ind3, 3);
+ //                   int i4     = Ax.map()(ind4, 4);
+
+ //                   int d4     = maxi*maxi*maxi;
+ //                   int d3     = maxi*maxi;
+ //                   int d2     = maxi;
+ //                   int i      = (i4-1)*d4+(i3-1)*d3+(i2-1)*d2+i1;
+
+ //                   lawa::IndexD lambda(4);
+ //                   lambda(1) = ind1;
+ //                   lambda(2) = ind2;
+ //                   lambda(3) = ind3;
+ //                   lambda(4) = ind4;
+
+ //                   AxT(i)     = Ax(lambda);
+ //               }
+ //           }
+ //       }
+ //   }
+
+
+
+ //   DenseVector AuT(maxi*maxi*maxi*maxi);
+ //   for (auto r1 : indexsetvec[0]) {
+ //       for (auto r2 : indexsetvec[1]) {
+ //           for (auto r3 : indexsetvec[2]) {
+ //               for (auto r4 : indexsetvec[3]) {
+ //                   int i1     = u.map()(r1, 1);
+ //                   int i2     = u.map()(r2, 2);
+ //                   int i3     = u.map()(r3, 3);
+ //                   int i4     = u.map()(r4, 4);
+
+ //                   int d4     = maxi*maxi*maxi;
+ //                   int d3     = maxi*maxi;
+ //                   int d2     = maxi;
+ //                   int i      = (i4-1)*d4+(i3-1)*d3+(i2-1)*d2+i1;
+
+ //                   lawa::IndexD lambda(4);
+ //                   lambda(1) = r1;
+ //                   lambda(2) = r2;
+ //                   lambda(3) = r3;
+ //                   lambda(4) = r4;
+
+ //                   int j1 = r1.j;
+ //                   if (r1.xtype==lawa::XWavelet) ++j1;
+ //                   int j2 = r2.j;
+ //                   if (r2.xtype==lawa::XWavelet) ++j2;
+ //                   int j3 = r3.j;
+ //                   if (r3.xtype==lawa::XWavelet) ++j3;
+ //                   int j4 = r4.j;
+ //                   if (r4.xtype==lawa::XWavelet) ++j4;
+
+ //                   T w  = std::pow(2., 2.*j1);
+ //                     w += std::pow(2., 2.*j2);
+ //                     w += std::pow(2., 2.*j3);
+ //                     w += std::pow(2., 2.*j4);
+ //                     w  = std::sqrt(w);
+
+ //                   AuT(i) = 0.;
+ //                   for (auto c1 : indexsetvec[0]) {
+ //                       for (auto c2 : indexsetvec[1]) {
+ //                           for (auto c3 : indexsetvec[2]) {
+ //                               for (auto c4 : indexsetvec[3]) {
+ //                                   int k1     = u.map()(c1, 1);
+ //                                   int k2     = u.map()(c2, 2);
+ //                                   int k3     = u.map()(c3, 3);
+ //                                   int k4     = u.map()(c4, 4);
+
+ //                                   int d4     = maxi*maxi*maxi;
+ //                                   int d3     = maxi*maxi;
+ //                                   int d2     = maxi;
+ //                                   int k      = (k4-1)*d4+(k3-1)*d3+(k2-1)*d2+k1;
+
+
+ //                                   T a1     = LaplaceBil(r1, c1);
+ //                                   T a2     = LaplaceBil(r2, c2);
+ //                                   T a3     = LaplaceBil(r3, c3);
+ //                                   T a4     = LaplaceBil(r4, c4);
+
+ //                                   T delta1 = (i1==k1);
+ //                                   T delta2 = (i2==k2);
+ //                                   T delta3 = (i3==k3);
+ //                                   T delta4 = (i4==k4);
+
+ //                                   T a = a1*delta2*delta3*delta4+
+ //                                         delta1*a2*delta3*delta4+
+ //                                         delta1*delta2*a3*delta4+
+ //                                         delta1*delta2*delta3*a4;
+
+ //                                   AuT(i) += a*uT(k);
+ //                               }
+ //                           }
+ //                       }
+ //                  }
+
+ //               AuT(i) /= w;
+ //               }
+ //           }
+ //       }
+ //   }
+
+ //   DenseVector diff = AuT-AxT;
+ //   std::cout << "l2 difference = " << flens::blas::nrm2(diff)/
+ //                                      flens::blas::nrm2(AuT) << std::endl;
+
+    exit(1);
     its = htawgm3(S, A, u, Fint, indexsetvec,
                   omega1,
                   omega2,

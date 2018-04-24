@@ -3901,7 +3901,7 @@ preassemble(const std::vector<Coefficients<Lexicographical, T, Index2D> >& Stiff
         htucker::DimensionIndex idx(1);
         idx[0] = j;
         SepCoefficients<Lexicographical, T, Index1D> U = extract(v, cols[j-1], idx);
-        Ws[j-1].resize(U.rank(), dim);
+        Ws[j-1].resize(U.rank(), 1);
         for (const auto& mu : Stiff[j-1]) {
             for (unsigned k=1; k<=U.rank(); ++k) {
                 Ws[j-1](k, 1)[mu.first] = mu.second*U(k, 1)[mu.first.index2];
@@ -3935,6 +3935,8 @@ evallaplace(       Sepop<Optype>&                                  A,
     iscale     = compIndexscale(u.basis(), cols, Scols.order());
     Scols.set_iscale(iscale);
     Scols.comp_n();
+
+    std::cout << "Scaling ::\n" << Scols << std::endl;
 
     /* Assemble Laplace */
     auto Ts = assemble_laplace<T, Optype>(A, rows, cols);
@@ -4044,6 +4046,7 @@ evallaplace(       Sepop<Optype>&                                  A,
                                                 << std::endl;
     return sum;
 }
+
 
 template <typename T, typename Basis>
 HTCoefficients<T, Basis>
