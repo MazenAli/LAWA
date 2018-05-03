@@ -40,8 +40,6 @@ ifeq ($(TARGET),Linux)
     CC  = gcc
     CXX = g++
     ifeq ($(BLASLAPACK),platform)
-      CPPFLAGS += -DWITH_OPENBLAS -DHAVE_CBLAS
-      LDLIBS   += -llapack -lopenblas -lgfortran
       # Multi-Precision stuff -lmpfr -lgmpxx -lgmp
     endif
   endif
@@ -58,15 +56,38 @@ HASHTYPE = -DBOOST -DBOOST_HAS_TR1_TUPLE
 #HASHTYPE = -DCONEONE
 
 # --- FLENS defines --------------------
-#CPPFLAGS += -DINCLUDE_TYPE_TRAITS
+#CPPFLAGS += -DWITH_OPENBLAS
+CPPFLAGS += -DWITH_MKLBLAS -m64
+#CPPFLAGS += -DMKL_ILP64
+#CPPFLAGS += -I${MKLROOT}/include
+CPPFLAGS += -DHAVE_CBLAS
+CPPFLAGS += -DINCLUDE_TYPE_TRAITS
 CPPFLAGS += -DFLENS_DEFAULT_INDEXTYPE=__INT32_TYPE__
+#CPPFLAGS += -DFLENS_DEFAULT_INDEXTYPE=__INT64_TYPE__
 CPPFLAGS += -DUSE_CXXLAPACK
 
 # --- MATLAB Interface Libraries --------------------
-LDLIBS += -leng
+#LDLIBS += -leng
 
 # --- SuiteSparse Library --------------------
-LDLIBS += -lcholmod
+#LDLIBS += -lcholmod
+
+# --- Libraries ------------------------------
+#LDLIBS  += -lmwlapack
+#LDLIBS  += -lmwblas
+#LDLIBS += -llapack
+#LDLIBS += -lcblas
+#LDLIBS += -lblas
+#LDLIBS += -lopenblas
+#LDLIBS += -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_ilp64.a \
+          ${MKLROOT}/lib/intel64/libmkl_sequential.a \
+          ${MKLROOT}/lib/intel64/libmkl_core.a \
+          -Wl,--end-group -lpthread -lm -ldl
+LDLIBS += -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a \
+          ${MKLROOT}/lib/intel64/libmkl_intel_thread.a \
+          ${MKLROOT}/lib/intel64/libmkl_core.a \
+          -Wl,--end-group -liomp5 -lpthread -lm -ldl
+LDLIBS += -lgfortran
 
 # --- debug mode -----------------------
 DEBUGLAWA += -DCHECK_INTERVAL_CONSTRUCTION \

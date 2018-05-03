@@ -555,8 +555,8 @@ main(int argc, char* argv[])
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    T delta  = 1e-04;
-    T eta    = 1e-04;
+    T delta  = 1e-01;
+    T eta    = 1e-01;
     setScaling(S, delta);
     S.set_nu(eta);
 
@@ -581,10 +581,7 @@ main(int argc, char* argv[])
                               (1.+std::sqrt(2.*dim-3)));
     T omega4     = comprho*std::sqrt(2.*dim-3)*omega3;
     T omega5     = comprho*std::sqrt((T) dim)*(1.+std::sqrt(2.*dim-3))*omega3;
-    T tol        = 1e-06;
-
-    T inrho      = std::sqrt(1.-std::pow((alpha-omega1)/(1.+omega1), 2.)/kA+
-                             std::pow(omega2/(1.-omega1), 2.)*kA);
+    T tol        = 1e-04;
 
     unsigned I = 20;
 //    unsigned M = std::ceil(std::abs(std::log(omega3/std::sqrt(kA))/
@@ -597,21 +594,21 @@ main(int argc, char* argv[])
 
     bool verbose = true;
 
-    std::cout << "*** HTAWGM Parameters ***\n";
-    std::cout << "lambda_max = " << lambda_max << std::endl;
-    std::cout << "lambda_min = " << lambda_min << std::endl;
-    std::cout << "kA         = " << kA << std::endl;
-    std::cout << "alpha      = " << alpha << std::endl;
-    std::cout << "omega1     = " << omega1 << std::endl;
-    std::cout << "omega2     = " << omega2 << std::endl;
-    std::cout << "omega3     = " << omega3 << std::endl;
-    std::cout << "omega4     = " << omega4 << std::endl;
-    std::cout << "omega5     = " << omega5 << std::endl;
-    std::cout << "vartheta   = " << inrho  << std::endl;
-    std::cout << "I          = " << I      << std::endl;
-    std::cout << "M          = " << M      << std::endl;
-    std::cout << "K          = " << K      << std::endl;
-    std::cout << "*** ----------------- ***\n";
+//    std::cout << "*** HTAWGM Parameters ***\n";
+//    std::cout << "lambda_max = " << lambda_max << std::endl;
+//    std::cout << "lambda_min = " << lambda_min << std::endl;
+//    std::cout << "kA         = " << kA << std::endl;
+//    std::cout << "alpha      = " << alpha << std::endl;
+//    std::cout << "omega1     = " << omega1 << std::endl;
+//    std::cout << "omega2     = " << omega2 << std::endl;
+//    std::cout << "omega3     = " << omega3 << std::endl;
+//    std::cout << "omega4     = " << omega4 << std::endl;
+//    std::cout << "omega5     = " << omega5 << std::endl;
+//    std::cout << "vartheta   = " << inrho  << std::endl;
+//    std::cout << "I          = " << I      << std::endl;
+//    std::cout << "M          = " << M      << std::endl;
+//    std::cout << "K          = " << K      << std::endl;
+//    std::cout << "*** ----------------- ***\n";
 
  // Compare to exact scaling
  //   std::cout << "rank f = " << f.tree().max_rank() << std::endl;
@@ -675,29 +672,68 @@ main(int argc, char* argv[])
  //   std::cout << "Err3 = " << err << std::endl;
 
  //   exit(1);
- //   unsigned sum = 0;
- //   for (unsigned j=0; j<indexsetvec.size(); ++j) {
- //       unsigned jmax = 0;
- //       for (const auto& it : indexsetvec[j]) {
- //           unsigned l = it.j;
- //           if (it.xtype==lawa::XWavelet) ++l;
- //           jmax = std::max(jmax, l);
- //       }
+    unsigned sum = 0;
+    for (unsigned j=0; j<indexsetvec.size(); ++j) {
+        unsigned jmax = 0;
+        for (const auto& it : indexsetvec[j]) {
+            unsigned l = it.j;
+            if (it.xtype==lawa::XWavelet) ++l;
+            jmax = std::max(jmax, l);
+        }
 
- //       sum += indexsetvec[j].size();
- //       std::cout << "        d = " << j+1
- //                 << ", size = " << indexsetvec[j].size()
- //                 << ", max level = " << jmax << std::endl;
- //   }
- //   std::cout << "        total size = " << sum << std::endl;
+        sum += indexsetvec[j].size();
+        std::cout << "        d = " << j+1
+                  << ", size = " << indexsetvec[j].size()
+                  << ", max level = " << jmax << std::endl;
+    }
+    std::cout << "        total size = " << sum << std::endl;
 
- //   T    eps_ = 1e-8;
- //   auto t0   = std::chrono::system_clock::now();
- //   auto Ax   = evallaplace(A, S, u, indexsetvec, indexsetvec, eps_);
- //   auto t1   = std::chrono::system_clock::now();
- //   auto dt   = std::chrono::duration_cast<std::chrono::seconds>(t1-t0);
- //   std::cout << "A*x took " << dt.count() << " secs\n";
- //   std::cout << "final rank = " << Ax.tree().max_rank() << std::endl;
+    T    eps_ = 1e-4;
+    std::cout << "Rank u = " << u.tree().max_rank() << std::endl;
+    T nrmu = nrm2(u);
+//
+//    unsigned seed = time(NULL);
+//    srand(seed);
+//    int N = indexsetvec[0].size();
+//    GeMat C(N, N);
+//    GeMat D(N, N);
+//    GeMat RES;
+//    for (int i=1; i<=N; ++i) {
+//        for (int j=1; j<=N; ++j) {
+//            C(i, j) = (T) rand()/ (T) RAND_MAX;
+//            D(i, j) = (T) rand()/ (T) RAND_MAX;
+//        }
+//    }
+//    u.orthogonalize();
+    std::cout << "nrmu = " << nrmu << std::endl;
+    std::cout << "\n***------------***\n";
+    auto t0   = std::chrono::high_resolution_clock::now();
+    auto Ax   = evallaplace(A, S, u, indexsetvec, indexsetvec, eps_*nrmu);
+    //u.tree().truncate(eps_*nrmu);
+    //u.tree().print_w_UorB();
+    //u.tree().truncate(10);
+//    auto gram = gramians_orthogonal(u.tree());
+//    //flens::blas::mm(cxxblas::NoTrans, cxxblas::NoTrans, 1., C, D, 0., RES);
+    auto t1   = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<T> dt = t1-t0;
+//    std::cout << "gram took " << dt.count() << " secs\n";
+//
+//    std::cout << "\n***------------***\n";
+//    t0   = std::chrono::high_resolution_clock::now();
+//    auto gram2 = gramians_orthogonal2(u.tree());
+//    t1   = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<T> dt2 = t1-t0;
+//    std::cout << "gram2 took " << dt2.count() << " secs\n";
+//
+//    std::cout << "\n***------------***\n";
+//    t0   = std::chrono::high_resolution_clock::now();
+//    auto gram3 = gramians_orthogonal3(u.tree());
+//    t1   = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<T> dt3 = t1-t0;
+//    std::cout << "gram3 took " << dt3.count() << " secs\n";
+
+    std::cout << "A*x took " << dt.count() << " secs\n";
+   std::cout << "final rank = " << Ax.tree().max_rank() << std::endl;
 
  //   unsigned maxi = maxintindhash(indexsetvec[0], u, 1);
  //   DenseVector uT(maxi*maxi*maxi*maxi);

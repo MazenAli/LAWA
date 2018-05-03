@@ -3952,6 +3952,7 @@ evallaplace(       Sepop<Optype>&                                  A,
     std::pair<FLENS_DEFAULT_INDEXTYPE, FLENS_DEFAULT_INDEXTYPE> > map(Nrows*Ncols);
 
     unsigned count = 0;
+    auto t0 = std::chrono::high_resolution_clock::now();
     for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
                                  l1<=(signed) Scols.nplus();
                                  ++l1) {
@@ -3970,6 +3971,9 @@ evallaplace(       Sepop<Optype>&                                  A,
             ++count;
         }
     }
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<T> diff  = t1 - t0;
+    std::cout << "Time for evallaplace = " << diff.count() << " secs\n";
 
     /* Sort norms */
     flens::sort(nrms, ids);
@@ -3992,6 +3996,7 @@ evallaplace(       Sepop<Optype>&                                  A,
         refsum += (T) (nrms.length()-i+1)*nrms(i);
     }
 
+    std::cout << "overall " << nrms.length() << std::endl;
     int times = nrms.length()-count;
     std::cout << "evallaplace: Need to truncate " << times
               << " times\n";
@@ -4015,9 +4020,19 @@ evallaplace(       Sepop<Optype>&                                  A,
     sumr   = maxr;
 
     T eps_ = nrms(count+1);
-    sum.truncate(eps/2*eps_/refsum);
+    //std::cout << "Current rank     = " << sum.tree().max_rank() << std::endl;
+    std::cout << "Init Tolerance   = " << eps << std::endl;
+    std::cout << "Tolerance        = " << eps/2*eps_/refsum << std::endl;
+    t0 = std::chrono::high_resolution_clock::now();
+    //sum.truncate(eps/2*eps_/refsum);
+    t1 = std::chrono::high_resolution_clock::now();
+    diff  = t1 - t0;
+//    std::cout << "After truncation = " << sum.tree().max_rank() << std::endl;
+//    std::cout << "Time for trunc   = " << diff.count() << " secs\n";
+    std::cout << "\n";
     ++count;
 
+    t0 = std::chrono::high_resolution_clock::now();
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
 
@@ -4036,9 +4051,20 @@ evallaplace(       Sepop<Optype>&                                  A,
         maxr       = std::max(maxr, newr);
         sumr      += newr;
 
-        sum.tree() = sum.tree()+v.tree();
-        sum.truncate(eps/2*eps_/refsum);
+        //sum.tree() = sum.tree()+v.tree();
+        //std::cout << "Current rank     = " << sum.tree().max_rank() << std::endl;
+        std::cout << "Tolerance        = " << eps/2*eps_/refsum << std::endl;
+        t0 = std::chrono::high_resolution_clock::now();
+        //sum.truncate(eps/2*eps_/refsum);
+        t1 = std::chrono::high_resolution_clock::now();
+        diff  = t1 - t0;
+        //std::cout << "After truncation = " << sum.tree().max_rank() << std::endl;
+        //std::cout << "Time for trunc   = " << diff.count() << " secs\n";
+        std::cout << "\n";
     }
+    t1 = std::chrono::high_resolution_clock::now();
+    diff  = t1 - t0;
+    std::cout << "Time for evallaplace 2 = " << diff.count() << " secs\n";
 
     std::cout << "evallaplace: maximum rank = " << maxr       << std::endl;
     std::cout << "evallaplace: minimum rank = " << minr       << std::endl;
@@ -4200,7 +4226,6 @@ energy(const std::vector<
     S.comp_n();
 
     /* Compute inner product */
-    auto N  = S.n()+S.nplus()+1;
     auto Ws = preassemble(Ts, right, cols);
     T        sum   = 0.;
     unsigned count = 0;
