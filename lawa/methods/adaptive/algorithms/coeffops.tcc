@@ -874,6 +874,58 @@ extract(const HTCoefficients<T, Basis>& tree,
 
 
 template <typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >
+extract_inplace(      HTCoefficients<T, Basis>& tree,
+                const htucker::DimensionIndex& idx)
+{
+    assert(idx.length()>0);
+    assert(idx.min()>=1 && idx.max()<=tree.dim());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    for (auto tit=tree.tree().getGeneralTree().end();
+              tit>=tree.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            Matrix& U = tit.getNode()->getContent()
+                              ->getUorB();
+
+            return U;
+        }
+    }
+
+    std::cerr << "error extract: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
+template <typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >&
+extract_inplace(      HTCoefficients<T, Basis>& tree,
+                const unsigned                  j)
+{
+    assert(j>=1 && j<=(unsigned) tree.dim());
+
+    typedef typename flens::GeMatrix
+                     <flens::FullStorage<T, flens::ColMajor> > Matrix;
+
+    htucker::DimensionIndex idx(1);
+    idx[0] = j;
+    for (auto tit=tree.tree().getGeneralTree().end();
+              tit>=tree.tree().getGeneralTree().begin(); tit--) {
+        if (tit.getNode()->getContent()->getIndex()==idx) {
+            Matrix& U = tit.getNode()->getContent()
+                              ->getUorB();
+            return U;
+        }
+    }
+
+    std::cerr << "error extract: idx not found\n";
+    exit(EXIT_FAILURE);
+}
+
+
+template <typename T, typename Basis>
 SepCoefficients<Lexicographical, T, Index1D>
 extract(      HTCoefficients<T, Basis>& tree,
         const IndexSet<Index1D>& Lambda,
@@ -3576,6 +3628,29 @@ scale(      Sepdiagscal<Basis>&              S,
 template <typename T, typename Basis>
 void
 scale(      Sepdiagscal<Basis>&              S,
+            HTCoefficients<T, Basis>&        u,
+      const FLENS_DEFAULT_INDEXTYPE          l)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(l>=-1*(signed) S.n() && l<=(signed) S.nplus());
+
+    typedef typename Sepdiagscal<Basis>::size_type  size_type;
+
+    for (size_type j=1; j<=S.dim(); ++j) {
+        auto  Uj  = extract_inplace(u, j);
+        auto& DUj = extract_inplace(u, j);
+        auto& D   = S(l, j);
+        assert(D.numCols() == Uj.numRows());
+        flens::blas::mm(cxxblas::NoTrans, cxxblas::NoTrans, 1.,
+                        D, Uj, 0., DUj);
+    }
+}
+
+
+
+template <typename T, typename Basis>
+void
+scale(      Sepdiagscal<Basis>&              S,
             std::vector<SepCoefficients<Lexicographical, T, Index2D>>& Ws,
       const FLENS_DEFAULT_INDEXTYPE                  l)
 {
@@ -3913,9 +3988,117 @@ preassemble(const std::vector<Coefficients<Lexicographical, T, Index2D> >& Stiff
 }
 
 
+//template <typename Optype, typename T, typename Basis>
+//HTCoefficients<T, Basis>
+//evallaplace(       Sepop<Optype>&                                  A,
+//                   Sepdiagscal<Basis>&                             Srows,
+//                   HTCoefficients<T, Basis>&                       u,
+//             const std::vector<IndexSet<Index1D> >&                rows,
+//             const std::vector<IndexSet<Index1D> >&                cols,
+//             const T                                               eps)
+//{
+//    assert(Srows.dim()==(unsigned) u.dim());
+//    assert(rows.size()==Srows.dim());
+//    assert(cols.size()==Srows.dim());
+//
+//    /* Compute scales */
+//    T iscale = compIndexscale(u.basis(), rows, Srows.order());
+//    Srows.set_iscale(iscale);
+//    Srows.comp_n();
+//
+//    auto Scols = Srows;
+//    iscale     = compIndexscale(u.basis(), cols, Scols.order());
+//    Scols.set_iscale(iscale);
+//    Scols.comp_n();
+//
+//    std::cout << "Scaling ::\n" << Scols << std::endl;
+//
+//    /* Assemble Laplace */
+//    auto t0 = std::chrono::high_resolution_clock::now();
+//    auto Ts = assemble_laplace<T, Optype>(A, rows, cols);
+//    auto t1 = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<T> diff  = t1 - t0;
+//    std::cout << "Assemble laplace: " << diff.count() << "\n";
+//
+//    /* Precompute summands */
+//    t0 = std::chrono::high_resolution_clock::now();
+//    auto Ws    = preassemble(Ts, u, cols);
+//    t1 = std::chrono::high_resolution_clock::now();
+//    diff  = t1 - t0;
+//    std::cout << "Preassemble Ws: " << diff.count() << "\n";
+//    auto Nrows = Srows.n()+Srows.nplus()+1;
+//    auto Ncols = Scols.n()+Scols.nplus()+1;
+//
+//    t0 = std::chrono::high_resolution_clock::now();
+//    auto dt     = diff;
+//    auto tlap   = dt.count();
+//    tlap        = 0;
+//    auto tscopy = tlap;
+//    auto tsv    = tlap;
+//    auto tstmp  = tlap;
+//    auto tcopy  = tlap;
+//    auto tnrm   = tlap;
+//    for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
+//                                 l1<=(signed) Scols.nplus();
+//                                 ++l1) {
+//        auto te0 = std::chrono::high_resolution_clock::now();
+//        auto copy = Ws;
+//        auto v    = u;
+//        auto te1 = std::chrono::high_resolution_clock::now();
+//        dt       = te1-te0;
+//        tcopy  += dt.count();
+//
+//        te0 = std::chrono::high_resolution_clock::now();
+//        scale(Scols, copy, l1);
+//        te1 = std::chrono::high_resolution_clock::now();
+//        dt  = te1-te0;
+//        tscopy += dt.count();
+//
+//        te0 = std::chrono::high_resolution_clock::now();
+//        scale(Scols, v, cols, l1);
+//        te1 = std::chrono::high_resolution_clock::now();
+//        dt  = te1-te0;
+//        tsv += dt.count();
+//
+//        te0 = std::chrono::high_resolution_clock::now();
+//        v        = evallaplace(copy, v, rows, cols);
+//        te1 = std::chrono::high_resolution_clock::now();
+//        dt  = te1-te0;
+//        tlap += dt.count();
+//        for (FLENS_DEFAULT_INDEXTYPE l0=-1*Srows.n();
+//                                     l0<=(signed) Srows.nplus();
+//                                     ++l0) {
+//            te0 = std::chrono::high_resolution_clock::now();
+//            auto tmp = v;
+//            te1 = std::chrono::high_resolution_clock::now();
+//            dt  = te1-te0;
+//            tcopy += dt.count();
+//
+//            te0    = std::chrono::high_resolution_clock::now();
+//            scale(Srows, tmp, rows, l0);
+//            te1    = std::chrono::high_resolution_clock::now();
+//            dt     = te1-te0;
+//            tstmp += dt.count();
+//
+//            // Add tmp
+//        }
+//    }
+//    t1 = std::chrono::high_resolution_clock::now();
+//    diff  = t1 - t0;
+//    std::cout << "First loop = " << diff.count() << " secs\n";
+//    std::cout << "Laplace    = " << tlap << " secs\n";
+//    std::cout << "Copy       = " << tcopy << " secs\n";
+//    std::cout << "Scale copy = " << tscopy << " secs\n";
+//    std::cout << "Scale v    = " << tsv << " secs\n";
+//    std::cout << "Scale tmp  = " << tstmp << " secs\n";
+//
+//    return u;
+//}
+
+
 template <typename Optype, typename T, typename Basis>
 HTCoefficients<T, Basis>
-evallaplace(       Sepop<Optype>&                                  A,
+evallaplace2(       Sepop<Optype>&                                  A,
                    Sepdiagscal<Basis>&                             Srows,
                    HTCoefficients<T, Basis>&                       u,
              const std::vector<IndexSet<Index1D> >&                rows,
@@ -3939,10 +4122,18 @@ evallaplace(       Sepop<Optype>&                                  A,
     std::cout << "Scaling ::\n" << Scols << std::endl;
 
     /* Assemble Laplace */
+    auto t0 = std::chrono::high_resolution_clock::now();
     auto Ts = assemble_laplace<T, Optype>(A, rows, cols);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<T> diff  = t1 - t0;
+    std::cout << "Assemble laplace: " << diff.count() << "\n";
 
     /* Precompute summands */
+    t0 = std::chrono::high_resolution_clock::now();
     auto Ws    = preassemble(Ts, u, cols);
+    t1 = std::chrono::high_resolution_clock::now();
+    diff  = t1 - t0;
+    std::cout << "Preassemble Ws: " << diff.count() << "\n";
     auto Nrows = Srows.n()+Srows.nplus()+1;
     auto Ncols = Scols.n()+Scols.nplus()+1;
 
@@ -3952,33 +4143,82 @@ evallaplace(       Sepop<Optype>&                                  A,
     std::pair<FLENS_DEFAULT_INDEXTYPE, FLENS_DEFAULT_INDEXTYPE> > map(Nrows*Ncols);
 
     unsigned count = 0;
-    auto t0 = std::chrono::high_resolution_clock::now();
+    t0 = std::chrono::high_resolution_clock::now();
+    auto dt     = diff;
+    auto tlap   = dt.count();
+    tlap        = 0;
+    auto tscopy = tlap;
+    auto tsv    = tlap;
+    auto tstmp  = tlap;
+    auto tcopy  = tlap;
+    auto tnrm   = tlap;
     for (FLENS_DEFAULT_INDEXTYPE l1=-1*Scols.n();
                                  l1<=(signed) Scols.nplus();
                                  ++l1) {
+        auto te0 = std::chrono::high_resolution_clock::now();
         auto copy = Ws;
         auto v    = u;
+        auto te1 = std::chrono::high_resolution_clock::now();
+        dt       = te1-te0;
+        tcopy  += dt.count();
+
+        te0 = std::chrono::high_resolution_clock::now();
         scale(Scols, copy, l1);
+        te1 = std::chrono::high_resolution_clock::now();
+        dt  = te1-te0;
+        tscopy += dt.count();
+
+        te0 = std::chrono::high_resolution_clock::now();
         scale(Scols, v, cols, l1);
-        v         = evallaplace(copy, v, rows, cols);
+        te1 = std::chrono::high_resolution_clock::now();
+        dt  = te1-te0;
+        tsv += dt.count();
+
+        te0 = std::chrono::high_resolution_clock::now();
+        v        = evallaplace(copy, v, rows, cols);
+        te1 = std::chrono::high_resolution_clock::now();
+        dt  = te1-te0;
+        tlap += dt.count();
         for (FLENS_DEFAULT_INDEXTYPE l0=-1*Srows.n();
                                      l0<=(signed) Srows.nplus();
                                      ++l0) {
+            te0 = std::chrono::high_resolution_clock::now();
             auto tmp = v;
+            te1 = std::chrono::high_resolution_clock::now();
+            dt  = te1-te0;
+            tcopy += dt.count();
+
+            te0    = std::chrono::high_resolution_clock::now();
             scale(Srows, tmp, rows, l0);
+            te1    = std::chrono::high_resolution_clock::now();
+            dt     = te1-te0;
+            tstmp += dt.count();
+
+            te0    = std::chrono::high_resolution_clock::now();
             nrms(count+1) = nrm2(tmp);
+            te1    = std::chrono::high_resolution_clock::now();
+            dt     = te1-te0;
+            tnrm  += dt.count();
+
             map[count]    = std::make_pair(l0, l1);
             ++count;
         }
     }
-    auto t1 = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<T> diff  = t1 - t0;
-    std::cout << "Time for evallaplace = " << diff.count() << " secs\n";
+    t1 = std::chrono::high_resolution_clock::now();
+    diff  = t1 - t0;
+    std::cout << "First loop = " << diff.count() << " secs\n";
+    std::cout << "Laplace    = " << tlap << " secs\n";
+    std::cout << "Copy       = " << tcopy << " secs\n";
+    std::cout << "Scale copy = " << tscopy << " secs\n";
+    std::cout << "Scale v    = " << tsv << " secs\n";
+    std::cout << "Scale tmp  = " << tstmp << " secs\n";
+    std::cout << "Norms      = " << tnrm << " secs\n";
 
     /* Sort norms */
     flens::sort(nrms, ids);
     count    = 0;
     T cutoff = 0.;
+    std::cout << "\n***---***\nCutoff tolerance = " << eps/2 << std::endl;
     for (; count<(unsigned) nrms.length(); ++count) {
         cutoff += nrms(count+1);
         if (cutoff>eps/2) break;
@@ -4020,30 +4260,64 @@ evallaplace(       Sepop<Optype>&                                  A,
     sumr   = maxr;
 
     T eps_ = nrms(count+1);
-    //std::cout << "Current rank     = " << sum.tree().max_rank() << std::endl;
+    std::cout << "Current rank     = " << sum.tree().max_rank() << std::endl;
     std::cout << "Init Tolerance   = " << eps << std::endl;
+    std::cout << "Refsum           = " << refsum << std::endl;
+    std::cout << "Current norm     = " << eps_ << std::endl;
     std::cout << "Tolerance        = " << eps/2*eps_/refsum << std::endl;
     t0 = std::chrono::high_resolution_clock::now();
-    //sum.truncate(eps/2*eps_/refsum);
+    sum.truncate(eps/2*eps_/refsum);
     t1 = std::chrono::high_resolution_clock::now();
     diff  = t1 - t0;
-//    std::cout << "After truncation = " << sum.tree().max_rank() << std::endl;
-//    std::cout << "Time for trunc   = " << diff.count() << " secs\n";
+    std::cout << "After truncation = " << sum.tree().max_rank() << std::endl;
+    std::cout << "Time for trunc   = " << diff.count() << " secs\n";
     std::cout << "\n";
     ++count;
 
+    tlap   = 0;
+    tscopy = tlap;
+    tsv    = tlap;
+    tstmp  = tlap;
+    tcopy  = tlap;
+    tnrm   = tlap;
     t0 = std::chrono::high_resolution_clock::now();
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
 
         l0   = map[ids(count+1)-1].first;
         l1   = map[ids(count+1)-1].second;
+
+        auto te0 = std::chrono::high_resolution_clock::now();
         copy = Ws;
         v    = u;
+        auto te1 = std::chrono::high_resolution_clock::now();
+        dt       = te1-te0;
+        tcopy  += dt.count();
+
+        te0 = std::chrono::high_resolution_clock::now();
         scale(Scols, copy, l1);
+        te1 = std::chrono::high_resolution_clock::now();
+        dt  = te1-te0;
+        tscopy += dt.count();
+
+
+        te0 = std::chrono::high_resolution_clock::now();
         scale(Scols, v, cols, l1);
-        v         = evallaplace(copy, v, rows, cols);
+        te1 = std::chrono::high_resolution_clock::now();
+        dt  = te1-te0;
+        tsv += dt.count();
+
+        te0 = std::chrono::high_resolution_clock::now();
+        v        = evallaplace(copy, v, rows, cols);
+        te1 = std::chrono::high_resolution_clock::now();
+        dt       = te1-te0;
+        tlap   += dt.count();
+
+        te0    = std::chrono::high_resolution_clock::now();
         scale(Srows, v, rows, l0);
+        te1    = std::chrono::high_resolution_clock::now();
+        dt     = te1-te0;
+        tstmp += dt.count();
 
         int newr   = sum.tree().max_rank()+
                      v.tree().max_rank();
@@ -4051,25 +4325,699 @@ evallaplace(       Sepop<Optype>&                                  A,
         maxr       = std::max(maxr, newr);
         sumr      += newr;
 
-        //sum.tree() = sum.tree()+v.tree();
-        //std::cout << "Current rank     = " << sum.tree().max_rank() << std::endl;
-        std::cout << "Tolerance        = " << eps/2*eps_/refsum << std::endl;
+        sum.tree() = sum.tree()+v.tree();
         t0 = std::chrono::high_resolution_clock::now();
-        //sum.truncate(eps/2*eps_/refsum);
+        sum.truncate(eps/2*eps_/refsum);
         t1 = std::chrono::high_resolution_clock::now();
         diff  = t1 - t0;
-        //std::cout << "After truncation = " << sum.tree().max_rank() << std::endl;
-        //std::cout << "Time for trunc   = " << diff.count() << " secs\n";
-        std::cout << "\n";
     }
     t1 = std::chrono::high_resolution_clock::now();
     diff  = t1 - t0;
-    std::cout << "Time for evallaplace 2 = " << diff.count() << " secs\n";
+    std::cout << "Second loop = " << diff.count() << " secs\n";
+    std::cout << "Laplace     = " << tlap << " secs\n";
+    std::cout << "Copy        = " << tcopy << " secs\n";
+    std::cout << "Scale copy  = " << tscopy << " secs\n";
+    std::cout << "Scale v     = " << tsv << " secs\n";
+    std::cout << "Scale tmp   = " << tstmp << " secs\n";
+    std::cout << "Norms       = " << tnrm << " secs\n";
 
     std::cout << "evallaplace: maximum rank = " << maxr       << std::endl;
     std::cout << "evallaplace: minimum rank = " << minr       << std::endl;
     std::cout << "evallaplace: average rank = " << (T)sumr/(T) times
                                                 << std::endl;
+    return sum;
+}
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             S,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(rows.size()==S.dim());
+    assert(cols.size()==S.dim());
+
+    typedef FLENS_DEFAULT_INDEXTYPE                     Int;
+    typedef flens::DenseVector<flens::Array<T>>         DenseVector;
+    typedef flens::DenseVector<flens::Array<Int>>       IntVector;
+    typedef flens::GeMatrix<
+            flens::FullStorage<Int, flens::ColMajor> >  Matrix;
+    typedef HTCoefficients<T, Basis>                    Tensor;
+
+    /* Precompute summands */
+    auto Nrows = S.n()+S.nplus()+1;
+    auto Ncols = S.n()+S.nplus()+1;
+
+    DenseVector nrms(Nrows*Ncols);
+    IntVector   ids(Nrows*Ncols);
+    Matrix      map(Nrows*Ncols, 2);
+
+    unsigned count = 0;
+    for (Int l1=-1*S.n(); l1<=(signed) S.nplus(); ++l1) {
+        auto v = u;
+        scale(S, v, l1);
+        v      = evallaplace(A, v, rows, cols);
+
+        for (Int l0=-1*S.n(); l0<=(signed) S.nplus(); ++l0) {
+            auto tmp = v;
+            scale(S, tmp, l0);
+
+            nrms(count+1) = nrm2(tmp);
+
+            map(count+1, 1) = l0;
+            map(count+1, 2) = l1;
+            ++count;
+        }
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    Tensor sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    int times = nrms.length()-count;
+
+    int minr  = 0;
+    int maxr  = 0;
+    int sumr  = 0;
+
+    auto l0   = map(ids(count+1), 1);
+    auto l1   = map(ids(count+1), 2);
+    auto v    = u;
+    scale(S, v, l1);
+    v         = evallaplace(A, v, rows, cols);
+    scale(S, v, l0);
+
+    sum    = v;
+    minr   = sum.tree().max_rank();
+    maxr   = minr;
+    sumr   = maxr;
+
+    T eps_ = nrms(count+1);
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+
+    auto lcols = S.nplus()+S.n()+1;
+    std::vector<Tensor> save(lcols);
+    IntVector           flags(lcols); // Asuuming FLENS 0 initializes
+
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_     += nrms(count+1);
+
+        l0   = map(ids(count+1), 1);
+        l1   = map(ids(count+1), 2);
+        Int l1off = l1 + (signed) S.n() + 1;
+
+        if (!flags(l1off)) {
+            v = u;
+        } else {
+            v = save[l1off-1];
+        }
+
+        if (!flags(l1off)) {
+            scale(S, v, l1);
+        }
+
+        // Save
+        if (!flags(l1off)) {
+            v             = evallaplace(A, v, rows, cols);
+            save[l1off-1] = v;
+            flags(l1off)  = 1;
+        }
+
+        scale(S, v, l0);
+
+        int newr   = sum.tree().max_rank()+
+                     v.tree().max_rank();
+        minr       = std::min(minr, newr);
+        maxr       = std::max(maxr, newr);
+        sumr      += newr;
+
+        sum.tree() = sum.tree()+v.tree();
+        sum.truncate(eps/2*eps_/refsum);
+    }
+
+    std::cout << "evallaplace: maximum rank = " << maxr       << std::endl;
+    std::cout << "evallaplace: minimum rank = " << minr       << std::endl;
+    std::cout << "evallaplace: average rank = " << (T)sumr/(T) times
+                                                << std::endl;
+    std::cout << "evallaplace: final rank   = " << sum.tree().max_rank()
+                                                << std::endl;
+
+    return sum;
+}
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+residualLap(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             S,
+                   HTCoefficients<T, Basis>&                       b,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps)
+{
+    assert(S.dim()==(unsigned) u.dim());
+    assert(rows.size()==S.dim());
+    assert(cols.size()==S.dim());
+
+    typedef FLENS_DEFAULT_INDEXTYPE                     Int;
+    typedef flens::DenseVector<flens::Array<T>>         DenseVector;
+    typedef flens::DenseVector<flens::Array<Int>>       IntVector;
+    typedef flens::GeMatrix<
+            flens::FullStorage<Int, flens::ColMajor> >  Matrix;
+    typedef HTCoefficients<T, Basis>                    Tensor;
+
+    /* Precompute summands */
+    auto Nrows = S.n()+S.nplus()+1;
+    auto Ncols = S.n()+S.nplus()+1;
+
+    DenseVector nrms(Nrows*Ncols);
+    IntVector   ids(Nrows*Ncols);
+    Matrix      map(Nrows*Ncols, 2);
+
+    unsigned count = 0;
+    auto t0  = std::chrono::high_resolution_clock::now();
+    auto t1  = std::chrono::high_resolution_clock::now();
+    auto te0 = t0;
+    auto te1 = t0;
+    std::chrono::duration<T> dt = t1 - t0;
+    auto tloop     = dt.count();
+    tloop          = 0.;
+    auto tvcopy    = tloop;
+    auto tvscale   = tloop;
+    auto tvlap     = tloop;
+    auto ttmpcopy  = tloop;
+    auto ttmpscale = tloop;
+    auto ttmpnrm   = tloop;
+
+    t0  = std::chrono::high_resolution_clock::now();
+    for (Int l1=-1*S.n(); l1<=(signed) S.nplus(); ++l1) {
+        te0     = std::chrono::high_resolution_clock::now();
+        auto v = u;
+        te1     = std::chrono::high_resolution_clock::now();
+        dt      = te1-te0;
+        tvcopy += dt.count();
+
+        te0      = std::chrono::high_resolution_clock::now();
+        scale(S, v, l1);
+        te1      = std::chrono::high_resolution_clock::now();
+        dt       = te1-te0;
+        tvscale += dt.count();
+
+        te0      = std::chrono::high_resolution_clock::now();
+        v  = evallaplace(A, v, rows, cols);
+        te1      = std::chrono::high_resolution_clock::now();
+        dt       = te1-te0;
+        tvlap   += dt.count();
+
+        for (Int l0=-1*S.n(); l0<=(signed) S.nplus(); ++l0) {
+            te0       = std::chrono::high_resolution_clock::now();
+            auto tmp = v;
+            te1       = std::chrono::high_resolution_clock::now();
+            dt        = te1-te0;
+            ttmpcopy += dt.count();
+
+            te0        = std::chrono::high_resolution_clock::now();
+            scale(S, tmp, l0);
+            te1        = std::chrono::high_resolution_clock::now();
+            dt         = te1-te0;
+            ttmpscale += dt.count();
+
+            te0        = std::chrono::high_resolution_clock::now();
+            nrms(count+1)   = nrm2(tmp);
+            te1        = std::chrono::high_resolution_clock::now();
+            dt         = te1-te0;
+            ttmpnrm   += dt.count();
+
+            map(count+1, 1) = l0;
+            map(count+1, 2) = l1;
+            ++count;
+        }
+    }
+    t1     = std::chrono::high_resolution_clock::now();
+    dt     = t1-t0;
+    tloop  = dt.count();
+
+    std::cout << "----------------------------------------------\n";
+    std::cout << "Nrows       = " << Nrows       << "\n";
+    std::cout << "Ncols       = " << Ncols       << "\n";
+    std::cout << "Nrows*Ncols = " << Nrows*Ncols << "\n";
+
+    std::cout << "First loop  = " << tloop       << " secs\n";
+    std::cout << "Copy v      = " << tvcopy      << " secs\n";
+    std::cout << "Scale v     = " << tvscale     << " secs\n";
+    std::cout << "Laplace     = " << tvlap       << " secs\n";
+    std::cout << "Copy tmp    = " << ttmpcopy    << " secs\n";
+    std::cout << "Scale tmp   = " << ttmpscale   << " secs\n";
+    std::cout << "Norm tmp    = " << ttmpnrm     << " secs\n";
+    std::cout << "----------------------------------------------\n";
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    Tensor sum = b;
+    T nrmb     = nrm2(b);
+    T refsum   = (nrms.length()-count+1)*nrmb;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    int times = nrms.length()-count;
+
+    int minr  = 0;
+    int maxr  = 0;
+    int sumr  = 0;
+
+    minr   = b.tree().max_rank();
+    maxr   = minr;
+    sumr   = maxr;
+
+    T eps_ = nrmb;
+
+    auto lcols = S.nplus()+S.n()+1;
+    std::vector<Tensor> save(lcols);
+    IntVector           flags(lcols); // Asuuming FLENS 0 initializes
+
+    int ccopyv     = 0;
+    int csavev     = 0;
+    int cscalev    = 0;
+    int clapv      = 0;
+    int cscalevrow = 0;
+    int ctrunc     = 0;
+
+    tvcopy         = 0.;
+    tvscale        = 0.;
+    tvlap          = 0.;
+    ttmpcopy       = 0.;
+    ttmpnrm        = 0.;
+
+    t0  = std::chrono::high_resolution_clock::now();
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_     += nrms(count+1);
+
+        auto l0   = map(ids(count+1), 1);
+        auto l1   = map(ids(count+1), 2);
+        Int l1off = l1 + (signed) S.n() + 1;
+
+        Tensor v(u.dim(), u.basis(), u.map());
+        te0 = std::chrono::high_resolution_clock::now();
+        if (!flags(l1off)) {
+            v = u;
+        } else {
+            v = save[l1off-1];
+        }
+        te1 = std::chrono::high_resolution_clock::now();
+        dt  = te1-te0;
+        tvcopy += dt.count();
+        ++ccopyv;
+
+        if (!flags(l1off)) {
+            te0 = std::chrono::high_resolution_clock::now();
+            scale(S, v, l1);
+            te1 = std::chrono::high_resolution_clock::now();
+            dt       = te1-te0;
+            tvscale += dt.count();
+            ++cscalev;
+        }
+
+        // Save
+        if (!flags(l1off)) {
+            te0    = std::chrono::high_resolution_clock::now();
+            v   = evallaplace(A, v, rows, cols);
+            te1    = std::chrono::high_resolution_clock::now();
+            dt     = te1-te0;
+            tvlap += dt.count();
+
+            te0       = std::chrono::high_resolution_clock::now();
+            save[l1off-1] = v;
+            flags(l1off)  = 1;
+            te1       = std::chrono::high_resolution_clock::now();
+            dt        = te1-te0;
+            ttmpcopy += dt.count();
+
+            ++clapv;
+            ++csavev;
+        }
+
+        te0        = std::chrono::high_resolution_clock::now();
+        scale(S, v, l0);
+        te1        = std::chrono::high_resolution_clock::now();
+        dt         = te1-te0;
+        ttmpscale += dt.count();
+        ++cscalevrow;
+
+        int newr   = sum.tree().max_rank()+
+                     v.tree().max_rank();
+        minr       = std::min(minr, newr);
+        maxr       = std::max(maxr, newr);
+        sumr      += newr;
+
+        te0        = std::chrono::high_resolution_clock::now();
+        sum.tree() = sum.tree()-v.tree();
+        sum.truncate(eps/2*eps_/refsum);
+        te1        = std::chrono::high_resolution_clock::now();
+        dt         = te1-te0;
+        ttmpnrm   += dt.count();
+        ++ctrunc;
+    }
+    t1     = std::chrono::high_resolution_clock::now();
+    dt     = t1-t0;
+    tloop  = dt.count();
+
+    std::cout << "----------------------------------------------\n";
+    std::cout << "# copy v    = " << ccopyv      << " times\n";
+    std::cout << "# scale v   = " << cscalev     << " times\n";
+    std::cout << "# laplace v = " << clapv       << " times\n";
+    std::cout << "# save v    = " << csavev      << " times\n";
+    std::cout << "# scale row = " << cscalevrow  << " times\n";
+    std::cout << "# truncate  = " << ctrunc      << " times\n";
+
+    std::cout << "Second loop  = " << tloop       << " secs\n";
+    std::cout << "Copy v       = " << tvcopy      << " secs\n";
+    std::cout << "Scale v      = " << tvscale     << " secs\n";
+    std::cout << "Laplace      = " << tvlap       << " secs\n";
+    std::cout << "Copy tmp     = " << ttmpcopy    << " secs\n";
+    std::cout << "Scale rows   = " << ttmpscale   << " secs\n";
+    std::cout << "Truncate     = " << ttmpnrm     << " secs\n";
+
+    std::cout << "residualLap: maximum rank = " << maxr       << std::endl;
+    std::cout << "residualLap: minimum rank = " << minr       << std::endl;
+    std::cout << "residualLap: average rank = " << (T)sumr/(T) times
+                                                << std::endl;
+    std::cout << "residualLap: final rank   = " << sum.tree().max_rank()
+                                                << std::endl;
+    std::cout << "----------------------------------------------\n";
+
+    return sum;
+}
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+residualLap(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             Srows,
+                   Sepdiagscal<Basis>&                             Scols,
+                   HTCoefficients<T, Basis>&                       b,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(Scols.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Scols.dim());
+
+    typedef FLENS_DEFAULT_INDEXTYPE                     Int;
+    typedef flens::DenseVector<flens::Array<T>>         DenseVector;
+    typedef flens::DenseVector<flens::Array<Int>>       IntVector;
+    typedef flens::GeMatrix<
+            flens::FullStorage<Int, flens::ColMajor> >  Matrix;
+    typedef HTCoefficients<T, Basis>                    Tensor;
+
+    /* Precompute summands */
+    auto Nrows = Srows.n()+Srows.nplus()+1;
+    auto Ncols = Scols.n()+Scols.nplus()+1;
+
+    DenseVector nrms(Nrows*Ncols);
+    IntVector   ids(Nrows*Ncols);
+    Matrix      map(Nrows*Ncols, 2);
+
+    unsigned count = 0;
+    for (Int l1=-1*Scols.n(); l1<=(signed) Scols.nplus(); ++l1) {
+        auto v = u;
+        scale(Scols, v, l1);
+        v      = evallaplace(A, v, rows, cols);
+
+        for (Int l0=-1*Srows.n(); l0<=(signed) Srows.nplus(); ++l0) {
+            auto tmp = v;
+            scale(Srows, tmp, l0);
+
+            nrms(count+1) = nrm2(tmp);
+
+            map(count+1, 1) = l0;
+            map(count+1, 2) = l1;
+            ++count;
+        }
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    Tensor sum = b;
+    T nrmb     = nrm2(b);
+    T refsum   = (nrms.length()-count+1)*nrmb;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    int times = nrms.length()-count;
+
+    int minr  = 0;
+    int maxr  = 0;
+    int sumr  = 0;
+
+    minr   = b.tree().max_rank();
+    maxr   = minr;
+    sumr   = maxr;
+
+    T eps_ = nrmb;
+
+    auto lcols = Scols.nplus()+Scols.n()+1;
+    std::vector<Tensor> save(lcols);
+    IntVector           flags(lcols); // Asuuming FLENS 0 initializes
+
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_     += nrms(count+1);
+
+        auto l0   = map(ids(count+1), 1);
+        auto l1   = map(ids(count+1), 2);
+        Int l1off = l1 + (signed) Scols.n() + 1;
+
+        Tensor v(u.dim(), u.basis(), u.map());
+        if (!flags(l1off)) {
+            v = u;
+        } else {
+            v = save[l1off-1];
+        }
+
+        if (!flags(l1off)) {
+            scale(Scols, v, l1);
+        }
+
+        // Save
+        if (!flags(l1off)) {
+            v             = evallaplace(A, v, rows, cols);
+            save[l1off-1] = v;
+            flags(l1off)  = 1;
+        }
+
+        scale(Srows, v, l0);
+
+        int newr   = sum.tree().max_rank()+
+                     v.tree().max_rank();
+        minr       = std::min(minr, newr);
+        maxr       = std::max(maxr, newr);
+        sumr      += newr;
+
+        sum.tree() = sum.tree()-v.tree();
+        sum.truncate(eps/2*eps_/refsum);
+    }
+
+    std::cout << "residualLap: maximum rank = " << maxr       << std::endl;
+    std::cout << "residualLap: minimum rank = " << minr       << std::endl;
+    std::cout << "residualLap: average rank = " << (T)sumr/(T) times
+                                                << std::endl;
+    std::cout << "residualLap: final rank   = " << sum.tree().max_rank()
+                                                << std::endl;
+
+    return sum;
+}
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             Srows,
+                   Sepdiagscal<Basis>&                             Scols,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps)
+{
+    assert(Srows.dim()==(unsigned) u.dim());
+    assert(Scols.dim()==(unsigned) u.dim());
+    assert(rows.size()==Srows.dim());
+    assert(cols.size()==Scols.dim());
+
+    typedef FLENS_DEFAULT_INDEXTYPE                     Int;
+    typedef flens::DenseVector<flens::Array<T>>         DenseVector;
+    typedef flens::DenseVector<flens::Array<Int>>       IntVector;
+    typedef flens::GeMatrix<
+            flens::FullStorage<Int, flens::ColMajor> >  Matrix;
+    typedef HTCoefficients<T, Basis>                    Tensor;
+
+    /* Precompute summands */
+    auto Nrows = Srows.n()+Srows.nplus()+1;
+    auto Ncols = Scols.n()+Scols.nplus()+1;
+
+    DenseVector nrms(Nrows*Ncols);
+    IntVector   ids(Nrows*Ncols);
+    Matrix      map(Nrows*Ncols, 2);
+
+    unsigned count = 0;
+    for (Int l1=-1*Scols.n(); l1<=(signed) Scols.nplus(); ++l1) {
+        auto v = u;
+        scale(Scols, v, l1);
+        v      = evallaplace(A, v, rows, cols);
+
+        for (Int l0=-1*Srows.n(); l0<=(signed) Srows.nplus(); ++l0) {
+            auto tmp = v;
+            scale(Srows, tmp, l0);
+
+            nrms(count+1) = nrm2(tmp);
+
+            map(count+1, 1) = l0;
+            map(count+1, 2) = l1;
+            ++count;
+        }
+    }
+
+    /* Sort norms */
+    flens::sort(nrms, ids);
+    count    = 0;
+    T cutoff = 0.;
+    for (; count<(unsigned) nrms.length(); ++count) {
+        cutoff += nrms(count+1);
+        if (cutoff>eps/2) break;
+    }
+
+    if (count==(unsigned) nrms.length()) {
+        std::cerr << "eval: Warning! Truncation parameter too large!\n";
+        count = nrms.length()-1;
+    }
+
+    /* Add and truncate */
+    Tensor sum(u.dim(), u.basis(), u.map());
+    T refsum = 0.;
+    for (unsigned i=count+1; i<=(unsigned) nrms.length(); ++i) {
+        refsum += (T) (nrms.length()-i+1)*nrms(i);
+    }
+
+    int times = nrms.length()-count;
+
+    int minr = 0;
+    int maxr = 0;
+    int sumr = 0;
+
+    auto l0   = map(ids(count+1), 1);
+    auto l1   = map(ids(count+1), 2);
+    auto v    = u;
+    scale(Scols, v, l1);
+    v         = evallaplace(A, v, rows, cols);
+    scale(Srows, v, l0);
+
+    sum    = v;
+    minr   = sum.tree().max_rank();
+    maxr   = minr;
+    sumr   = maxr;
+
+    T eps_ = nrms(count+1);
+    sum.truncate(eps/2*eps_/refsum);
+    ++count;
+
+    auto lcols = Scols.nplus()+Scols.n()+1;
+    std::vector<Tensor> save(lcols);
+    IntVector           flags(lcols); // Asuuming FLENS 0 initializes
+
+    for (; count<(unsigned) nrms.length(); ++count) {
+        eps_     += nrms(count+1);
+
+        l0        = map(ids(count+1), 1);
+        l1        = map(ids(count+1), 2);
+        Int l1off = l1 + (signed) Scols.n() + 1;
+
+        if (!flags(l1off)) {
+            v = u;
+        } else {
+            v = save[l1off-1];
+        }
+
+        if (!flags(l1off)) {
+            scale(Scols, v, l1);
+        }
+
+        // Save
+        if (!flags(l1off)) {
+            v             = evallaplace(A, v, rows, cols);
+            save[l1off-1] = v;
+            flags(l1off)  = 1;
+        }
+
+        scale(Srows, v, l0);
+
+        int newr   = sum.tree().max_rank()+
+                     v.tree().max_rank();
+        minr       = std::min(minr, newr);
+        maxr       = std::max(maxr, newr);
+        sumr      += newr;
+
+        sum.tree() = sum.tree()+v.tree();
+        sum.truncate(eps/2*eps_/refsum);
+    }
+
+    std::cout << "evallaplace: maximum rank = " << maxr       << std::endl;
+    std::cout << "evallaplace: minimum rank = " << minr       << std::endl;
+    std::cout << "evallaplace: average rank = " << (T)sumr/(T) times
+                                                << std::endl;
+
     return sum;
 }
 
@@ -4251,6 +5199,41 @@ energy(const std::vector<
 }
 
 
+template <typename T, typename Basis, typename Optype>
+T
+energy(      Sepop<Optype>&                                A,
+             Sepdiagscal<Basis>&                           S,
+             HTCoefficients<T, Basis>&                     left,
+             HTCoefficients<T, Basis>&                     right,
+       const std::vector<IndexSet<Index1D> >&              cols)
+{
+    assert(S.dim()==(unsigned) left.dim());
+    assert(cols.size()==S.dim());
+    assert(left.dim()==right.dim());
+
+    /* Compute inner product */
+    T        sum   = 0.;
+    unsigned count = 0;
+    for (FLENS_DEFAULT_INDEXTYPE l1=-1*S.n();
+                                 l1<=(signed) S.nplus();
+                                 ++l1) {
+        auto v = right;
+        scale(S, v, l1);
+        v      = evallaplace(A, v, cols, cols);
+        for (FLENS_DEFAULT_INDEXTYPE l0=-1*S.n();
+                                     l0<=(signed) S.nplus();
+                                     ++l0) {
+            auto tmp = v;
+            scale(S, tmp, l0);
+            sum += dot(left, tmp);
+            ++count;
+        }
+    }
+
+    return sum;
+}
+
+
 template <typename T, typename Basis>
 T
 energy(const HTCoefficients<T, Basis>&                left,
@@ -4289,8 +5272,8 @@ applyScale(      Sepdiagscal<Basis>&              S,
     for (FLENS_DEFAULT_INDEXTYPE l0=-1*S.n();
                                  l0<=(signed) S.nplus();
                                  ++l0) {
-        auto v = u;
-        scale(S, v, cols, l0);
+        auto v        = u;
+        scale(S, v, l0);
         nrms(count+1) = nrm2(v);
         prods[count]  = v;
         ++count;
@@ -4323,8 +5306,8 @@ applyScale(      Sepdiagscal<Basis>&              S,
     ++count;
     for (; count<(unsigned) nrms.length(); ++count) {
         eps_      += nrms(count+1);
-        sum.tree() = add_truncate(sum.tree(), prods[ids(count+1)-1].tree(),
-                     eps/2*eps_/refsum);
+        sum.tree() = sum.tree() + prods[ids(count+1)-1].tree();
+        sum.truncate(eps/2*eps_/refsum);
     }
 
     return sum;

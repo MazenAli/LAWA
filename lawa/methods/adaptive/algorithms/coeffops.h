@@ -17,18 +17,18 @@
 // This is a big fucking mess. Sorry...
 
 namespace lawa
-{
+    {
 
-template <SortingCriterion S, typename T, typename Index>
-void
-setCoefficients(SepCoefficients<S, T, Index>& coeffs,
-                const typename SepCoefficients<S, T, Index>
-                ::CoeffVec& _coeffs);
+    template <SortingCriterion S, typename T, typename Index>
+    void
+    setCoefficients(SepCoefficients<S, T, Index>& coeffs,
+                    const typename SepCoefficients<S, T, Index>
+                    ::CoeffVec& _coeffs);
 
 
-template <SortingCriterion S, typename T, typename Index>
-void
-setCoefficients(SepCoefficients<S, T, Index>& coeffs,
+    template <SortingCriterion S, typename T, typename Index>
+    void
+    setCoefficients(SepCoefficients<S, T, Index>& coeffs,
                 const typename SepCoefficients<S, T, Index>
                 ::size_type i,
                 const typename SepCoefficients<S, T, Index>
@@ -227,6 +227,18 @@ extract(const HTCoefficients<T, Basis>& tree,
 
 
 template <typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >&
+extract_inplace(      HTCoefficients<T, Basis>& tree,
+                const htucker::DimensionIndex& idx);
+
+
+template <typename T, typename Basis>
+flens::GeMatrix<flens::FullStorage<T, flens::ColMajor> >&
+extract_inplace(      HTCoefficients<T, Basis>& tree,
+                const unsigned                  j);
+
+
+template <typename T, typename Basis>
 SepCoefficients<Lexicographical, T, Index1D>
 extract(      HTCoefficients<T, Basis>& tree,
         const IndexSet<Index1D>& Lambda,
@@ -344,6 +356,50 @@ evallaplace(Sepop<Optype>& A,
             const HTCoefficients<T, Basis>& u,
             const double eps = 1e-08,
             const std::size_t hashtablelength=193);
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             S,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps);
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+residualLap(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             S,
+                   HTCoefficients<T, Basis>&                       b,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps);
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+residualLap(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             Srows,
+                   Sepdiagscal<Basis>&                             Scols,
+                   HTCoefficients<T, Basis>&                       b,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps);
+
+
+template <typename Optype, typename T, typename Basis>
+HTCoefficients<T, Basis>
+evallaplace(       Sepop<Optype>&                                  A,
+                   Sepdiagscal<Basis>&                             Srows,
+                   Sepdiagscal<Basis>&                             Scols,
+                   HTCoefficients<T, Basis>&                       u,
+             const std::vector<IndexSet<Index1D> >&                rows,
+             const std::vector<IndexSet<Index1D> >&                cols,
+             const T                                               eps);
 
 
 template <typename T, typename Optype, typename Basis>
@@ -731,6 +787,13 @@ scale(      Sepdiagscal<Basis>&              S,
       const FLENS_DEFAULT_INDEXTYPE          l);
 
 
+template <typename T, typename Basis>
+void
+scale(      Sepdiagscal<Basis>&              S,
+            HTCoefficients<T, Basis>&        u,
+      const FLENS_DEFAULT_INDEXTYPE          l);
+
+
 /* Truncation strategy as in DB (least efficient) */
 template <typename T, typename Basis, typename Optype>
 HTCoefficients<T, Basis>
@@ -740,6 +803,25 @@ eval(      Sepop<Optype>&                   A,
      const std::vector<IndexSet<Index1D> >& rows,
      const std::vector<IndexSet<Index1D> >& cols,
      const T                                eps = 1e-08);
+
+
+template <typename T, typename Basis>
+T
+energy(const std::vector<
+             Coefficients<Lexicographical, T, Index2D> >&  Ts,
+             Sepdiagscal<Basis>&                           S,
+             HTCoefficients<T, Basis>&                     left,
+             HTCoefficients<T, Basis>&                     right,
+       const std::vector<IndexSet<Index1D> >&              cols);
+
+
+template <typename T, typename Basis, typename Optype>
+T
+energy(      Sepop<Optype>&                                A,
+             Sepdiagscal<Basis>&                           S,
+             HTCoefficients<T, Basis>&                     left,
+             HTCoefficients<T, Basis>&                     right,
+       const std::vector<IndexSet<Index1D> >&              cols);
 
 
 /* Truncation strategy II from AU (2x times faster than DB) */

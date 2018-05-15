@@ -38,7 +38,7 @@ unsigned
 galerkin_pcg2(Sepop<Optype>& A,
               Sepdiagscal<Basis>& S,
               HTCoefficients<T, Basis>& x,
-              const HTCoefficients<T, Basis>& b,
+              HTCoefficients<T, Basis>& b,
               const std::vector<IndexSet<Index1D> >& Lambda,
               T& residual,
               const bool uzero     = true,

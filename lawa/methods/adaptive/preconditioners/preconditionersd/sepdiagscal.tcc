@@ -11,17 +11,21 @@
 
 #include <cassert>
 #include <cmath>
+#include <lawa/methods/adaptive/algorithms/coeffops.h>
+#include <lawa/methods/adaptive/datastructures/indexset.h>
 
 namespace lawa
 {
 
 template <typename Basis>
 Sepdiagscal<Basis>::Sepdiagscal(const size_type _dim, const Basis& _basis,
+                                      Maptype& _map,
                                 const T _order, const T _eps, const T _nu,
                                 const T _h, const T _iscale,
                                 const size_type _nplus, const size_type _n):
     dim_(_dim),
     basis_(&_basis),
+    map_(&_map),
     order_(_order),
     eps_(_eps),
     nu_(_nu),
@@ -54,6 +58,15 @@ Sepdiagscal<Basis>::basis() const
 {
     assert(basis_);
     return *basis_;
+}
+
+
+template <typename Basis>
+typename Sepdiagscal<Basis>::Maptype&
+Sepdiagscal<Basis>::map()
+{
+    assert(map_);
+    return *map_;
 }
 
 
@@ -196,6 +209,84 @@ Sepdiagscal<Basis>::comp_n()
                    std::abs(std::log(min))
                    +0.5*std::log(iscale())));
     set_n(_n);
+}
+
+
+template <typename Basis>
+void
+Sepdiagscal<Basis>::assemble(const std::vector<IndexSet<Index1D> >& cols)
+{
+    assert(cols.size() == dim());
+
+    // n and n+
+    T iscale = compIndexscale(basis(), cols, order());
+    set_iscale(iscale);
+    comp_n();
+    size_type rank = n() + nplus() + 1;
+
+    // Set up storage
+    Ds_.resize(dim()*rank);
+
+    // w_min
+    T omega2  = compOmegamin2(basis(), dim(), order());
+    T factor1 = h()*(1./std::sqrt(omega2));
+
+    DenseIntVector  sizes(dim());
+    for (size_type j=1; j<=dim(); ++j) {
+        sizes(j) = maxintindhash(cols[j-1], j, map());
+    }
+
+    for (Int i=-1*n(); i<=(signed) nplus(); ++i) {
+        T factor2 = 2.*std::pow(M_PI, -0.5)*
+                    (1./(1+std::exp(-1.*h()*(T) i)));
+        factor2   = std::pow(factor1*factor2, 1./(T) dim());
+        T alpha   = std::pow(std::log(1.+std::exp((T) i*h())), 2.);
+
+        for (size_type j=1; j<=dim(); ++j) {
+            DenseVector Dij(sizes(j));
+
+            for (const auto& lambda : cols[j-1]) {
+                Int level = lambda.j;
+                if (lambda.xtype==XWavelet) ++level;
+                T weight  = std::pow(2., 2.*order()*level)/omega2;
+
+                auto k    = map()(lambda, j);
+                Dij(k) = factor2*std::exp(-alpha*weight);
+            }
+            operator()(i, j).resize(sizes(j));
+            operator()(i, j).diag() = Dij;
+        }
+    }
+}
+
+
+template <typename Basis>
+const typename Sepdiagscal<Basis>::DiagMat&
+Sepdiagscal<Basis>::operator()(const Int       k,
+                               const size_type j) const
+{
+    assert(k>=-1*(signed) n() && k<=(signed) nplus());
+    const size_type i    = k+(signed) n();
+    const size_type rank = nplus()+n()+1;
+    assert(j>=1 && j <= dim());
+    assert((j-1)*rank+i <= Ds_.size());
+
+    return Ds_[(j-1)*rank+i];
+}
+
+
+template <typename Basis>
+typename Sepdiagscal<Basis>::DiagMat&
+Sepdiagscal<Basis>::operator()(const Int       k,
+                               const size_type j)
+{
+    assert(k>=-1*(signed) n() && k<=(signed) nplus());
+    const size_type i    = k+(signed) n();
+    const size_type rank = nplus()+n()+1;
+    assert(j>=1 && j <= dim());
+    assert((j-1)*rank+i <= Ds_.size());
+
+    return Ds_[(j-1)*rank+i];
 }
 
 } // namespace lawa

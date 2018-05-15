@@ -143,7 +143,8 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
 
     genCoefficients(fcp, f, Lambda0);
     set(f_Lambda, fcp);
-    f_Lambda = applyScaleTT(S, f_Lambda, Lambda0, tol);
+    S.assemble(Lambda0);
+    f_Lambda     = applyScale(S, f_Lambda, Lambda0, tol);
 
     T fdelta     = nrm2(f_Lambda);
     residual     = fdelta;
@@ -197,8 +198,6 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                 }
 
                 std::cout << "        total size = " << sum << std::endl;
-                std::cout << "        rank = " << u0.tree().max_rank()
-                          << std::endl;
             }
             // Fix rhs for pcg
             start   = std::chrono::system_clock::now();
@@ -207,14 +206,13 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             set(f_Lambda, fcp);
 
             // Determine scaling precision
+            T lower  = 10.;
             T eps_km = omega2*residual;
-            T eta_km = (1.-S.eps())*residual/
+            T eta_km = (1.-S.eps())*residual*lower/
                        (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-//            S.set_nu(eta_km);
-//            T iscale = compIndexscale(u0.basis(), Lambda, S.order());
-//            S.set_iscale(iscale);
-//            S.comp_n();
-            f_Lambda = applyScaleTT(S, f_Lambda, Lambda, eps_km);
+            //S.set_nu(eta_km);
+            S.assemble(Lambda);
+            f_Lambda = applyScale(S, f_Lambda, Lambda, eps_km);
 
             end     = std::chrono::system_clock::now();
             elapsed = std::chrono::duration_cast<std::chrono::seconds>
@@ -247,9 +245,12 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             T        delta  = 1e-01;
             unsigned pcgit  = galerkin_pcg2(A, S, u0, f_Lambda, Lambda,
                                             res_pcg,
-                                            zero, eps_km, I, delta, eps_km);
+                                            zero, eps_km, I, delta, residual);
             zero            = false;
-            if (k==0 && m==1) err0 = nrm2(u0);
+            if (k==0 && m==1) {
+                err0 = nrm2(u0);
+                std::cout << "err0 = " << err0 << std::endl;
+            }
 
             if (verbose) {
                  std::cout << "htawgm: pcg required " << pcgit
@@ -268,7 +269,7 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                               << elapsed.count() << " secs\n";
             }
             // Evaluate residual
-            start  = std::chrono::system_clock::now();
+            start    = std::chrono::system_clock::now();
 
             sweep    = presidual2(A, S, u0, f_Lambda, fcp, rtree, f,
                                   Lambda, sweep, total,
@@ -296,6 +297,11 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                           << " secs\n";
 
             }
+            if (verbose) {
+                std::cout << "htawgm: rank = " << u0.tree().max_rank()
+                          << std::endl;
+            }
+
             if ((1.+omega1)*residual<=tol) return k;
 
             // Check stopping criterion
@@ -353,11 +359,11 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
         omega0 *= omega3+omega4+omega5;
 
         // Determine scaling precision
-        T eps_km = residual*10.;
-        T eta_km = (1.-S.eps())*residual/
+        T eps_km = residual;
+        T eta_km = (1.-S.eps())*residual*10/
                    (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
- //       S.set_nu(eta_km);
-
+        //S.set_nu(eta_km);
+        S.assemble(Lambda);
         (void) presidual2(A, S, u0, f_Lambda, fcp, rtree, f,
                           Lambda, sweep, total,
                           eps_km);
@@ -511,27 +517,27 @@ main(int argc, char* argv[])
     RefIdentity1D   RefIdentityBil(basis.refinementbasis);
     LOp_Lapl1D      lapl(basis, basis, RefLaplaceBil, LaplaceBil);
 
-    rndinit(u, indexsetvec, 5, 1.);
+    rndinit(u, indexsetvec, 1, 0.);
     Sepop A(lapl, dim, dim);
 
-    lawa::Sepdiagscal<Basis>    S(dim, basis);
+    lawa::Sepdiagscal<Basis>    S(dim, basis, map);
 
-    lawa::HTRICH_Params  params;
-    params.omega      = 1e-03;
-    params.cA         = 1.;
-    params.eps0       = 5e-02;
-    params.rho        = 0.92;
-    params.maxit_inner= 250;
-    params.beta1      = 1e-01;
-    params.beta2      = 1e-01;
-    params.maxit_rich = 100;
-
-    double alpha      = 1e-02;
-    double kappaP     = std::sqrt(2.*dim-3.);
-    double kappaC     = std::sqrt(dim);
-    params.kappa1     = 1./(1.+(1.+alpha)*(kappaP+kappaC+kappaP*kappaC));
-    params.kappa2     = (1.+alpha)*kappaP*params.kappa1;
-    params.kappa3     = kappaC*(kappaP+1.)*(1.+alpha)*params.kappa1;
+//    lawa::HTRICH_Params  params;
+//    params.omega      = 1e-03;
+//    params.cA         = 1.;
+//    params.eps0       = 5e-02;
+//    params.rho        = 0.92;
+//    params.maxit_inner= 250;
+//    params.beta1      = 1e-01;
+//    params.beta2      = 1e-01;
+//    params.maxit_rich = 100;
+//
+//    double alpha      = 1e-02;
+//    double kappaP     = std::sqrt(2.*dim-3.);
+//    double kappaC     = std::sqrt(dim);
+//    params.kappa1     = 1./(1.+(1.+alpha)*(kappaP+kappaC+kappaP*kappaC));
+//    params.kappa2     = (1.+alpha)*kappaP*params.kappa1;
+//    params.kappa3     = kappaC*(kappaP+1.)*(1.+alpha)*params.kappa1;
 
     lawa::HTAWGM_Params params2;
     params2.nrmA       = 100.;
@@ -544,19 +550,13 @@ main(int argc, char* argv[])
     params2.gamma1     = 8e-02;
     params2.gammait    = 9;
 
-//    std::cout << "HTRICH params =\n";
-//    std::cout << params << std::endl;
-//
-//    std::cout << "HTAWGM params =\n";
-//    std::cout << params2 << std::endl;
-
     unsigned its = 0;
     double   res = 0;
 
     genCoefficients(coeffs, Fint, indexsetvec);
     set(f, coeffs);
-    T delta  = 1e-01;
-    T eta    = 1e-01;
+    T delta  = 0.5;
+    T eta    = 0.1;
     setScaling(S, delta);
     S.set_nu(eta);
 
@@ -571,22 +571,22 @@ main(int argc, char* argv[])
     T lambda_min = 0.3;
     T kA         = lambda_max/lambda_min;
     T comprho    = 1.01;
-    T outrho     = 1e-01;
-    alpha        = 0.9;
+    T outrho     = 0.5;
+    T alpha      = 0.9;
 
-    T omega1     = 0.2;
+    T omega1     = 0.1;
     T omega2     = 0.5;
     T omega3     = outrho/(1.+comprho*std::sqrt(2.*dim-3)+
                               comprho*std::sqrt((T) dim)*
                               (1.+std::sqrt(2.*dim-3)));
     T omega4     = comprho*std::sqrt(2.*dim-3)*omega3;
     T omega5     = comprho*std::sqrt((T) dim)*(1.+std::sqrt(2.*dim-3))*omega3;
-    T tol        = 1e-04;
+    T tol        = 1e-06;
 
-    unsigned I = 20;
+    unsigned I = 10;
 //    unsigned M = std::ceil(std::abs(std::log(omega3/std::sqrt(kA))/
 //                           std::log(inrho)));
-    unsigned M = 20;
+    unsigned M = 50;
 //    unsigned K = std::ceil(std::abs(
 //                 std::log(1./(tol*kA*omega3*omega0*(1.+omega1))*(1.-omega1))/
 //                 std::log(omega3+omega4+omega5)));
@@ -594,304 +594,31 @@ main(int argc, char* argv[])
 
     bool verbose = true;
 
-//    std::cout << "*** HTAWGM Parameters ***\n";
-//    std::cout << "lambda_max = " << lambda_max << std::endl;
-//    std::cout << "lambda_min = " << lambda_min << std::endl;
-//    std::cout << "kA         = " << kA << std::endl;
-//    std::cout << "alpha      = " << alpha << std::endl;
-//    std::cout << "omega1     = " << omega1 << std::endl;
-//    std::cout << "omega2     = " << omega2 << std::endl;
-//    std::cout << "omega3     = " << omega3 << std::endl;
-//    std::cout << "omega4     = " << omega4 << std::endl;
-//    std::cout << "omega5     = " << omega5 << std::endl;
-//    std::cout << "vartheta   = " << inrho  << std::endl;
-//    std::cout << "I          = " << I      << std::endl;
-//    std::cout << "M          = " << M      << std::endl;
-//    std::cout << "K          = " << K      << std::endl;
-//    std::cout << "*** ----------------- ***\n";
+    std::cout << "*** HTAWGM Parameters ***\n";
+    std::cout << "lambda_max = " << lambda_max << std::endl;
+    std::cout << "lambda_min = " << lambda_min << std::endl;
+    std::cout << "kA         = " << kA << std::endl;
+    std::cout << "alpha      = " << alpha << std::endl;
+    std::cout << "omega1     = " << omega1 << std::endl;
+    std::cout << "omega2     = " << omega2 << std::endl;
+    std::cout << "omega3     = " << omega3 << std::endl;
+    std::cout << "omega4     = " << omega4 << std::endl;
+    std::cout << "omega5     = " << omega5 << std::endl;
+    std::cout << "I          = " << I      << std::endl;
+    std::cout << "M          = " << M      << std::endl;
+    std::cout << "K          = " << K      << std::endl;
+    std::cout << "*** ----------------- ***\n";
 
- // Compare to exact scaling
- //   std::cout << "rank f = " << f.tree().max_rank() << std::endl;
- //   std::cout << "nrm(f) = " << nrm2(f) << std::endl;
- //   f.tree().print_w_UorB();
- //   auto ist   = applyScale(S, f, indexsetvec, 1e-08/nrm2(f));
- //   S.set_nu(1e-07);
- //   auto soll2 = applyScale(S, f, indexsetvec, 1e-08/nrm2(f));
- //   lawa::Coefficients<lawa::Lexicographical, T, lawa::Index2D> soll;
- //   T omega_min = compOmegamin2(S.basis(), S.dim(), S.order());
-
- //   for (auto& mu1 : indexsetvec[0]) {
- //       for (auto& mu2 : indexsetvec[1]) {
- //           lawa::IndexD  indexd(2);
- //           lawa::Index2D index(mu1, mu2);
- //           indexd(1)   = mu1;
- //           indexd(2)   = mu2;
- //           int l1      = mu1.j;
- //           int l2      = mu2.j;
- //           if (mu1.xtype==lawa::XWavelet) ++l1;
- //           if (mu2.xtype==lawa::XWavelet) ++l2;
-
- //           T scale1 = std::pow(2., 2.*(T) l1);
- //           T scale2 = std::pow(2., 2.*(T) l2);
- //           T scale  = scale1+scale2;
-
- //           soll[index] = f(indexd)/std::sqrt(scale);
- //       }
- //   }
-
- //   T err  = 0.;
- //   T err2 = 0.;
- //   soll2.tree() = ist.tree()-soll2.tree();
- //   soll2.orthogonalize();
- //   for (auto& mu : soll) {
- //       lawa::IndexD  indexd(2);
- //       indexd(1) = mu.first.index1;
- //       indexd(2) = mu.first.index2;
- //       int l1    = mu.first.index1.j;
- //       int l2    = mu.first.index2.j;
- //       if (mu.first.index1.xtype==lawa::XWavelet) ++l1;
- //       if (mu.first.index1.xtype==lawa::XWavelet) ++l2;
-
- //       T scale     = std::pow(2., 2.*(T) l1);
- //         scale    += std::pow(2., 2.*(T) l2);
-
- //       err  += scale*std::pow(mu.second-ist(indexd), 2.);
- //       err2 += scale*std::pow(soll2(indexd), 2.);
- //   }
- //   std::cout << "*\n*\n*\nErr1 = "
- //             << std::sqrt(err)/nrm2(f) << std::endl;
- //   std::cout << "Err2 = "
- //             << std::sqrt(err2)/nrm2(f) << std::endl;
-
-
- //   T t      = (std::pow(2., 2.)+std::pow(2., 2.*2.));
- //   T c      = std::sqrt(omega_min);
-
- //   T varphi = appScale(t/(c*c), delta, eta, t/(c*c));
- //   err = std::sqrt(t)*std::abs(1./(std::sqrt(t))-varphi/c);
- //   std::cout << "Err3 = " << err << std::endl;
-
- //   exit(1);
-    unsigned sum = 0;
-    for (unsigned j=0; j<indexsetvec.size(); ++j) {
-        unsigned jmax = 0;
-        for (const auto& it : indexsetvec[j]) {
-            unsigned l = it.j;
-            if (it.xtype==lawa::XWavelet) ++l;
-            jmax = std::max(jmax, l);
-        }
-
-        sum += indexsetvec[j].size();
-        std::cout << "        d = " << j+1
-                  << ", size = " << indexsetvec[j].size()
-                  << ", max level = " << jmax << std::endl;
-    }
-    std::cout << "        total size = " << sum << std::endl;
-
-    T    eps_ = 1e-4;
-    std::cout << "Rank u = " << u.tree().max_rank() << std::endl;
-    T nrmu = nrm2(u);
+//    T trunc = 1e-02*nrm2(u);
 //
-//    unsigned seed = time(NULL);
-//    srand(seed);
-//    int N = indexsetvec[0].size();
-//    GeMat C(N, N);
-//    GeMat D(N, N);
-//    GeMat RES;
-//    for (int i=1; i<=N; ++i) {
-//        for (int j=1; j<=N; ++j) {
-//            C(i, j) = (T) rand()/ (T) RAND_MAX;
-//            D(i, j) = (T) rand()/ (T) RAND_MAX;
-//        }
-//    }
-//    u.orthogonalize();
-    std::cout << "nrmu = " << nrmu << std::endl;
-    std::cout << "\n***------------***\n";
-    auto t0   = std::chrono::high_resolution_clock::now();
-    auto Ax   = evallaplace(A, S, u, indexsetvec, indexsetvec, eps_*nrmu);
-    //u.tree().truncate(eps_*nrmu);
-    //u.tree().print_w_UorB();
-    //u.tree().truncate(10);
-//    auto gram = gramians_orthogonal(u.tree());
-//    //flens::blas::mm(cxxblas::NoTrans, cxxblas::NoTrans, 1., C, D, 0., RES);
-    auto t1   = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<T> dt = t1-t0;
-//    std::cout << "gram took " << dt.count() << " secs\n";
+//    auto t0 = std::chrono::high_resolution_clock::now();
+//    u.truncate(trunc);
+//    auto t1 = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<T> dt = t1-t0;
+//    std::cout << "trunc took " << dt.count() << " secs\n";
 //
-//    std::cout << "\n***------------***\n";
-//    t0   = std::chrono::high_resolution_clock::now();
-//    auto gram2 = gramians_orthogonal2(u.tree());
-//    t1   = std::chrono::high_resolution_clock::now();
-//    std::chrono::duration<T> dt2 = t1-t0;
-//    std::cout << "gram2 took " << dt2.count() << " secs\n";
 //
-//    std::cout << "\n***------------***\n";
-//    t0   = std::chrono::high_resolution_clock::now();
-//    auto gram3 = gramians_orthogonal3(u.tree());
-//    t1   = std::chrono::high_resolution_clock::now();
-//    std::chrono::duration<T> dt3 = t1-t0;
-//    std::cout << "gram3 took " << dt3.count() << " secs\n";
-
-    std::cout << "A*x took " << dt.count() << " secs\n";
-   std::cout << "final rank = " << Ax.tree().max_rank() << std::endl;
-
- //   unsigned maxi = maxintindhash(indexsetvec[0], u, 1);
- //   DenseVector uT(maxi*maxi*maxi*maxi);
- //   for (auto ind1 : indexsetvec[0]) {
- //       for (auto ind2 : indexsetvec[1]) {
- //           for (auto ind3 : indexsetvec[2]) {
- //               for (auto ind4 : indexsetvec[3]) {
- //                   int i1     = u.map()(ind1, 1);
- //                   int i2     = u.map()(ind2, 2);
- //                   int i3     = u.map()(ind3, 3);
- //                   int i4     = u.map()(ind4, 4);
-
- //                   int d4     = maxi*maxi*maxi;
- //                   int d3     = maxi*maxi;
- //                   int d2     = maxi;
- //                   int i      = (i4-1)*d4+(i3-1)*d3+(i2-1)*d2+i1;
-
- //                   lawa::IndexD lambda(4);
- //                   lambda(1) = ind1;
- //                   lambda(2) = ind2;
- //                   lambda(3) = ind3;
- //                   lambda(4) = ind4;
-
- //                   int j1 = ind1.j;
- //                   if (ind1.xtype==lawa::XWavelet) ++j1;
- //                   int j2 = ind2.j;
- //                   if (ind2.xtype==lawa::XWavelet) ++j2;
- //                   int j3 = ind3.j;
- //                   if (ind3.xtype==lawa::XWavelet) ++j3;
- //                   int j4 = ind4.j;
- //                   if (ind4.xtype==lawa::XWavelet) ++j4;
-
- //                   T w  = std::pow(2., 2.*j1);
- //                     w += std::pow(2., 2.*j2);
- //                     w += std::pow(2., 2.*j3);
- //                     w += std::pow(2., 2.*j4);
- //                     w  = std::sqrt(w);
-
- //                   uT(i)     = u(lambda)/w;
- //               }
- //           }
- //       }
- //   }
-
-
- //   DenseVector AxT(maxi*maxi*maxi*maxi);
- //   for (auto ind1 : indexsetvec[0]) {
- //       for (auto ind2 : indexsetvec[1]) {
- //           for (auto ind3 : indexsetvec[2]) {
- //               for (auto ind4 : indexsetvec[3]) {
- //                   int i1     = Ax.map()(ind1, 1);
- //                   int i2     = Ax.map()(ind2, 2);
- //                   int i3     = Ax.map()(ind3, 3);
- //                   int i4     = Ax.map()(ind4, 4);
-
- //                   int d4     = maxi*maxi*maxi;
- //                   int d3     = maxi*maxi;
- //                   int d2     = maxi;
- //                   int i      = (i4-1)*d4+(i3-1)*d3+(i2-1)*d2+i1;
-
- //                   lawa::IndexD lambda(4);
- //                   lambda(1) = ind1;
- //                   lambda(2) = ind2;
- //                   lambda(3) = ind3;
- //                   lambda(4) = ind4;
-
- //                   AxT(i)     = Ax(lambda);
- //               }
- //           }
- //       }
- //   }
-
-
-
- //   DenseVector AuT(maxi*maxi*maxi*maxi);
- //   for (auto r1 : indexsetvec[0]) {
- //       for (auto r2 : indexsetvec[1]) {
- //           for (auto r3 : indexsetvec[2]) {
- //               for (auto r4 : indexsetvec[3]) {
- //                   int i1     = u.map()(r1, 1);
- //                   int i2     = u.map()(r2, 2);
- //                   int i3     = u.map()(r3, 3);
- //                   int i4     = u.map()(r4, 4);
-
- //                   int d4     = maxi*maxi*maxi;
- //                   int d3     = maxi*maxi;
- //                   int d2     = maxi;
- //                   int i      = (i4-1)*d4+(i3-1)*d3+(i2-1)*d2+i1;
-
- //                   lawa::IndexD lambda(4);
- //                   lambda(1) = r1;
- //                   lambda(2) = r2;
- //                   lambda(3) = r3;
- //                   lambda(4) = r4;
-
- //                   int j1 = r1.j;
- //                   if (r1.xtype==lawa::XWavelet) ++j1;
- //                   int j2 = r2.j;
- //                   if (r2.xtype==lawa::XWavelet) ++j2;
- //                   int j3 = r3.j;
- //                   if (r3.xtype==lawa::XWavelet) ++j3;
- //                   int j4 = r4.j;
- //                   if (r4.xtype==lawa::XWavelet) ++j4;
-
- //                   T w  = std::pow(2., 2.*j1);
- //                     w += std::pow(2., 2.*j2);
- //                     w += std::pow(2., 2.*j3);
- //                     w += std::pow(2., 2.*j4);
- //                     w  = std::sqrt(w);
-
- //                   AuT(i) = 0.;
- //                   for (auto c1 : indexsetvec[0]) {
- //                       for (auto c2 : indexsetvec[1]) {
- //                           for (auto c3 : indexsetvec[2]) {
- //                               for (auto c4 : indexsetvec[3]) {
- //                                   int k1     = u.map()(c1, 1);
- //                                   int k2     = u.map()(c2, 2);
- //                                   int k3     = u.map()(c3, 3);
- //                                   int k4     = u.map()(c4, 4);
-
- //                                   int d4     = maxi*maxi*maxi;
- //                                   int d3     = maxi*maxi;
- //                                   int d2     = maxi;
- //                                   int k      = (k4-1)*d4+(k3-1)*d3+(k2-1)*d2+k1;
-
-
- //                                   T a1     = LaplaceBil(r1, c1);
- //                                   T a2     = LaplaceBil(r2, c2);
- //                                   T a3     = LaplaceBil(r3, c3);
- //                                   T a4     = LaplaceBil(r4, c4);
-
- //                                   T delta1 = (i1==k1);
- //                                   T delta2 = (i2==k2);
- //                                   T delta3 = (i3==k3);
- //                                   T delta4 = (i4==k4);
-
- //                                   T a = a1*delta2*delta3*delta4+
- //                                         delta1*a2*delta3*delta4+
- //                                         delta1*delta2*a3*delta4+
- //                                         delta1*delta2*delta3*a4;
-
- //                                   AuT(i) += a*uT(k);
- //                               }
- //                           }
- //                       }
- //                  }
-
- //               AuT(i) /= w;
- //               }
- //           }
- //       }
- //   }
-
- //   DenseVector diff = AuT-AxT;
- //   std::cout << "l2 difference = " << flens::blas::nrm2(diff)/
- //                                      flens::blas::nrm2(AuT) << std::endl;
-
-    exit(1);
+//    exit(1);
     its = htawgm3(S, A, u, Fint, indexsetvec,
                   omega1,
                   omega2,
