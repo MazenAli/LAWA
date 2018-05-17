@@ -210,7 +210,7 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             T eps_km = omega2*residual;
             T eta_km = (1.-S.eps())*residual*lower/
                        (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-            //S.set_nu(eta_km);
+            S.set_nu(eta_km);
             S.assemble(Lambda);
             f_Lambda = applyScale(S, f_Lambda, Lambda, eps_km);
 
@@ -354,6 +354,10 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                 std::cout << "        C(T(...)) took "
                           << elapsed.count() << " secs\n";
         }
+        if (verbose) {
+                std::cout << "htawgm: rank = " << u0.tree().max_rank()
+                          << std::endl;
+        }
 
         genCoefficients(fcp, f, Lambda);
         omega0 *= omega3+omega4+omega5;
@@ -362,7 +366,7 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
         T eps_km = residual;
         T eta_km = (1.-S.eps())*residual*10/
                    (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-        //S.set_nu(eta_km);
+        S.set_nu(eta_km);
         S.assemble(Lambda);
         (void) presidual2(A, S, u0, f_Lambda, fcp, rtree, f,
                           Lambda, sweep, total,
@@ -571,7 +575,7 @@ main(int argc, char* argv[])
     T lambda_min = 0.3;
     T kA         = lambda_max/lambda_min;
     T comprho    = 1.01;
-    T outrho     = 0.5;
+    T outrho     = 0.1;
     T alpha      = 0.9;
 
     T omega1     = 0.1;
