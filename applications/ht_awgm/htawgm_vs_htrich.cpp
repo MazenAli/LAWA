@@ -210,7 +210,7 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
             T eps_km = omega2*residual;
             T eta_km = (1.-S.eps())*residual*lower/
                        (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-            S.set_nu(eta_km);
+            //S.set_nu(eta_km);
             S.assemble(Lambda);
             f_Lambda = applyScale(S, f_Lambda, Lambda, eps_km);
 
@@ -366,7 +366,7 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
         T eps_km = residual;
         T eta_km = (1.-S.eps())*residual*10/
                    (3.*(2.*fdelta+2.*lambda_max*nrm2(u0)));
-        S.set_nu(eta_km);
+        //S.set_nu(eta_km);
         S.assemble(Lambda);
         (void) presidual2(A, S, u0, f_Lambda, fcp, rtree, f,
                           Lambda, sweep, total,
