@@ -5031,3 +5031,3323 @@ residualLap: average rank = 196.351
 residualLap: final rank   = 156
 ----------------------------------------------
 pcg: residualLap time: 12228
+pcg: (r, Ap) time: 7627
+pcg: Update p time: 74
+pcg: Iteration 1 residual 1.96186e-06
+pcg: max rank r 156
+pcg: max rank solution 60
+pcg: max rank p 87
+pcg: max rank b 12
+pcg: trunc_acc    = 1.32684e-09
+pcg: nrmp         = 2.26364e-06
+pcg: ak           = 0.00398041
+pcg: bk           = 0.331557
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 849
+pcg: update x time: 2
+pcg: tol = 1.96186e-06
+----------------------------------------------
+Nrows       = 40
+Ncols       = 40
+Nrows*Ncols = 1600
+First loop  = 1432 secs
+Copy v      = 0.229604 secs
+Scale v     = 0.151367 secs
+Laplace     = 97.5318 secs
+Copy tmp    = 58.5052 secs
+Scale tmp   = 11.9598 secs
+Norm tmp    = 1263.55 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 1285 times
+# scale v   = 40 times
+# laplace v = 40 times
+# save v    = 40 times
+# scale row = 1285 times
+# truncate  = 1285 times
+Second loop  = 16226.1 secs
+Copy v       = 45.2144 secs
+Scale v      = 0.152171 secs
+Laplace      = 97.4309 secs
+Copy tmp     = 1.48299 secs
+Scale rows   = 21.4823 secs
+Truncate     = 16071.9 secs
+residualLap: maximum rank = 322
+residualLap: minimum rank = 12
+residualLap: average rank = 230.23
+residualLap: final rank   = 185
+----------------------------------------------
+pcg: residualLap time: 17658
+pcg: (r, Ap) time: 2380
+pcg: Update p time: 37
+pcg: Iteration 2 residual 1.56739e-06
+pcg: max rank r 185
+pcg: max rank solution 68
+pcg: max rank p 87
+pcg: max rank b 12
+pcg: trunc_acc    = 1.08504e-09
+pcg: nrmp         = 1.97226e-06
+pcg: ak           = 0.00479335
+pcg: bk           = 0.467473
+pcg: Tolerance reached r = 1.56739e-06
+htawgm: pcg required 3 iterations for r<=1.56739e-06
+
+*** PCG end ***
+
+htawgm: Iteration (0, 24)
+        PCG took 62834 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 9.41827e-07
+presidual: S*f took 0 secs
+residualLap: maximum rank = 356
+residualLap: minimum rank = 10
+residualLap: average rank = 256.806
+residualLap: final rank   = 224
+presidual: residualLap took 15606 secs
+htawgm: Iteration (0, 24)
+        RES took 15612 secs
+htawgm: Iteration (0, 24), residual = 2.37426e-06
+        Current time: 289751 secs
+htawgm: rank = 68
+htawgm: Iteration 0
+        eps trunc  = 2.19003e-05
+        eps coarse = 0.000139749
+        nrm(u)     = 0.00327464
+htawgm: Iteration 0
+        C(T(...)) took 0 secs
+htawgm: rank = 6
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 1.18713e-06
+presidual: S*f took 0 secs
+residualLap: maximum rank = 64
+residualLap: minimum rank = 5
+residualLap: average rank = 52.6029
+residualLap: final rank   = 48
+presidual: residualLap took 51 secs
+htawgm: Iteration 1, omega0 = 0.0111605, residual = 0.0211435
+        Current time: 289803 secs
+htawgm: Iteration (1, 1)
+        d = 1, size = 16, max level = 3
+        d = 2, size = 16, max level = 3
+        d = 3, size = 17, max level = 3
+        d = 4, size = 17, max level = 3
+        d = 5, size = 16, max level = 3
+        d = 6, size = 17, max level = 3
+        d = 7, size = 17, max level = 3
+        d = 8, size = 17, max level = 3
+        d = 9, size = 17, max level = 3
+        d = 10, size = 17, max level = 3
+        d = 11, size = 17, max level = 3
+        d = 12, size = 17, max level = 3
+        d = 13, size = 16, max level = 3
+        d = 14, size = 17, max level = 3
+        d = 15, size = 17, max level = 3
+        d = 16, size = 16, max level = 3
+        d = 17, size = 17, max level = 3
+        d = 18, size = 16, max level = 3
+        d = 19, size = 17, max level = 3
+        d = 20, size = 17, max level = 3
+        d = 21, size = 16, max level = 3
+        d = 22, size = 17, max level = 3
+        d = 23, size = 17, max level = 3
+        d = 24, size = 16, max level = 3
+        d = 25, size = 17, max level = 3
+        d = 26, size = 17, max level = 3
+        d = 27, size = 17, max level = 3
+        d = 28, size = 17, max level = 3
+        d = 29, size = 17, max level = 3
+        d = 30, size = 17, max level = 3
+        d = 31, size = 16, max level = 3
+        d = 32, size = 16, max level = 3
+        total size = 534
+htawgm: Iteration (1, 1)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 1)
+        eps_km  = 0.0105717
+        eta_km  = 0.145108
+        rank(S) = 21
+htawgm: Iteration (1, 1)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 21
+Ncols       = 21
+Nrows*Ncols = 441
+First loop  = 2.05458 secs
+Copy v      = 0.000659767 secs
+Scale v     = 0.00158257 secs
+Laplace     = 0.282847 secs
+Copy tmp    = 0.0236041 secs
+Scale tmp   = 0.0479167 secs
+Norm tmp    = 1.69364 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 175 times
+# scale v   = 15 times
+# laplace v = 15 times
+# save v    = 15 times
+# scale row = 175 times
+# truncate  = 175 times
+Second loop  = 1.93012 secs
+Copy v       = 0.0101732 secs
+Scale v      = 0.00115536 secs
+Laplace      = 0.200481 secs
+Copy tmp     = 0.000866874 secs
+Scale rows   = 0.0680953 secs
+Truncate     = 1.68876 secs
+residualLap: maximum rank = 16
+residualLap: minimum rank = 2
+residualLap: average rank = 14.4
+residualLap: final rank   = 3
+----------------------------------------------
+pcg: initial residual time: 3
+pcg: Iteration 0 residual 0.00679363
+pcg: max rank r 3
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 0
+pcg: update x time: 0
+pcg: tol = 0.00679363
+----------------------------------------------
+Nrows       = 21
+Ncols       = 21
+Nrows*Ncols = 441
+First loop  = 2.11543 secs
+Copy v      = 0.000742886 secs
+Scale v     = 0.00151239 secs
+Laplace     = 0.280061 secs
+Copy tmp    = 0.0248789 secs
+Scale tmp   = 0.0452671 secs
+Norm tmp    = 1.75849 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 251 times
+# scale v   = 19 times
+# laplace v = 19 times
+# save v    = 19 times
+# scale row = 251 times
+# truncate  = 251 times
+Second loop  = 3.72846 secs
+Copy v       = 0.0151842 secs
+Scale v      = 0.00144982 secs
+Laplace      = 0.255736 secs
+Copy tmp     = 0.00112517 secs
+Scale rows   = 0.0743101 secs
+Truncate     = 3.41414 secs
+residualLap: maximum rank = 24
+residualLap: minimum rank = 2
+residualLap: average rank = 17.494
+residualLap: final rank   = 12
+----------------------------------------------
+pcg: residualLap time: 5
+pcg: (r, Ap) time: 0
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00754796
+pcg: max rank r 12
+pcg: max rank solution 6
+pcg: max rank p 7
+pcg: max rank b 2
+pcg: trunc_acc    = 8.31292e-06
+pcg: nrmp         = 0.00519721
+pcg: ak           = 0.0122363
+pcg: bk           = 1.18614
+pcg: Tolerance reached r = 0.00754796
+htawgm: pcg required 2 iterations for r<=0.00754796
+
+*** PCG end ***
+
+htawgm: Iteration (1, 1)
+        PCG took 10 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.00528586
+presidual: S*f took 0 secs
+residualLap: maximum rank = 24
+residualLap: minimum rank = 2
+residualLap: average rank = 20.4615
+residualLap: final rank   = 12
+presidual: residualLap took 5 secs
+htawgm: Iteration (1, 1)
+        RES took 5 secs
+htawgm: Iteration (1, 1), residual = 0.0201679
+        Current time: 289820 secs
+htawgm: rank = 6
+bulk: true alpha = 0.903489
+htawgm: Iteration (1, 1)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 2)
+        d = 1, size = 18, max level = 3
+        d = 2, size = 19, max level = 4
+        d = 3, size = 20, max level = 4
+        d = 4, size = 20, max level = 4
+        d = 5, size = 19, max level = 4
+        d = 6, size = 20, max level = 4
+        d = 7, size = 20, max level = 4
+        d = 8, size = 20, max level = 4
+        d = 9, size = 21, max level = 4
+        d = 10, size = 19, max level = 3
+        d = 11, size = 19, max level = 3
+        d = 12, size = 20, max level = 4
+        d = 13, size = 18, max level = 3
+        d = 14, size = 21, max level = 4
+        d = 15, size = 21, max level = 4
+        d = 16, size = 20, max level = 4
+        d = 17, size = 21, max level = 4
+        d = 18, size = 18, max level = 3
+        d = 19, size = 20, max level = 4
+        d = 20, size = 21, max level = 4
+        d = 21, size = 19, max level = 4
+        d = 22, size = 20, max level = 4
+        d = 23, size = 21, max level = 4
+        d = 24, size = 20, max level = 4
+        d = 25, size = 20, max level = 3
+        d = 26, size = 21, max level = 4
+        d = 27, size = 21, max level = 4
+        d = 28, size = 21, max level = 4
+        d = 29, size = 21, max level = 4
+        d = 30, size = 21, max level = 4
+        d = 31, size = 20, max level = 4
+        d = 32, size = 19, max level = 4
+        total size = 639
+htawgm: Iteration (1, 2)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 2)
+        eps_km  = 0.0100839
+        eta_km  = 0.138196
+        rank(S) = 22
+htawgm: Iteration (1, 2)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 22
+Ncols       = 22
+Nrows*Ncols = 484
+First loop  = 2.74844 secs
+Copy v      = 0.000851933 secs
+Scale v     = 0.00189941 secs
+Laplace     = 0.4167 secs
+Copy tmp    = 0.0289895 secs
+Scale tmp   = 0.0595332 secs
+Norm tmp    = 2.23564 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 187 times
+# scale v   = 16 times
+# laplace v = 16 times
+# save v    = 16 times
+# scale row = 187 times
+# truncate  = 187 times
+Second loop  = 2.95987 secs
+Copy v       = 0.011851 secs
+Scale v      = 0.00135111 secs
+Laplace      = 0.30156 secs
+Copy tmp     = 0.00100069 secs
+Scale rows   = 0.0832701 secs
+Truncate     = 2.61193 secs
+residualLap: maximum rank = 20
+residualLap: minimum rank = 2
+residualLap: average rank = 16.2834
+residualLap: final rank   = 7
+----------------------------------------------
+pcg: initial residual time: 5
+pcg: Iteration 0 residual 0.018077
+pcg: max rank r 7
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 0
+pcg: update x time: 0
+pcg: tol = 0.018077
+----------------------------------------------
+Nrows       = 22
+Ncols       = 22
+Nrows*Ncols = 484
+First loop  = 4.11743 secs
+Copy v      = 0.00099753 secs
+Scale v     = 0.00231089 secs
+Laplace     = 0.624344 secs
+Copy tmp    = 0.062587 secs
+Scale tmp   = 0.0786412 secs
+Norm tmp    = 3.3435 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 199 times
+# scale v   = 16 times
+# laplace v = 16 times
+# save v    = 16 times
+# scale row = 199 times
+# truncate  = 199 times
+Second loop  = 4.61651 secs
+Copy v       = 0.0244423 secs
+Scale v      = 0.00168002 secs
+Laplace      = 0.454533 secs
+Copy tmp     = 0.00206371 secs
+Scale rows   = 0.11272 secs
+Truncate     = 4.08896 secs
+residualLap: maximum rank = 25
+residualLap: minimum rank = 2
+residualLap: average rank = 20.5427
+residualLap: final rank   = 8
+----------------------------------------------
+pcg: residualLap time: 8
+pcg: (r, Ap) time: 0
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00489715
+pcg: max rank r 8
+pcg: max rank solution 8
+pcg: max rank p 8
+pcg: max rank b 2
+pcg: trunc_acc    = 8.72649e-06
+pcg: nrmp         = 0.018077
+pcg: ak           = 0.00482739
+pcg: bk           = -0.00859526
+pcg: Tolerance reached r = 0.00489715
+htawgm: pcg required 2 iterations for r<=0.00489715
+
+*** PCG end ***
+
+htawgm: Iteration (1, 2)
+        PCG took 15 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.00504197
+presidual: S*f took 0 secs
+residualLap: maximum rank = 34
+residualLap: minimum rank = 2
+residualLap: average rank = 26.9503
+residualLap: final rank   = 17
+presidual: residualLap took 11 secs
+htawgm: Iteration (1, 2)
+        RES took 11 secs
+htawgm: Iteration (1, 2), residual = 0.00987804
+        Current time: 289847 secs
+htawgm: rank = 8
+bulk: true alpha = 0.9031
+htawgm: Iteration (1, 2)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 3)
+        d = 1, size = 22, max level = 4
+        d = 2, size = 22, max level = 4
+        d = 3, size = 24, max level = 4
+        d = 4, size = 24, max level = 4
+        d = 5, size = 23, max level = 4
+        d = 6, size = 24, max level = 4
+        d = 7, size = 24, max level = 4
+        d = 8, size = 24, max level = 4
+        d = 9, size = 24, max level = 4
+        d = 10, size = 24, max level = 4
+        d = 11, size = 24, max level = 4
+        d = 12, size = 24, max level = 4
+        d = 13, size = 23, max level = 4
+        d = 14, size = 24, max level = 4
+        d = 15, size = 24, max level = 4
+        d = 16, size = 23, max level = 4
+        d = 17, size = 24, max level = 4
+        d = 18, size = 23, max level = 4
+        d = 19, size = 24, max level = 4
+        d = 20, size = 24, max level = 4
+        d = 21, size = 23, max level = 4
+        d = 22, size = 24, max level = 4
+        d = 23, size = 24, max level = 4
+        d = 24, size = 23, max level = 4
+        d = 25, size = 24, max level = 4
+        d = 26, size = 24, max level = 4
+        d = 27, size = 24, max level = 4
+        d = 28, size = 24, max level = 4
+        d = 29, size = 24, max level = 4
+        d = 30, size = 24, max level = 4
+        d = 31, size = 23, max level = 4
+        d = 32, size = 23, max level = 4
+        total size = 756
+htawgm: Iteration (1, 3)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 3)
+        eps_km  = 0.00493902
+        eta_km  = 0.0676678
+        rank(S) = 23
+htawgm: Iteration (1, 3)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 23
+Ncols       = 23
+Nrows*Ncols = 529
+First loop  = 5.17831 secs
+Copy v      = 0.00114477 secs
+Scale v     = 0.002822 secs
+Laplace     = 0.802986 secs
+Copy tmp    = 0.0707203 secs
+Scale tmp   = 0.105507 secs
+Norm tmp    = 4.18957 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 254 times
+# scale v   = 19 times
+# laplace v = 19 times
+# save v    = 19 times
+# scale row = 254 times
+# truncate  = 254 times
+Second loop  = 7.81588 secs
+Copy v       = 0.0366839 secs
+Scale v      = 0.0023083 secs
+Laplace      = 0.653897 secs
+Copy tmp     = 0.00252728 secs
+Scale rows   = 0.158102 secs
+Truncate     = 7.05399 secs
+residualLap: maximum rank = 32
+residualLap: minimum rank = 2
+residualLap: average rank = 24.0276
+residualLap: final rank   = 15
+----------------------------------------------
+pcg: initial residual time: 13
+pcg: Iteration 0 residual 0.00919221
+pcg: max rank r 15
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 2
+pcg: update x time: 0
+pcg: tol = 0.00919221
+----------------------------------------------
+Nrows       = 23
+Ncols       = 23
+Nrows*Ncols = 529
+First loop  = 9.03794 secs
+Copy v      = 0.00160105 secs
+Scale v     = 0.0035041 secs
+Laplace     = 1.04419 secs
+Copy tmp    = 0.195444 secs
+Scale tmp   = 0.131297 secs
+Norm tmp    = 7.65533 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 260 times
+# scale v   = 19 times
+# laplace v = 19 times
+# save v    = 19 times
+# scale row = 260 times
+# truncate  = 260 times
+Second loop  = 13.5109 secs
+Copy v       = 0.103407 secs
+Scale v      = 0.00281048 secs
+Laplace      = 0.863755 secs
+Copy tmp     = 0.00712555 secs
+Scale rows   = 0.19921 secs
+Truncate     = 12.4495 secs
+residualLap: maximum rank = 42
+residualLap: minimum rank = 2
+residualLap: average rank = 31.9962
+residualLap: final rank   = 14
+----------------------------------------------
+pcg: residualLap time: 22
+pcg: (r, Ap) time: 2
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00333941
+pcg: max rank r 14
+pcg: max rank solution 12
+pcg: max rank p 10
+pcg: max rank b 2
+pcg: trunc_acc    = 4.76902e-06
+pcg: nrmp         = 0.00351336
+pcg: ak           = 0.00518811
+pcg: bk           = 0.0686074
+pcg: Tolerance reached r = 0.00333941
+htawgm: pcg required 2 iterations for r<=0.00333941
+
+*** PCG end ***
+
+htawgm: Iteration (1, 3)
+        PCG took 40 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.00246951
+presidual: S*f took 0 secs
+residualLap: maximum rank = 51
+residualLap: minimum rank = 3
+residualLap: average rank = 41.9838
+residualLap: final rank   = 23
+presidual: residualLap took 30 secs
+htawgm: Iteration (1, 3)
+        RES took 30 secs
+htawgm: Iteration (1, 3), residual = 0.00675906
+        Current time: 289918 secs
+htawgm: rank = 12
+bulk: true alpha = 0.902074
+htawgm: Iteration (1, 3)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 4)
+        d = 1, size = 26, max level = 4
+        d = 2, size = 26, max level = 5
+        d = 3, size = 27, max level = 5
+        d = 4, size = 28, max level = 5
+        d = 5, size = 27, max level = 5
+        d = 6, size = 27, max level = 5
+        d = 7, size = 27, max level = 5
+        d = 8, size = 28, max level = 5
+        d = 9, size = 27, max level = 5
+        d = 10, size = 26, max level = 4
+        d = 11, size = 28, max level = 5
+        d = 12, size = 27, max level = 5
+        d = 13, size = 26, max level = 5
+        d = 14, size = 28, max level = 5
+        d = 15, size = 27, max level = 5
+        d = 16, size = 26, max level = 5
+        d = 17, size = 27, max level = 5
+        d = 18, size = 25, max level = 4
+        d = 19, size = 28, max level = 5
+        d = 20, size = 28, max level = 5
+        d = 21, size = 27, max level = 5
+        d = 22, size = 28, max level = 5
+        d = 23, size = 28, max level = 5
+        d = 24, size = 27, max level = 5
+        d = 25, size = 27, max level = 5
+        d = 26, size = 28, max level = 5
+        d = 27, size = 27, max level = 5
+        d = 28, size = 28, max level = 5
+        d = 29, size = 28, max level = 5
+        d = 30, size = 28, max level = 5
+        d = 31, size = 26, max level = 5
+        d = 32, size = 26, max level = 5
+        total size = 867
+htawgm: Iteration (1, 4)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 4)
+        eps_km  = 0.00337953
+        eta_km  = 0.046308
+        rank(S) = 24
+htawgm: Iteration (1, 4)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 24
+Ncols       = 24
+Nrows*Ncols = 576
+First loop  = 10.1531 secs
+Copy v      = 0.00171905 secs
+Scale v     = 0.00402047 secs
+Laplace     = 1.30359 secs
+Copy tmp    = 0.214138 secs
+Scale tmp   = 0.162157 secs
+Norm tmp    = 8.46015 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 293 times
+# scale v   = 20 times
+# laplace v = 20 times
+# save v    = 20 times
+# scale row = 293 times
+# truncate  = 293 times
+Second loop  = 19.7388 secs
+Copy v       = 0.123036 secs
+Scale v      = 0.00324825 secs
+Laplace      = 1.09682 secs
+Copy tmp     = 0.00760696 secs
+Scale rows   = 0.247845 secs
+Truncate     = 18.4019 secs
+residualLap: maximum rank = 44
+residualLap: minimum rank = 3
+residualLap: average rank = 35.116
+residualLap: final rank   = 19
+----------------------------------------------
+pcg: initial residual time: 29
+pcg: Iteration 0 residual 0.00580034
+pcg: max rank r 19
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 4
+pcg: update x time: 0
+pcg: tol = 0.00580034
+----------------------------------------------
+Nrows       = 24
+Ncols       = 24
+Nrows*Ncols = 576
+First loop  = 13.4777 secs
+Copy v      = 0.00275615 secs
+Scale v     = 0.00391221 secs
+Laplace     = 1.34507 secs
+Copy tmp    = 0.313874 secs
+Scale tmp   = 0.159629 secs
+Norm tmp    = 11.6448 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 306 times
+# scale v   = 20 times
+# laplace v = 20 times
+# save v    = 20 times
+# scale row = 306 times
+# truncate  = 306 times
+Second loop  = 31.7877 secs
+Copy v       = 0.197023 secs
+Scale v      = 0.00330301 secs
+Laplace      = 1.12235 secs
+Copy tmp     = 0.0108734 secs
+Scale rows   = 0.251647 secs
+Truncate     = 30.3383 secs
+residualLap: maximum rank = 53
+residualLap: minimum rank = 3
+residualLap: average rank = 42.3856
+residualLap: final rank   = 19
+----------------------------------------------
+pcg: residualLap time: 45
+pcg: (r, Ap) time: 4
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00267962
+pcg: max rank r 19
+pcg: max rank solution 16
+pcg: max rank p 15
+pcg: max rank b 3
+pcg: trunc_acc    = 3.06841e-06
+pcg: nrmp         = 0.00290313
+pcg: ak           = 0.00529005
+pcg: bk           = 0.123881
+pcg: Tolerance reached r = 0.00267962
+htawgm: pcg required 2 iterations for r<=0.00267962
+
+*** PCG end ***
+
+htawgm: Iteration (1, 4)
+        PCG took 85 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.00168976
+presidual: S*f took 0 secs
+residualLap: maximum rank = 63
+residualLap: minimum rank = 3
+residualLap: average rank = 51.6355
+residualLap: final rank   = 27
+presidual: residualLap took 50 secs
+htawgm: Iteration (1, 4)
+        RES took 51 secs
+htawgm: Iteration (1, 4), residual = 0.00559295
+        Current time: 290054 secs
+htawgm: rank = 16
+bulk: true alpha = 0.901545
+htawgm: Iteration (1, 4)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 5)
+        d = 1, size = 28, max level = 5
+        d = 2, size = 28, max level = 5
+        d = 3, size = 29, max level = 5
+        d = 4, size = 29, max level = 5
+        d = 5, size = 28, max level = 5
+        d = 6, size = 29, max level = 5
+        d = 7, size = 30, max level = 5
+        d = 8, size = 29, max level = 5
+        d = 9, size = 30, max level = 5
+        d = 10, size = 30, max level = 5
+        d = 11, size = 29, max level = 5
+        d = 12, size = 30, max level = 5
+        d = 13, size = 27, max level = 5
+        d = 14, size = 29, max level = 5
+        d = 15, size = 30, max level = 5
+        d = 16, size = 28, max level = 5
+        d = 17, size = 30, max level = 5
+        d = 18, size = 29, max level = 5
+        d = 19, size = 29, max level = 5
+        d = 20, size = 29, max level = 5
+        d = 21, size = 28, max level = 5
+        d = 22, size = 29, max level = 5
+        d = 23, size = 29, max level = 5
+        d = 24, size = 28, max level = 5
+        d = 25, size = 29, max level = 5
+        d = 26, size = 29, max level = 5
+        d = 27, size = 30, max level = 5
+        d = 28, size = 29, max level = 5
+        d = 29, size = 29, max level = 5
+        d = 30, size = 29, max level = 5
+        d = 31, size = 29, max level = 5
+        d = 32, size = 29, max level = 5
+        total size = 927
+htawgm: Iteration (1, 5)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 5)
+        eps_km  = 0.00279647
+        eta_km  = 0.0383231
+        rank(S) = 25
+htawgm: Iteration (1, 5)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 25
+Ncols       = 25
+Nrows*Ncols = 625
+First loop  = 14.7595 secs
+Copy v      = 0.00314174 secs
+Scale v     = 0.00421075 secs
+Laplace     = 1.57303 secs
+Copy tmp    = 0.344022 secs
+Scale tmp   = 0.188341 secs
+Norm tmp    = 12.6382 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 317 times
+# scale v   = 21 times
+# laplace v = 21 times
+# save v    = 21 times
+# scale row = 317 times
+# truncate  = 317 times
+Second loop  = 36.2883 secs
+Copy v       = 0.208917 secs
+Scale v      = 0.0036474 secs
+Laplace      = 1.35215 secs
+Copy tmp     = 0.0114842 secs
+Scale rows   = 0.290586 secs
+Truncate     = 34.5842 secs
+residualLap: maximum rank = 54
+residualLap: minimum rank = 3
+residualLap: average rank = 43.3722
+residualLap: final rank   = 19
+----------------------------------------------
+pcg: initial residual time: 51
+pcg: Iteration 0 residual 0.00425589
+pcg: max rank r 19
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 6
+pcg: update x time: 0
+pcg: tol = 0.00425589
+----------------------------------------------
+Nrows       = 25
+Ncols       = 25
+Nrows*Ncols = 625
+First loop  = 16.9035 secs
+Copy v      = 0.00374503 secs
+Scale v     = 0.004549 secs
+Laplace     = 1.73803 secs
+Copy tmp    = 0.403008 secs
+Scale tmp   = 0.201097 secs
+Norm tmp    = 14.5444 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 343 times
+# scale v   = 21 times
+# laplace v = 21 times
+# save v    = 21 times
+# scale row = 343 times
+# truncate  = 343 times
+Second loop  = 45.3525 secs
+Copy v       = 0.266163 secs
+Scale v      = 0.00391962 secs
+Laplace      = 1.46533 secs
+Copy tmp     = 0.013392 secs
+Scale rows   = 0.320243 secs
+Truncate     = 43.4548 secs
+residualLap: maximum rank = 61
+residualLap: minimum rank = 3
+residualLap: average rank = 45.9883
+residualLap: final rank   = 21
+----------------------------------------------
+pcg: residualLap time: 62
+pcg: (r, Ap) time: 6
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00249104
+pcg: max rank r 21
+pcg: max rank solution 17
+pcg: max rank p 17
+pcg: max rank b 3
+pcg: trunc_acc    = 2.00663e-06
+pcg: nrmp         = 0.00276186
+pcg: ak           = 0.00471494
+pcg: bk           = 0.191569
+pcg: Tolerance reached r = 0.00249104
+htawgm: pcg required 2 iterations for r<=0.00249104
+
+*** PCG end ***
+
+htawgm: Iteration (1, 5)
+        PCG took 126 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.00139824
+presidual: S*f took 0 secs
+residualLap: maximum rank = 70
+residualLap: minimum rank = 3
+residualLap: average rank = 56.2356
+residualLap: final rank   = 29
+presidual: residualLap took 70 secs
+htawgm: Iteration (1, 5)
+        RES took 70 secs
+htawgm: Iteration (1, 5), residual = 0.00381943
+        Current time: 290251 secs
+htawgm: rank = 17
+bulk: true alpha = 0.900935
+htawgm: Iteration (1, 5)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 6)
+        d = 1, size = 30, max level = 5
+        d = 2, size = 30, max level = 6
+        d = 3, size = 31, max level = 6
+        d = 4, size = 31, max level = 6
+        d = 5, size = 30, max level = 6
+        d = 6, size = 33, max level = 6
+        d = 7, size = 32, max level = 6
+        d = 8, size = 32, max level = 6
+        d = 9, size = 33, max level = 6
+        d = 10, size = 32, max level = 5
+        d = 11, size = 31, max level = 6
+        d = 12, size = 32, max level = 6
+        d = 13, size = 34, max level = 6
+        d = 14, size = 33, max level = 6
+        d = 15, size = 32, max level = 6
+        d = 16, size = 34, max level = 6
+        d = 17, size = 34, max level = 6
+        d = 18, size = 31, max level = 5
+        d = 19, size = 31, max level = 6
+        d = 20, size = 31, max level = 6
+        d = 21, size = 31, max level = 6
+        d = 22, size = 31, max level = 6
+        d = 23, size = 32, max level = 6
+        d = 24, size = 31, max level = 6
+        d = 25, size = 33, max level = 6
+        d = 26, size = 32, max level = 6
+        d = 27, size = 33, max level = 6
+        d = 28, size = 33, max level = 6
+        d = 29, size = 33, max level = 6
+        d = 30, size = 33, max level = 6
+        d = 31, size = 34, max level = 6
+        d = 32, size = 33, max level = 6
+        total size = 1026
+htawgm: Iteration (1, 6)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 6)
+        eps_km  = 0.00190971
+        eta_km  = 0.0261743
+        rank(S) = 26
+htawgm: Iteration (1, 6)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 26
+Ncols       = 26
+Nrows*Ncols = 676
+First loop  = 18.6432 secs
+Copy v      = 0.00411804 secs
+Scale v     = 0.00525957 secs
+Laplace     = 2.02332 secs
+Copy tmp    = 0.463724 secs
+Scale tmp   = 0.283913 secs
+Norm tmp    = 15.8536 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 361 times
+# scale v   = 23 times
+# laplace v = 23 times
+# save v    = 23 times
+# scale row = 361 times
+# truncate  = 361 times
+Second loop  = 53.9191 secs
+Copy v       = 0.296902 secs
+Scale v      = 0.00477512 secs
+Laplace      = 1.79353 secs
+Copy tmp     = 0.0156914 secs
+Scale rows   = 0.440665 secs
+Truncate     = 51.617 secs
+residualLap: maximum rank = 62
+residualLap: minimum rank = 3
+residualLap: average rank = 46.9945
+residualLap: final rank   = 21
+----------------------------------------------
+pcg: initial residual time: 72
+pcg: Iteration 0 residual 0.0031524
+pcg: max rank r 21
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 10
+pcg: update x time: 0
+pcg: tol = 0.0031524
+----------------------------------------------
+Nrows       = 26
+Ncols       = 26
+Nrows*Ncols = 676
+First loop  = 19.6203 secs
+Copy v      = 0.00414407 secs
+Scale v     = 0.00537475 secs
+Laplace     = 2.07807 secs
+Copy tmp    = 0.499629 secs
+Scale tmp   = 0.307004 secs
+Norm tmp    = 16.7168 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 378 times
+# scale v   = 23 times
+# laplace v = 23 times
+# save v    = 23 times
+# scale row = 378 times
+# truncate  = 378 times
+Second loop  = 58.309 secs
+Copy v       = 0.346438 secs
+Scale v      = 0.00491705 secs
+Laplace      = 1.84067 secs
+Copy tmp     = 0.016996 secs
+Scale rows   = 0.483011 secs
+Truncate     = 55.8854 secs
+residualLap: maximum rank = 68
+residualLap: minimum rank = 3
+residualLap: average rank = 51.5291
+residualLap: final rank   = 23
+----------------------------------------------
+pcg: residualLap time: 77
+pcg: (r, Ap) time: 11
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00210921
+pcg: max rank r 23
+pcg: max rank solution 19
+pcg: max rank p 18
+pcg: max rank b 3
+pcg: trunc_acc    = 1.72716e-06
+pcg: nrmp         = 0.00250465
+pcg: ak           = 0.00547887
+pcg: bk           = 0.34271
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 6
+pcg: update x time: 0
+pcg: tol = 0.00210921
+----------------------------------------------
+Nrows       = 26
+Ncols       = 26
+Nrows*Ncols = 676
+First loop  = 18.9666 secs
+Copy v      = 0.00389813 secs
+Scale v     = 0.00541442 secs
+Laplace     = 2.06877 secs
+Copy tmp    = 0.494907 secs
+Scale tmp   = 0.30603 secs
+Norm tmp    = 16.0781 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 413 times
+# scale v   = 24 times
+# laplace v = 24 times
+# save v    = 24 times
+# scale row = 413 times
+# truncate  = 413 times
+Second loop  = 77.0469 secs
+Copy v       = 0.381863 secs
+Scale v      = 0.00507254 secs
+Laplace      = 1.92738 secs
+Copy tmp     = 0.0175598 secs
+Scale rows   = 0.49759 secs
+Truncate     = 74.4812 secs
+residualLap: maximum rank = 74
+residualLap: minimum rank = 3
+residualLap: average rank = 55.4092
+residualLap: final rank   = 30
+----------------------------------------------
+pcg: residualLap time: 96
+pcg: (r, Ap) time: 9
+pcg: Update p time: 0
+pcg: Iteration 2 residual 0.00164143
+pcg: max rank r 30
+pcg: max rank solution 19
+pcg: max rank p 20
+pcg: max rank b 3
+pcg: trunc_acc    = 1.84852e-06
+pcg: nrmp         = 0.00211492
+pcg: ak           = 0.00738037
+pcg: bk           = 0.407078
+pcg: Tolerance reached r = 0.00164143
+htawgm: pcg required 3 iterations for r<=0.00164143
+
+*** PCG end ***
+
+htawgm: Iteration (1, 6)
+        PCG took 285 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.000954857
+presidual: S*f took 0 secs
+residualLap: maximum rank = 82
+residualLap: minimum rank = 3
+residualLap: average rank = 64.7313
+residualLap: final rank   = 38
+presidual: residualLap took 97 secs
+htawgm: Iteration (1, 6)
+        RES took 97 secs
+htawgm: Iteration (1, 6), residual = 0.00271725
+        Current time: 290635 secs
+htawgm: rank = 19
+bulk: true alpha = 0.900554
+htawgm: Iteration (1, 6)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 7)
+        d = 1, size = 35, max level = 6
+        d = 2, size = 35, max level = 6
+        d = 3, size = 36, max level = 6
+        d = 4, size = 37, max level = 6
+        d = 5, size = 36, max level = 6
+        d = 6, size = 36, max level = 6
+        d = 7, size = 38, max level = 6
+        d = 8, size = 36, max level = 6
+        d = 9, size = 37, max level = 6
+        d = 10, size = 39, max level = 6
+        d = 11, size = 37, max level = 6
+        d = 12, size = 37, max level = 6
+        d = 13, size = 39, max level = 6
+        d = 14, size = 36, max level = 6
+        d = 15, size = 37, max level = 6
+        d = 16, size = 38, max level = 6
+        d = 17, size = 38, max level = 6
+        d = 18, size = 37, max level = 6
+        d = 19, size = 36, max level = 6
+        d = 20, size = 37, max level = 6
+        d = 21, size = 36, max level = 6
+        d = 22, size = 36, max level = 6
+        d = 23, size = 36, max level = 6
+        d = 24, size = 35, max level = 6
+        d = 25, size = 36, max level = 6
+        d = 26, size = 37, max level = 6
+        d = 27, size = 39, max level = 6
+        d = 28, size = 37, max level = 6
+        d = 29, size = 36, max level = 6
+        d = 30, size = 39, max level = 6
+        d = 31, size = 39, max level = 6
+        d = 32, size = 38, max level = 6
+        total size = 1181
+htawgm: Iteration (1, 7)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 7)
+        eps_km  = 0.00135862
+        eta_km  = 0.0186298
+        rank(S) = 26
+htawgm: Iteration (1, 7)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 26
+Ncols       = 26
+Nrows*Ncols = 676
+First loop  = 19.6312 secs
+Copy v      = 0.00411471 secs
+Scale v     = 0.00606527 secs
+Laplace     = 2.43349 secs
+Copy tmp    = 0.55432 secs
+Scale tmp   = 0.416333 secs
+Norm tmp    = 16.2074 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 393 times
+# scale v   = 24 times
+# laplace v = 24 times
+# save v    = 24 times
+# scale row = 393 times
+# truncate  = 393 times
+Second loop  = 71.3402 secs
+Copy v       = 0.392202 secs
+Scale v      = 0.0057202 secs
+Laplace      = 2.21246 secs
+Copy tmp     = 0.0196803 secs
+Scale rows   = 0.658452 secs
+Truncate     = 68.4271 secs
+residualLap: maximum rank = 72
+residualLap: minimum rank = 4
+residualLap: average rank = 53.9186
+residualLap: final rank   = 27
+----------------------------------------------
+pcg: initial residual time: 90
+pcg: Iteration 0 residual 0.0018789
+pcg: max rank r 27
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 15
+pcg: update x time: 0
+pcg: tol = 0.0018789
+----------------------------------------------
+Nrows       = 26
+Ncols       = 26
+Nrows*Ncols = 676
+First loop  = 27.1561 secs
+Copy v      = 0.00807392 secs
+Scale v     = 0.00652088 secs
+Laplace     = 2.67341 secs
+Copy tmp    = 0.793091 secs
+Scale tmp   = 0.441251 secs
+Norm tmp    = 23.2231 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 422 times
+# scale v   = 24 times
+# laplace v = 24 times
+# save v    = 24 times
+# scale row = 422 times
+# truncate  = 422 times
+Second loop  = 107.605 secs
+Copy v       = 0.634038 secs
+Scale v      = 0.00628872 secs
+Laplace      = 2.47977 secs
+Copy tmp     = 0.0279893 secs
+Scale rows   = 0.72698 secs
+Truncate     = 104.12 secs
+residualLap: maximum rank = 83
+residualLap: minimum rank = 4
+residualLap: average rank = 64.372
+residualLap: final rank   = 26
+----------------------------------------------
+pcg: residualLap time: 134
+pcg: (r, Ap) time: 16
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00121671
+pcg: max rank r 26
+pcg: max rank solution 24
+pcg: max rank p 21
+pcg: max rank b 4
+pcg: trunc_acc    = 8.39737e-07
+pcg: nrmp         = 0.00138231
+pcg: ak           = 0.0044693
+pcg: bk           = 0.261733
+pcg: Tolerance reached r = 0.00121671
+htawgm: pcg required 2 iterations for r<=0.00121671
+
+*** PCG end ***
+
+htawgm: Iteration (1, 7)
+        PCG took 257 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.000679312
+presidual: S*f took 0 secs
+residualLap: maximum rank = 97
+residualLap: minimum rank = 4
+residualLap: average rank = 77.3058
+residualLap: final rank   = 39
+presidual: residualLap took 136 secs
+htawgm: Iteration (1, 7)
+        RES took 136 secs
+htawgm: Iteration (1, 7), residual = 0.00174306
+        Current time: 291029 secs
+htawgm: rank = 24
+bulk: true alpha = 0.901048
+htawgm: Iteration (1, 7)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 8)
+        d = 1, size = 39, max level = 6
+        d = 2, size = 43, max level = 7
+        d = 3, size = 43, max level = 7
+        d = 4, size = 43, max level = 7
+        d = 5, size = 42, max level = 7
+        d = 6, size = 43, max level = 7
+        d = 7, size = 43, max level = 7
+        d = 8, size = 41, max level = 7
+        d = 9, size = 44, max level = 7
+        d = 10, size = 43, max level = 6
+        d = 11, size = 43, max level = 7
+        d = 12, size = 43, max level = 7
+        d = 13, size = 46, max level = 7
+        d = 14, size = 42, max level = 7
+        d = 15, size = 43, max level = 7
+        d = 16, size = 44, max level = 7
+        d = 17, size = 45, max level = 7
+        d = 18, size = 45, max level = 6
+        d = 19, size = 41, max level = 7
+        d = 20, size = 44, max level = 7
+        d = 21, size = 43, max level = 7
+        d = 22, size = 44, max level = 7
+        d = 23, size = 44, max level = 7
+        d = 24, size = 44, max level = 7
+        d = 25, size = 43, max level = 7
+        d = 26, size = 44, max level = 7
+        d = 27, size = 45, max level = 7
+        d = 28, size = 43, max level = 7
+        d = 29, size = 43, max level = 7
+        d = 30, size = 45, max level = 7
+        d = 31, size = 46, max level = 7
+        d = 32, size = 44, max level = 7
+        total size = 1388
+htawgm: Iteration (1, 8)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 8)
+        eps_km  = 0.00087153
+        eta_km  = 0.0119514
+        rank(S) = 28
+htawgm: Iteration (1, 8)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 28
+Ncols       = 28
+Nrows*Ncols = 784
+First loop  = 31.8219 secs
+Copy v      = 0.00881764 secs
+Scale v     = 0.00743793 secs
+Laplace     = 3.48353 secs
+Copy tmp    = 0.922951 secs
+Scale tmp   = 0.525549 secs
+Norm tmp    = 26.8614 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 451 times
+# scale v   = 25 times
+# laplace v = 25 times
+# save v    = 25 times
+# scale row = 451 times
+# truncate  = 451 times
+Second loop  = 125.772 secs
+Copy v       = 0.6879 secs
+Scale v      = 0.00680419 secs
+Laplace      = 3.09659 secs
+Copy tmp     = 0.0293082 secs
+Scale rows   = 0.83819 secs
+Truncate     = 121.583 secs
+residualLap: maximum rank = 87
+residualLap: minimum rank = 4
+residualLap: average rank = 65.7494
+residualLap: final rank   = 29
+----------------------------------------------
+pcg: initial residual time: 157
+pcg: Iteration 0 residual 0.00143731
+pcg: max rank r 29
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 29
+pcg: update x time: 0
+pcg: tol = 0.00143731
+----------------------------------------------
+Nrows       = 28
+Ncols       = 28
+Nrows*Ncols = 784
+First loop  = 31.7611 secs
+Copy v      = 0.00868177 secs
+Scale v     = 0.00766229 secs
+Laplace     = 3.66864 secs
+Copy tmp    = 0.924882 secs
+Scale tmp   = 0.550169 secs
+Norm tmp    = 26.5889 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 470 times
+# scale v   = 26 times
+# laplace v = 26 times
+# save v    = 26 times
+# scale row = 470 times
+# truncate  = 470 times
+Second loop  = 129.627 secs
+Copy v       = 0.704217 secs
+Scale v      = 0.00759314 secs
+Laplace      = 3.41798 secs
+Copy tmp     = 0.0303407 secs
+Scale rows   = 0.888901 secs
+Truncate     = 125.072 secs
+residualLap: maximum rank = 82
+residualLap: minimum rank = 4
+residualLap: average rank = 63.3532
+residualLap: final rank   = 30
+----------------------------------------------
+pcg: residualLap time: 161
+pcg: (r, Ap) time: 30
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.00118856
+pcg: max rank r 30
+pcg: max rank solution 23
+pcg: max rank p 22
+pcg: max rank b 4
+pcg: trunc_acc    = 7.49175e-07
+pcg: nrmp         = 0.00152219
+pcg: ak           = 0.00521233
+pcg: bk           = 0.592093
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 12
+pcg: update x time: 0
+pcg: tol = 0.00118856
+----------------------------------------------
+Nrows       = 28
+Ncols       = 28
+Nrows*Ncols = 784
+First loop  = 27.5363 secs
+Copy v      = 0.00534404 secs
+Scale v     = 0.0072843 secs
+Laplace     = 3.42057 secs
+Copy tmp    = 0.778556 secs
+Scale tmp   = 0.525056 secs
+Norm tmp    = 22.7874 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 487 times
+# scale v   = 26 times
+# laplace v = 26 times
+# save v    = 26 times
+# scale row = 487 times
+# truncate  = 487 times
+Second loop  = 139.916 secs
+Copy v       = 0.619741 secs
+Scale v      = 0.00703679 secs
+Laplace      = 3.18297 secs
+Copy tmp     = 0.0255382 secs
+Scale rows   = 0.861286 secs
+Truncate     = 135.691 secs
+residualLap: maximum rank = 78
+residualLap: minimum rank = 4
+residualLap: average rank = 60.271
+residualLap: final rank   = 33
+----------------------------------------------
+pcg: residualLap time: 167
+pcg: (r, Ap) time: 17
+pcg: Update p time: 0
+pcg: Iteration 2 residual 0.000859929
+pcg: max rank r 33
+pcg: max rank solution 20
+pcg: max rank p 23
+pcg: max rank b 4
+pcg: trunc_acc    = 9.79475e-07
+pcg: nrmp         = 0.00118425
+pcg: ak           = 0.00643466
+pcg: bk           = 0.473759
+pcg: Tolerance reached r = 0.000859929
+htawgm: pcg required 3 iterations for r<=0.000859929
+
+*** PCG end ***
+
+htawgm: Iteration (1, 8)
+        PCG took 578 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.000435765
+presidual: S*f took 0 secs
+residualLap: maximum rank = 92
+residualLap: minimum rank = 4
+residualLap: average rank = 72.2594
+residualLap: final rank   = 43
+presidual: residualLap took 167 secs
+htawgm: Iteration (1, 8)
+        RES took 167 secs
+htawgm: Iteration (1, 8), residual = 0.00134229
+        Current time: 291775 secs
+htawgm: rank = 20
+bulk: true alpha = 0.900439
+htawgm: Iteration (1, 8)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 9)
+        d = 1, size = 47, max level = 7
+        d = 2, size = 47, max level = 7
+        d = 3, size = 50, max level = 7
+        d = 4, size = 48, max level = 7
+        d = 5, size = 48, max level = 7
+        d = 6, size = 51, max level = 7
+        d = 7, size = 49, max level = 7
+        d = 8, size = 49, max level = 7
+        d = 9, size = 50, max level = 7
+        d = 10, size = 48, max level = 7
+        d = 11, size = 49, max level = 7
+        d = 12, size = 48, max level = 7
+        d = 13, size = 52, max level = 7
+        d = 14, size = 51, max level = 7
+        d = 15, size = 50, max level = 7
+        d = 16, size = 52, max level = 7
+        d = 17, size = 51, max level = 7
+        d = 18, size = 53, max level = 7
+        d = 19, size = 49, max level = 7
+        d = 20, size = 53, max level = 7
+        d = 21, size = 52, max level = 7
+        d = 22, size = 51, max level = 7
+        d = 23, size = 51, max level = 7
+        d = 24, size = 49, max level = 7
+        d = 25, size = 51, max level = 7
+        d = 26, size = 52, max level = 7
+        d = 27, size = 53, max level = 7
+        d = 28, size = 50, max level = 7
+        d = 29, size = 51, max level = 7
+        d = 30, size = 53, max level = 7
+        d = 31, size = 53, max level = 7
+        d = 32, size = 51, max level = 7
+        total size = 1612
+htawgm: Iteration (1, 9)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 9)
+        eps_km  = 0.000671147
+        eta_km  = 0.00920589
+        rank(S) = 28
+htawgm: Iteration (1, 9)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 28
+Ncols       = 28
+Nrows*Ncols = 784
+First loop  = 28.2263 secs
+Copy v      = 0.00583438 secs
+Scale v     = 0.00807901 secs
+Laplace     = 3.98212 secs
+Copy tmp    = 0.794893 secs
+Scale tmp   = 0.585161 secs
+Norm tmp    = 22.8381 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 477 times
+# scale v   = 26 times
+# laplace v = 26 times
+# save v    = 26 times
+# scale row = 477 times
+# truncate  = 477 times
+Second loop  = 137.933 secs
+Copy v       = 0.621173 secs
+Scale v      = 0.0081025 secs
+Laplace      = 3.72664 secs
+Copy tmp     = 0.026176 secs
+Scale rows   = 0.950285 secs
+Truncate     = 133.134 secs
+residualLap: maximum rank = 76
+residualLap: minimum rank = 4
+residualLap: average rank = 59.2306
+residualLap: final rank   = 30
+----------------------------------------------
+pcg: initial residual time: 166
+pcg: Iteration 0 residual 0.00102089
+pcg: max rank r 30
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 40
+pcg: update x time: 0
+pcg: tol = 0.00102089
+----------------------------------------------
+Nrows       = 28
+Ncols       = 28
+Nrows*Ncols = 784
+First loop  = 38.1779 secs
+Copy v      = 0.0101163 secs
+Scale v     = 0.00950727 secs
+Laplace     = 4.7475 secs
+Copy tmp    = 1.09337 secs
+Scale tmp   = 0.664434 secs
+Norm tmp    = 31.6405 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 503 times
+# scale v   = 26 times
+# laplace v = 26 times
+# save v    = 26 times
+# scale row = 503 times
+# truncate  = 503 times
+Second loop  = 173.627 secs
+Copy v       = 0.934476 secs
+Scale v      = 0.0094415 secs
+Laplace      = 4.42411 secs
+Copy tmp     = 0.0361559 secs
+Scale rows   = 1.10121 secs
+Truncate     = 167.718 secs
+residualLap: maximum rank = 86
+residualLap: minimum rank = 4
+residualLap: average rank = 67.338
+residualLap: final rank   = 34
+----------------------------------------------
+pcg: residualLap time: 211
+pcg: (r, Ap) time: 42
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.000699692
+pcg: max rank r 34
+pcg: max rank solution 24
+pcg: max rank p 24
+pcg: max rank b 4
+pcg: trunc_acc    = 4.29563e-07
+pcg: nrmp         = 0.000823499
+pcg: ak           = 0.00420774
+pcg: bk           = 0.38753
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 17
+pcg: update x time: 0
+pcg: tol = 0.000699692
+----------------------------------------------
+Nrows       = 28
+Ncols       = 28
+Nrows*Ncols = 784
+First loop  = 37.1209 secs
+Copy v      = 0.0103396 secs
+Scale v     = 0.010238 secs
+Laplace     = 4.75256 secs
+Copy tmp    = 1.06066 secs
+Scale tmp   = 0.672679 secs
+Norm tmp    = 30.6024 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 532 times
+# scale v   = 27 times
+# laplace v = 27 times
+# save v    = 27 times
+# scale row = 532 times
+# truncate  = 532 times
+Second loop  = 216.452 secs
+Copy v       = 0.976751 secs
+Scale v      = 0.00983352 secs
+Laplace      = 4.62222 secs
+Copy tmp     = 0.0366703 secs
+Scale rows   = 1.13932 secs
+Truncate     = 210.267 secs
+residualLap: maximum rank = 94
+residualLap: minimum rank = 4
+residualLap: average rank = 73.3195
+residualLap: final rank   = 39
+----------------------------------------------
+pcg: residualLap time: 253
+pcg: (r, Ap) time: 26
+pcg: Update p time: 0
+pcg: Iteration 2 residual 0.000615921
+pcg: max rank r 39
+pcg: max rank solution 24
+pcg: max rank p 26
+pcg: max rank b 4
+pcg: trunc_acc    = 4.77725e-07
+pcg: nrmp         = 0.000831398
+pcg: ak           = 0.00580115
+pcg: bk           = 0.581578
+pcg: Tolerance reached r = 0.000615921
+htawgm: pcg required 3 iterations for r<=0.000615921
+
+*** PCG end ***
+
+htawgm: Iteration (1, 9)
+        PCG took 760 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.000335574
+presidual: S*f took 0 secs
+residualLap: maximum rank = 106
+residualLap: minimum rank = 4
+residualLap: average rank = 84.0366
+residualLap: final rank   = 48
+presidual: residualLap took 215 secs
+htawgm: Iteration (1, 9)
+        RES took 215 secs
+htawgm: Iteration (1, 9), residual = 0.000896671
+        Current time: 292752 secs
+htawgm: rank = 24
+bulk: true alpha = 0.900504
+htawgm: Iteration (1, 9)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 10)
+        d = 1, size = 56, max level = 7
+        d = 2, size = 61, max level = 8
+        d = 3, size = 58, max level = 8
+        d = 4, size = 58, max level = 8
+        d = 5, size = 59, max level = 8
+        d = 6, size = 59, max level = 8
+        d = 7, size = 60, max level = 8
+        d = 8, size = 58, max level = 8
+        d = 9, size = 62, max level = 8
+        d = 10, size = 56, max level = 7
+        d = 11, size = 62, max level = 8
+        d = 12, size = 58, max level = 8
+        d = 13, size = 63, max level = 8
+        d = 14, size = 61, max level = 8
+        d = 15, size = 58, max level = 8
+        d = 16, size = 60, max level = 8
+        d = 17, size = 60, max level = 8
+        d = 18, size = 64, max level = 7
+        d = 19, size = 59, max level = 8
+        d = 20, size = 62, max level = 8
+        d = 21, size = 60, max level = 8
+        d = 22, size = 62, max level = 8
+        d = 23, size = 63, max level = 8
+        d = 24, size = 64, max level = 8
+        d = 25, size = 64, max level = 8
+        d = 26, size = 65, max level = 8
+        d = 27, size = 68, max level = 8
+        d = 28, size = 65, max level = 8
+        d = 29, size = 68, max level = 8
+        d = 30, size = 64, max level = 8
+        d = 31, size = 66, max level = 8
+        d = 32, size = 65, max level = 8
+        total size = 1968
+htawgm: Iteration (1, 10)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 10)
+        eps_km  = 0.000448335
+        eta_km  = 0.00615036
+        rank(S) = 30
+htawgm: Iteration (1, 10)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 30
+Ncols       = 30
+Nrows*Ncols = 900
+First loop  = 43.5704 secs
+Copy v      = 0.0138583 secs
+Scale v     = 0.0167966 secs
+Laplace     = 6.08733 secs
+Copy tmp    = 1.25391 secs
+Scale tmp   = 0.865323 secs
+Norm tmp    = 35.3188 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 536 times
+# scale v   = 28 times
+# laplace v = 28 times
+# save v    = 28 times
+# scale row = 536 times
+# truncate  = 536 times
+Second loop  = 205.194 secs
+Copy v       = 0.998978 secs
+Scale v      = 0.0161197 secs
+Laplace      = 5.67848 secs
+Copy tmp     = 0.0388533 secs
+Scale rows   = 1.39238 secs
+Truncate     = 197.854 secs
+residualLap: maximum rank = 91
+residualLap: minimum rank = 5
+residualLap: average rank = 70.0448
+residualLap: final rank   = 35
+----------------------------------------------
+pcg: initial residual time: 248
+pcg: Iteration 0 residual 0.000753794
+pcg: max rank r 35
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 62
+pcg: update x time: 0
+pcg: tol = 0.000753794
+----------------------------------------------
+Nrows       = 30
+Ncols       = 30
+Nrows*Ncols = 900
+First loop  = 43.1647 secs
+Copy v      = 0.0143282 secs
+Scale v     = 0.0171 secs
+Laplace     = 6.06303 secs
+Copy tmp    = 1.23728 secs
+Scale tmp   = 0.864409 secs
+Norm tmp    = 34.9544 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 557 times
+# scale v   = 29 times
+# laplace v = 29 times
+# save v    = 29 times
+# scale row = 557 times
+# truncate  = 557 times
+Second loop  = 202.471 secs
+Copy v       = 0.997308 secs
+Scale v      = 0.0169544 secs
+Laplace      = 5.87879 secs
+Copy tmp     = 0.0397253 secs
+Scale rows   = 1.41067 secs
+Truncate     = 194.917 secs
+residualLap: maximum rank = 84
+residualLap: minimum rank = 5
+residualLap: average rank = 65.8869
+residualLap: final rank   = 34
+----------------------------------------------
+pcg: residualLap time: 245
+pcg: (r, Ap) time: 62
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.000578109
+pcg: max rank r 34
+pcg: max rank solution 23
+pcg: max rank p 25
+pcg: max rank b 5
+pcg: trunc_acc    = 3.69842e-07
+pcg: nrmp         = 0.000715645
+pcg: ak           = 0.00490641
+pcg: bk           = 0.508275
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 20
+pcg: update x time: 0
+pcg: tol = 0.000578109
+----------------------------------------------
+Nrows       = 30
+Ncols       = 30
+Nrows*Ncols = 900
+First loop  = 39.8175 secs
+Copy v      = 0.0109946 secs
+Scale v     = 0.0169625 secs
+Laplace     = 6.01496 secs
+Copy tmp    = 1.12778 secs
+Scale tmp   = 0.85966 secs
+Norm tmp    = 31.7736 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 581 times
+# scale v   = 29 times
+# laplace v = 29 times
+# save v    = 29 times
+# scale row = 581 times
+# truncate  = 581 times
+Second loop  = 236.4 secs
+Copy v       = 0.983648 secs
+Scale v      = 0.0168378 secs
+Laplace      = 5.86004 secs
+Copy tmp     = 0.0358934 secs
+Scale rows   = 1.4293 secs
+Truncate     = 228.851 secs
+residualLap: maximum rank = 89
+residualLap: minimum rank = 5
+residualLap: average rank = 68.6954
+residualLap: final rank   = 41
+----------------------------------------------
+pcg: residualLap time: 276
+pcg: (r, Ap) time: 33
+pcg: Update p time: 0
+pcg: Iteration 2 residual 0.000547661
+pcg: max rank r 41
+pcg: max rank solution 22
+pcg: max rank p 25
+pcg: max rank b 5
+pcg: trunc_acc    = 4.53621e-07
+pcg: nrmp         = 0.000826316
+pcg: ak           = 0.00633864
+pcg: bk           = 0.78502
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 17
+pcg: update x time: 0
+pcg: tol = 0.000547661
+----------------------------------------------
+Nrows       = 30
+Ncols       = 30
+Nrows*Ncols = 900
+First loop  = 38.8983 secs
+Copy v      = 0.0106838 secs
+Scale v     = 0.0168883 secs
+Laplace     = 6.01568 secs
+Copy tmp    = 1.08455 secs
+Scale tmp   = 0.860881 secs
+Norm tmp    = 30.8958 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 588 times
+# scale v   = 29 times
+# laplace v = 29 times
+# save v    = 29 times
+# scale row = 588 times
+# truncate  = 588 times
+Second loop  = 253.651 secs
+Copy v       = 0.957827 secs
+Scale v      = 0.0169315 secs
+Laplace      = 5.8539 secs
+Copy tmp     = 0.0347172 secs
+Scale rows   = 1.43855 secs
+Truncate     = 246.128 secs
+residualLap: maximum rank = 91
+residualLap: minimum rank = 5
+residualLap: average rank = 69.4048
+residualLap: final rank   = 45
+----------------------------------------------
+pcg: residualLap time: 292
+pcg: (r, Ap) time: 31
+pcg: Update p time: 0
+pcg: Iteration 3 residual 0.000429369
+pcg: max rank r 45
+pcg: max rank solution 20
+pcg: max rank p 31
+pcg: max rank b 5
+pcg: trunc_acc    = 7.3243e-07
+pcg: nrmp         = 0.000680428
+pcg: ak           = 0.0088638
+pcg: bk           = 0.614854
+pcg: Tolerance reached r = 0.000429369
+htawgm: pcg required 4 iterations for r<=0.000429369
+
+*** PCG end ***
+
+htawgm: Iteration (1, 10)
+        PCG took 1293 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.000224168
+presidual: S*f took 0 secs
+residualLap: maximum rank = 106
+residualLap: minimum rank = 5
+residualLap: average rank = 81.5339
+residualLap: final rank   = 58
+presidual: residualLap took 262 secs
+htawgm: Iteration (1, 10)
+        RES took 262 secs
+htawgm: Iteration (1, 10), residual = 0.000639493
+        Current time: 294308 secs
+htawgm: rank = 20
+bulk: true alpha = 0.900675
+htawgm: Iteration (1, 10)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 11)
+        d = 1, size = 68, max level = 8
+        d = 2, size = 67, max level = 8
+        d = 3, size = 69, max level = 8
+        d = 4, size = 68, max level = 8
+        d = 5, size = 68, max level = 8
+        d = 6, size = 68, max level = 8
+        d = 7, size = 68, max level = 8
+        d = 8, size = 66, max level = 8
+        d = 9, size = 70, max level = 8
+        d = 10, size = 68, max level = 8
+        d = 11, size = 70, max level = 8
+        d = 12, size = 68, max level = 8
+        d = 13, size = 67, max level = 8
+        d = 14, size = 68, max level = 8
+        d = 15, size = 69, max level = 8
+        d = 16, size = 69, max level = 8
+        d = 17, size = 69, max level = 8
+        d = 18, size = 70, max level = 8
+        d = 19, size = 67, max level = 8
+        d = 20, size = 68, max level = 8
+        d = 21, size = 68, max level = 8
+        d = 22, size = 68, max level = 8
+        d = 23, size = 70, max level = 8
+        d = 24, size = 70, max level = 8
+        d = 25, size = 70, max level = 8
+        d = 26, size = 70, max level = 8
+        d = 27, size = 71, max level = 8
+        d = 28, size = 73, max level = 8
+        d = 29, size = 73, max level = 8
+        d = 30, size = 71, max level = 8
+        d = 31, size = 72, max level = 8
+        d = 32, size = 72, max level = 8
+        total size = 2213
+htawgm: Iteration (1, 11)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 11)
+        eps_km  = 0.000319746
+        eta_km  = 0.00438764
+        rank(S) = 30
+htawgm: Iteration (1, 11)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 30
+Ncols       = 30
+Nrows*Ncols = 900
+First loop  = 39.7847 secs
+Copy v      = 0.0116154 secs
+Scale v     = 0.0182581 secs
+Laplace     = 6.63968 secs
+Copy tmp    = 1.10496 secs
+Scale tmp   = 0.934537 secs
+Norm tmp    = 31.0616 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 573 times
+# scale v   = 29 times
+# laplace v = 29 times
+# save v    = 29 times
+# scale row = 573 times
+# truncate  = 573 times
+Second loop  = 239.336 secs
+Copy v       = 0.948468 secs
+Scale v      = 0.0181423 secs
+Laplace      = 6.40764 secs
+Copy tmp     = 0.0353712 secs
+Scale rows   = 1.53816 secs
+Truncate     = 231.244 secs
+residualLap: maximum rank = 89
+residualLap: minimum rank = 5
+residualLap: average rank = 67.3333
+residualLap: final rank   = 40
+----------------------------------------------
+pcg: initial residual time: 279
+pcg: Iteration 0 residual 0.000543069
+pcg: max rank r 40
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 89
+pcg: update x time: 0
+pcg: tol = 0.000543069
+----------------------------------------------
+Nrows       = 30
+Ncols       = 30
+Nrows*Ncols = 900
+First loop  = 54.6948 secs
+Copy v      = 0.0179682 secs
+Scale v     = 0.0195964 secs
+Laplace     = 7.27887 secs
+Copy tmp    = 1.59529 secs
+Scale tmp   = 1.02326 secs
+Norm tmp    = 44.7429 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 588 times
+# scale v   = 29 times
+# laplace v = 29 times
+# save v    = 29 times
+# scale row = 588 times
+# truncate  = 588 times
+Second loop  = 270.301 secs
+Copy v       = 1.42568 secs
+Scale v      = 0.019123 secs
+Laplace      = 7.03921 secs
+Copy tmp     = 0.0510508 secs
+Scale rows   = 1.68336 secs
+Truncate     = 261.034 secs
+residualLap: maximum rank = 99
+residualLap: minimum rank = 5
+residualLap: average rank = 77.483
+residualLap: final rank   = 40
+----------------------------------------------
+pcg: residualLap time: 325
+pcg: (r, Ap) time: 90
+pcg: Update p time: 0
+pcg: Iteration 1 residual 0.000278307
+pcg: max rank r 40
+pcg: max rank solution 27
+pcg: max rank p 31
+pcg: max rank b 5
+pcg: trunc_acc    = 2.33907e-07
+pcg: nrmp         = 0.000314307
+pcg: ak           = 0.00430713
+pcg: bk           = 0.254098
+pcg: Tolerance reached r = 0.000278307
+htawgm: pcg required 2 iterations for r<=0.000278307
+
+*** PCG end ***
+
+htawgm: Iteration (1, 11)
+        PCG took 785 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.000159873
+presidual: S*f took 0 secs
+residualLap: maximum rank = 125
+residualLap: minimum rank = 5
+residualLap: average rank = 97.5076
+residualLap: final rank   = 60
+presidual: residualLap took 337 secs
+htawgm: Iteration (1, 11)
+        RES took 337 secs
+htawgm: Iteration (1, 11), residual = 0.000402399
+        Current time: 295432 secs
+htawgm: rank = 27
+bulk: true alpha = 0.900953
+htawgm: Iteration (1, 11)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 12)
+        d = 1, size = 75, max level = 8
+        d = 2, size = 74, max level = 9
+        d = 3, size = 74, max level = 8
+        d = 4, size = 73, max level = 9
+        d = 5, size = 75, max level = 9
+        d = 6, size = 75, max level = 9
+        d = 7, size = 76, max level = 9
+        d = 8, size = 74, max level = 9
+        d = 9, size = 76, max level = 8
+        d = 10, size = 76, max level = 8
+        d = 11, size = 78, max level = 9
+        d = 12, size = 79, max level = 9
+        d = 13, size = 77, max level = 8
+        d = 14, size = 78, max level = 9
+        d = 15, size = 78, max level = 9
+        d = 16, size = 76, max level = 9
+        d = 17, size = 74, max level = 8
+        d = 18, size = 77, max level = 8
+        d = 19, size = 78, max level = 9
+        d = 20, size = 76, max level = 9
+        d = 21, size = 77, max level = 9
+        d = 22, size = 77, max level = 9
+        d = 23, size = 78, max level = 9
+        d = 24, size = 78, max level = 9
+        d = 25, size = 77, max level = 8
+        d = 26, size = 78, max level = 9
+        d = 27, size = 79, max level = 9
+        d = 28, size = 77, max level = 9
+        d = 29, size = 80, max level = 9
+        d = 30, size = 78, max level = 9
+        d = 31, size = 79, max level = 9
+        d = 32, size = 78, max level = 8
+        total size = 2455
+htawgm: Iteration (1, 12)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 12)
+        eps_km  = 0.0002012
+        eta_km  = 0.00276093
+        rank(S) = 32
+htawgm: Iteration (1, 12)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 62.9744 secs
+Copy v      = 0.0191989 secs
+Scale v     = 0.0227245 secs
+Laplace     = 8.5768 secs
+Copy tmp    = 1.85889 secs
+Scale tmp   = 1.27177 secs
+Norm tmp    = 51.2072 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 640 times
+# scale v   = 30 times
+# laplace v = 30 times
+# save v    = 30 times
+# scale row = 640 times
+# truncate  = 640 times
+Second loop  = 326.626 secs
+Copy v       = 1.61364 secs
+Scale v      = 0.0219626 secs
+Laplace      = 8.05494 secs
+Copy tmp     = 0.0537506 secs
+Scale rows   = 2.06615 secs
+Truncate     = 316.006 secs
+residualLap: maximum rank = 108
+residualLap: minimum rank = 6
+residualLap: average rank = 81.7828
+residualLap: final rank   = 46
+----------------------------------------------
+pcg: initial residual time: 389
+pcg: Iteration 0 residual 0.000349082
+pcg: max rank r 46
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 129
+pcg: update x time: 0
+pcg: tol = 0.000349082
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 71.8202 secs
+Copy v      = 0.0211074 secs
+Scale v     = 0.0247052 secs
+Laplace     = 9.17686 secs
+Copy tmp    = 2.07878 secs
+Scale tmp   = 1.34203 secs
+Norm tmp    = 59.1568 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 656 times
+# scale v   = 31 times
+# laplace v = 31 times
+# save v    = 31 times
+# scale row = 656 times
+# truncate  = 656 times
+Second loop  = 339.311 secs
+Copy v       = 1.82716 secs
+Scale v      = 0.0237892 secs
+Laplace      = 8.90218 secs
+Copy tmp     = 0.0621282 secs
+Scale rows   = 2.21021 secs
+Truncate     = 327.552 secs
+residualLap: maximum rank = 106
+residualLap: minimum rank = 6
+residualLap: average rank = 81.0488
+residualLap: final rank   = 49
+----------------------------------------------
+pcg: residualLap time: 411
+pcg: (r, Ap) time: 132
+pcg: Update p time: 1
+pcg: Iteration 1 residual 0.000269432
+pcg: max rank r 49
+pcg: max rank solution 27
+pcg: max rank p 32
+pcg: max rank b 6
+pcg: trunc_acc    = 1.54367e-07
+pcg: nrmp         = 0.000339001
+pcg: ak           = 0.00442207
+pcg: bk           = 0.558226
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 46
+pcg: update x time: 0
+pcg: tol = 0.000269432
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 74.9484 secs
+Copy v      = 0.0219582 secs
+Scale v     = 0.0261678 secs
+Laplace     = 9.80722 secs
+Copy tmp    = 2.17902 secs
+Scale tmp   = 1.43146 secs
+Norm tmp    = 61.4642 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 680 times
+# scale v   = 31 times
+# laplace v = 31 times
+# save v    = 31 times
+# scale row = 680 times
+# truncate  = 680 times
+Second loop  = 401.261 secs
+Copy v       = 2.02005 secs
+Scale v      = 0.0254361 secs
+Laplace      = 9.53498 secs
+Copy tmp     = 0.0656913 secs
+Scale rows   = 2.3913 secs
+Truncate     = 388.574 secs
+residualLap: maximum rank = 117
+residualLap: minimum rank = 6
+residualLap: average rank = 86.9574
+residualLap: final rank   = 57
+----------------------------------------------
+pcg: residualLap time: 476
+pcg: (r, Ap) time: 73
+pcg: Update p time: 0
+pcg: Iteration 2 residual 0.000226439
+pcg: max rank r 57
+pcg: max rank solution 27
+pcg: max rank p 34
+pcg: max rank b 6
+pcg: trunc_acc    = 2.2201e-07
+pcg: nrmp         = 0.000324661
+pcg: ak           = 0.00654894
+pcg: bk           = 0.645771
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 42
+pcg: update x time: 0
+pcg: tol = 0.000226439
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 74.8732 secs
+Copy v      = 0.0223024 secs
+Scale v     = 0.02532 secs
+Laplace     = 9.75898 secs
+Copy tmp    = 2.25455 secs
+Scale tmp   = 1.43846 secs
+Norm tmp    = 61.3546 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 698 times
+# scale v   = 32 times
+# laplace v = 32 times
+# save v    = 32 times
+# scale row = 698 times
+# truncate  = 698 times
+Second loop  = 463.395 secs
+Copy v       = 2.15528 secs
+Scale v      = 0.026157 secs
+Laplace      = 9.81307 secs
+Copy tmp     = 0.0694956 secs
+Scale rows   = 2.41556 secs
+Truncate     = 450.268 secs
+residualLap: maximum rank = 127
+residualLap: minimum rank = 6
+residualLap: average rank = 91.9312
+residualLap: final rank   = 63
+----------------------------------------------
+pcg: residualLap time: 538
+pcg: (r, Ap) time: 75
+pcg: Update p time: 1
+pcg: Iteration 3 residual 0.000228751
+pcg: max rank r 63
+pcg: max rank solution 27
+pcg: max rank p 35
+pcg: max rank b 6
+pcg: trunc_acc    = 2.74336e-07
+pcg: nrmp         = 0.000395347
+pcg: ak           = 0.00844991
+pcg: bk           = 0.956661
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 38
+pcg: update x time: 0
+pcg: tol = 0.000228751
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 75.386 secs
+Copy v      = 0.022489 secs
+Scale v     = 0.0251043 secs
+Laplace     = 9.77266 secs
+Copy tmp    = 2.21254 secs
+Scale tmp   = 1.45399 secs
+Norm tmp    = 61.88 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 696 times
+# scale v   = 32 times
+# laplace v = 32 times
+# save v    = 32 times
+# scale row = 696 times
+# truncate  = 696 times
+Second loop  = 469.214 secs
+Copy v       = 2.07639 secs
+Scale v      = 0.0263307 secs
+Laplace      = 9.80859 secs
+Copy tmp     = 0.0672177 secs
+Scale rows   = 2.43212 secs
+Truncate     = 456.176 secs
+residualLap: maximum rank = 125
+residualLap: minimum rank = 6
+residualLap: average rank = 93.3405
+residualLap: final rank   = 62
+----------------------------------------------
+pcg: residualLap time: 544
+pcg: (r, Ap) time: 69
+pcg: Update p time: 1
+pcg: Iteration 4 residual 0.00016818
+pcg: max rank r 62
+pcg: max rank solution 27
+pcg: max rank p 40
+pcg: max rank b 6
+pcg: trunc_acc    = 3.25859e-07
+pcg: nrmp         = 0.000276806
+pcg: ak           = 0.00824236
+pcg: bk           = 0.549825
+pcg: Tolerance reached r = 0.00016818
+htawgm: pcg required 5 iterations for r<=0.00016818
+
+*** PCG end ***
+
+htawgm: Iteration (1, 12)
+        PCG took 2974 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 0.0001006
+presidual: S*f took 0 secs
+residualLap: maximum rank = 141
+residualLap: minimum rank = 5
+residualLap: average rank = 107.165
+residualLap: final rank   = 78
+presidual: residualLap took 492 secs
+htawgm: Iteration (1, 12)
+        RES took 493 secs
+htawgm: Iteration (1, 12), residual = 0.000257516
+        Current time: 298900 secs
+htawgm: rank = 27
+bulk: true alpha = 0.900306
+htawgm: Iteration (1, 12)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 13)
+        d = 1, size = 82, max level = 9
+        d = 2, size = 85, max level = 9
+        d = 3, size = 85, max level = 9
+        d = 4, size = 83, max level = 9
+        d = 5, size = 83, max level = 9
+        d = 6, size = 85, max level = 9
+        d = 7, size = 83, max level = 9
+        d = 8, size = 85, max level = 9
+        d = 9, size = 85, max level = 9
+        d = 10, size = 86, max level = 9
+        d = 11, size = 85, max level = 9
+        d = 12, size = 87, max level = 9
+        d = 13, size = 86, max level = 9
+        d = 14, size = 84, max level = 9
+        d = 15, size = 86, max level = 9
+        d = 16, size = 86, max level = 9
+        d = 17, size = 85, max level = 9
+        d = 18, size = 86, max level = 9
+        d = 19, size = 85, max level = 9
+        d = 20, size = 87, max level = 9
+        d = 21, size = 86, max level = 9
+        d = 22, size = 88, max level = 9
+        d = 23, size = 88, max level = 9
+        d = 24, size = 87, max level = 9
+        d = 25, size = 88, max level = 9
+        d = 26, size = 87, max level = 9
+        d = 27, size = 86, max level = 9
+        d = 28, size = 87, max level = 9
+        d = 29, size = 87, max level = 9
+        d = 30, size = 88, max level = 9
+        d = 31, size = 87, max level = 9
+        d = 32, size = 86, max level = 9
+        total size = 2744
+htawgm: Iteration (1, 13)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 13)
+        eps_km  = 0.000128758
+        eta_km  = 0.00176715
+        rank(S) = 32
+htawgm: Iteration (1, 13)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 77.8662 secs
+Copy v      = 0.0240126 secs
+Scale v     = 0.0276865 secs
+Laplace     = 10.9728 secs
+Copy tmp    = 2.26237 secs
+Scale tmp   = 1.62866 secs
+Norm tmp    = 62.9327 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 685 times
+# scale v   = 31 times
+# laplace v = 31 times
+# save v    = 31 times
+# scale row = 685 times
+# truncate  = 685 times
+Second loop  = 446.649 secs
+Copy v       = 2.10657 secs
+Scale v      = 0.0275705 secs
+Laplace      = 10.6432 secs
+Copy tmp     = 0.0667376 secs
+Scale rows   = 2.69996 secs
+Truncate     = 432.648 secs
+residualLap: maximum rank = 121
+residualLap: minimum rank = 6
+residualLap: average rank = 89.8686
+residualLap: final rank   = 56
+----------------------------------------------
+pcg: initial residual time: 524
+pcg: Iteration 0 residual 0.000220189
+pcg: max rank r 56
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 194
+pcg: update x time: 0
+pcg: tol = 0.000220189
+----------------------------------------------
+Nrows       = 32
+Ncols       = 32
+Nrows*Ncols = 1024
+First loop  = 102.214 secs
+Copy v      = 0.0313423 secs
+Scale v     = 0.0304598 secs
+Laplace     = 11.7637 secs
+Copy tmp    = 3.54328 secs
+Scale tmp   = 1.71416 secs
+Norm tmp    = 85.1049 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 701 times
+# scale v   = 32 times
+# laplace v = 32 times
+# save v    = 32 times
+# scale row = 701 times
+# truncate  = 701 times
+Second loop  = 497.338 secs
+Copy v       = 2.94628 secs
+Scale v      = 0.0302097 secs
+Laplace      = 11.7545 secs
+Copy tmp     = 0.0994854 secs
+Scale rows   = 2.8743 secs
+Truncate     = 481.265 secs
+residualLap: maximum rank = 128
+residualLap: minimum rank = 6
+residualLap: average rank = 98.9258
+residualLap: final rank   = 56
+----------------------------------------------
+pcg: residualLap time: 599
+pcg: (r, Ap) time: 191
+pcg: Update p time: 1
+pcg: Iteration 1 residual 0.000125639
+pcg: max rank r 56
+pcg: max rank solution 34
+pcg: max rank p 39
+pcg: max rank b 6
+pcg: trunc_acc    = 9.19826e-08
+pcg: nrmp         = 0.000145527
+pcg: ak           = 0.00417745
+pcg: bk           = 0.325775
+pcg: Tolerance reached r = 0.000125639
+htawgm: pcg required 2 iterations for r<=0.000125639
+
+*** PCG end ***
+
+htawgm: Iteration (1, 13)
+        PCG took 1513 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 6.43789e-05
+presidual: S*f took 0 secs
+residualLap: maximum rank = 159
+residualLap: minimum rank = 6
+residualLap: average rank = 122.967
+residualLap: final rank   = 82
+presidual: residualLap took 656 secs
+htawgm: Iteration (1, 13)
+        RES took 657 secs
+htawgm: Iteration (1, 13), residual = 0.000168837
+        Current time: 301071 secs
+htawgm: rank = 34
+bulk: true alpha = 0.900316
+htawgm: Iteration (1, 13)
+        EXPAND took 0 secs
+htawgm: Iteration (1, 14)
+        d = 1, size = 91, max level = 9
+        d = 2, size = 89, max level = 9
+        d = 3, size = 91, max level = 9
+        d = 4, size = 91, max level = 9
+        d = 5, size = 92, max level = 9
+        d = 6, size = 91, max level = 10
+        d = 7, size = 90, max level = 9
+        d = 8, size = 91, max level = 9
+        d = 9, size = 91, max level = 9
+        d = 10, size = 89, max level = 9
+        d = 11, size = 92, max level = 10
+        d = 12, size = 91, max level = 9
+        d = 13, size = 91, max level = 9
+        d = 14, size = 92, max level = 10
+        d = 15, size = 91, max level = 9
+        d = 16, size = 90, max level = 9
+        d = 17, size = 92, max level = 9
+        d = 18, size = 90, max level = 9
+        d = 19, size = 91, max level = 9
+        d = 20, size = 90, max level = 9
+        d = 21, size = 91, max level = 9
+        d = 22, size = 92, max level = 10
+        d = 23, size = 93, max level = 10
+        d = 24, size = 95, max level = 10
+        d = 25, size = 92, max level = 9
+        d = 26, size = 93, max level = 10
+        d = 27, size = 92, max level = 10
+        d = 28, size = 92, max level = 9
+        d = 29, size = 92, max level = 10
+        d = 30, size = 93, max level = 10
+        d = 31, size = 92, max level = 10
+        d = 32, size = 94, max level = 9
+        total size = 2927
+htawgm: Iteration (1, 14)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 14)
+        eps_km  = 8.44186e-05
+        eta_km  = 0.00115861
+        rank(S) = 33
+htawgm: Iteration (1, 14)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 33
+Ncols       = 33
+Nrows*Ncols = 1089
+First loop  = 109.666 secs
+Copy v      = 0.0338498 secs
+Scale v     = 0.031075 secs
+Laplace     = 12.8005 secs
+Copy tmp    = 4.03367 secs
+Scale tmp   = 1.91389 secs
+Norm tmp    = 90.8216 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 742 times
+# scale v   = 33 times
+# laplace v = 33 times
+# save v    = 33 times
+# scale row = 742 times
+# truncate  = 742 times
+Second loop  = 598.468 secs
+Copy v       = 3.1749 secs
+Scale v      = 0.0320048 secs
+Laplace      = 12.8071 secs
+Copy tmp     = 0.102393 secs
+Scale rows   = 3.18988 secs
+Truncate     = 580.985 secs
+residualLap: maximum rank = 137
+residualLap: minimum rank = 6
+residualLap: average rank = 103.663
+residualLap: final rank   = 61
+----------------------------------------------
+pcg: initial residual time: 708
+pcg: Iteration 0 residual 0.000148875
+pcg: max rank r 61
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 270
+pcg: update x time: 0
+pcg: tol = 0.000148875
+----------------------------------------------
+Nrows       = 33
+Ncols       = 33
+Nrows*Ncols = 1089
+First loop  = 113.272 secs
+Copy v      = 0.0377017 secs
+Scale v     = 0.0340099 secs
+Laplace     = 13.7512 secs
+Copy tmp    = 4.69886 secs
+Scale tmp   = 2.01702 secs
+Norm tmp    = 92.7003 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 751 times
+# scale v   = 33 times
+# laplace v = 33 times
+# save v    = 33 times
+# scale row = 751 times
+# truncate  = 751 times
+Second loop  = 593.363 secs
+Copy v       = 3.49858 secs
+Scale v      = 0.0339557 secs
+Laplace      = 13.7662 secs
+Copy tmp     = 0.116437 secs
+Scale rows   = 3.41395 secs
+Truncate     = 574.458 secs
+residualLap: maximum rank = 131
+residualLap: minimum rank = 6
+residualLap: average rank = 99.9308
+residualLap: final rank   = 60
+----------------------------------------------
+pcg: residualLap time: 706
+pcg: (r, Ap) time: 266
+pcg: Update p time: 2
+pcg: Iteration 1 residual 9.10347e-05
+pcg: max rank r 60
+pcg: max rank solution 34
+pcg: max rank p 39
+pcg: max rank b 6
+pcg: trunc_acc    = 5.13783e-08
+pcg: nrmp         = 0.000107234
+pcg: ak           = 0.0034511
+pcg: bk           = 0.350702
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 90
+pcg: update x time: 0
+pcg: tol = 9.10347e-05
+----------------------------------------------
+Nrows       = 33
+Ncols       = 33
+Nrows*Ncols = 1089
+First loop  = 146.328 secs
+Copy v      = 0.0469621 secs
+Scale v     = 0.0345548 secs
+Laplace     = 14.3412 secs
+Copy tmp    = 6.67145 secs
+Scale tmp   = 2.08566 secs
+Norm tmp    = 123.104 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 794 times
+# scale v   = 33 times
+# laplace v = 33 times
+# save v    = 33 times
+# scale row = 794 times
+# truncate  = 794 times
+Second loop  = 932.747 secs
+Copy v       = 4.81403 secs
+Scale v      = 0.0353838 secs
+Laplace      = 14.4119 secs
+Copy tmp     = 0.183587 secs
+Scale rows   = 3.61178 secs
+Truncate     = 911.675 secs
+residualLap: maximum rank = 159
+residualLap: minimum rank = 6
+residualLap: average rank = 118.89
+residualLap: final rank   = 76
+----------------------------------------------
+pcg: residualLap time: 1079
+pcg: (r, Ap) time: 145
+pcg: Update p time: 2
+pcg: Iteration 2 residual 7.05856e-05
+pcg: max rank r 76
+pcg: max rank solution 38
+pcg: max rank p 45
+pcg: max rank b 6
+pcg: trunc_acc    = 6.87146e-08
+pcg: nrmp         = 9.12483e-05
+pcg: ak           = 0.0064079
+pcg: bk           = 0.510496
+pcg: Tolerance reached r = 7.05856e-05
+htawgm: pcg required 3 iterations for r<=7.05856e-05
+
+*** PCG end ***
+
+htawgm: Iteration (1, 14)
+        PCG took 3273 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 4.22093e-05
+presidual: S*f took 0 secs
+residualLap: maximum rank = 183
+residualLap: minimum rank = 6
+residualLap: average rank = 138.228
+residualLap: final rank   = 97
+presidual: residualLap took 1009 secs
+htawgm: Iteration (1, 14)
+        RES took 1009 secs
+htawgm: Iteration (1, 14), residual = 0.000110871
+        Current time: 305356 secs
+htawgm: rank = 38
+bulk: true alpha = 0.900639
+htawgm: Iteration (1, 14)
+        EXPAND took 1 secs
+htawgm: Iteration (1, 15)
+        d = 1, size = 100, max level = 10
+        d = 2, size = 100, max level = 10
+        d = 3, size = 99, max level = 10
+        d = 4, size = 100, max level = 10
+        d = 5, size = 101, max level = 10
+        d = 6, size = 99, max level = 10
+        d = 7, size = 99, max level = 10
+        d = 8, size = 101, max level = 10
+        d = 9, size = 100, max level = 10
+        d = 10, size = 100, max level = 10
+        d = 11, size = 99, max level = 10
+        d = 12, size = 100, max level = 10
+        d = 13, size = 100, max level = 10
+        d = 14, size = 100, max level = 10
+        d = 15, size = 99, max level = 10
+        d = 16, size = 100, max level = 10
+        d = 17, size = 101, max level = 10
+        d = 18, size = 99, max level = 10
+        d = 19, size = 99, max level = 10
+        d = 20, size = 99, max level = 10
+        d = 21, size = 99, max level = 10
+        d = 22, size = 99, max level = 10
+        d = 23, size = 99, max level = 10
+        d = 24, size = 99, max level = 10
+        d = 25, size = 100, max level = 10
+        d = 26, size = 101, max level = 10
+        d = 27, size = 99, max level = 10
+        d = 28, size = 101, max level = 10
+        d = 29, size = 100, max level = 10
+        d = 30, size = 101, max level = 10
+        d = 31, size = 101, max level = 10
+        d = 32, size = 100, max level = 10
+        total size = 3194
+htawgm: Iteration (1, 15)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 15)
+        eps_km  = 5.54356e-05
+        eta_km  = 0.000760835
+        rank(S) = 34
+htawgm: Iteration (1, 15)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 34
+Ncols       = 34
+Nrows*Ncols = 1156
+First loop  = 157.719 secs
+Copy v      = 0.0502954 secs
+Scale v     = 0.0396666 secs
+Laplace     = 16.341 secs
+Copy tmp    = 7.21784 secs
+Scale tmp   = 2.48574 secs
+Norm tmp    = 131.537 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 796 times
+# scale v   = 34 times
+# laplace v = 34 times
+# save v    = 34 times
+# scale row = 796 times
+# truncate  = 796 times
+Second loop  = 863.431 secs
+Copy v       = 4.88653 secs
+Scale v      = 0.0404537 secs
+Laplace      = 16.4128 secs
+Copy tmp     = 0.19554 secs
+Scale rows   = 4.19575 secs
+Truncate     = 840.083 secs
+residualLap: maximum rank = 153
+residualLap: minimum rank = 7
+residualLap: average rank = 114.58
+residualLap: final rank   = 70
+----------------------------------------------
+pcg: initial residual time: 1021
+pcg: Iteration 0 residual 8.79224e-05
+pcg: max rank r 70
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 373
+pcg: update x time: 0
+pcg: tol = 8.79224e-05
+----------------------------------------------
+Nrows       = 34
+Ncols       = 34
+Nrows*Ncols = 1156
+First loop  = 154.3 secs
+Copy v      = 0.0464435 secs
+Scale v     = 0.0416206 secs
+Laplace     = 17.1767 secs
+Copy tmp    = 6.68337 secs
+Scale tmp   = 2.59971 secs
+Norm tmp    = 127.715 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 816 times
+# scale v   = 34 times
+# laplace v = 34 times
+# save v    = 34 times
+# scale row = 816 times
+# truncate  = 816 times
+Second loop  = 867.344 secs
+Copy v       = 4.8622 secs
+Scale v      = 0.0431203 secs
+Laplace      = 17.2381 secs
+Copy tmp     = 0.187596 secs
+Scale rows   = 4.45777 secs
+Truncate     = 843.051 secs
+residualLap: maximum rank = 146
+residualLap: minimum rank = 7
+residualLap: average rank = 110.795
+residualLap: final rank   = 72
+----------------------------------------------
+pcg: residualLap time: 1021
+pcg: (r, Ap) time: 393
+pcg: Update p time: 4
+pcg: Iteration 1 residual 5.55375e-05
+pcg: max rank r 72
+pcg: max rank solution 36
+pcg: max rank p 45
+pcg: max rank b 7
+pcg: trunc_acc    = 3.56574e-08
+pcg: nrmp         = 6.51773e-05
+pcg: ak           = 0.00405556
+pcg: bk           = 0.349469
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 115
+pcg: update x time: 0
+pcg: tol = 5.55375e-05
+----------------------------------------------
+Nrows       = 34
+Ncols       = 34
+Nrows*Ncols = 1156
+First loop  = 177.318 secs
+Copy v      = 0.0581772 secs
+Scale v     = 0.0432114 secs
+Laplace     = 18.1843 secs
+Copy tmp    = 8.17685 secs
+Scale tmp   = 2.74094 secs
+Norm tmp    = 148.07 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 858 times
+# scale v   = 34 times
+# laplace v = 34 times
+# save v    = 34 times
+# scale row = 858 times
+# truncate  = 858 times
+Second loop  = 1305.31 secs
+Copy v       = 5.96321 secs
+Scale v      = 0.0447991 secs
+Laplace      = 18.2761 secs
+Copy tmp     = 0.233206 secs
+Scale rows   = 4.78877 secs
+Truncate     = 1278.63 secs
+residualLap: maximum rank = 171
+residualLap: minimum rank = 7
+residualLap: average rank = 125.969
+residualLap: final rank   = 88
+----------------------------------------------
+pcg: residualLap time: 1482
+pcg: (r, Ap) time: 201
+pcg: Update p time: 3
+pcg: Iteration 2 residual 6.07223e-05
+pcg: max rank r 88
+pcg: max rank solution 38
+pcg: max rank p 46
+pcg: max rank b 7
+pcg: trunc_acc    = 4.5225e-08
+pcg: nrmp         = 9.36242e-05
+pcg: ak           = 0.00693876
+pcg: bk           = 1.01065
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 84
+pcg: update x time: 0
+pcg: tol = 6.07223e-05
+----------------------------------------------
+Nrows       = 34
+Ncols       = 34
+Nrows*Ncols = 1156
+First loop  = 151.35 secs
+Copy v      = 0.0476036 secs
+Scale v     = 0.0414875 secs
+Laplace     = 17.3366 secs
+Copy tmp    = 6.91919 secs
+Scale tmp   = 2.66549 secs
+Norm tmp    = 124.296 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 848 times
+# scale v   = 34 times
+# laplace v = 34 times
+# save v    = 34 times
+# scale row = 848 times
+# truncate  = 848 times
+Second loop  = 1200.81 secs
+Copy v       = 5.03929 secs
+Scale v      = 0.0431225 secs
+Laplace      = 17.3884 secs
+Copy tmp     = 0.182555 secs
+Scale rows   = 4.59848 secs
+Truncate     = 1176.12 secs
+residualLap: maximum rank = 162
+residualLap: minimum rank = 7
+residualLap: average rank = 118.409
+residualLap: final rank   = 87
+----------------------------------------------
+pcg: residualLap time: 1352
+pcg: (r, Ap) time: 166
+pcg: Update p time: 2
+pcg: Iteration 3 residual 6.42014e-05
+pcg: max rank r 87
+pcg: max rank solution 34
+pcg: max rank p 44
+pcg: max rank b 7
+pcg: trunc_acc    = 7.33708e-08
+pcg: nrmp         = 0.00012115
+pcg: ak           = 0.00783673
+pcg: bk           = 1.10553
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 69
+pcg: update x time: 0
+pcg: tol = 6.42014e-05
+----------------------------------------------
+Nrows       = 34
+Ncols       = 34
+Nrows*Ncols = 1156
+First loop  = 131.762 secs
+Copy v      = 0.043052 secs
+Scale v     = 0.0391725 secs
+Laplace     = 16.2216 secs
+Copy tmp    = 5.62604 secs
+Scale tmp   = 2.49109 secs
+Norm tmp    = 107.302 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 845 times
+# scale v   = 34 times
+# laplace v = 34 times
+# save v    = 34 times
+# scale row = 845 times
+# truncate  = 845 times
+Second loop  = 1028.96 secs
+Copy v       = 4.34694 secs
+Scale v      = 0.0406905 secs
+Laplace      = 16.3061 secs
+Copy tmp     = 0.138967 secs
+Scale rows   = 4.30436 secs
+Truncate     = 1006.21 secs
+residualLap: maximum rank = 152
+residualLap: minimum rank = 7
+residualLap: average rank = 109.594
+residualLap: final rank   = 83
+----------------------------------------------
+pcg: residualLap time: 1160
+pcg: (r, Ap) time: 146
+pcg: Update p time: 2
+pcg: Iteration 4 residual 5.00024e-05
+pcg: max rank r 83
+pcg: max rank solution 31
+pcg: max rank p 49
+pcg: max rank b 7
+pcg: trunc_acc    = 8.70451e-08
+pcg: nrmp         = 8.60282e-05
+pcg: ak           = 0.0071849
+pcg: bk           = 0.574744
+pcg: Tolerance reached r = 5.00024e-05
+htawgm: pcg required 5 iterations for r<=5.00024e-05
+
+*** PCG end ***
+
+htawgm: Iteration (1, 15)
+        PCG took 7606 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 2.77178e-05
+presidual: S*f took 0 secs
+residualLap: maximum rank = 174
+residualLap: minimum rank = 7
+residualLap: average rank = 129.05
+residualLap: final rank   = 106
+presidual: residualLap took 1126 secs
+htawgm: Iteration (1, 15)
+        RES took 1127 secs
+htawgm: Iteration (1, 15), residual = 7.3928e-05
+        Current time: 314090 secs
+htawgm: rank = 31
+bulk: true alpha = 0.90062
+htawgm: Iteration (1, 15)
+        EXPAND took 1 secs
+htawgm: Iteration (1, 16)
+        d = 1, size = 110, max level = 10
+        d = 2, size = 110, max level = 10
+        d = 3, size = 111, max level = 10
+        d = 4, size = 111, max level = 10
+        d = 5, size = 110, max level = 10
+        d = 6, size = 110, max level = 11
+        d = 7, size = 111, max level = 10
+        d = 8, size = 110, max level = 10
+        d = 9, size = 112, max level = 10
+        d = 10, size = 113, max level = 10
+        d = 11, size = 112, max level = 11
+        d = 12, size = 111, max level = 10
+        d = 13, size = 111, max level = 10
+        d = 14, size = 113, max level = 11
+        d = 15, size = 111, max level = 10
+        d = 16, size = 111, max level = 10
+        d = 17, size = 110, max level = 10
+        d = 18, size = 113, max level = 10
+        d = 19, size = 112, max level = 10
+        d = 20, size = 111, max level = 10
+        d = 21, size = 111, max level = 10
+        d = 22, size = 113, max level = 11
+        d = 23, size = 111, max level = 11
+        d = 24, size = 111, max level = 11
+        d = 25, size = 112, max level = 10
+        d = 26, size = 112, max level = 11
+        d = 27, size = 112, max level = 11
+        d = 28, size = 111, max level = 10
+        d = 29, size = 113, max level = 11
+        d = 30, size = 112, max level = 11
+        d = 31, size = 112, max level = 11
+        d = 32, size = 111, max level = 10
+        total size = 3564
+htawgm: Iteration (1, 16)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 16)
+        eps_km  = 3.6964e-05
+        eta_km  = 0.000507338
+        rank(S) = 35
+htawgm: Iteration (1, 16)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 35
+Ncols       = 35
+Nrows*Ncols = 1225
+First loop  = 141.614 secs
+Copy v      = 0.0465216 secs
+Scale v     = 0.0429532 secs
+Laplace     = 18.3159 secs
+Copy tmp    = 6.05597 secs
+Scale tmp   = 2.83965 secs
+Norm tmp    = 114.272 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 851 times
+# scale v   = 35 times
+# laplace v = 35 times
+# save v    = 35 times
+# scale row = 851 times
+# truncate  = 851 times
+Second loop  = 993.723 secs
+Copy v       = 4.38895 secs
+Scale v      = 0.043803 secs
+Laplace      = 18.3406 secs
+Copy tmp     = 0.145868 secs
+Scale rows   = 4.76524 secs
+Truncate     = 968.773 secs
+residualLap: maximum rank = 149
+residualLap: minimum rank = 7
+residualLap: average rank = 107.35
+residualLap: final rank   = 80
+----------------------------------------------
+pcg: initial residual time: 1135
+pcg: Iteration 0 residual 6.46699e-05
+pcg: max rank r 80
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 629
+pcg: update x time: 1
+pcg: tol = 6.46699e-05
+----------------------------------------------
+Nrows       = 35
+Ncols       = 35
+Nrows*Ncols = 1225
+First loop  = 194.413 secs
+Copy v      = 0.0593203 secs
+Scale v     = 0.0470041 secs
+Laplace     = 20.3335 secs
+Copy tmp    = 8.86567 secs
+Scale tmp   = 3.07923 secs
+Norm tmp    = 161.981 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 863 times
+# scale v   = 35 times
+# laplace v = 35 times
+# save v    = 35 times
+# scale row = 863 times
+# truncate  = 863 times
+Second loop  = 1067.9 secs
+Copy v       = 6.08781 secs
+Scale v      = 0.0479443 secs
+Laplace      = 20.3758 secs
+Copy tmp     = 0.24585 secs
+Scale rows   = 5.22039 secs
+Truncate     = 1038.9 secs
+residualLap: maximum rank = 157
+residualLap: minimum rank = 7
+residualLap: average rank = 114.618
+residualLap: final rank   = 78
+----------------------------------------------
+pcg: residualLap time: 1262
+pcg: (r, Ap) time: 600
+pcg: Update p time: 6
+pcg: Iteration 1 residual 3.54051e-05
+pcg: max rank r 78
+pcg: max rank solution 38
+pcg: max rank p 49
+pcg: max rank b 7
+pcg: trunc_acc    = 2.78339e-08
+pcg: nrmp         = 4.08885e-05
+pcg: ak           = 0.00430399
+pcg: bk           = 0.3079
+pcg: Tolerance reached r = 3.54051e-05
+htawgm: pcg required 2 iterations for r<=3.54051e-05
+
+*** PCG end ***
+
+htawgm: Iteration (1, 16)
+        PCG took 3635 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 1.8482e-05
+presidual: S*f took 0 secs
+residualLap: maximum rank = 196
+residualLap: minimum rank = 8
+residualLap: average rank = 144.504
+residualLap: final rank   = 113
+presidual: residualLap took 1574 secs
+htawgm: Iteration (1, 16)
+        RES took 1575 secs
+htawgm: Iteration (1, 16), residual = 4.80742e-05
+        Current time: 319303 secs
+htawgm: rank = 38
+bulk: true alpha = 0.900218
+htawgm: Iteration (1, 16)
+        EXPAND took 1 secs
+htawgm: Iteration (1, 17)
+        d = 1, size = 127, max level = 11
+        d = 2, size = 127, max level = 11
+        d = 3, size = 126, max level = 11
+        d = 4, size = 126, max level = 11
+        d = 5, size = 126, max level = 11
+        d = 6, size = 125, max level = 11
+        d = 7, size = 127, max level = 11
+        d = 8, size = 125, max level = 11
+        d = 9, size = 128, max level = 11
+        d = 10, size = 128, max level = 11
+        d = 11, size = 127, max level = 11
+        d = 12, size = 126, max level = 11
+        d = 13, size = 127, max level = 11
+        d = 14, size = 127, max level = 11
+        d = 15, size = 127, max level = 11
+        d = 16, size = 125, max level = 11
+        d = 17, size = 127, max level = 11
+        d = 18, size = 127, max level = 11
+        d = 19, size = 130, max level = 11
+        d = 20, size = 127, max level = 11
+        d = 21, size = 126, max level = 11
+        d = 22, size = 132, max level = 11
+        d = 23, size = 127, max level = 11
+        d = 24, size = 126, max level = 11
+        d = 25, size = 128, max level = 11
+        d = 26, size = 127, max level = 11
+        d = 27, size = 128, max level = 11
+        d = 28, size = 127, max level = 11
+        d = 29, size = 127, max level = 11
+        d = 30, size = 128, max level = 11
+        d = 31, size = 130, max level = 11
+        d = 32, size = 129, max level = 11
+        total size = 4070
+htawgm: Iteration (1, 17)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 17)
+        eps_km  = 2.40371e-05
+        eta_km  = 0.000329913
+        rank(S) = 36
+htawgm: Iteration (1, 17)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 36
+Ncols       = 36
+Nrows*Ncols = 1296
+First loop  = 213.368 secs
+Copy v      = 0.0664485 secs
+Scale v     = 0.0524372 secs
+Laplace     = 24.532 secs
+Copy tmp    = 9.8803 secs
+Scale tmp   = 3.65619 secs
+Norm tmp    = 175.13 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 909 times
+# scale v   = 36 times
+# laplace v = 36 times
+# save v    = 36 times
+# scale row = 909 times
+# truncate  = 909 times
+Second loop  = 1407.29 secs
+Copy v       = 6.60723 secs
+Scale v      = 0.054366 secs
+Laplace      = 24.5813 secs
+Copy tmp     = 0.262089 secs
+Scale rows   = 6.22314 secs
+Truncate     = 1373.1 secs
+residualLap: maximum rank = 168
+residualLap: minimum rank = 8
+residualLap: average rank = 122.98
+residualLap: final rank   = 87
+----------------------------------------------
+pcg: initial residual time: 1620
+pcg: Iteration 0 residual 4.09849e-05
+pcg: max rank r 87
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 842
+pcg: update x time: 1
+pcg: tol = 4.09849e-05
+----------------------------------------------
+Nrows       = 36
+Ncols       = 36
+Nrows*Ncols = 1296
+First loop  = 251.111 secs
+Copy v      = 0.0725949 secs
+Scale v     = 0.0595472 secs
+Laplace     = 26.8863 secs
+Copy tmp    = 10.7113 secs
+Scale tmp   = 3.9399 secs
+Norm tmp    = 209.392 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 925 times
+# scale v   = 36 times
+# laplace v = 36 times
+# save v    = 36 times
+# scale row = 925 times
+# truncate  = 925 times
+Second loop  = 1475.29 secs
+Copy v       = 7.59703 secs
+Scale v      = 0.0606789 secs
+Laplace      = 26.887 secs
+Copy tmp     = 0.306392 secs
+Scale rows   = 6.81587 secs
+Truncate     = 1437.44 secs
+residualLap: maximum rank = 162
+residualLap: minimum rank = 8
+residualLap: average rank = 119.44
+residualLap: final rank   = 85
+----------------------------------------------
+pcg: residualLap time: 1726
+pcg: (r, Ap) time: 850
+pcg: Update p time: 8
+pcg: Iteration 1 residual 2.75979e-05
+pcg: max rank r 85
+pcg: max rank solution 38
+pcg: max rank p 51
+pcg: max rank b 8
+pcg: trunc_acc    = 1.55828e-08
+pcg: nrmp         = 3.32436e-05
+pcg: ak           = 0.00380209
+pcg: bk           = 0.444951
+pcg: (r,p) time: 0
+pcg: (p, Ap) time: 178
+pcg: update x time: 0
+pcg: tol = 2.75979e-05
+----------------------------------------------
+Nrows       = 36
+Ncols       = 36
+Nrows*Ncols = 1296
+First loop  = 285.461 secs
+Copy v      = 0.0787096 secs
+Scale v     = 0.0600088 secs
+Laplace     = 28.2183 secs
+Copy tmp    = 13.2943 secs
+Scale tmp   = 4.11872 secs
+Norm tmp    = 239.636 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 960 times
+# scale v   = 36 times
+# laplace v = 36 times
+# save v    = 36 times
+# scale row = 960 times
+# truncate  = 960 times
+Second loop  = 2136.44 secs
+Copy v       = 9.15952 secs
+Scale v      = 0.0622854 secs
+Laplace      = 28.1948 secs
+Copy tmp     = 0.35958 secs
+Scale rows   = 7.21447 secs
+Truncate     = 2095.45 secs
+residualLap: maximum rank = 189
+residualLap: minimum rank = 8
+residualLap: average rank = 138.007
+residualLap: final rank   = 102
+----------------------------------------------
+pcg: residualLap time: 2421
+pcg: (r, Ap) time: 332
+pcg: Update p time: 5
+pcg: Iteration 2 residual 1.97701e-05
+pcg: max rank r 102
+pcg: max rank solution 43
+pcg: max rank p 57
+pcg: max rank b 8
+pcg: trunc_acc    = 1.84672e-08
+pcg: nrmp         = 2.48344e-05
+pcg: ak           = 0.00555512
+pcg: bk           = 0.424644
+pcg: Tolerance reached r = 1.97701e-05
+htawgm: pcg required 3 iterations for r<=1.97701e-05
+
+*** PCG end ***
+
+htawgm: Iteration (1, 17)
+        PCG took 7990 secs
+presidual: extend took 0 secs
+presidual: rhs took 0 secs
+presidual: tol = 1.20185e-05
+presidual: S*f took 0 secs
+residualLap: maximum rank = 220
+residualLap: minimum rank = 8
+residualLap: average rank = 160.853
+residualLap: final rank   = 131
+presidual: residualLap took 2355 secs
+htawgm: Iteration (1, 17)
+        RES took 2355 secs
+htawgm: Iteration (1, 17), residual = 3.04441e-05
+        Current time: 329651 secs
+htawgm: rank = 43
+bulk: true alpha = 0.900351
+htawgm: Iteration (1, 17)
+        EXPAND took 2 secs
+htawgm: Iteration (1, 18)
+        d = 1, size = 141, max level = 11
+        d = 2, size = 143, max level = 11
+        d = 3, size = 148, max level = 11
+        d = 4, size = 148, max level = 11
+        d = 5, size = 150, max level = 11
+        d = 6, size = 146, max level = 12
+        d = 7, size = 147, max level = 11
+        d = 8, size = 149, max level = 11
+        d = 9, size = 144, max level = 11
+        d = 10, size = 144, max level = 11
+        d = 11, size = 148, max level = 12
+        d = 12, size = 145, max level = 11
+        d = 13, size = 144, max level = 11
+        d = 14, size = 151, max level = 12
+        d = 15, size = 145, max level = 11
+        d = 16, size = 146, max level = 11
+        d = 17, size = 147, max level = 11
+        d = 18, size = 147, max level = 11
+        d = 19, size = 149, max level = 11
+        d = 20, size = 147, max level = 11
+        d = 21, size = 144, max level = 11
+        d = 22, size = 148, max level = 12
+        d = 23, size = 148, max level = 12
+        d = 24, size = 145, max level = 11
+        d = 25, size = 145, max level = 11
+        d = 26, size = 147, max level = 12
+        d = 27, size = 148, max level = 12
+        d = 28, size = 146, max level = 11
+        d = 29, size = 150, max level = 12
+        d = 30, size = 149, max level = 12
+        d = 31, size = 149, max level = 12
+        d = 32, size = 148, max level = 11
+        total size = 4696
+htawgm: Iteration (1, 18)
+        Set up rhs took 0 secs
+htawgm: Iteration (1, 18)
+        eps_km  = 1.5222e-05
+        eta_km  = 0.000208925
+        rank(S) = 37
+htawgm: Iteration (1, 18)
+
+*** PCG begin ***
+
+----------------------------------------------
+Nrows       = 37
+Ncols       = 37
+Nrows*Ncols = 1369
+First loop  = 305.594 secs
+Copy v      = 0.0824731 secs
+Scale v     = 0.0671127 secs
+Laplace     = 31.8894 secs
+Copy tmp    = 14.3653 secs
+Scale tmp   = 4.7442 secs
+Norm tmp    = 254.389 secs
+----------------------------------------------
+----------------------------------------------
+# copy v    = 972 times
+# scale v   = 37 times
+# laplace v = 37 times
+# save v    = 37 times
+# scale row = 972 times
+# truncate  = 972 times
+Second loop  = 2093.18 secs
+Copy v       = 9.42708 secs
+Scale v      = 0.0680429 secs
+Laplace      = 31.8452 secs
+Copy tmp     = 0.370454 secs
+Scale rows   = 8.03879 secs
+Truncate     = 2048.05 secs
+residualLap: maximum rank = 188
+residualLap: minimum rank = 9
+residualLap: average rank = 136.258
+residualLap: final rank   = 99
+----------------------------------------------
+pcg: initial residual time: 2399
+pcg: Iteration 0 residual 2.74862e-05
+pcg: max rank r 99
+pcg: (r,p) time: 0
