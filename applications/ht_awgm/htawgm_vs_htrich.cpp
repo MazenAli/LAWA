@@ -70,6 +70,38 @@ zero(double)
     return 0.;
 }
 
+lawa::NoPreconditioner<T, Index1D>          pnull;
+
+void
+saveCoeffVector1D(const Coeff1D &coeff, const Basis &basis, const char* filename)
+{
+    typedef typename Coeff1D::const_iterator const_coeff_it;
+
+    std::ofstream data(filename);
+
+    if(!data.good()){
+        std::cerr << "File "
+                  << filename
+                  << " could not be opened for writing" << std::endl;
+        exit(1);
+    }
+    data.precision(40);
+    data << "# Center_x Value Xtype j k" << std::endl;
+
+    for (const_coeff_it it = coeff.begin(); it != coeff.end(); ++it) {
+      FLENS_DEFAULT_INDEXTYPE j=(*it).first.j,
+                              k=(*it).first.k;
+      lawa::XType type=(*it).first.xtype;
+
+      //center of the support
+      double x = 0.5*(basis.generator(type).support(j,k).l2 +
+                      basis.generator(type).support(j,k).l1);
+
+      data << x << " " << std::scientific <<  (*it).second << " "
+           << type << " " << j << " " << k << std::endl;
+    }
+    data.close();
+}
 
 unsigned
 richardson(Sepop&                          A,
@@ -324,6 +356,9 @@ htawgm3(lawa::Sepdiagscal<Basis>&       S,
                               << elapsed.count() << " secs\n";
             }
         }
+
+        Lambda0 = Lambda;
+        return k;
 
         // Truncate and coarsen
         T epst = omega4*err0;
@@ -590,11 +625,11 @@ main(int argc, char* argv[])
     unsigned I = 10;
 //    unsigned M = std::ceil(std::abs(std::log(omega3/std::sqrt(kA))/
 //                           std::log(inrho)));
-    unsigned M = 50;
+    unsigned M = 15;
 //    unsigned K = std::ceil(std::abs(
 //                 std::log(1./(tol*kA*omega3*omega0*(1.+omega1))*(1.-omega1))/
 //                 std::log(omega3+omega4+omega5)));
-    unsigned K = 20;
+    unsigned K = 0;
 
     bool verbose = true;
 
@@ -623,24 +658,38 @@ main(int argc, char* argv[])
 //
 //
 //    exit(1);
-    its = htawgm3(S, A, u, Fint, indexsetvec,
-                  omega1,
-                  omega2,
-                  omega3,
-                  omega4,
-                  omega5,
-                  lambda_max,
-                  lambda_min,
-                  alpha,
-                  tol,
-                  I,
-                  M,
-                  K,
-                  res,
-                  verbose);
+//    its = htawgm3(S, A, u, Fint, indexsetvec,
+//                  omega1,
+//                  omega2,
+//                  omega3,
+//                  omega4,
+//                  omega5,
+//                  lambda_max,
+//                  lambda_min,
+//                  alpha,
+//                  tol,
+//                  I,
+//                  M,
+//                  K,
+//                  res,
+//                  verbose);
 
     std::cout << "Solver took " << its << " iterations to reach "
               << res << " accuracy" << std::endl;
+
+    htucker::DimensionIndex idx(1);
+    idx[0]    = 1;
+    auto outp = extract(u, indexsetvec[0], idx);
+
+    saveCoeffVector1D(outp(1, 1), u.basis(), "support_d1.dat");
+    exit(1);
+    for (unsigned k=1; k<=outp.rank(); ++k) {
+        std::string name = "plot_";
+        name            += std::to_string(k);
+        name            += ".dat";
+        plot(basis, outp(k, 1), pnull, zero, zero, 0., 1.02, 1./100.,
+             name.c_str());
+    }
 
     return 0;
 }
