@@ -1478,7 +1478,7 @@ greedyPoissonSolve(      Engine                         *ep,
         vtree.tree().set_tree(u.tree());
         setCoefficientsJ0(v, u.basis());
         //set(vtree, wn);
-        set(vtree, v);
+        set(vtree, v, Lambda);
 
         // ALS residual
         AlsOperatorRhs Au(A, u, vtree);
@@ -1874,7 +1874,7 @@ main(int argc, char* argv[])
     int rank = 1;
 
     /* Generate example */
-    Basis                       basis(2);
+    Basis                       basis(4);
     basis.template              enforceBoundaryCondition<lawa::DirichletBC>();
     lawa::Mapwavind<Index1D>    map(dim);
 
@@ -1997,13 +1997,13 @@ main(int argc, char* argv[])
 
     T delta = 1e-01;
     T eta   = 1e-01;
-    lawa::Sepdiagscal<Basis> S(u.dim(), u.basis());
+    lawa::Sepdiagscal<Basis> S(u.dim(), u.basis(), map);
     setScaling(S, delta);
     S.set_nu(eta);
 
     lawa::AdaptiveLeafParams par;
-    par.tol          = 0.;
-    par.maxit        = 2;
+    par.tol          = 1e-02;
+    par.maxit        = 50;
     par.gamma        = 1e-01;
     par.cg_maxit     = 50;
     par.cg_verbose   = false;
@@ -2018,8 +2018,8 @@ main(int argc, char* argv[])
 
     lawa::AdaptiveGreedyParams agparams;
     agparams.r1Als   = pam;
-    agparams.verbose = false;
-    agparams.maxit   = 4;
+    agparams.verbose = true;
+    agparams.maxit   = 8;
     agparams.tol     = 1e-07;
 
     lawa::Rank1UP_Params                    p1;

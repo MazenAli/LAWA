@@ -67,7 +67,7 @@ CPPFLAGS += -DFLENS_DEFAULT_INDEXTYPE=__INT32_TYPE__
 CPPFLAGS += -DUSE_CXXLAPACK
 
 # --- MATLAB Interface Libraries --------------------
-#LDLIBS += -leng
+LDLIBS += -leng
 
 # --- SuiteSparse Library --------------------
 #LDLIBS += -lcholmod
@@ -112,8 +112,8 @@ PROFILEMODE = -pg -g -DNDEBUG $(HASHTYPE) -fPIC -Wno-attributes
 PROFILEMODE += -DVERBOSE
 
 # --- select compilation-mode here by commenting / uncommenting
-CXXFLAGS += $(DEBUGMODE)
-#CXXFLAGS += $(RELEASEMODE)
+#CXXFLAGS += $(DEBUGMODE)
+CXXFLAGS += $(RELEASEMODE)
 #CXXFLAGS += $(PROFILEMODE)
 
 #CPPFLAGS += -D_GLIBCXX_PERMIT_BACKWARD_HASH

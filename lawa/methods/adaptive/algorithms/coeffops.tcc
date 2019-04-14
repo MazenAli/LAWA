@@ -2314,7 +2314,8 @@ evalLaplaceD_1Dim(      Sepop<Optype>& A,
             auto rowsU  = Uu.numRows();
             auto colsU  = Uu.numCols();
             if ((unsigned) idx[0] == j) {
-                UAu.resize(1, 2*colsU);
+                auto max = maxintindhash(rows[idx[0]-1], idx[0], u);
+                UAu.resize(max, 2*colsU);
                 nodeAu->getContent()->setNumRows(2*colsU);
             } else {
                 auto max    = maxintindhash(rows[idx[0]-1], idx[0], u);
